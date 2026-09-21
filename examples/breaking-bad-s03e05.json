@@ -1,0 +1,50 @@
+{
+  "format": "ajfm-deck",
+  "version": 1,
+  "deck": {
+    "name": "Breaking Bad S03E05",
+    "folder": "Сериалы/Breaking Bad",
+    "language": "en-US",
+    "scheduler": "fsrs6",
+    "cardTypes": ["recognition", "recall", "listening", "pronunciation"],
+    "source": "Breaking Bad, сезон 3, серия 5"
+  },
+  "notes": [
+    {
+      "term": "to pull off",
+      "translation": "провернуть, суметь сделать",
+      "ipa": "/pʊl ɔːf/",
+      "partOfSpeech": "phrasal verb",
+      "example": "I can't believe you pulled that off.",
+      "exampleTranslation": "Не верится, что ты это провернул.",
+      "cloze": "I can't believe you ___ that ___.",
+      "synonyms": ["manage", "succeed in"],
+      "note": "Отделяемый: pull it off, но не «pull off it».",
+      "tags": ["phrasal", "s03e05"],
+      "difficulty": "medium"
+    },
+    {
+      "term": "leverage",
+      "translation": "рычаг давления, козырь",
+      "ipa": "/ˈlevərɪdʒ/",
+      "partOfSpeech": "noun",
+      "example": "Right now, you have no leverage at all.",
+      "exampleTranslation": "Прямо сейчас у тебя вообще нет никаких козырей.",
+      "cloze": "Right now, you have no ___ at all.",
+      "note": "В американском первый слог — /lev/, не /liːv/, как у британцев.",
+      "tags": ["business", "s03e05"],
+      "difficulty": "hard"
+    },
+    {
+      "term": "to back out",
+      "translation": "пойти на попятную, отказаться",
+      "ipa": "/bæk aʊt/",
+      "partOfSpeech": "phrasal verb",
+      "example": "You can't back out now.",
+      "exampleTranslation": "Сейчас ты уже не можешь пойти на попятную.",
+      "cloze": "You can't ___ ___ now.",
+      "tags": ["phrasal", "s03e05"],
+      "difficulty": "easy"
+    }
+  ]
+}
