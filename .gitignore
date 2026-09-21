@@ -1,0 +1,12 @@
+# Проект генерируется из project.yml — в репозитории ему не место.
+*.xcodeproj/
+App/Info.plist
+*.xcworkspace/
+
+.build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.swiftpm/
+
+.DS_Store

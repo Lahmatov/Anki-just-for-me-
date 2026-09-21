@@ -1,0 +1,59 @@
+name: AJFM
+options:
+  bundleIdPrefix: com.lahmatov
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+configs:
+  Debug: debug
+  Release: release
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+
+packages:
+  AJFMCore:
+    path: Core
+
+targets:
+  AJFM:
+    type: application
+    platform: iOS
+    # Подпись живёт в отдельном xcconfig, чтобы перегенерация проекта её не стирала.
+    configFiles:
+      Debug: Config/Signing.xcconfig
+      Release: Config/Signing.xcconfig
+    sources:
+      - path: App/Sources
+    dependencies:
+      - package: AJFMCore
+        product: AJFMCore
+    settings:
+      base:
+        # Bundle ID менять нельзя: на бесплатном аккаунте лимит ~10 новых App ID
+        # за 7 дней, и каждый новый идентификатор его расходует.
+        PRODUCT_BUNDLE_IDENTIFIER: com.lahmatov.ajfm
+        MARKETING_VERSION: "0.1"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1"
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Карточки
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIUserInterfaceStyle: Automatic
+        # Благодаря этому приложение появляется в шторке «Поделиться» для .json —
+        # так набор долетает из Файлов, iCloud Drive или мессенджера.
+        LSSupportsOpeningDocumentsInPlace: true
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Набор карточек
+            CFBundleTypeRole: Editor
+            LSHandlerRank: Alternate
+            LSItemContentTypes:
+              - public.json
