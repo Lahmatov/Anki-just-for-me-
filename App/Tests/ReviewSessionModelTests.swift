@@ -176,6 +176,41 @@ final class ReviewSessionModelTests: XCTestCase {
         XCTAssertEqual(try context.fetch(FetchDescriptor<Review>()).count, 1)
     }
 
+    func testListeningCardChecksTheWordItSpeaks() throws {
+        let (_, model) = try makeSession(
+            cardTypes: [.listening],
+            notes: [NoteData(
+                term: "leverage", translation: "рычаг",
+                example: "You have no leverage at all.")])
+
+        // Озвучивается слово, значит и проверяться должно слово.
+        // Если бы проигрывался пример целиком, правильный ответ был бы
+        // недостижим: услышал фразу, а ждут одно слово.
+        model.typedAnswer = "leverage"
+        model.reveal()
+        XCTAssertEqual(model.check?.verdict, .correct)
+    }
+
+    func testListeningCardForgivesTypos() throws {
+        let (_, model) = try makeSession(
+            cardTypes: [.listening],
+            notes: [NoteData(term: "leverage", translation: "рычаг")])
+        model.typedAnswer = "leverge"
+        model.reveal()
+        // На слух опечатка — не то же самое, что не понял слово.
+        XCTAssertEqual(model.check?.verdict, .typo)
+    }
+
+    func testPronunciationCardNeedsNoTyping() throws {
+        let (_, model) = try makeSession(cardTypes: [.pronunciation])
+        XCTAssertFalse(model.current?.type.requiresTyping ?? true)
+
+        model.reveal()
+        XCTAssertTrue(model.isRevealed)
+        XCTAssertNil(model.check, "самооценку не проверяем автоматически")
+        XCTAssertEqual(model.stats.answered, 0)
+    }
+
     func testIntervalsAreShownForEveryGrade() throws {
         let (_, model) = try makeSession()
         for grade in Grade.allCases {

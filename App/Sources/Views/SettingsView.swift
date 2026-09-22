@@ -12,9 +12,12 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.desiredRetention) private var desiredRetention =
         AppSettings.default.desiredRetention
 
+    @AppStorage(SettingsKey.autoSpeak) private var autoSpeak = true
     @AppStorage(SettingsKey.reminderEnabled) private var reminderEnabled = false
     @AppStorage(SettingsKey.reminderHour) private var reminderHour = 20
     @AppStorage(SettingsKey.reminderMinute) private var reminderMinute = 0
+
+    private var speech: SpeechService { SpeechService.shared }
 
     var body: some View {
         NavigationStack {
@@ -67,6 +70,24 @@ struct SettingsView: View {
                         "Какую долю карточек ты хочешь помнить в момент показа. "
                         + "Выше планка — заметно больше повторений ради небольшого "
                         + "выигрыша. Работает только для FSRS.")
+                }
+
+                Section {
+                    Toggle("Озвучивать автоматически", isOn: $autoSpeak)
+                    if let voice = speech.voiceName {
+                        LabeledContent("Голос", value: voice)
+                    }
+                    if speech.shouldSuggestBetterVoice {
+                        Text(VoiceSelector.downloadHint)
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                    }
+                } header: {
+                    Text("Звук")
+                } footer: {
+                    Text(
+                        "Карточка на слух озвучивается сразу при показе, а слово "
+                        + "проговаривается после ответа.")
                 }
 
                 Section {

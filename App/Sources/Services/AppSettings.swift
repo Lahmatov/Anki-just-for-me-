@@ -9,6 +9,7 @@ enum SettingsKey {
     static let burySiblings = "burySiblings"
     static let dayCutoffHour = "dayCutoffHour"
     static let desiredRetention = "desiredRetention"
+    static let autoSpeak = "autoSpeak"
     static let reminderEnabled = "reminderEnabled"
     static let reminderHour = "reminderHour"
     static let reminderMinute = "reminderMinute"

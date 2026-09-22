@@ -82,6 +82,14 @@ struct CardPromptView: View {
 
     private var note: Note? { card.note }
 
+    @AppStorage(SettingsKey.autoSpeak) private var autoSpeak = true
+
+    /// Озвучивается ровно то, что потом проверяется. Соблазн проигрывать
+    /// пример целиком велик, но тогда на слух звучит фраза, а ответом ждут
+    /// одно слово — и пользователь оказывается неправ на ровном месте.
+    /// Пример можно послушать после ответа.
+    private var spokenText: String { card.note?.term ?? "" }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(card.type.instruction)
@@ -109,6 +117,19 @@ struct CardPromptView: View {
                 answer
             }
         }
+        .onAppear { speakPromptIfNeeded() }
+        .onChange(of: card.persistentModelID) { _, _ in speakPromptIfNeeded() }
+        .onChange(of: model.isRevealed) { _, revealed in
+            if revealed, autoSpeak, card.type != .listening {
+                SpeechService.shared.speak(card.note?.term ?? "")
+            }
+        }
+    }
+
+    /// Карточку на слух озвучиваем сразу: без звука на ней просто нечего делать.
+    private func speakPromptIfNeeded() {
+        guard card.type == .listening, autoSpeak else { return }
+        SpeechService.shared.speak(spokenText)
     }
 
     @ViewBuilder
@@ -121,14 +142,25 @@ struct CardPromptView: View {
         case .cloze:
             Text(note?.cloze ?? note?.example ?? note?.translation ?? "")
                 .font(.title2)
-        case .listening, .spelling:
-            VStack(alignment: .leading, spacing: 8) {
-                // Звук появится в следующей итерации — пока карточка работает
-                // как обычный ввод по переводу, чтобы прогресс не стоял.
-                Label("Звук появится в следующей итерации", systemImage: "speaker.slash")
+        case .listening:
+            // Ни слова, ни перевода на экране: смысл карточки в том,
+            // чтобы разобрать речь на слух, а не прочитать подсказку.
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    SpeakButton(text: spokenText, label: "Прослушать")
+                    SpeakButton(text: spokenText, rate: .slow, label: "Медленно")
+                }
+                Text("Можно слушать сколько угодно раз.")
                     .font(.caption)
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(.secondary)
+            }
+        case .spelling:
+            VStack(alignment: .leading, spacing: 12) {
                 Text(note?.translation ?? "").font(.title).bold()
+                HStack {
+                    SpeakButton(text: note?.term ?? "", label: "Прослушать")
+                    SpeakButton(text: note?.term ?? "", rate: .slow, label: "Медленно")
+                }
             }
         case .pronunciation:
             VStack(alignment: .leading, spacing: 8) {
@@ -136,7 +168,12 @@ struct CardPromptView: View {
                 if let ipa = note?.ipa, !ipa.isEmpty {
                     Text(ipa).foregroundStyle(.secondary)
                 }
-                Text("Произнеси вслух, потом оцени себя сам.")
+                HStack {
+                    SpeakButton(text: note?.term ?? "", label: "Эталон")
+                    SpeakButton(text: note?.term ?? "", rate: .slow, label: "Медленно")
+                }
+                Text("Послушай, произнеси вслух, потом оцени себя сам. "
+                     + "Автоматическая проверка появится в следующей итерации.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -173,14 +210,21 @@ struct CardPromptView: View {
 
             Divider()
 
-            Text(note?.term ?? "").font(.title2).bold()
+            HStack {
+                Text(note?.term ?? "").font(.title2).bold()
+                SpeakButton(text: note?.term ?? "", compact: true)
+            }
             if let ipa = note?.ipa, !ipa.isEmpty {
                 Text(ipa).foregroundStyle(.secondary)
             }
             Text(note?.translation ?? "").font(.body)
 
             if let example = note?.example, !example.isEmpty {
-                Text(example).font(.callout).italic().padding(.top, 4)
+                HStack(alignment: .top) {
+                    Text(example).font(.callout).italic()
+                    SpeakButton(text: example, compact: true)
+                }
+                .padding(.top, 4)
             }
             if let translation = note?.exampleTranslation, !translation.isEmpty {
                 Text(translation).font(.caption).foregroundStyle(.secondary)

@@ -85,6 +85,7 @@ struct NoteRow: View {
                     Text(ipa).font(.caption).foregroundStyle(.secondary)
                 }
                 Spacer()
+                SpeakButton(text: note.term, compact: true)
                 Text("\(note.cards.count)")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
