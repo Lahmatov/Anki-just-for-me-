@@ -23,8 +23,12 @@ struct OnboardingView: View {
 
     @State private var index = 0
     @State private var starterInstalled = false
+    @State private var starterFailed = false
     @State private var goalWords = 150
     @State private var goalReward = ""
+
+    /// Считается один раз: читать файл на каждую перерисовку незачем.
+    private var starterCount: Int { StarterDeck.wordCount() }
 
     private var step: OnboardingStep? {
         index < plan.steps.count ? plan.steps[index] : nil
@@ -55,7 +59,7 @@ struct OnboardingView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Пропустить") { finish() }
+                    Button("Пропустить") { finish(keepingGoal: false) }
                         .font(.callout)
                 }
             }
@@ -133,15 +137,32 @@ struct OnboardingView: View {
                     Haptics.tap()
                     if StarterDeck.install(into: context) != nil {
                         starterInstalled = true
+                        starterFailed = false
                         Haptics.success()
+                    } else {
+                        starterFailed = true
+                        Haptics.failure()
                     }
                 } label: {
-                    Label("Добавить \(StarterDeck.wordCount()) слов", systemImage: "plus.circle")
+                    Label(starterCount > 0 ? "Добавить \(starterCount) слов" : "Добавить набор",
+                          systemImage: "plus.circle")
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 4)
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
+
+                if starterFailed {
+                    // Молчаливый отказ оставил бы человека с пустой базой
+                    // и без понимания, что пошло не так.
+                    Label(
+                        "Набор не установился. Ничего страшного: импортируй "
+                        + "examples/retelling-vocabulary.json вручную или попроси "
+                        + "у Claude новый.",
+                        systemImage: "exclamationmark.triangle")
+                        .font(.footnote)
+                        .foregroundStyle(.orange)
+                }
             }
         }
         .cardSurface()
@@ -263,17 +284,22 @@ struct OnboardingView: View {
 
     private func advance() {
         if isLastStep {
-            finish()
+            finish(keepingGoal: true)
         } else {
             withAnimation { index += 1 }
         }
     }
 
-    private func finish() {
-        applyGoal()
+    /// - Parameter keepingGoal: нажали «Пропустить» — значит от цели
+    ///   отказались, даже если награду успели напечатать.
+    private func finish(keepingGoal: Bool) {
+        if keepingGoal { applyGoal() }
         applyReminder()
         onboardingDone = true
-        Log.info(.app, "Знакомство пройдено", detail: "шагов показано: \(index + 1)")
+        Log.info(
+            .app, "Знакомство пройдено",
+            detail: "шагов показано: \(index + 1) из \(plan.count)"
+                + (keepingGoal ? "" : ", пропущено")) 
         dismiss()
     }
 
@@ -284,6 +310,10 @@ struct OnboardingView: View {
     }
 
     private func applyReminder() {
+        // Шага не было — значит напоминание уже настроено, и трогать его
+        // незачем: перепланирование зря дёргает разрешения, а при отозванном
+        // доступе ещё и молча выключило бы уже работающее напоминание.
+        guard plan.steps.contains(.reminder) else { return }
         guard reminderEnabled else {
             NotificationService.cancelDailyReminder()
             return
