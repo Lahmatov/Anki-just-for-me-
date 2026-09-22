@@ -9,6 +9,10 @@ let package = Package(
     ],
     targets: [
         .target(name: "AJFMCore"),
-        .testTarget(name: "AJFMCoreTests", dependencies: ["AJFMCore"])
+        .testTarget(
+            name: "AJFMCoreTests",
+            dependencies: ["AJFMCore"],
+            resources: [.copy("Resources")]
+        )
     ]
 )
