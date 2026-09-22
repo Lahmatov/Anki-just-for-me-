@@ -70,6 +70,9 @@ struct ProgressService {
             goal: goal, reward: reward, baseline: matureWordCount(), deadline: deadline)
         context.insert(RewardContractEntity(contract: contract))
         try? context.save()
+        Log.info(
+            .rewards, "Цель заведена: \(reward)",
+            detail: "нужно \(goal) слов, сейчас выучено \(contract.baseline)")
     }
 
     /// Отмечает награду полученной.
@@ -77,6 +80,11 @@ struct ProgressService {
         guard let entity = entity(for: contract.id) else { return }
         entity.completedAt = Date()
         try? context.save()
+        Log.info(
+            .rewards, "Награда получена: \(contract.reward)",
+            detail: contract.hadManualAdjustments
+                ? "прогресс правился руками"
+                : "честно, \(contract.goal) слов")
     }
 
     func delete(_ contract: RewardContract) {

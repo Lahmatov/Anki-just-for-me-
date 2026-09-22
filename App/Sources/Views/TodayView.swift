@@ -18,12 +18,16 @@ struct TodayView: View {
                     if let summary, !summary.isEmpty {
                         counters(summary)
                         Button {
+                            Haptics.tap()
                             isSessionActive = true
                         } label: {
                             Label("Учить \(summary.total) карточек", systemImage: "play.fill")
+                                .font(.headline)
                                 .frame(maxWidth: .infinity)
+                                .padding(.vertical, 6)
                         }
                         .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
                         .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                     } else if notes.isEmpty {
                         ContentUnavailableView(
@@ -84,22 +88,31 @@ struct TodayView: View {
 
     @ViewBuilder
     private func counters(_ summary: QueueSummary) -> some View {
-        HStack {
-            counter("Новые", summary.new, .blue)
-            Divider()
-            counter("Учатся", summary.learning, .orange)
-            Divider()
-            counter("Повторить", summary.review, .green)
+        HStack(alignment: .top, spacing: 0) {
+            counter("Новые", summary.new, Design.color(for: .new))
+            Divider().frame(height: 36)
+            counter("Учатся", summary.learning, Design.color(for: .learning))
+            Divider().frame(height: 36)
+            counter("Повторить", summary.review, Design.color(for: .review))
         }
         .frame(maxWidth: .infinity)
+        .padding(.vertical, 4)
     }
 
     private func counter(_ title: String, _ value: Int, _ color: Color) -> some View {
-        VStack(spacing: 2) {
-            Text("\(value)").font(.title2).bold().foregroundStyle(color)
-            Text(title).font(.caption).foregroundStyle(.secondary)
+        VStack(spacing: 4) {
+            // Цифра — главное на экране, её видно с расстояния вытянутой руки.
+            Text("\(value)")
+                .font(.system(.title, design: .rounded, weight: .semibold))
+                .foregroundStyle(value == 0 ? Color.secondary : color)
+                .monospacedDigit()
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value)")
     }
 
     private func refresh() {

@@ -41,20 +41,25 @@ struct ReviewSessionView: View {
     private func sessionBody(_ model: ReviewSessionModel) -> some View {
         VStack(spacing: 0) {
             ProgressView(value: model.progress)
+                .progressViewStyle(.linear)
+                .tint(.accentColor)
                 .padding(.horizontal)
+                .padding(.top, 4)
 
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: Design.stackSpacing) {
                     if let card = model.current {
                         CardPromptView(card: card, model: model)
+                            .cardSurface(emphasized: model.isRevealed)
                     }
                 }
                 .padding()
             }
 
-            Divider()
             footer(model)
+                .background(.bar)
         }
+        .background(Color(.systemGroupedBackground))
     }
 
     @ViewBuilder
@@ -63,18 +68,35 @@ struct ReviewSessionView: View {
             if model.isRevealed {
                 GradeButtons(model: model)
             } else if model.current?.type.requiresTyping == true {
-                Button("Проверить") { model.reveal() }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
+                Button {
+                    Haptics.tap()
+                    model.reveal()
+                } label: {
+                    Text("Проверить").frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
             } else if model.current?.type == .pronunciation {
-                Button("Показать") { model.reveal() }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
+                Button {
+                    Haptics.tap()
+                    model.reveal()
+                } label: {
+                    Text("Показать").frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
             }
 
-            Text("\(model.index + 1) из \(model.cards.count)")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            HStack(spacing: 12) {
+                Text("\(model.index + 1) из \(model.cards.count)")
+                if model.stats.answered > 0 {
+                    Text("·")
+                    Text("верно \(model.stats.correct + model.stats.typos) "
+                         + "из \(model.stats.answered)")
+                }
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
         }
         .padding()
     }
@@ -124,7 +146,14 @@ struct CardPromptView: View {
         .onAppear { speakPromptIfNeeded() }
         .onChange(of: card.persistentModelID) { _, _ in speakPromptIfNeeded() }
         .onChange(of: model.isRevealed) { _, revealed in
-            if revealed, autoSpeak, card.type != .listening {
+            guard revealed else { return }
+            switch model.check?.verdict {
+            case .correct: Haptics.success()
+            case .typo: Haptics.warning()
+            case .wrong: Haptics.failure()
+            case nil: break
+            }
+            if autoSpeak, card.type != .listening {
                 SpeechService.shared.speak(card.note?.term ?? "")
             }
         }
@@ -140,9 +169,11 @@ struct CardPromptView: View {
     private var prompt: some View {
         switch card.type {
         case .recognition:
-            Text(note?.term ?? "").font(.largeTitle).bold()
+            Text(note?.term ?? "")
+                .font(.system(.largeTitle, design: .rounded, weight: .semibold))
         case .recall:
-            Text(note?.translation ?? "").font(.title).bold()
+            Text(note?.translation ?? "")
+                .font(.system(.title, design: .rounded, weight: .semibold))
         case .cloze:
             Text(note?.cloze ?? note?.example ?? note?.translation ?? "")
                 .font(.title2)
@@ -189,13 +220,17 @@ struct CardPromptView: View {
         VStack(spacing: 8) {
             ForEach(model.choices, id: \.self) { option in
                 Button {
+                    Haptics.tap()
                     model.choose(option)
                 } label: {
                     Text(option)
+                        .font(.body)
+                        .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 8)
+                        .padding(.vertical, 10)
                 }
                 .buttonStyle(.bordered)
+                .controlSize(.large)
             }
         }
     }
@@ -271,6 +306,7 @@ struct GradeButtons: View {
         HStack(spacing: 8) {
             ForEach(Grade.allCases, id: \.rawValue) { grade in
                 Button {
+                    Haptics.tap()
                     model.grade(grade)
                 } label: {
                     VStack(spacing: 2) {

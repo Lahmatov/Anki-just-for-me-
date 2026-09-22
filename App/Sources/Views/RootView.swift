@@ -15,6 +15,7 @@ struct RootView: View {
     @State private var exportedFile: ExportedFile?
     @State private var promptCopied = false
     @State private var showRestoreImporter = false
+    @State private var showQuickAdd = false
     @State private var pendingRestore: PendingRestore?
     @State private var restoreResult: RestoreService.Result?
 
@@ -51,6 +52,7 @@ struct RootView: View {
         .task {
             // Раз в неделю база сама уезжает в файл — на случай, если
             // вспомнить про кнопку «Сохранить бэкап» не получится.
+            Log.info(.app, "Приложение запущено")
             BackupService(context: context).backupIfNeeded()
             SnapshotService.recordIfNeeded(context: context)
         }
@@ -126,6 +128,9 @@ struct RootView: View {
             // Файл, присланный через «Поделиться» из Файлов или мессенджера.
             loadPlan { try ImportService(context: context).makePlan(from: try read(url)) }
         }
+        .sheet(isPresented: $showQuickAdd) {
+            QuickAddView()
+        }
         .sheet(isPresented: $showPasteImport) {
             PasteImportView { text in
                 loadPlan { try ImportService(context: context).makePlan(from: text) }
@@ -170,6 +175,8 @@ struct RootView: View {
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
+                Button("Новое слово", systemImage: "plus.circle") { showQuickAdd = true }
+                Divider()
                 Button("Импорт из файла", systemImage: "doc") { showFileImporter = true }
                 Button("Вставить из буфера", systemImage: "doc.on.clipboard") {
                     showPasteImport = true

@@ -117,6 +117,7 @@ final class RetellRecorder {
             status = .recording
         } catch {
             cleanUp()
+            Log.failure(.speech, "Запись пересказа не началась", error)
             status = .failed("Не получилось начать запись: \(error.localizedDescription)")
         }
     }
@@ -129,6 +130,9 @@ final class RetellRecorder {
         engine.inputNode.removeTap(onBus: 0)
         finishSegment()
         cleanUp()
+        Log.info(
+            .speech, "Пересказ записан",
+            detail: "\(Int(elapsed)) секунд, слов: \(wordCount)")
         status = .finished
     }
 

@@ -81,6 +81,7 @@ final class PronunciationService {
             status = .recording
         } catch {
             cleanUp()
+            Log.failure(.speech, "Запись не началась", error)
             status = .failed("Не получилось начать запись: \(error.localizedDescription)")
         }
     }
@@ -200,6 +201,10 @@ final class PronunciationService {
                 expected: expected, recognized: bestTranscript, confidence: bestConfidence)
         }
         cleanUp()
+        Log.debug(
+            .speech, "Произношение: \(assessment.verdict.rawValue)",
+            detail: "ждали «\(assessment.expected)», услышали «\(assessment.recognized)», "
+                + "уверенность \(Int(assessment.confidence * 100))%")
         status = .finished(assessment)
     }
 

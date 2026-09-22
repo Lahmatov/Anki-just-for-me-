@@ -80,6 +80,10 @@ final class RetellFlowModel {
         }
         do {
             let parsed = try SubtitleParser.parse(raw)
+            Log.info(
+                .importing, "Субтитры загружены",
+                detail: "реплик: \(parsed.cues.count), "
+                    + "длительность: \(Int(parsed.duration / 60)) мин")
             track = parsed
             watchedUpToMinutes = (parsed.duration / 60).rounded()
             step = .ready
@@ -143,8 +147,16 @@ final class RetellFlowModel {
             // от того, удалось ли разобрать ответ.
             context.insert(UsageEntry(record: outcome.usage))
             lastCost = outcome.usage.cost
+            Log.info(
+                .network, String(format: "Разбор пересказа: $%.4f", outcome.usage.cost),
+                detail: "модель: \(selectedModel), "
+                    + "вход: \(outcome.usage.inputTokens) токенов, "
+                    + "выход: \(outcome.usage.outputTokens)")
 
             guard let parsed = outcome.report else {
+                Log.error(
+                    .network, "Ответ модели не разобрался",
+                    detail: outcome.decodeError ?? "причина неизвестна")
                 try? context.save()
                 step = .failed(
                     "Модель ответила, но разобрать ответ не вышло: "
@@ -164,6 +176,7 @@ final class RetellFlowModel {
             report = parsed
             step = .done
         } catch {
+            Log.failure(.network, "Запрос разбора не прошёл", error)
             step = .failed(error.localizedDescription)
         }
     }

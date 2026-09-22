@@ -86,8 +86,14 @@ struct RestoreService {
             try context.save()
         } catch {
             context.rollback()
+            Log.failure(.backup, "Восстановление сорвалось, база возвращена как была", error)
             throw error
         }
+
+        Log.info(
+            .backup, "База восстановлена из бэкапа",
+            detail: "наборов: \(backup.decks.count), слов: \(backup.noteCount), "
+                + "карточек: \(cardCount)")
 
         return Result(
             decks: backup.decks.count, notes: backup.noteCount, cards: cardCount)

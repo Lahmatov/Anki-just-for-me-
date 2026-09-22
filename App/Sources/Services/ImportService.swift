@@ -77,6 +77,11 @@ struct ImportService {
 
         try context.save()
 
+        Log.info(
+            .importing, "Набор «\(plan.deckName)» добавлен",
+            detail: "слов: \(notesToAdd.count), карточек: \(addedCards), "
+                + "дублей пропущено: \(plan.duplicates.count)")
+
         return ImportResult(
             deckName: plan.deckName,
             addedNotes: notesToAdd.count,

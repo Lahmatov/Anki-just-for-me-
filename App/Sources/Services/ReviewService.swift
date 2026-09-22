@@ -71,6 +71,13 @@ struct ReviewService {
         log.card = card
 
         try context.save()
+
+        Log.debug(
+            .review, "Оценка «\(grade.title)» для «\(card.note?.term ?? "—")»",
+            detail: "алгоритм: \(schedulerID.rawValue), "
+                + "интервал: \(IntervalFormatter.short(next.intervalDays * 86_400)), "
+                + "состояние: \(next.state.rawValue)")
+
         return next
     }
 

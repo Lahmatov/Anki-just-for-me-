@@ -132,6 +132,18 @@ struct SettingsView: View {
                 } footer: {
                     Text("Локальное уведомление — работает без платного аккаунта Apple.")
                 }
+
+                Section {
+                    NavigationLink {
+                        LogView()
+                    } label: {
+                        Label("Журнал событий", systemImage: "text.alignleft")
+                    }
+                } footer: {
+                    Text("Что происходило внутри приложения. Если что-то повело себя "
+                         + "странно — журнал можно переслать одним нажатием, это "
+                         + "быстрее любых описаний.")
+                }
             }
             .navigationTitle("Настройки")
             .onAppear { apiKey = Keychain.get(Keychain.claudeAPIKey) ?? "" }

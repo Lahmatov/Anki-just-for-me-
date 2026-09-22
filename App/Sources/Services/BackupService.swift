@@ -35,9 +35,15 @@ struct BackupService {
 
     @discardableResult
     func performBackup(now: Date = Date()) -> URL? {
-        guard let directory = Self.directory else { return nil }
+        guard let directory = Self.directory else {
+            Log.error(.backup, "Не нашлась папка для бэкапов")
+            return nil
+        }
         guard let data = try? BackupCoder.encode(
-            try ExportService(context: context).makeBackup()) else { return nil }
+            try ExportService(context: context).makeBackup()) else {
+            Log.error(.backup, "Не удалось собрать бэкап")
+            return nil
+        }
 
         let stamp = Self.stampFormatter.string(from: now)
         let url = directory.appendingPathComponent("ajfm-\(stamp).json")
@@ -45,6 +51,9 @@ struct BackupService {
 
         UserDefaults.standard.set(now, forKey: SettingsKey.lastBackupDate)
         pruneOldBackups(in: directory)
+        Log.info(
+            .backup, "Бэкап сохранён",
+            detail: "\(url.lastPathComponent), \(data.count / 1024) КБ")
         return url
     }
 
