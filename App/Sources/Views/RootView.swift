@@ -49,6 +49,7 @@ struct RootView: View {
             // Раз в неделю база сама уезжает в файл — на случай, если
             // вспомнить про кнопку «Сохранить бэкап» не получится.
             BackupService(context: context).backupIfNeeded()
+            SnapshotService.recordIfNeeded(context: context)
         }
         .fileImporter(
             isPresented: $showFileImporter,

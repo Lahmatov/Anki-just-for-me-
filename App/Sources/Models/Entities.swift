@@ -344,3 +344,20 @@ final class RewardContractEntity {
             hadManualAdjustments: hadManualAdjustments)
     }
 }
+
+/// Ежедневный снимок прогресса — из них строится кривая роста.
+///
+/// Без снимков кривую не восстановить: база хранит текущее состояние карточек,
+/// а не историю того, когда каждая из них стала зрелой.
+@Model
+final class ProgressSnapshot {
+    var date: Date = Date()
+    var matureWords: Int = 0
+    var totalWords: Int = 0
+
+    init(date: Date, matureWords: Int, totalWords: Int) {
+        self.date = date
+        self.matureWords = matureWords
+        self.totalWords = totalWords
+    }
+}

@@ -10,6 +10,7 @@ enum TestDB {
         let container = try ModelContainer(
             for: Folder.self, Deck.self, Note.self, Card.self, Review.self,
             RetellSession.self, UsageEntry.self, RewardContractEntity.self,
+            ProgressSnapshot.self,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
         return ModelContext(container)

@@ -57,6 +57,19 @@ struct TodayView: View {
                 }
 
                 StatsSection(cards: cards, notes: notes)
+
+                Section {
+                    NavigationLink {
+                        StatsView()
+                    } label: {
+                        Label("Графики и прогноз нагрузки", systemImage: "chart.bar")
+                    }
+                    NavigationLink {
+                        DifficultCardsView()
+                    } label: {
+                        Label("Трудные карточки", systemImage: "exclamationmark.triangle")
+                    }
+                }
             }
             .navigationTitle("Сегодня")
             .navigationDestination(isPresented: $isSessionActive) {

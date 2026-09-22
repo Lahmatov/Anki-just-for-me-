@@ -1,0 +1,58 @@
+import Foundation
+
+/// Карточки, которые проваливаются снова и снова.
+///
+/// В Anki их называют «пиявками» — они съедают непропорционально много
+/// времени. Держать их в общей очереди бессмысленно: если слово забыто
+/// восемь раз, девятый повтор той же карточки ничего не изменит.
+/// Менять надо саму карточку, а не расписание.
+public enum LeechPolicy {
+
+    /// Порог, после которого карточка считается проблемной.
+    public static let defaultThreshold = 5
+
+    public static func isLeech(lapses: Int, threshold: Int = defaultThreshold) -> Bool {
+        lapses >= threshold
+    }
+
+    /// Насколько всё плохо — по этому сортируется список трудных.
+    public static func severity(lapses: Int, reps: Int) -> Double {
+        guard reps > 0 else { return 0 }
+        return Double(lapses) / Double(reps)
+    }
+
+    /// Что конкретно делать с такой карточкой.
+    ///
+    /// Советы разные, потому что причины разные: слово без контекста,
+    /// слишком длинная фраза, два похожих слова, которые путаются между собой.
+    public static func advice(lapses: Int, hasExample: Bool, termWordCount: Int) -> String {
+        if !hasExample {
+            return "Добавь пример из сериала: слово без контекста почти не держится "
+                + "в памяти. Кинь субтитры в набор — примеры подставятся сами."
+        }
+        if termWordCount > 4 {
+            return "Фраза длинная. Разбей её на части или оставь ключевое слово — "
+                + "целиком такие конструкции почти не запоминаются."
+        }
+        if lapses >= 10 {
+            return "Десять провалов — карточка не работает. Перепиши её своими словами, "
+                + "придумай мнемонику или временно отложи: это слово пока не твоё."
+        }
+        return "Проверь, не путается ли оно с похожим словом. Если да — заведи "
+            + "карточку с обоими сразу, чтобы разница была видна."
+    }
+
+    /// Формулировка для экрана.
+    public static func summary(lapses: Int) -> String {
+        "Забыто \(lapses) \(pluralForgot(lapses))"
+    }
+
+    private static func pluralForgot(_ count: Int) -> String {
+        let remainder100 = count % 100
+        if remainder100 >= 11 && remainder100 <= 14 { return "раз" }
+        switch count % 10 {
+        case 2, 3, 4: return "раза"
+        default: return "раз"
+        }
+    }
+}

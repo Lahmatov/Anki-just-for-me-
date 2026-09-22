@@ -16,6 +16,7 @@ enum SettingsKey {
     static let perfectSessions = "perfectSessions"
     static let weeklyTarget = "weeklyTarget"
     static let lastBackupDate = "lastBackupDate"
+    static let leechThreshold = "leechThreshold"
     static let reminderEnabled = "reminderEnabled"
     static let reminderHour = "reminderHour"
     static let reminderMinute = "reminderMinute"
