@@ -20,6 +20,9 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.reminderHour) private var reminderHour = 20
     @AppStorage(SettingsKey.reminderMinute) private var reminderMinute = 0
 
+    @Environment(\.modelContext) private var context
+    @State private var onboarding: OnboardingPlan?
+
     private var speech: SpeechService { SpeechService.shared }
 
     var body: some View {
@@ -134,6 +137,11 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    Button {
+                        onboarding = OnboardingPlanBuilder.make(context: context)
+                    } label: {
+                        Label("Показать знакомство", systemImage: "sparkles")
+                    }
                     NavigationLink {
                         LogView()
                     } label: {
@@ -147,6 +155,9 @@ struct SettingsView: View {
             }
             .navigationTitle("Настройки")
             .onAppear { apiKey = Keychain.get(Keychain.claudeAPIKey) ?? "" }
+            .sheet(item: $onboarding) { plan in
+                OnboardingView(plan: plan)
+            }
             .onChange(of: reminderEnabled) { _, enabled in
                 Task { await applyReminder(enabled: enabled) }
             }

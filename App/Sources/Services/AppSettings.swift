@@ -17,6 +17,7 @@ enum SettingsKey {
     static let weeklyTarget = "weeklyTarget"
     static let lastBackupDate = "lastBackupDate"
     static let leechThreshold = "leechThreshold"
+    static let onboardingDone = "onboardingDone"
     static let reminderEnabled = "reminderEnabled"
     static let reminderHour = "reminderHour"
     static let reminderMinute = "reminderMinute"

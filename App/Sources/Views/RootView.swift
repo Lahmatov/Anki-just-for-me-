@@ -16,6 +16,7 @@ struct RootView: View {
     @State private var promptCopied = false
     @State private var showRestoreImporter = false
     @State private var showQuickAdd = false
+    @State private var onboarding: OnboardingPlan?
     @State private var pendingRestore: PendingRestore?
     @State private var restoreResult: RestoreService.Result?
 
@@ -55,6 +56,7 @@ struct RootView: View {
             Log.info(.app, "Приложение запущено")
             BackupService(context: context).backupIfNeeded()
             SnapshotService.recordIfNeeded(context: context)
+            showOnboardingIfNeeded()
         }
         .fileImporter(
             isPresented: $showFileImporter,
@@ -130,6 +132,9 @@ struct RootView: View {
         }
         .sheet(isPresented: $showQuickAdd) {
             QuickAddView()
+        }
+        .sheet(item: $onboarding) { plan in
+            OnboardingView(plan: plan)
         }
         .sheet(isPresented: $showPasteImport) {
             PasteImportView { text in
@@ -254,6 +259,18 @@ struct RootView: View {
         } catch {
             importError = ImportError(message: error.localizedDescription)
         }
+    }
+}
+
+extension RootView {
+    /// Знакомство показывается один раз, а потом — только по своей воле
+    /// из настроек.
+    @MainActor
+    func showOnboardingIfNeeded() {
+        guard !UserDefaults.standard.bool(forKey: SettingsKey.onboardingDone) else {
+            return
+        }
+        onboarding = OnboardingPlanBuilder.make(context: context)
     }
 }
 

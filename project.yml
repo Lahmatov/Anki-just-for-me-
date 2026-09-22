@@ -29,6 +29,8 @@ targets:
       Release: Config/Signing.xcconfig
     sources:
       - path: App/Sources
+      - path: App/Resources
+        buildPhase: resources
     dependencies:
       - package: AJFMCore
         product: AJFMCore
