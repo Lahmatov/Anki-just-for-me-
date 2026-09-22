@@ -10,6 +10,8 @@ enum SettingsKey {
     static let dayCutoffHour = "dayCutoffHour"
     static let desiredRetention = "desiredRetention"
     static let autoSpeak = "autoSpeak"
+    static let claudeModel = "claudeModel"
+    static let monthlyBudget = "monthlyBudget"
     static let reminderEnabled = "reminderEnabled"
     static let reminderHour = "reminderHour"
     static let reminderMinute = "reminderMinute"

@@ -7,6 +7,9 @@ struct AJFMApp: App {
         WindowGroup {
             RootView()
         }
-        .modelContainer(for: [Folder.self, Deck.self, Note.self, Card.self, Review.self])
+        .modelContainer(for: [
+            Folder.self, Deck.self, Note.self, Card.self, Review.self,
+            RetellSession.self, UsageEntry.self,
+        ])
     }
 }

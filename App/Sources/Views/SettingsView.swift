@@ -13,6 +13,9 @@ struct SettingsView: View {
         AppSettings.default.desiredRetention
 
     @AppStorage(SettingsKey.autoSpeak) private var autoSpeak = true
+    @AppStorage(SettingsKey.claudeModel) private var claudeModel = ClaudeModel.opus5.id
+    @AppStorage(SettingsKey.monthlyBudget) private var monthlyBudget = 10.0
+    @State private var apiKey = ""
     @AppStorage(SettingsKey.reminderEnabled) private var reminderEnabled = false
     @AppStorage(SettingsKey.reminderHour) private var reminderHour = 20
     @AppStorage(SettingsKey.reminderMinute) private var reminderMinute = 0
@@ -91,6 +94,30 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    SecureField("Ключ API", text: $apiKey)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .onChange(of: apiKey) { _, value in
+                            Keychain.set(value.trimmingCharacters(in: .whitespaces),
+                                         for: Keychain.claudeAPIKey)
+                        }
+                    Picker("Модель", selection: $claudeModel) {
+                        ForEach(ClaudeModel.all, id: \.id) { pricing in
+                            Text(pricing.title).tag(pricing.id)
+                        }
+                    }
+                    Stepper(
+                        "Лимит в месяц: $\(Int(monthlyBudget))",
+                        value: $monthlyBudget, in: 1...100, step: 1)
+                } header: {
+                    Text("Разбор пересказов")
+                } footer: {
+                    Text("Ключ хранится в Keychain и никуда, кроме Anthropic, не уходит. "
+                         + "Лимит нужен не ради экономии — бюджета хватает с запасом, — "
+                         + "а чтобы ошибка в коде не съела его молча.")
+                }
+
+                Section {
                     Toggle("Напоминание", isOn: $reminderEnabled)
                     if reminderEnabled {
                         DatePicker(
@@ -107,6 +134,7 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Настройки")
+            .onAppear { apiKey = Keychain.get(Keychain.claudeAPIKey) ?? "" }
             .onChange(of: reminderEnabled) { _, enabled in
                 Task { await applyReminder(enabled: enabled) }
             }

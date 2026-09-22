@@ -253,3 +253,63 @@ final class Review {
         self.timestamp = Date()
     }
 }
+
+/// Сохранённый разбор пересказа серии.
+@Model
+final class RetellSession {
+    var createdAt: Date = Date()
+    var episodeTitle: String = ""
+    var transcript: String = ""
+    /// Разбор целиком, сериализованный в JSON.
+    var reportJSON: String = ""
+    var coverage: Double = 0
+    var grammarMistakes: Int = 0
+    var cost: Double = 0
+    var model: String = ""
+    /// Создан ли уже набор карточек по этому разбору.
+    var deckCreated: Bool = false
+
+    init(
+        episodeTitle: String, transcript: String, report: RetellReport,
+        cost: Double, model: String
+    ) {
+        self.createdAt = Date()
+        self.episodeTitle = episodeTitle
+        self.transcript = transcript
+        self.reportJSON = (try? JSONEncoder().encode(report))
+            .flatMap { String(data: $0, encoding: .utf8) } ?? ""
+        self.coverage = report.understanding.coverage
+        self.grammarMistakes = report.language.grammar.count
+        self.cost = cost
+        self.model = model
+    }
+
+    var report: RetellReport? {
+        guard let data = reportJSON.data(using: .utf8) else { return nil }
+        return try? JSONDecoder().decode(RetellReport.self, from: data)
+    }
+}
+
+/// Строка расхода на облачный разбор.
+@Model
+final class UsageEntry {
+    var date: Date = Date()
+    var model: String = ""
+    var inputTokens: Int = 0
+    var outputTokens: Int = 0
+    var cost: Double = 0
+
+    init(record: UsageRecord) {
+        self.date = record.date
+        self.model = record.model
+        self.inputTokens = record.inputTokens
+        self.outputTokens = record.outputTokens
+        self.cost = record.cost
+    }
+
+    var asRecord: UsageRecord {
+        UsageRecord(
+            date: date, model: model, inputTokens: inputTokens,
+            outputTokens: outputTokens, cost: cost)
+    }
+}

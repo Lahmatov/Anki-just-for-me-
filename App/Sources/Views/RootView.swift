@@ -25,6 +25,9 @@ struct RootView: View {
             }
             .tabItem { Label("Наборы", systemImage: "folder") }
 
+            RetellView()
+                .tabItem { Label("Пересказ", systemImage: "text.bubble") }
+
             MinimalPairsView()
                 .tabItem { Label("Речь", systemImage: "waveform") }
 
