@@ -84,6 +84,12 @@ public enum BackupError: Error, Equatable, LocalizedError {
     }
 }
 
+/// Только формат и версия — читается до полного разбора.
+private struct BackupEnvelope: Decodable {
+    var format: String?
+    var version: Int?
+}
+
 public enum BackupCoder {
     public static func encode(_ backup: BackupFile) throws -> Data {
         let encoder = JSONEncoder()
@@ -93,19 +99,22 @@ public enum BackupCoder {
     }
 
     public static func decode(_ data: Data) throws -> BackupFile {
+        // Восстановление заменяет базу целиком, поэтому формат проверяется
+        // строже, чем при обычном импорте, и до всего остального: иначе
+        // на чужом файле мы бы сообщили о пропавшем поле вместо внятного
+        // «это не бэкап».
+        if let envelope = try? JSONDecoder().decode(BackupEnvelope.self, from: data) {
+            if let format = envelope.format, format != BackupFile.formatID {
+                throw BackupError.wrongFormat(found: format)
+            }
+            if let version = envelope.version, version > BackupFile.supportedVersion {
+                throw BackupError.unsupportedVersion(
+                    found: version, supported: BackupFile.supportedVersion)
+            }
+        }
+
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        let backup = try decoder.decode(BackupFile.self, from: data)
-
-        // Восстановление заменяет базу целиком, поэтому формат проверяется
-        // строже, чем при обычном импорте.
-        guard backup.format == BackupFile.formatID else {
-            throw BackupError.wrongFormat(found: backup.format)
-        }
-        guard backup.version <= BackupFile.supportedVersion else {
-            throw BackupError.unsupportedVersion(
-                found: backup.version, supported: BackupFile.supportedVersion)
-        }
-        return backup
+        return try decoder.decode(BackupFile.self, from: data)
     }
 }

@@ -90,9 +90,12 @@ struct RootView: View {
                     restoreResult = try RestoreService(context: context)
                         .restore(pending.backup)
                 } catch {
-                    // Ошибку показываем после закрытия предупреждения —
-                    // иначе одно оповещение перекрывает другое и пропадает.
-                    importError = ImportError(message: error.localizedDescription)
+                    let message = error.localizedDescription
+                    // Следующим циклом обновления: оповещение, показанное
+                    // в том же проходе, что и закрытие предыдущего, теряется.
+                    Task { @MainActor in
+                        importError = ImportError(message: message)
+                    }
                 }
             }
             Button("Отмена", role: .cancel) { pendingRestore = nil }

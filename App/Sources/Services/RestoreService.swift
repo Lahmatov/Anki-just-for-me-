@@ -46,7 +46,7 @@ struct RestoreService {
     func restore(_ backup: BackupFile) throws -> Result {
         // Чистка и наполнение — одна транзакция: промежуточное сохранение
         // оставило бы базу пустой, если запись новых данных сорвётся.
-        wipe()
+        try wipe()
 
         var folderCache: [String: Folder] = [:]
         var cardCount = 0
@@ -77,7 +77,15 @@ struct RestoreService {
             }
         }
 
-        try context.save()
+        do {
+            try context.save()
+        } catch {
+            // Без отката удаления остались бы висеть в общем контексте,
+            // и первое же постороннее сохранение стёрло бы библиотеку.
+            context.rollback()
+            throw error
+        }
+
         return Result(
             decks: backup.decks.count, notes: backup.noteCount, cards: cardCount)
     }
@@ -111,17 +119,19 @@ struct RestoreService {
     /// Чистит всё, что восстанавливается из бэкапа. История пересказов,
     /// расходы, награды и журнал занятий не трогаются — бэкап их не содержит,
     /// а терять счёт учебных дней при переносе на новый телефон обидно.
-    private func wipe() {
-        for folder in (try? context.fetch(FetchDescriptor<Folder>())) ?? [] {
+    private func wipe() throws {
+        // Ошибку выборки нельзя глотать: «ничего не нашлось» превратило бы
+        // замену в слияние, о котором пользователю не сказали.
+        for folder in try context.fetch(FetchDescriptor<Folder>()) {
             context.delete(folder)
         }
-        for deck in (try? context.fetch(FetchDescriptor<Deck>())) ?? [] {
+        for deck in try context.fetch(FetchDescriptor<Deck>()) {
             context.delete(deck)
         }
-        for note in (try? context.fetch(FetchDescriptor<Note>())) ?? [] {
+        for note in try context.fetch(FetchDescriptor<Note>()) {
             context.delete(note)
         }
-        for card in (try? context.fetch(FetchDescriptor<Card>())) ?? [] {
+        for card in try context.fetch(FetchDescriptor<Card>()) {
             context.delete(card)
         }
     }

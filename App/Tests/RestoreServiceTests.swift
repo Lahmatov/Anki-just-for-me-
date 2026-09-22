@@ -133,6 +133,16 @@ final class RestoreServiceTests: XCTestCase {
         XCTAssertEqual(try context.fetch(FetchDescriptor<Note>()).count, 2, "база цела")
     }
 
+    func testForeignFormatIsNamedPlainly() throws {
+        let (_, _, _, restorer) = try makeEnvironment()
+        // Сообщение «нет поля exportedAt» ничего не объясняет — файл должен
+        // отвергаться по формату, до попытки разобрать остальное.
+        XCTAssertThrowsError(try restorer.preview(from: TestDB.deckFile(
+            notes: [NoteData(term: "a", translation: "б")]))) { error in
+            XCTAssertEqual(error as? BackupError, .wrongFormat(found: DeckFile.formatID))
+        }
+    }
+
     func testStudyJournalSurvivesRestore() throws {
         let (context, importer, exporter, restorer) = try makeEnvironment()
         try seed(importer)
