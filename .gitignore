@@ -10,3 +10,6 @@ xcuserdata/
 .swiftpm/
 
 .DS_Store
+
+# Отчёт скрипта проверки
+build-errors.txt
