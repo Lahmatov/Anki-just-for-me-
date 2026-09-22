@@ -168,14 +168,14 @@ struct CardPromptView: View {
                 if let ipa = note?.ipa, !ipa.isEmpty {
                     Text(ipa).foregroundStyle(.secondary)
                 }
-                HStack {
-                    SpeakButton(text: note?.term ?? "", label: "Эталон")
-                    SpeakButton(text: note?.term ?? "", rate: .slow, label: "Медленно")
+                SpeakButton(text: note?.term ?? "", rate: .slow, label: "Медленно")
+                PronunciationRecorderView(word: note?.term ?? "")
+                if let pair = MinimalPairLibrary.pair(containing: note?.term ?? "") {
+                    Text("Это слово из минимальной пары «\(pair.first) — \(pair.second)». "
+                         + "Вкладка «Речь» проверит его строже.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
-                Text("Послушай, произнеси вслух, потом оцени себя сам. "
-                     + "Автоматическая проверка появится в следующей итерации.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
         }
     }

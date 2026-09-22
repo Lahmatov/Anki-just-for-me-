@@ -25,6 +25,9 @@ struct RootView: View {
             }
             .tabItem { Label("Наборы", systemImage: "folder") }
 
+            MinimalPairsView()
+                .tabItem { Label("Речь", systemImage: "waveform") }
+
             SettingsView()
                 .tabItem { Label("Настройки", systemImage: "gearshape") }
         }

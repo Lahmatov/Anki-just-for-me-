@@ -51,6 +51,12 @@ targets:
         # Благодаря этому приложение появляется в шторке «Поделиться» для .json —
         # так набор долетает из Файлов, iCloud Drive или мессенджера.
         LSSupportsOpeningDocumentsInPlace: true
+        NSMicrophoneUsageDescription: >-
+          Чтобы проверять произношение, приложению нужен доступ к микрофону.
+          Запись остаётся на устройстве.
+        NSSpeechRecognitionUsageDescription: >-
+          Распознавание речи работает локально и нужно, чтобы сверить
+          произнесённое слово с тем, которое ты учишь.
         CFBundleDocumentTypes:
           - CFBundleTypeName: Набор карточек
             CFBundleTypeRole: Editor
