@@ -1,0 +1,50 @@
+import Foundation
+import SwiftUI
+import AJFMCore
+
+/// Настройки приложения. Живут в UserDefaults — их немного и они несложные.
+enum SettingsKey {
+    static let newPerDay = "newPerDay"
+    static let reviewsPerDay = "reviewsPerDay"
+    static let burySiblings = "burySiblings"
+    static let dayCutoffHour = "dayCutoffHour"
+    static let desiredRetention = "desiredRetention"
+    static let reminderEnabled = "reminderEnabled"
+    static let reminderHour = "reminderHour"
+    static let reminderMinute = "reminderMinute"
+}
+
+struct AppSettings {
+    var newPerDay: Int
+    var reviewsPerDay: Int
+    var burySiblings: Bool
+    var dayCutoffHour: Int
+    var desiredRetention: Double
+
+    static let `default` = AppSettings(
+        newPerDay: 20, reviewsPerDay: 200, burySiblings: true,
+        dayCutoffHour: 4, desiredRetention: 0.9)
+
+    static func load(from defaults: UserDefaults = .standard) -> AppSettings {
+        AppSettings(
+            newPerDay: value(defaults, SettingsKey.newPerDay, `default`.newPerDay),
+            reviewsPerDay: value(defaults, SettingsKey.reviewsPerDay, `default`.reviewsPerDay),
+            burySiblings: defaults.object(forKey: SettingsKey.burySiblings) as? Bool
+                ?? `default`.burySiblings,
+            dayCutoffHour: value(defaults, SettingsKey.dayCutoffHour, `default`.dayCutoffHour),
+            desiredRetention: defaults.object(forKey: SettingsKey.desiredRetention) as? Double
+                ?? `default`.desiredRetention)
+    }
+
+    private static func value(_ defaults: UserDefaults, _ key: String, _ fallback: Int) -> Int {
+        defaults.object(forKey: key) as? Int ?? fallback
+    }
+
+    var queueConfig: QueueConfig {
+        QueueConfig(
+            newPerDay: newPerDay,
+            reviewsPerDay: reviewsPerDay,
+            burySiblings: burySiblings,
+            dayCutoffHour: dayCutoffHour)
+    }
+}

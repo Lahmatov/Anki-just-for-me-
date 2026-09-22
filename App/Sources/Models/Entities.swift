@@ -155,32 +155,26 @@ final class Note {
     }
 }
 
-/// Состояние карточки в цикле повторений. Общее для всех алгоритмов —
-/// специфика конкретного лежит в `schedulerState`.
-enum CardState: String, Codable, CaseIterable {
-    case new, learning, review, relearning
-
-    var title: String {
-        switch self {
-        case .new: return "Новая"
-        case .learning: return "Учится"
-        case .review: return "Повторение"
-        case .relearning: return "Переучивается"
-        }
-    }
-}
-
 @Model
 final class Card {
     var typeRaw: String = CardType.recognition.rawValue
-    var stateRaw: String = CardState.new.rawValue
+    var stateRaw: String = LearningState.new.rawValue
     var due: Date = Date()
+    var lastReview: Date?
     var intervalDays: Double = 0
     var reps: Int = 0
     var lapses: Int = 0
-    /// JSON состояния конкретного алгоритма. При смене алгоритма пересчитывается,
-    /// см. docs/architecture.md.
-    var schedulerState: String?
+
+    // Поля состояния алгоритма. Хранятся явными колонками, а не JSON-строкой:
+    // так переключение алгоритма на наборе не теряет прогресс, а состояние
+    // видно в отладчике и проверяется тестами.
+    var step: Int?
+    var stability: Double?
+    var difficulty: Double?
+    var ease: Double?
+    var box: Int?
+    var streak: Int?
+
     var createdAt: Date = Date()
 
     var note: Note?
@@ -188,11 +182,10 @@ final class Card {
     @Relationship(deleteRule: .cascade, inverse: \Review.card)
     var reviews: [Review] = []
 
-    init(type: CardType, note: Note? = nil, due: Date = Date()) {
+    init(type: CardType, due: Date = Date()) {
         self.typeRaw = type.rawValue
-        self.stateRaw = CardState.new.rawValue
+        self.stateRaw = LearningState.new.rawValue
         self.due = due
-        self.note = note
         self.createdAt = Date()
     }
 
@@ -201,18 +194,39 @@ final class Card {
         set { typeRaw = newValue.rawValue }
     }
 
-    var state: CardState {
-        get { CardState(rawValue: stateRaw) ?? .new }
+    var state: LearningState {
+        get { LearningState(rawValue: stateRaw) ?? .new }
         set { stateRaw = newValue.rawValue }
     }
 
-    /// «Выучено» для наград и статистики: карточка дожила до интервала в 21 день.
-    /// Единая метрика на всё приложение, решение P-4 в docs/decisions.md.
-    static let matureIntervalDays: Double = 21
-
-    var isMature: Bool {
-        state == .review && intervalDays >= Self.matureIntervalDays
+    /// Состояние в том виде, в каком его понимают алгоритмы из ядра.
+    var reviewState: ReviewState {
+        get {
+            ReviewState(
+                state: state, due: due, lastReview: lastReview, intervalDays: intervalDays,
+                reps: reps, lapses: lapses, step: step, stability: stability,
+                difficulty: difficulty, ease: ease, box: box, streak: streak)
+        }
+        set {
+            state = newValue.state
+            due = newValue.due
+            lastReview = newValue.lastReview
+            intervalDays = newValue.intervalDays
+            reps = newValue.reps
+            lapses = newValue.lapses
+            step = newValue.step
+            stability = newValue.stability
+            difficulty = newValue.difficulty
+            ease = newValue.ease
+            box = newValue.box
+            streak = newValue.streak
+        }
     }
+
+    /// «Выучено» для наград и статистики — решение P-4 в docs/decisions.md.
+    static let matureIntervalDays = ReviewState.matureIntervalDays
+
+    var isMature: Bool { reviewState.isMature }
 }
 
 @Model

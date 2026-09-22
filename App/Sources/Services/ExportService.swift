@@ -28,15 +28,7 @@ struct ExportService {
                             data: note.asNoteData,
                             createdAt: note.createdAt,
                             cards: note.cards.map { card in
-                                BackupCard(
-                                    type: card.type,
-                                    due: card.due,
-                                    intervalDays: card.intervalDays,
-                                    reps: card.reps,
-                                    lapses: card.lapses,
-                                    state: card.state.rawValue,
-                                    schedulerState: card.schedulerState
-                                )
+                                BackupCard(type: card.type, review: card.reviewState)
                             }
                         )
                     }

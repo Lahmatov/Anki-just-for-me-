@@ -14,10 +14,19 @@ struct RootView: View {
     @State private var exportedFile: ExportedFile?
 
     var body: some View {
-        NavigationStack {
-            FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
-                .navigationTitle("Наборы")
-                .toolbar { toolbar }
+        TabView {
+            TodayView()
+                .tabItem { Label("Сегодня", systemImage: "calendar") }
+
+            NavigationStack {
+                FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
+                    .navigationTitle("Наборы")
+                    .toolbar { toolbar }
+            }
+            .tabItem { Label("Наборы", systemImage: "folder") }
+
+            SettingsView()
+                .tabItem { Label("Настройки", systemImage: "gearshape") }
         }
         .fileImporter(
             isPresented: $showFileImporter,

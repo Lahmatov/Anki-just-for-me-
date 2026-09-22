@@ -41,6 +41,18 @@ struct DeckDetailView: View {
                 Button("Поделиться", systemImage: "square.and.arrow.up") { export() }
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            NavigationLink {
+                ReviewSessionView(deck: deck)
+            } label: {
+                Label("Учить этот набор", systemImage: "play.fill")
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 6)
+            }
+            .buttonStyle(.borderedProminent)
+            .padding()
+            .background(.bar)
+        }
         .alert(
             "Не получилось",
             isPresented: Binding(get: { exportError != nil }, set: { if !$0 { exportError = nil } }),

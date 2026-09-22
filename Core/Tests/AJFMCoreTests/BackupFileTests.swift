@@ -20,12 +20,16 @@ final class BackupFileTests: XCTestCase {
                             cards: [
                                 BackupCard(
                                     type: .recognition,
-                                    due: Date(timeIntervalSince1970: 1_700_100_000),
-                                    intervalDays: 21,
-                                    reps: 7,
-                                    lapses: 1,
-                                    state: "review",
-                                    schedulerState: "{\"difficulty\":5.2}"
+                                    review: ReviewState(
+                                        state: .review,
+                                        due: Date(timeIntervalSince1970: 1_700_100_000),
+                                        lastReview: Date(timeIntervalSince1970: 1_698_284_000),
+                                        intervalDays: 21,
+                                        reps: 7,
+                                        lapses: 1,
+                                        stability: 34.5,
+                                        difficulty: 5.2
+                                    )
                                 )
                             ]
                         )
@@ -45,11 +49,13 @@ final class BackupFileTests: XCTestCase {
         let restored = try BackupCoder.decode(try BackupCoder.encode(sampleBackup()))
         let card = try XCTUnwrap(restored.decks.first?.notes.first?.cards.first)
         // Главное, ради чего бэкап и существует: прогресс повторений переживает переезд.
-        XCTAssertEqual(card.intervalDays, 21)
-        XCTAssertEqual(card.reps, 7)
-        XCTAssertEqual(card.lapses, 1)
-        XCTAssertEqual(card.state, "review")
-        XCTAssertEqual(card.schedulerState, "{\"difficulty\":5.2}")
+        XCTAssertEqual(card.review.intervalDays, 21)
+        XCTAssertEqual(card.review.reps, 7)
+        XCTAssertEqual(card.review.lapses, 1)
+        XCTAssertEqual(card.review.state, .review)
+        XCTAssertEqual(card.review.stability, 34.5)
+        XCTAssertEqual(card.review.difficulty, 5.2)
+        XCTAssertTrue(card.review.isMature, "21 день — это уже выученное слово")
     }
 
     func testStampsFormatAndVersion() throws {

@@ -27,9 +27,14 @@ extension Scheduler {
 }
 
 public enum SchedulerFactory {
-    public static func make(_ id: SchedulerID) -> any Scheduler {
+    /// - Parameter desiredRetention: доля карточек, которую хочется помнить
+    ///   на момент повторения. Учитывается только FSRS — остальные алгоритмы
+    ///   не умеют подстраивать интервалы под целевое удержание.
+    public static func make(
+        _ id: SchedulerID, desiredRetention: Double = 0.9
+    ) -> any Scheduler {
         switch id {
-        case .fsrs6: return FSRS6Scheduler()
+        case .fsrs6: return FSRS6Scheduler(desiredRetention: desiredRetention)
         case .sm2: return SM2Scheduler()
         case .leitner: return LeitnerScheduler()
         case .cram: return CramScheduler()

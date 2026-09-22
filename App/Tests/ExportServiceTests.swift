@@ -61,16 +61,19 @@ final class ExportServiceTests: XCTestCase {
         card.intervalDays = 30
         card.reps = 9
         card.lapses = 2
-        card.schedulerState = #"{"stability":42.0}"#
+        card.stability = 42.0
+        card.difficulty = 6.5
         try context.save()
 
         let restored = try BackupCoder.decode(try BackupCoder.encode(try exporter.makeBackup()))
         let backupCard = try XCTUnwrap(restored.decks.first?.notes.first?.cards.first)
-        XCTAssertEqual(backupCard.state, "review")
-        XCTAssertEqual(backupCard.intervalDays, 30)
-        XCTAssertEqual(backupCard.reps, 9)
-        XCTAssertEqual(backupCard.lapses, 2)
-        XCTAssertEqual(backupCard.schedulerState, #"{"stability":42.0}"#)
+        XCTAssertEqual(backupCard.review.state, .review)
+        XCTAssertEqual(backupCard.review.intervalDays, 30)
+        XCTAssertEqual(backupCard.review.reps, 9)
+        XCTAssertEqual(backupCard.review.lapses, 2)
+        XCTAssertEqual(backupCard.review.stability, 42.0)
+        XCTAssertEqual(backupCard.review.difficulty, 6.5)
+        XCTAssertTrue(backupCard.review.isMature, "30 дней — слово в долгосрочной памяти")
     }
 
     func testEmptyDatabaseExportsWithoutCrashing() throws {

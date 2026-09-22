@@ -60,25 +60,13 @@ public struct BackupNote: Codable, Equatable, Sendable {
 
 public struct BackupCard: Codable, Equatable, Sendable {
     public var type: CardType
-    public var due: Date
-    public var intervalDays: Double
-    public var reps: Int
-    public var lapses: Int
-    public var state: String
-    /// Состояние конкретного алгоритма, как он сам его сериализовал.
-    public var schedulerState: String?
+    /// Состояние повторений целиком — интервал, устойчивость, коробка и прочее.
+    /// Ради этого бэкап и существует: слова восстановить легко, прогресс — нет.
+    public var review: ReviewState
 
-    public init(
-        type: CardType, due: Date, intervalDays: Double, reps: Int, lapses: Int,
-        state: String, schedulerState: String?
-    ) {
+    public init(type: CardType, review: ReviewState) {
         self.type = type
-        self.due = due
-        self.intervalDays = intervalDays
-        self.reps = reps
-        self.lapses = lapses
-        self.state = state
-        self.schedulerState = schedulerState
+        self.review = review
     }
 }
 
