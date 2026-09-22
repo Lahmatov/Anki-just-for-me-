@@ -44,44 +44,45 @@ struct RestoreService {
     /// карточек сливался бы непредсказуемо.
     @discardableResult
     func restore(_ backup: BackupFile) throws -> Result {
-        // Чистка и наполнение — одна транзакция: промежуточное сохранение
-        // оставило бы базу пустой, если запись новых данных сорвётся.
-        try wipe()
-
-        var folderCache: [String: Folder] = [:]
         var cardCount = 0
 
-        for backupDeck in backup.decks {
-            let deck = Deck(
-                name: backupDeck.name,
-                scheduler: backupDeck.scheduler,
-                cardTypes: backupDeck.cardTypes,
-                source: backupDeck.source)
-            context.insert(deck)
-            deck.createdAt = backupDeck.createdAt
-            deck.folder = folder(for: backupDeck.folder, cache: &folderCache)
+        // Чистка, наполнение и сохранение — одна транзакция под одним откатом.
+        // Любой сбой внутри обязан вернуть базу в исходное состояние: иначе
+        // удаления останутся висеть в общем контексте, и первое же постороннее
+        // сохранение сотрёт библиотеку уже после того, как восстановление
+        // сообщило об ошибке.
+        do {
+            try wipe()
 
-            for backupNote in backupDeck.notes {
-                let note = Note(data: backupNote.data)
-                context.insert(note)
-                note.createdAt = backupNote.createdAt
-                note.deck = deck
+            var folderCache: [String: Folder] = [:]
+            for backupDeck in backup.decks {
+                let deck = Deck(
+                    name: backupDeck.name,
+                    scheduler: backupDeck.scheduler,
+                    cardTypes: backupDeck.cardTypes,
+                    source: backupDeck.source)
+                context.insert(deck)
+                deck.createdAt = backupDeck.createdAt
+                deck.folder = folder(for: backupDeck.folder, cache: &folderCache)
 
-                for backupCard in backupNote.cards {
-                    let card = Card(type: backupCard.type)
-                    context.insert(card)
-                    card.note = note
-                    card.reviewState = backupCard.review
-                    cardCount += 1
+                for backupNote in backupDeck.notes {
+                    let note = Note(data: backupNote.data)
+                    context.insert(note)
+                    note.createdAt = backupNote.createdAt
+                    note.deck = deck
+
+                    for backupCard in backupNote.cards {
+                        let card = Card(type: backupCard.type)
+                        context.insert(card)
+                        card.note = note
+                        card.reviewState = backupCard.review
+                        cardCount += 1
+                    }
                 }
             }
-        }
 
-        do {
             try context.save()
         } catch {
-            // Без отката удаления остались бы висеть в общем контексте,
-            // и первое же постороннее сохранение стёрло бы библиотеку.
             context.rollback()
             throw error
         }

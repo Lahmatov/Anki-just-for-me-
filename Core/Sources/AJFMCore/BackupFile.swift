@@ -72,12 +72,15 @@ public struct BackupCard: Codable, Equatable, Sendable {
 
 public enum BackupError: Error, Equatable, LocalizedError {
     case wrongFormat(found: String)
+    case notABackup
     case unsupportedVersion(found: Int, supported: Int)
 
     public var errorDescription: String? {
         switch self {
         case .wrongFormat(let found):
             return "Это не бэкап, а «\(found)». Восстанавливать из него нечего."
+        case .notABackup:
+            return "Это не файл бэкапа: в нём нет ни формата, ни версии."
         case .unsupportedVersion(let found, let supported):
             return "Бэкап версии \(found) новее поддерживаемой (\(supported))."
         }
@@ -104,7 +107,11 @@ public enum BackupCoder {
         // на чужом файле мы бы сообщили о пропавшем поле вместо внятного
         // «это не бэкап».
         if let envelope = try? JSONDecoder().decode(BackupEnvelope.self, from: data) {
-            if let format = envelope.format, format != BackupFile.formatID {
+            guard let format = envelope.format else {
+                // Разобралось как объект, но поля формата нет — чужой файл.
+                throw BackupError.notABackup
+            }
+            guard format == BackupFile.formatID else {
                 throw BackupError.wrongFormat(found: format)
             }
             if let version = envelope.version, version > BackupFile.supportedVersion {

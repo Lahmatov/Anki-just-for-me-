@@ -86,15 +86,18 @@ struct RootView: View {
         ) { pending in
             Button("Заменить всё", role: .destructive) {
                 pendingRestore = nil
-                do {
-                    restoreResult = try RestoreService(context: context)
-                        .restore(pending.backup)
-                } catch {
-                    let message = error.localizedDescription
-                    // Следующим циклом обновления: оповещение, показанное
-                    // в том же проходе, что и закрытие предыдущего, теряется.
-                    Task { @MainActor in
-                        importError = ImportError(message: message)
+                // Явный тип: у сервиса есть собственный Result.
+                let outcome: Swift.Result<RestoreService.Result, Error> = Result {
+                    try RestoreService(context: context).restore(pending.backup)
+                }
+                // Оба исхода показываем следующим циклом обновления:
+                // оповещение, поднятое в том же проходе, что и закрытие
+                // предыдущего, теряется.
+                Task { @MainActor in
+                    switch outcome {
+                    case .success(let value): restoreResult = value
+                    case .failure(let error):
+                        importError = ImportError(message: error.localizedDescription)
                     }
                 }
             }

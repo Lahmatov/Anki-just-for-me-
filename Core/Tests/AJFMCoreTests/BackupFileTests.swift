@@ -89,6 +89,14 @@ final class BackupFileTests: XCTestCase {
         XCTAssertThrowsError(try BackupCoder.decode(Data("не json".utf8)))
     }
 
+    func testRejectsObjectWithoutFormat() {
+        // Посторонний JSON без поля формата не должен доходить до разбора
+        // и выдавать невнятное сообщение про пропущенное поле.
+        XCTAssertThrowsError(try BackupCoder.decode(Data("{\"a\": 1}".utf8))) { error in
+            XCTAssertEqual(error as? BackupError, .notABackup)
+        }
+    }
+
     func testRejectsForeignFormat() throws {
         // Восстановление заменяет базу целиком, поэтому чужой файл должен
         // отсекаться до того, как что-то будет удалено.
