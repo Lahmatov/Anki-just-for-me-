@@ -16,6 +16,12 @@ public struct AnswerCheck: Equatable, Sendable {
     /// Пояснение для экрана: чем именно ответ отличался.
     public var hint: String?
 
+    public init(verdict: Verdict, matched: String? = nil, hint: String? = nil) {
+        self.verdict = verdict
+        self.matched = matched
+        self.hint = hint
+    }
+
     public var isAccepted: Bool { verdict != .wrong }
 }
 

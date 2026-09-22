@@ -56,6 +56,13 @@ public struct QueueSummary: Equatable, Sendable {
     /// Отложено из-за лимитов и «захоронения» братьев.
     public var heldBack: Int
 
+    public init(learning: Int, review: Int, new: Int, heldBack: Int) {
+        self.learning = learning
+        self.review = review
+        self.new = new
+        self.heldBack = heldBack
+    }
+
     public var total: Int { learning + review + new }
     public var isEmpty: Bool { total == 0 }
 }
@@ -63,6 +70,11 @@ public struct QueueSummary: Equatable, Sendable {
 public struct ReviewQueue: Equatable, Sendable {
     public var cards: [QueueCard]
     public var summary: QueueSummary
+
+    public init(cards: [QueueCard], summary: QueueSummary) {
+        self.cards = cards
+        self.summary = summary
+    }
 
     public var isEmpty: Bool { cards.isEmpty }
 }

@@ -14,6 +14,9 @@ struct RootView: View {
     @State private var showPasteImport = false
     @State private var exportedFile: ExportedFile?
     @State private var promptCopied = false
+    @State private var showRestoreImporter = false
+    @State private var pendingRestore: PendingRestore?
+    @State private var restoreResult: RestoreService.Result?
 
     var body: some View {
         TabView {
@@ -56,6 +59,56 @@ struct RootView: View {
             allowedContentTypes: [.json, .plainText]
         ) { result in
             handleFileImport(result)
+        }
+        .fileImporter(
+            isPresented: $showRestoreImporter,
+            allowedContentTypes: [.json]
+        ) { result in
+            guard case .success(let url) = result else { return }
+            do {
+                let (backup, preview) = try RestoreService(context: context)
+                    .preview(from: try read(url))
+                pendingRestore = PendingRestore(backup: backup, preview: preview)
+            } catch {
+                importError = ImportError(message: error.localizedDescription)
+            }
+        }
+        .alert(
+            "Восстановить из бэкапа?",
+            isPresented: Binding(
+                get: { pendingRestore != nil },
+                set: { if !$0 { pendingRestore = nil } }),
+            presenting: pendingRestore
+        ) { pending in
+            Button("Заменить всё", role: .destructive) {
+                do {
+                    restoreResult = try RestoreService(context: context)
+                        .restore(pending.backup)
+                } catch {
+                    importError = ImportError(message: error.localizedDescription)
+                }
+                pendingRestore = nil
+            }
+            Button("Отмена", role: .cancel) { pendingRestore = nil }
+        } message: { pending in
+            Text("В файле \(pending.preview.decks) наборов, "
+                 + "\(pending.preview.notes) слов, из них выучено "
+                 + "\(pending.preview.matureWords). Бэкап от "
+                 + pending.preview.exportedAt.formatted(date: .abbreviated, time: .shortened)
+                 + ". Текущее содержимое будет заменено целиком.")
+        }
+        .alert(
+            "Восстановлено",
+            isPresented: Binding(
+                get: { restoreResult != nil },
+                set: { if !$0 { restoreResult = nil } })
+        ) {
+            Button("Хорошо") { restoreResult = nil }
+        } message: {
+            if let restoreResult {
+                Text("Наборов: \(restoreResult.decks), слов: \(restoreResult.notes), "
+                     + "карточек: \(restoreResult.cards) — вместе с прогрессом.")
+            }
         }
         .onOpenURL { url in
             // Файл, присланный через «Поделиться» из Файлов или мессенджера.
@@ -111,6 +164,9 @@ struct RootView: View {
                 }
                 Divider()
                 Button("Сохранить бэкап", systemImage: "arrow.down.doc") { exportBackup() }
+                Button("Восстановить из бэкапа", systemImage: "arrow.up.doc") {
+                    showRestoreImporter = true
+                }
                 Divider()
                 Button("Запрос для Claude", systemImage: "doc.on.clipboard.fill") {
                     UIPasteboard.general.string = PromptTemplates.newDeck(
@@ -180,6 +236,12 @@ struct RootView: View {
             importError = ImportError(message: error.localizedDescription)
         }
     }
+}
+
+struct PendingRestore: Identifiable {
+    let id = UUID()
+    let backup: BackupFile
+    let preview: RestoreService.Preview
 }
 
 struct PendingImport: Identifiable {

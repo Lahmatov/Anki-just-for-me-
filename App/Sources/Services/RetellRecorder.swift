@@ -35,6 +35,10 @@ final class RetellRecorder {
     private var audioFile: AVAudioFile?
     private var timer: Timer?
     private var segmentStart = Date()
+    /// Номер текущего отрезка. Старая задача распознавания может прислать
+    /// финальный результат уже после того, как отрезок перенесён в текст —
+    /// без этой проверки кусок попадал бы в расшифровку дважды.
+    private var segmentGeneration = 0
 
     /// Больше минуты распознаватель не держит — перезапускаем отрезок заранее.
     private let segmentLimit: TimeInterval = 50
@@ -72,11 +76,14 @@ final class RetellRecorder {
             let format = input.outputFormat(forBus: 0)
             let url = FileManager.default.temporaryDirectory
                 .appendingPathComponent("ajfm-retell.caf")
-            audioFile = try AVAudioFile(forWriting: url, settings: format.settings)
+            // Собственная ссылка на файл: замыкание работает на аудиопотоке,
+            // а свойство обнуляется на главном акторе.
+            let file = try AVAudioFile(forWriting: url, settings: format.settings)
+            audioFile = file
 
             input.installTap(onBus: 0, bufferSize: 2048, format: format) { [weak self] buffer, _ in
                 self?.request?.append(buffer)
-                try? self?.audioFile?.write(from: buffer)
+                try? file.write(from: buffer)
             }
             engine.prepare()
             try engine.start()
@@ -117,10 +124,14 @@ final class RetellRecorder {
         request.requiresOnDeviceRecognition = recognizer.supportsOnDeviceRecognition
         self.request = request
         segmentStart = Date()
+        segmentGeneration += 1
+        let generation = segmentGeneration
 
         task = recognizer.recognitionTask(with: request) { [weak self] result, _ in
             Task { @MainActor in
-                guard let self, let result else { return }
+                guard let self, let result, generation == self.segmentGeneration else {
+                    return
+                }
                 self.partial = result.bestTranscription.formattedString
             }
         }
@@ -134,6 +145,9 @@ final class RetellRecorder {
     }
 
     private func finishSegment() {
+        // Поколение растёт сразу: всё, что придёт из старой задачи после
+        // этого момента, относится к уже перенесённому отрезку.
+        segmentGeneration += 1
         request?.endAudio()
         task?.finish()
         if !partial.isEmpty {

@@ -35,9 +35,14 @@ struct ClaudeClient {
     private static let endpoint = URL(string: "https://api.anthropic.com/v1/messages")!
     private static let apiVersion = "2023-06-01"
 
-    struct Result {
-        var report: RetellReport
+    /// Итог запроса. Расход учитывается всегда — даже если ответ не удалось
+    /// разобрать: запрос уже оплачен, и не посчитать его значит незаметно
+    /// сломать месячный лимит.
+    struct Outcome {
         var usage: UsageRecord
+        var report: RetellReport?
+        var rawText: String
+        var decodeError: String?
     }
 
     func analyze(
@@ -45,23 +50,26 @@ struct ClaudeClient {
         retell: String,
         episodeTitle: String?,
         watchedUpTo: TimeInterval?
-    ) async throws -> Result {
+    ) async throws -> Outcome {
         guard !apiKey.isEmpty else { throw ClaudeClientError.noAPIKey }
 
         let userMessage = RetellPrompt.userMessage(
             subtitles: subtitles, retell: retell,
             episodeTitle: episodeTitle, watchedUpTo: watchedUpTo)
 
-        let body: [String: Any] = [
+        var body: [String: Any] = [
             "model": model,
             "max_tokens": 8_000,
             "system": RetellPrompt.system,
             "messages": [["role": "user", "content": userMessage]],
-            // Разбор пересказа — задача с рассуждением: модель сверяет утверждения
-            // с субтитрами и подбирает цитаты.
-            "thinking": ["type": "adaptive"],
-            "output_config": ["effort": "high"],
         ]
+        // Разбор пересказа — задача с рассуждением: модель сверяет утверждения
+        // с субтитрами и подбирает цитаты. Но самые дешёвые модели этих
+        // параметров не принимают вовсе и вернут ошибку.
+        if ClaudeModel.pricing(for: model).supportsAdaptiveThinking {
+            body["thinking"] = ["type": "adaptive"]
+            body["output_config"] = ["effort": "high"]
+        }
 
         var request = URLRequest(url: Self.endpoint)
         request.httpMethod = "POST"
@@ -80,13 +88,23 @@ struct ClaudeClient {
         }
 
         let parsed = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
+        let usage = Self.usageRecord(from: parsed, model: model)
+
         guard let text = Self.extractText(from: parsed), !text.isEmpty else {
-            throw ClaudeClientError.emptyResponse
+            return Outcome(
+                usage: usage, report: nil, rawText: "",
+                decodeError: ClaudeClientError.emptyResponse.localizedDescription)
         }
 
-        let report = try Self.decodeReport(from: text)
-        let usage = Self.usageRecord(from: parsed, model: model)
-        return Result(report: report, usage: usage)
+        do {
+            return Outcome(
+                usage: usage, report: try Self.decodeReport(from: text),
+                rawText: text, decodeError: nil)
+        } catch {
+            return Outcome(
+                usage: usage, report: nil, rawText: text,
+                decodeError: error.localizedDescription)
+        }
     }
 
     // MARK: - Разбор ответа

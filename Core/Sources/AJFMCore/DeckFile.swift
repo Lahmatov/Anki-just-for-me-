@@ -159,7 +159,8 @@ extension KeyedDecodingContainer {
     /// Неизвестное значение перечисления не роняет импорт — поле просто становится nil.
     func decodeLenient<T: RawRepresentable>(_ type: T.Type, forKey key: Key) -> T?
     where T.RawValue == String {
-        guard let raw = try? decodeIfPresent(String.self, forKey: key), let raw else { return nil }
-        return T(rawValue: raw)
+        // try? уже даёт String? — Swift не добавляет второй уровень опциональности.
+        guard let raw = try? decodeIfPresent(String.self, forKey: key) else { return nil }
+        return raw.flatMap(T.init(rawValue:))
     }
 }

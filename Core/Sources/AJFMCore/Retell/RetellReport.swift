@@ -12,12 +12,50 @@ public struct RetellReport: Codable, Equatable, Sendable {
     /// и перестаёшь её читать.
     public var topPriorities: [String]
 
+    public init(
+        understanding: Understanding, language: LanguageFeedback, topPriorities: [String]
+    ) {
+        self.understanding = understanding
+        self.language = language
+        self.topPriorities = topPriorities
+    }
+
+    /// Отсутствующее поле не должно ронять разбор: запрос уже оплачен,
+    /// и терять его из-за пропущенного пустого массива — самый обидный
+    /// способ потратить деньги впустую.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        understanding = (try? c.decode(Understanding.self, forKey: .understanding))
+            ?? Understanding(correct: [], incorrect: [], missed: [], coverage: 0)
+        language = (try? c.decode(LanguageFeedback.self, forKey: .language))
+            ?? LanguageFeedback(
+                grammar: [], vocabulary: [], fluencyNote: nil, suggestedWords: [])
+        topPriorities = (try? c.decode([String].self, forKey: .topPriorities)) ?? []
+    }
+
     public struct Understanding: Codable, Equatable, Sendable {
         public var correct: [Point]
         public var incorrect: [Point]
         public var missed: [Point]
         /// Доля ключевых событий, которые ты упомянул, 0...1.
         public var coverage: Double
+
+        public init(
+            correct: [Point], incorrect: [Point], missed: [Point], coverage: Double
+        ) {
+            self.correct = correct
+            self.incorrect = incorrect
+            self.missed = missed
+            self.coverage = coverage
+        }
+
+        public init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            correct = (try? c.decode([Point].self, forKey: .correct)) ?? []
+            incorrect = (try? c.decode([Point].self, forKey: .incorrect)) ?? []
+            missed = (try? c.decode([Point].self, forKey: .missed)) ?? []
+            coverage = (try? c.decode(Double.self, forKey: .coverage)) ?? 0
+        }
 
         public var coveragePercent: Int { Int((coverage * 100).rounded()) }
     }
@@ -49,6 +87,25 @@ public struct RetellReport: Codable, Equatable, Sendable {
         public var fluencyNote: String?
         /// Слова, которых не хватило, — прямые кандидаты в карточки.
         public var suggestedWords: [SuggestedWord]
+
+        public init(
+            grammar: [Correction], vocabulary: [Correction],
+            fluencyNote: String?, suggestedWords: [SuggestedWord]
+        ) {
+            self.grammar = grammar
+            self.vocabulary = vocabulary
+            self.fluencyNote = fluencyNote
+            self.suggestedWords = suggestedWords
+        }
+
+        public init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            grammar = (try? c.decode([Correction].self, forKey: .grammar)) ?? []
+            vocabulary = (try? c.decode([Correction].self, forKey: .vocabulary)) ?? []
+            fluencyNote = try? c.decode(String.self, forKey: .fluencyNote)
+            suggestedWords =
+                (try? c.decode([SuggestedWord].self, forKey: .suggestedWords)) ?? []
+        }
     }
 
     public struct Correction: Codable, Equatable, Sendable {

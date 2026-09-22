@@ -26,9 +26,13 @@ public enum Forecast {
         let start = ReviewQueueBuilder.studyDayStart(
             for: now, cutoffHour: cutoffHour, calendar: calendar)
 
+        // Дни отсчитываем календарём: на переходе летнего времени сутки
+        // не равны 86 400 секундам, и карточки проваливались бы мимо корзин.
         var buckets: [Date: Int] = [:]
         for offset in 0..<max(1, days) {
-            buckets[start.addingTimeInterval(Double(offset) * 86_400)] = 0
+            let day = calendar.date(byAdding: .day, value: offset, to: start)
+                ?? start.addingTimeInterval(Double(offset) * 86_400)
+            buckets[day] = 0
         }
 
         for due in dueDates {
@@ -70,13 +74,17 @@ public enum Forecast {
             let weekday = calendar.component(.weekday, from: date)
             let daysFromMonday = (weekday + 5) % 7
             let midnight = calendar.startOfDay(for: date)
-            return midnight.addingTimeInterval(-Double(daysFromMonday) * 86_400)
+            return calendar.date(byAdding: .day, value: -daysFromMonday, to: midnight)
+                ?? midnight.addingTimeInterval(-Double(daysFromMonday) * 86_400)
         }
 
         let currentWeek = startOfWeek(now)
         var buckets: [Date: Int] = [:]
         for offset in 0..<weeks {
-            buckets[currentWeek.addingTimeInterval(-Double(offset) * 7 * 86_400)] = 0
+            let week = calendar.date(
+                byAdding: .weekOfYear, value: -offset, to: currentWeek)
+                ?? currentWeek.addingTimeInterval(-Double(offset) * 7 * 86_400)
+            buckets[week] = 0
         }
 
         for date in reviewDates {

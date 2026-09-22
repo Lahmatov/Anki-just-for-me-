@@ -6,6 +6,20 @@ public struct ModelPricing: Equatable, Sendable {
     public var title: String
     public var inputPerMillion: Double
     public var outputPerMillion: Double
+    /// Понимает ли модель adaptive-рассуждение и параметр усилия.
+    /// У Haiku их нет — запрос с ними вернёт ошибку.
+    public var supportsAdaptiveThinking: Bool
+
+    public init(
+        id: String, title: String, inputPerMillion: Double, outputPerMillion: Double,
+        supportsAdaptiveThinking: Bool
+    ) {
+        self.id = id
+        self.title = title
+        self.inputPerMillion = inputPerMillion
+        self.outputPerMillion = outputPerMillion
+        self.supportsAdaptiveThinking = supportsAdaptiveThinking
+    }
 
     public func cost(inputTokens: Int, outputTokens: Int) -> Double {
         Double(inputTokens) / 1_000_000 * inputPerMillion
@@ -16,13 +30,13 @@ public struct ModelPricing: Equatable, Sendable {
 public enum ClaudeModel {
     public static let opus5 = ModelPricing(
         id: "claude-opus-5", title: "Opus 5 — лучший разбор",
-        inputPerMillion: 5, outputPerMillion: 25)
+        inputPerMillion: 5, outputPerMillion: 25, supportsAdaptiveThinking: true)
     public static let sonnet5 = ModelPricing(
         id: "claude-sonnet-5", title: "Sonnet 5 — втрое дешевле",
-        inputPerMillion: 2, outputPerMillion: 10)
+        inputPerMillion: 2, outputPerMillion: 10, supportsAdaptiveThinking: true)
     public static let haiku45 = ModelPricing(
         id: "claude-haiku-4-5", title: "Haiku 4.5 — самый дешёвый",
-        inputPerMillion: 1, outputPerMillion: 5)
+        inputPerMillion: 1, outputPerMillion: 5, supportsAdaptiveThinking: false)
 
     public static let all = [opus5, sonnet5, haiku45]
 

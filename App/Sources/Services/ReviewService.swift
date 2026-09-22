@@ -75,10 +75,15 @@ struct ReviewService {
     }
 
     /// Что покажут кнопки оценок.
+    ///
+    /// Считается без разброса интервалов: иначе на кнопке было бы одно число,
+    /// а по нажатию получалось другое — и подпись превращалась бы в обман.
     func preview(for card: Card, now: Date = Date()) -> [Grade: TimeInterval] {
         let schedulerID = card.note?.deck?.scheduler ?? .fsrs6
-        return SchedulerFactory.make(schedulerID, desiredRetention: desiredRetention)
-            .preview(card.reviewState, now: now)
+        let scheduler: any Scheduler = schedulerID == .fsrs6
+            ? FSRS6Scheduler(desiredRetention: desiredRetention, enableFuzzing: false)
+            : SchedulerFactory.make(schedulerID, desiredRetention: desiredRetention)
+        return scheduler.preview(card.reviewState, now: now)
     }
 
     func card(withID id: String) throws -> Card? {

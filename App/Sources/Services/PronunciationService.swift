@@ -134,12 +134,16 @@ final class PronunciationService {
 
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("ajfm-recording.caf")
-        audioFile = try AVAudioFile(forWriting: url, settings: format.settings)
+        // Замыкание тапа вызывается на аудиопотоке, поэтому держит собственную
+        // ссылку на файл: обращаться отсюда к свойству, которое обнуляется
+        // на главном акторе, — гонка.
+        let file = try AVAudioFile(forWriting: url, settings: format.settings)
+        audioFile = file
         recordingURL = url
 
-        input.installTap(onBus: 0, bufferSize: 1024, format: format) { [weak self] buffer, _ in
+        input.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, _ in
             request.append(buffer)
-            try? self?.audioFile?.write(from: buffer)
+            try? file.write(from: buffer)
         }
 
         engine.prepare()

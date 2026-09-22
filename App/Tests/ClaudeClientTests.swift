@@ -104,8 +104,35 @@ final class ClaudeClientTests: XCTestCase {
         XCTAssertThrowsError(try ClaudeClient.decodeReport(from: "модель заболтала ответ"))
     }
 
-    func testMalformedReportIsReported() {
-        XCTAssertThrowsError(try ClaudeClient.decodeReport(from: "{\"understanding\": 5}"))
+    func testPartialReportSurvivesInsteadOfLosingThePayment() throws {
+        // Одно поле не того типа не должно стоить оплаченного разбора:
+        // лучше показать то, что разобралось, чем потерять всё.
+        let report = try ClaudeClient.decodeReport(from: """
+        {"understanding": 5, "language": {"grammar": [{"said": "a", "better": "b"}]},
+         "topPriorities": ["важное"]}
+        """)
+        XCTAssertEqual(report.understanding.coverage, 0)
+        XCTAssertTrue(report.understanding.correct.isEmpty)
+        XCTAssertEqual(report.language.grammar.count, 1)
+        XCTAssertEqual(report.topPriorities, ["важное"])
+    }
+
+    func testMissingArraysBecomeEmpty() throws {
+        // Модель часто опускает пустые массивы — это не повод падать.
+        let report = try ClaudeClient.decodeReport(
+            from: "{\"understanding\": {\"coverage\": 0.6}}")
+        XCTAssertEqual(report.understanding.coverage, 0.6)
+        XCTAssertTrue(report.understanding.missed.isEmpty)
+        XCTAssertTrue(report.language.suggestedWords.isEmpty)
+        XCTAssertTrue(report.topPriorities.isEmpty)
+    }
+
+    func testCheapModelSkipsUnsupportedParameters() {
+        // Haiku не принимает adaptive-рассуждение и параметр усилия —
+        // запрос с ними вернул бы ошибку вместо разбора.
+        XCTAssertFalse(ClaudeModel.haiku45.supportsAdaptiveThinking)
+        XCTAssertTrue(ClaudeModel.opus5.supportsAdaptiveThinking)
+        XCTAssertTrue(ClaudeModel.sonnet5.supportsAdaptiveThinking)
     }
 
     // MARK: - Учёт расходов

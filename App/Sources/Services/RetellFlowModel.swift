@@ -133,23 +133,35 @@ final class RetellFlowModel {
         step = .analyzing
         do {
             let client = ClaudeClient(apiKey: apiKey, model: selectedModel)
-            let result = try await client.analyze(
+            let outcome = try await client.analyze(
                 subtitles: subtitleText(from: track),
                 retell: transcript,
                 episodeTitle: episodeTitle.isEmpty ? nil : episodeTitle,
                 watchedUpTo: watchedSeconds)
 
-            context.insert(UsageEntry(record: result.usage))
+            // Расход записываем в любом случае: запрос оплачен независимо
+            // от того, удалось ли разобрать ответ.
+            context.insert(UsageEntry(record: outcome.usage))
+            lastCost = outcome.usage.cost
+
+            guard let parsed = outcome.report else {
+                try? context.save()
+                step = .failed(
+                    "Модель ответила, но разобрать ответ не вышло: "
+                    + (outcome.decodeError ?? "неизвестная причина")
+                    + ". Деньги за запрос уже учтены.")
+                return
+            }
+
             context.insert(RetellSession(
                 episodeTitle: episodeTitle.isEmpty ? "Без названия" : episodeTitle,
                 transcript: transcript,
-                report: result.report,
-                cost: result.usage.cost,
+                report: parsed,
+                cost: outcome.usage.cost,
                 model: selectedModel))
             try? context.save()
 
-            report = result.report
-            lastCost = result.usage.cost
+            report = parsed
             step = .done
         } catch {
             step = .failed(error.localizedDescription)

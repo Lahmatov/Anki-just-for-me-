@@ -45,6 +45,11 @@ struct PronunciationRecorderView: View {
                 onResult?(assessment)
             }
         }
+        .onChange(of: word) { _, _ in
+            // Иначе на новом слове висел бы разбор предыдущего.
+            service.reset()
+            permissionDenied = false
+        }
     }
 
     /// Для onChange нужен сравнимый ключ — само состояние содержит структуру.

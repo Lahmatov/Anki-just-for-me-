@@ -37,12 +37,20 @@ public enum StreakCalculator {
         let today = ReviewQueueBuilder.studyDayStart(
             for: now, cutoffHour: cutoffHour, calendar: calendar)
 
+        // Сутки отсчитываем календарём, а не вычитанием 86 400 секунд:
+        // в день перехода на летнее время их 23 или 25, и шаг в секундах
+        // промахивается мимо учебного дня, рвя счёт на ровном месте.
+        func previousDay(_ date: Date) -> Date {
+            calendar.date(byAdding: .day, value: -1, to: date)
+                ?? date.addingTimeInterval(-86_400)
+        }
+
         var streak = 0
-        var day = studyDays.contains(today) ? today : today.addingTimeInterval(-86_400)
+        var day = studyDays.contains(today) ? today : previousDay(today)
 
         while studyDays.contains(day) {
             streak += 1
-            day = day.addingTimeInterval(-86_400)
+            day = previousDay(day)
         }
         return streak
     }
@@ -57,7 +65,8 @@ public enum StreakCalculator {
         let weekday = calendar.component(.weekday, from: today)
         // Неделя считается от понедельника независимо от языка системы.
         let daysFromMonday = (weekday + 5) % 7
-        let weekStart = today.addingTimeInterval(-Double(daysFromMonday) * 86_400)
+        let weekStart = calendar.date(byAdding: .day, value: -daysFromMonday, to: today)
+            ?? today.addingTimeInterval(-Double(daysFromMonday) * 86_400)
 
         let studied = studyDays.filter { $0 >= weekStart && $0 <= today }.count
         return WeekProgress(daysStudied: studied, target: max(1, target))
