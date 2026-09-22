@@ -25,10 +25,10 @@ struct RootView: View {
             }
             .tabItem { Label("Наборы", systemImage: "folder") }
 
-            RetellView()
-                .tabItem { Label("Пересказ", systemImage: "text.bubble") }
+            RewardsView()
+                .tabItem { Label("Награды", systemImage: "trophy") }
 
-            MinimalPairsView()
+            SpeakingHubView()
                 .tabItem { Label("Речь", systemImage: "waveform") }
 
             SettingsView()

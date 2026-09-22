@@ -9,7 +9,7 @@ struct AJFMApp: App {
         }
         .modelContainer(for: [
             Folder.self, Deck.self, Note.self, Card.self, Review.self,
-            RetellSession.self, UsageEntry.self,
+            RetellSession.self, UsageEntry.self, RewardContractEntity.self,
         ])
     }
 }

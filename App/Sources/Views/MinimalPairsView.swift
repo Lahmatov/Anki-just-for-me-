@@ -18,8 +18,7 @@ struct MinimalPairsView: View {
     private var target: String { targetIsFirst ? pair.first : pair.second }
 
     var body: some View {
-        NavigationStack {
-            List {
+        List {
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Произнеси").font(.caption).foregroundStyle(.secondary)
@@ -29,6 +28,7 @@ struct MinimalPairsView: View {
                         PronunciationRecorderView(word: target, pair: pair) { assessment in
                             lastVerdict = assessment.verdict
                             streak = assessment.verdict == .matched ? streak + 1 : 0
+                            ProgressService.recordPronunciationStreak(streak)
                         }
                     }
                     .padding(.vertical, 4)
@@ -87,8 +87,7 @@ struct MinimalPairsView: View {
                     Text("Подобраны под типичные трудности русскоязычных: межзубные, "
                          + "различение долгих и кратких гласных, /v/ против /w/.")
                 }
-            }
-            .navigationTitle("Произношение")
         }
+        .navigationTitle("Произношение")
     }
 }

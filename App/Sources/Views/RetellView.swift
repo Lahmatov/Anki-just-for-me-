@@ -12,40 +12,38 @@ struct RetellView: View {
     @Query(sort: \RetellSession.createdAt, order: .reverse) private var history: [RetellSession]
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if let model {
-                    content(model)
-                } else {
-                    ProgressView()
-                }
+        Group {
+            if let model {
+                content(model)
+            } else {
+                ProgressView()
             }
-            .navigationTitle("Пересказ")
-            .onAppear {
-                if model == nil { model = RetellFlowModel(context: context) }
+        }
+        .navigationTitle("Пересказ")
+        .onAppear {
+            if model == nil { model = RetellFlowModel(context: context) }
+        }
+        .fileImporter(
+            isPresented: $showSubtitleImporter,
+            allowedContentTypes: [.plainText, .text, .data]
+        ) { result in
+            guard case .success(let url) = result else { return }
+            let scoped = url.startAccessingSecurityScopedResource()
+            defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+            if let data = try? Data(contentsOf: url) {
+                model?.loadSubtitles(from: data)
             }
-            .fileImporter(
-                isPresented: $showSubtitleImporter,
-                allowedContentTypes: [.plainText, .text, .data]
-            ) { result in
-                guard case .success(let url) = result else { return }
-                let scoped = url.startAccessingSecurityScopedResource()
-                defer { if scoped { url.stopAccessingSecurityScopedResource() } }
-                if let data = try? Data(contentsOf: url) {
-                    model?.loadSubtitles(from: data)
-                }
-            }
-            .alert(
-                "Набор создан",
-                isPresented: Binding(
-                    get: { importResult != nil },
-                    set: { if !$0 { importResult = nil } })
-            ) {
-                Button("Хорошо") { importResult = nil }
-            } message: {
-                if let importResult {
-                    Text("«\(importResult.deckName)»: \(importResult.addedNotes) слов.")
-                }
+        }
+        .alert(
+            "Набор создан",
+            isPresented: Binding(
+                get: { importResult != nil },
+                set: { if !$0 { importResult = nil } })
+        ) {
+            Button("Хорошо") { importResult = nil }
+        } message: {
+            if let importResult {
+                Text("«\(importResult.deckName)»: \(importResult.addedNotes) слов.")
             }
         }
     }

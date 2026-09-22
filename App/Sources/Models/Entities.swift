@@ -313,3 +313,34 @@ final class UsageEntry {
             outputTokens: outputTokens, cost: cost)
     }
 }
+
+/// Контракт на награду, сохранённый в базе.
+@Model
+final class RewardContractEntity {
+    var id: UUID = UUID()
+    var goal: Int = 150
+    var reward: String = ""
+    var startedAt: Date = Date()
+    var baseline: Int = 0
+    var deadline: Date?
+    var completedAt: Date?
+    var hadManualAdjustments: Bool = false
+
+    init(contract: RewardContract) {
+        self.id = contract.id
+        self.goal = contract.goal
+        self.reward = contract.reward
+        self.startedAt = contract.startedAt
+        self.baseline = contract.baseline
+        self.deadline = contract.deadline
+        self.completedAt = contract.completedAt
+        self.hadManualAdjustments = contract.hadManualAdjustments
+    }
+
+    var asContract: RewardContract {
+        RewardContract(
+            id: id, goal: goal, reward: reward, startedAt: startedAt,
+            baseline: baseline, deadline: deadline, completedAt: completedAt,
+            hadManualAdjustments: hadManualAdjustments)
+    }
+}

@@ -15,6 +15,10 @@ struct ReviewSessionView: View {
             if let model {
                 if model.isFinished {
                     SessionSummaryView(stats: model.stats) { dismiss() }
+                        .onAppear {
+                            ProgressService.recordSessionResult(
+                                accurate: model.stats.answered > 0 && model.stats.wrong == 0)
+                        }
                 } else {
                     sessionBody(model)
                 }
