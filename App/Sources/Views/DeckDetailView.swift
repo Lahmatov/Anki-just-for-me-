@@ -126,7 +126,6 @@ struct DeckDetailView: View {
 
 struct NoteRow: View {
     let note: Note
-    @State private var expanded = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -144,25 +143,11 @@ struct NoteRow: View {
             Text(note.translation)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-
-            if expanded {
-                if let example = note.example, !example.isEmpty {
-                    Text(example).font(.caption).italic()
-                }
-                if let translation = note.exampleTranslation, !translation.isEmpty {
-                    Text(translation).font(.caption).foregroundStyle(.secondary)
-                }
-                if let userNote = note.userNote, !userNote.isEmpty {
-                    Text(userNote).font(.caption).foregroundStyle(.orange)
-                }
-                if !note.tags.isEmpty {
-                    Text(note.tags.map { "#\($0)" }.joined(separator: " "))
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
+            if !note.tags.isEmpty {
+                Text(note.tags.map { "#\($0)" }.joined(separator: " "))
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
             }
         }
-        .contentShape(Rectangle())
-        .onTapGesture { withAnimation { expanded.toggle() } }
     }
 }
