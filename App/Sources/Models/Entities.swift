@@ -179,7 +179,10 @@ final class Card {
 
     var note: Note?
 
-    @Relationship(deleteRule: .cascade, inverse: \Review.card)
+    // Журнал занятий переживает удаление карточки: по нему считаются
+    // учебные дни и награды, и терять их при удалении набора или при
+    // восстановлении из бэкапа нельзя.
+    @Relationship(deleteRule: .nullify, inverse: \Review.card)
     var reviews: [Review] = []
 
     init(type: CardType, due: Date = Date()) {

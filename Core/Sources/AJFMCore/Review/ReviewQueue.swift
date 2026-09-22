@@ -91,16 +91,20 @@ public enum ReviewQueueBuilder {
         components.minute = 0
         components.second = 0
         let todayCutoff = calendar.date(from: components) ?? date
-        return date < todayCutoff
-            ? todayCutoff.addingTimeInterval(-86_400)
-            : todayCutoff
+        guard date < todayCutoff else { return todayCutoff }
+        // Календарём, а не вычитанием 86 400 секунд: в день перехода на летнее
+        // время сутки длятся 23 или 25 часов, и ключи учебных дней разъезжались
+        // бы с теми, что считают по календарю.
+        return calendar.date(byAdding: .day, value: -1, to: todayCutoff)
+            ?? todayCutoff.addingTimeInterval(-86_400)
     }
 
     public static func studyDayEnd(
         for date: Date, cutoffHour: Int, calendar: Calendar = .current
     ) -> Date {
-        studyDayStart(for: date, cutoffHour: cutoffHour, calendar: calendar)
-            .addingTimeInterval(86_400)
+        let start = studyDayStart(for: date, cutoffHour: cutoffHour, calendar: calendar)
+        return calendar.date(byAdding: .day, value: 1, to: start)
+            ?? start.addingTimeInterval(86_400)
     }
 
     /// Очередь на текущий учебный день.

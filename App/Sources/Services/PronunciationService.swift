@@ -112,6 +112,8 @@ final class PronunciationService {
         cleanUp()
         status = .idle
         partialText = ""
+        // Иначе кнопка «Я» проиграла бы запись предыдущего слова.
+        recordingURL = nil
     }
 
     // MARK: - Внутреннее

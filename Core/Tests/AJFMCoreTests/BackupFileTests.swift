@@ -88,4 +88,27 @@ final class BackupFileTests: XCTestCase {
     func testRejectsGarbage() {
         XCTAssertThrowsError(try BackupCoder.decode(Data("не json".utf8)))
     }
+
+    func testRejectsForeignFormat() throws {
+        // Восстановление заменяет базу целиком, поэтому чужой файл должен
+        // отсекаться до того, как что-то будет удалено.
+        let deckFile = try DeckParser.encode(DeckFile(
+            deck: DeckMeta(name: "Набор"),
+            notes: [NoteData(term: "word", translation: "слово")]))
+        XCTAssertThrowsError(try BackupCoder.decode(deckFile)) { error in
+            XCTAssertEqual(error as? BackupError, .wrongFormat(found: DeckFile.formatID))
+        }
+    }
+
+    func testRejectsNewerVersion() throws {
+        var data = try BackupCoder.encode(sampleBackup())
+        let text = try XCTUnwrap(String(data: data, encoding: .utf8))
+            .replacingOccurrences(of: "\"version\" : 1", with: "\"version\" : 99")
+        data = Data(text.utf8)
+        XCTAssertThrowsError(try BackupCoder.decode(data)) { error in
+            XCTAssertEqual(
+                error as? BackupError,
+                .unsupportedVersion(found: 99, supported: BackupFile.supportedVersion))
+        }
+    }
 }

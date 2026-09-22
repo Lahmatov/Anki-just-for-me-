@@ -70,6 +70,20 @@ public struct BackupCard: Codable, Equatable, Sendable {
     }
 }
 
+public enum BackupError: Error, Equatable, LocalizedError {
+    case wrongFormat(found: String)
+    case unsupportedVersion(found: Int, supported: Int)
+
+    public var errorDescription: String? {
+        switch self {
+        case .wrongFormat(let found):
+            return "Это не бэкап, а «\(found)». Восстанавливать из него нечего."
+        case .unsupportedVersion(let found, let supported):
+            return "Бэкап версии \(found) новее поддерживаемой (\(supported))."
+        }
+    }
+}
+
 public enum BackupCoder {
     public static func encode(_ backup: BackupFile) throws -> Data {
         let encoder = JSONEncoder()
@@ -81,6 +95,17 @@ public enum BackupCoder {
     public static func decode(_ data: Data) throws -> BackupFile {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        return try decoder.decode(BackupFile.self, from: data)
+        let backup = try decoder.decode(BackupFile.self, from: data)
+
+        // Восстановление заменяет базу целиком, поэтому формат проверяется
+        // строже, чем при обычном импорте.
+        guard backup.format == BackupFile.formatID else {
+            throw BackupError.wrongFormat(found: backup.format)
+        }
+        guard backup.version <= BackupFile.supportedVersion else {
+            throw BackupError.unsupportedVersion(
+                found: backup.version, supported: BackupFile.supportedVersion)
+        }
+        return backup
     }
 }

@@ -161,6 +161,6 @@ extension KeyedDecodingContainer {
     where T.RawValue == String {
         // try? уже даёт String? — Swift не добавляет второй уровень опциональности.
         guard let raw = try? decodeIfPresent(String.self, forKey: key) else { return nil }
-        return raw.flatMap(T.init(rawValue:))
+        return T(rawValue: raw)
     }
 }

@@ -25,9 +25,23 @@ public struct RetellReport: Codable, Equatable, Sendable {
     /// способ потратить деньги впустую.
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        understanding = (try? c.decode(Understanding.self, forKey: .understanding))
+        let decodedUnderstanding = try? c.decode(Understanding.self, forKey: .understanding)
+        let decodedLanguage = try? c.decode(LanguageFeedback.self, forKey: .language)
+
+        // Терпимость к пропущенному полю — не повод принимать что угодно.
+        // Ответ, обрезанный по лимиту токенов, декодировался бы в «отчёт»
+        // без единой ошибки, попадал в историю и портил статистику.
+        guard decodedUnderstanding != nil || decodedLanguage != nil else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(
+                codingPath: decoder.codingPath,
+                debugDescription:
+                    "в ответе нет ни разбора понимания, ни разбора языка — "
+                    + "похоже, он оборвался"))
+        }
+
+        understanding = decodedUnderstanding
             ?? Understanding(correct: [], incorrect: [], missed: [], coverage: 0)
-        language = (try? c.decode(LanguageFeedback.self, forKey: .language))
+        language = decodedLanguage
             ?? LanguageFeedback(
                 grammar: [], vocabulary: [], fluencyNote: nil, suggestedWords: [])
         topPriorities = (try? c.decode([String].self, forKey: .topPriorities)) ?? []

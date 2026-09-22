@@ -44,7 +44,9 @@ struct RestoreService {
     /// карточек сливался бы непредсказуемо.
     @discardableResult
     func restore(_ backup: BackupFile) throws -> Result {
-        try wipe()
+        // Чистка и наполнение — одна транзакция: промежуточное сохранение
+        // оставило бы базу пустой, если запись новых данных сорвётся.
+        wipe()
 
         var folderCache: [String: Folder] = [:]
         var cardCount = 0
@@ -107,20 +109,20 @@ struct RestoreService {
     }
 
     /// Чистит всё, что восстанавливается из бэкапа. История пересказов,
-    /// расходы и награды не трогаются — их бэкап не содержит.
-    private func wipe() throws {
-        for folder in try context.fetch(FetchDescriptor<Folder>()) {
+    /// расходы, награды и журнал занятий не трогаются — бэкап их не содержит,
+    /// а терять счёт учебных дней при переносе на новый телефон обидно.
+    private func wipe() {
+        for folder in (try? context.fetch(FetchDescriptor<Folder>())) ?? [] {
             context.delete(folder)
         }
-        for deck in try context.fetch(FetchDescriptor<Deck>()) {
+        for deck in (try? context.fetch(FetchDescriptor<Deck>())) ?? [] {
             context.delete(deck)
         }
-        for note in try context.fetch(FetchDescriptor<Note>()) {
+        for note in (try? context.fetch(FetchDescriptor<Note>())) ?? [] {
             context.delete(note)
         }
-        for card in try context.fetch(FetchDescriptor<Card>()) {
+        for card in (try? context.fetch(FetchDescriptor<Card>())) ?? [] {
             context.delete(card)
         }
-        try context.save()
     }
 }

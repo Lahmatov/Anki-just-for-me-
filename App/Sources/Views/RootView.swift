@@ -64,12 +64,16 @@ struct RootView: View {
             isPresented: $showRestoreImporter,
             allowedContentTypes: [.json]
         ) { result in
-            guard case .success(let url) = result else { return }
-            do {
-                let (backup, preview) = try RestoreService(context: context)
-                    .preview(from: try read(url))
-                pendingRestore = PendingRestore(backup: backup, preview: preview)
-            } catch {
+            switch result {
+            case .success(let url):
+                do {
+                    let (backup, preview) = try RestoreService(context: context)
+                        .preview(from: try read(url))
+                    pendingRestore = PendingRestore(backup: backup, preview: preview)
+                } catch {
+                    importError = ImportError(message: error.localizedDescription)
+                }
+            case .failure(let error):
                 importError = ImportError(message: error.localizedDescription)
             }
         }
@@ -81,13 +85,15 @@ struct RootView: View {
             presenting: pendingRestore
         ) { pending in
             Button("Заменить всё", role: .destructive) {
+                pendingRestore = nil
                 do {
                     restoreResult = try RestoreService(context: context)
                         .restore(pending.backup)
                 } catch {
+                    // Ошибку показываем после закрытия предупреждения —
+                    // иначе одно оповещение перекрывает другое и пропадает.
                     importError = ImportError(message: error.localizedDescription)
                 }
-                pendingRestore = nil
             }
             Button("Отмена", role: .cancel) { pendingRestore = nil }
         } message: { pending in

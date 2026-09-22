@@ -10,6 +10,28 @@ import AJFMCore
 /// расшифровка идёт отрезками: аудио пишется в один файл непрерывно, а
 /// распознавание перезапускается каждые 50 секунд, накапливая текст.
 /// Всё локально — голос никуда не отправляется.
+/// Потокобезопасный приёмник аудио.
+///
+/// Замыкание тапа работает на аудиопотоке, а запрос распознавания
+/// переназначается на главном акторе каждые 50 секунд — читать свойство
+/// напрямую значило бы устроить гонку на каждом буфере.
+private final class AudioSink: @unchecked Sendable {
+    private let lock = NSLock()
+    private var request: SFSpeechAudioBufferRecognitionRequest?
+
+    func use(_ request: SFSpeechAudioBufferRecognitionRequest?) {
+        lock.lock()
+        defer { lock.unlock() }
+        self.request = request
+    }
+
+    func append(_ buffer: AVAudioPCMBuffer) {
+        lock.lock()
+        defer { lock.unlock() }
+        request?.append(buffer)
+    }
+}
+
 @Observable
 @MainActor
 final class RetellRecorder {
@@ -33,6 +55,7 @@ final class RetellRecorder {
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var task: SFSpeechRecognitionTask?
     private var audioFile: AVAudioFile?
+    private let sink = AudioSink()
     private var timer: Timer?
     private var segmentStart = Date()
     /// Номер текущего отрезка. Старая задача распознавания может прислать
@@ -80,9 +103,10 @@ final class RetellRecorder {
             // а свойство обнуляется на главном акторе.
             let file = try AVAudioFile(forWriting: url, settings: format.settings)
             audioFile = file
+            let sink = self.sink
 
-            input.installTap(onBus: 0, bufferSize: 2048, format: format) { [weak self] buffer, _ in
-                self?.request?.append(buffer)
+            input.installTap(onBus: 0, bufferSize: 2048, format: format) { buffer, _ in
+                sink.append(buffer)
                 try? file.write(from: buffer)
             }
             engine.prepare()
@@ -123,6 +147,7 @@ final class RetellRecorder {
         request.shouldReportPartialResults = true
         request.requiresOnDeviceRecognition = recognizer.supportsOnDeviceRecognition
         self.request = request
+        sink.use(request)
         segmentStart = Date()
         segmentGeneration += 1
         let generation = segmentGeneration
@@ -156,6 +181,7 @@ final class RetellRecorder {
         }
         task = nil
         request = nil
+        sink.use(nil)
     }
 
     private func startTimer() {
@@ -181,6 +207,7 @@ final class RetellRecorder {
         task?.cancel()
         task = nil
         request = nil
+        sink.use(nil)
         audioFile = nil
     }
 }

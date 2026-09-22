@@ -109,6 +109,25 @@ final class RetellReportTests: XCTestCase {
         XCTAssertEqual(restored, report)
     }
 
+    func testTruncatedAnswerIsRejected() {
+        // Ответ, оборвавшийся по лимиту токенов, декодировался бы в «отчёт»
+        // без единой ошибки — и попадал в историю, портя статистику.
+        XCTAssertThrowsError(
+            try JSONDecoder().decode(RetellReport.self, from: Data("{}".utf8)))
+        XCTAssertThrowsError(try JSONDecoder().decode(
+            RetellReport.self, from: Data("{\"topPriorities\": []}".utf8)))
+    }
+
+    func testPartialAnswerWithUnderstandingIsAccepted() throws {
+        // А вот разбор, где есть понимание, но нет блока языка, — рабочий:
+        // терять его из-за пропущенного поля было бы обиднее.
+        let report = try JSONDecoder().decode(RetellReport.self, from: Data("""
+        {"understanding": {"coverage": 0.6}}
+        """.utf8))
+        XCTAssertEqual(report.understanding.coverage, 0.6)
+        XCTAssertTrue(report.language.grammar.isEmpty)
+    }
+
     func testDecodesTheShapeTheModelIsAskedFor() throws {
         // Если схема в промпте и структура разойдутся, разбор будет падать
         // уже после того, как деньги за запрос списаны.

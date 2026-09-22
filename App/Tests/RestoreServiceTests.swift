@@ -133,6 +133,23 @@ final class RestoreServiceTests: XCTestCase {
         XCTAssertEqual(try context.fetch(FetchDescriptor<Note>()).count, 2, "база цела")
     }
 
+    func testStudyJournalSurvivesRestore() throws {
+        let (context, importer, exporter, restorer) = try makeEnvironment()
+        try seed(importer)
+        let card = try XCTUnwrap(try context.fetch(FetchDescriptor<Card>()).first)
+        context.insert(Review(card: card, grade: 3, timeSpent: 1, algorithm: "fsrs6"))
+        try context.save()
+
+        try restorer.restore(try exporter.makeBackup())
+
+        // Бэкап не содержит журнала занятий, поэтому удаление карточек не
+        // должно его уносить: иначе перенос на новый телефон обнулял бы
+        // счёт учебных дней и все награды.
+        XCTAssertEqual(try context.fetch(FetchDescriptor<Review>()).count, 1)
+        XCTAssertGreaterThanOrEqual(
+            ProgressService(context: context, cutoffHour: 4).stats().honestReviews, 1)
+    }
+
     func testDeckFileIsNotAcceptedAsBackup() throws {
         let (_, _, _, restorer) = try makeEnvironment()
         // Набор карточек — другой формат; принимать его за бэкап нельзя.
