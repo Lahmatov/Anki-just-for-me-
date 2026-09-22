@@ -133,6 +133,18 @@ final class RestoreServiceTests: XCTestCase {
         XCTAssertEqual(try context.fetch(FetchDescriptor<Note>()).count, 2, "база цела")
     }
 
+    func testServicePassesTypedErrorThrough() throws {
+        let (_, _, _, restorer) = try makeEnvironment()
+        // Сам разбор формата проверяется в ядре; здесь важно, что сервис
+        // не заворачивает ошибку во что-то безымянное по дороге к экрану.
+        XCTAssertThrowsError(try restorer.preview(from: TestDB.deckFile(
+            notes: [NoteData(term: "a", translation: "б")]))) { error in
+            XCTAssertTrue(
+                error is BackupError,
+                "ожидалась типизированная ошибка, получена \(type(of: error))")
+        }
+    }
+
     func testStudyJournalSurvivesRestore() throws {
         let (context, importer, exporter, restorer) = try makeEnvironment()
         try seed(importer)

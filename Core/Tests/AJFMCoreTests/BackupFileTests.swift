@@ -86,7 +86,20 @@ final class BackupFileTests: XCTestCase {
     }
 
     func testRejectsGarbage() {
-        XCTAssertThrowsError(try BackupCoder.decode(Data("не json".utf8)))
+        XCTAssertThrowsError(try BackupCoder.decode(Data("не json".utf8))) { error in
+            XCTAssertEqual(error as? BackupError, .notABackup)
+        }
+    }
+
+    func testRejectsNonObjectJSON() {
+        // Список слов на верхнем уровне — обычное дело при импорте наборов,
+        // и спутать его с бэкапом легко.
+        XCTAssertThrowsError(try BackupCoder.decode(Data("[1, 2, 3]".utf8))) { error in
+            XCTAssertEqual(error as? BackupError, .notABackup)
+        }
+        XCTAssertThrowsError(try BackupCoder.decode(Data("42".utf8))) { error in
+            XCTAssertEqual(error as? BackupError, .notABackup)
+        }
     }
 
     func testRejectsObjectWithoutFormat() {
