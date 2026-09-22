@@ -1,5 +1,7 @@
 import SwiftUI
 import SwiftData
+import UniformTypeIdentifiers
+import AJFMCore
 
 struct DeckDetailView: View {
     let deck: Deck
@@ -7,6 +9,8 @@ struct DeckDetailView: View {
 
     @Environment(\.modelContext) private var context
     @State private var exportError: String?
+    @State private var showSubtitleImporter = false
+    @State private var enrichResult: EnrichService.Result?
 
     private var notes: [Note] {
         deck.notes.sorted { $0.createdAt < $1.createdAt }
@@ -24,9 +28,29 @@ struct DeckDetailView: View {
                 }
             }
 
+            Section {
+                let missing = EnrichService(context: context).notesWithoutExamples(in: deck)
+                Button("Добавить примеры из субтитров", systemImage: "text.quote") {
+                    showSubtitleImporter = true
+                }
+                .disabled(missing.isEmpty)
+                if !missing.isEmpty {
+                    Text("Без живого примера: \(missing.count) слов")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            } footer: {
+                Text("Подставит фразы из серии вместо словарных примеров. "
+                     + "Фраза из сцены, которую ты видел, запоминается лучше.")
+            }
+
             Section("Слова (\(notes.count))") {
                 ForEach(notes) { note in
-                    NoteRow(note: note)
+                    NavigationLink {
+                        NoteDetailView(note: note)
+                    } label: {
+                        NoteRow(note: note)
+                    }
                 }
                 .onDelete { offsets in
                     for index in offsets { context.delete(notes[index]) }
@@ -52,6 +76,33 @@ struct DeckDetailView: View {
             .buttonStyle(.borderedProminent)
             .padding()
             .background(.bar)
+        }
+        .fileImporter(
+            isPresented: $showSubtitleImporter,
+            allowedContentTypes: [.plainText, .text, .data]
+        ) { result in
+            guard case .success(let url) = result else { return }
+            let scoped = url.startAccessingSecurityScopedResource()
+            defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+            guard let data = try? Data(contentsOf: url),
+                  let raw = String(data: data, encoding: .utf8),
+                  let track = try? SubtitleParser.parse(raw) else {
+                exportError = "Не удалось прочитать субтитры."
+                return
+            }
+            enrichResult = EnrichService(context: context).enrich(deck: deck, with: track)
+        }
+        .alert(
+            "Примеры добавлены",
+            isPresented: Binding(
+                get: { enrichResult != nil }, set: { if !$0 { enrichResult = nil } })
+        ) {
+            Button("Хорошо") { enrichResult = nil }
+        } message: {
+            if let enrichResult {
+                Text("Дополнено слов: \(enrichResult.enriched). "
+                     + "Не нашлось в субтитрах: \(enrichResult.skipped).")
+            }
         }
         .alert(
             "Не получилось",

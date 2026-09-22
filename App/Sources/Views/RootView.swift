@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
+import UIKit
 import AJFMCore
 
 struct RootView: View {
@@ -12,6 +13,7 @@ struct RootView: View {
     @State private var showFileImporter = false
     @State private var showPasteImport = false
     @State private var exportedFile: ExportedFile?
+    @State private var promptCopied = false
 
     var body: some View {
         TabView {
@@ -22,6 +24,15 @@ struct RootView: View {
                 FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
                     .navigationTitle("Наборы")
                     .toolbar { toolbar }
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            NavigationLink {
+                                SearchView()
+                            } label: {
+                                Image(systemName: "magnifyingglass")
+                            }
+                        }
+                    }
             }
             .tabItem { Label("Наборы", systemImage: "folder") }
 
@@ -33,6 +44,11 @@ struct RootView: View {
 
             SettingsView()
                 .tabItem { Label("Настройки", systemImage: "gearshape") }
+        }
+        .task {
+            // Раз в неделю база сама уезжает в файл — на случай, если
+            // вспомнить про кнопку «Сохранить бэкап» не получится.
+            BackupService(context: context).backupIfNeeded()
         }
         .fileImporter(
             isPresented: $showFileImporter,
@@ -66,6 +82,12 @@ struct RootView: View {
         } message: { error in
             Text(error.message)
         }
+        .alert("Запрос скопирован", isPresented: $promptCopied) {
+            Button("Понятно") { promptCopied = false }
+        } message: {
+            Text("Вставь его мне в чат, подставив название серии и слова. "
+                 + "В ответ придёт готовый файл набора.")
+        }
         .alert(
             "Готово",
             isPresented: Binding(get: { lastResult != nil }, set: { if !$0 { lastResult = nil } })
@@ -88,6 +110,12 @@ struct RootView: View {
                 }
                 Divider()
                 Button("Сохранить бэкап", systemImage: "arrow.down.doc") { exportBackup() }
+                Divider()
+                Button("Запрос для Claude", systemImage: "doc.on.clipboard.fill") {
+                    UIPasteboard.general.string = PromptTemplates.newDeck(
+                        source: "название серии", words: [])
+                    promptCopied = true
+                }
             } label: {
                 Image(systemName: "ellipsis.circle")
             }
