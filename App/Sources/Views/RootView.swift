@@ -19,36 +19,56 @@ struct RootView: View {
     @State private var onboarding: OnboardingPlan?
     @State private var pendingRestore: PendingRestore?
     @State private var restoreResult: RestoreService.Result?
+    /// Заставка видна с первого кадра: иначе содержимое мелькнуло бы до неё.
+    @State private var showIntro = true
 
     var body: some View {
+        // Новый API вкладок: на iOS 26 таб-бар сам становится Liquid Glass
+        // и прячется при прокрутке, освобождая место под содержимое.
         TabView {
-            TodayView()
-                .tabItem { Label("Сегодня", systemImage: "calendar") }
+            Tab("Сегодня", systemImage: "calendar") {
+                TodayView()
+            }
 
-            NavigationStack {
-                FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
-                    .navigationTitle("Наборы")
-                    .toolbar { toolbar }
-                    .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                            NavigationLink {
-                                SearchView()
-                            } label: {
-                                Image(systemName: "magnifyingglass")
+            Tab("Наборы", systemImage: "folder") {
+                NavigationStack {
+                    FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
+                        .navigationTitle("Наборы")
+                        .toolbar { toolbar }
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                NavigationLink {
+                                    SearchView()
+                                } label: {
+                                    Image(systemName: "magnifyingglass")
+                                }
                             }
                         }
-                    }
+                }
             }
-            .tabItem { Label("Наборы", systemImage: "folder") }
 
-            RewardsView()
-                .tabItem { Label("Награды", systemImage: "trophy") }
+            Tab("Награды", systemImage: "trophy") {
+                RewardsView()
+            }
 
-            SpeakingHubView()
-                .tabItem { Label("Речь", systemImage: "waveform") }
+            Tab("Речь", systemImage: "waveform") {
+                SpeakingHubView()
+            }
 
-            SettingsView()
-                .tabItem { Label("Настройки", systemImage: "gearshape") }
+            Tab("Настройки", systemImage: "gearshape") {
+                SettingsView()
+            }
+        }
+        .tabBarMinimizeBehavior(.onScrollDown)
+        .overlay {
+            if showIntro {
+                LaunchIntroView {
+                    showIntro = false
+                    // Знакомство — после заставки, а не поверх неё.
+                    showOnboardingIfNeeded()
+                }
+                .transition(.opacity)
+            }
         }
         .task {
             // Раз в неделю база сама уезжает в файл — на случай, если
@@ -56,7 +76,6 @@ struct RootView: View {
             Log.info(.app, "Приложение запущено")
             BackupService(context: context).backupIfNeeded()
             SnapshotService.recordIfNeeded(context: context)
-            showOnboardingIfNeeded()
         }
         .fileImporter(
             isPresented: $showFileImporter,

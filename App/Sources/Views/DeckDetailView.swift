@@ -70,12 +70,14 @@ struct DeckDetailView: View {
                 ReviewSessionView(deck: deck)
             } label: {
                 Label("Учить этот набор", systemImage: "play.fill")
+                    .font(.headline)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 6)
+                    .padding(.vertical, 4)
             }
-            .buttonStyle(.borderedProminent)
-            .padding()
-            .background(.bar)
+            .buttonStyle(.glassProminent)
+            .controlSize(.large)
+            .padding(.horizontal)
+            .padding(.bottom, 8)
         }
         .fileImporter(
             isPresented: $showSubtitleImporter,

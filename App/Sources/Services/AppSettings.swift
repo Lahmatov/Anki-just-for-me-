@@ -18,6 +18,7 @@ enum SettingsKey {
     static let lastBackupDate = "lastBackupDate"
     static let leechThreshold = "leechThreshold"
     static let onboardingDone = "onboardingDone"
+    static let lastLaunchAnimation = "lastLaunchAnimation"
     static let reminderEnabled = "reminderEnabled"
     static let reminderHour = "reminderHour"
     static let reminderMinute = "reminderMinute"

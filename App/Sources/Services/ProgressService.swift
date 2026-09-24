@@ -34,14 +34,25 @@ struct ProgressService {
             matureWords: matureWordCount(),
             totalWords: notes.count,
             honestReviews: honest.count,
-            currentStreakDays: StreakCalculator.currentStreak(
-                studyDays: days, cutoffHour: cutoffHour),
+            // Серия с заморозками: та же цифра, что на главном экране, иначе
+            // достижение «неделя подряд» спорило бы с тем, что видно глазами.
+            currentStreakDays: StreakCalculator.streakStatus(
+                studyDays: days, cutoffHour: cutoffHour).days,
             retellCount: retells.count,
             bestRetellCoverage: retells.map(\.coverage).max() ?? 0,
             pronunciationStreak: UserDefaults.standard
                 .integer(forKey: SettingsKey.bestPronunciationStreak),
             perfectSessions: UserDefaults.standard
                 .integer(forKey: SettingsKey.perfectSessions))
+    }
+
+    /// Серия учебных дней с автоматическими заморозками.
+    func streakStatus(freezesPerMonth: Int = 2) -> StreakStatus {
+        let reviews = (try? context.fetch(FetchDescriptor<Review>())) ?? []
+        let days = StreakCalculator.studyDays(
+            from: reviews.filter(\.isHonest).map(\.timestamp), cutoffHour: cutoffHour)
+        return StreakCalculator.streakStatus(
+            studyDays: days, cutoffHour: cutoffHour, freezesPerMonth: freezesPerMonth)
     }
 
     func weekProgress(target: Int = 5) -> WeekProgress {

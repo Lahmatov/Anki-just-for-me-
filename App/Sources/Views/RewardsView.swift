@@ -73,9 +73,10 @@ struct RewardsView: View {
             }
             Stepper("Цель: \(weeklyTarget) дней в неделю", value: $weeklyTarget, in: 1...7)
         } footer: {
-            Text("Недельная цель вместо ежедневной полоски: полоска отлично "
-                 + "мотивирует ровно до первого пропуска, после которого её "
-                 + "обычно бросают вместе с приложением.")
+            Text("Недельная цель — в дополнение к серии дней на главном экране. "
+                 + "Серия тянет вернуться завтра, а неделя прощает пропущенный "
+                 + "вторник; самый опасный момент — первый пропуск — прикрывает "
+                 + "заморозка.")
         }
     }
 
@@ -198,6 +199,7 @@ struct RewardEarnedView: View {
             Image(systemName: "checkmark.seal.fill")
                 .font(.system(size: 72))
                 .foregroundStyle(.green)
+                .symbolEffect(.bounce, options: .repeat(2))
 
             Text("Заслужено")
                 .font(.largeTitle).bold()
@@ -217,9 +219,13 @@ struct RewardEarnedView: View {
 
             // Следующая цель ставится сразу: награда, после которой ничего
             // не следует, гасит мотивацию вместо того, чтобы её поддержать.
-            Button("Получил — ставим следующую цель", action: onDone)
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+            Button(action: onDone) {
+                Text("Получил — ставим следующую цель")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.glassProminent)
+            .controlSize(.large)
         }
         .padding()
     }

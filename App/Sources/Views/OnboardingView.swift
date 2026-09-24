@@ -49,10 +49,11 @@ struct OnboardingView: View {
                     }
                     .padding()
                 }
-
-                footer
-                    .padding()
-                    .background(.bar)
+                .safeAreaInset(edge: .bottom) {
+                    footer
+                        .padding(.horizontal)
+                        .padding(.bottom, 8)
+                }
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle(step?.title ?? "")
@@ -269,7 +270,7 @@ struct OnboardingView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.glassProminent)
             .controlSize(.large)
 
             if plan.count > 1 {

@@ -12,7 +12,7 @@ import UIKit
 /// 2. На экране одно очевидное действие; всё прочее — тише и мельче.
 /// 3. Учат обычно одной рукой и на ходу, поэтому главные кнопки крупные и внизу.
 enum Design {
-    static let cardCornerRadius: CGFloat = 16
+    static let cardCornerRadius: CGFloat = 24
     static let cardPadding: CGFloat = 20
     static let stackSpacing: CGFloat = 16
 

@@ -173,3 +173,63 @@ py-fsrs). Писать с нуля не надо, но надо **прогнат
 - [YouGlish JS API](https://youglish.com/api/doc/js-api) · [виджет](https://youglish.com/api/doc/widget) · [аддон Aglish для Anki](https://github.com/abdnh/aglish)
 - [Apple Developer: бесплатный vs $99](https://bitrig.com/blog/apple-developer-program-free-vs-paid) · [ограничения бесплатного аккаунта](https://mybyways.com/blog/new-limitations-imposed-on-free-apple-developer-account/) · [гайд по дистрибуции 2026](https://foresightmobile.com/blog/ios-app-distribution-guide-2026)
 - [Тренды AI в изучении языков 2026](https://edumo.io/blog/ai-language-teaching-trends-2026) · [научно-обоснованный гайд](https://langmitra.com/blog/how-to-learn-a-language)
+
+---
+
+## 9. Проверка решений (сентябрь 2026)
+
+Через неделю после начала проект перепроверен против свежих данных: что
+подтвердилось, что пришлось исправить.
+
+### Подтвердилось
+
+- **Главный круг «пересказ → разрывы → карточки»** опирается на гипотезу
+  понятного вывода (comprehensible output) Меррилла Суэйн: учишься, когда,
+  пытаясь сказать, натыкаешься на разрыв в собственных знаниях и замечаешь его.
+  Пересказ устроен ровно так: не хватило слова — это видно, и оно тут же
+  становится карточкой. Это самое сильное научное основание во всём проекте.
+- **Интервальное извлечение.** Вспоминание с усилием через растущие промежутки —
+  один из самых подтверждённых приёмов для словаря; FSRS стал стандартом.
+- **Главная причина бросить — долго делать карточки.** Закрыто с двух сторон:
+  наборы приходят готовыми, пересказ сам делает карточки из ошибок.
+- **Офлайн.** Всё ключевое работает без сети.
+- **Карточки как плотные поверхности**, а не стекло, совпали с правилами Liquid
+  Glass: стекло — только для слоя управления над содержимым.
+
+### Исправлено
+
+- **Серия дней недооценена.** Изначально выбрана недельная цель вместо ежедневной
+  серии — из опасения, что серию бросают после первого пропуска. Данные говорят
+  иначе: именно этот страх снимает заморозка (у Duolingo она сократила отток
+  рискующих потерять серию на 21%, а две заморозки на старте дополнительно
+  подняли удержание). Хуже того, заморозки у нас считались, но нигде не
+  применялись. Теперь серия с автоматическими заморозками видна на главном
+  экране, недельная цель осталась рядом. Известный побочный эффект серий —
+  стремление «отметиться» лёгким занятием — смягчён тем, что в счёт идут только
+  честные повторы.
+- **Подложки под кнопками устарели.** На iOS 26 плавающие элементы управления —
+  Liquid Glass; самодельные `.background(.bar)` убраны.
+- **Проверка произношения мягче, чем у лидеров.** Лучшие приложения 2026 года
+  разбирают произношение по фонемам. Бесплатная проверка на устройстве плюс
+  минимальные пары остаются основой, но облачный пофонемный разбор (Azure,
+  по расчёту ~$0–1.5 в месяц) стоит поднять в приоритете.
+- **Заставка.** Apple не рекомендует экраны-заставки: запуск должен ощущаться
+  мгновенным. Решено так, чтобы не спорить с этим: системный экран запуска
+  статичен и совпадает с первым кадром анимации, анимация идёт поверх уже
+  загруженного приложения, пропускается нажатием, полная — раз в день.
+- **У приложения не было иконки вовсе.** Добавлена, в трёх вариантах: светлом,
+  тёмном и тинтованном.
+
+### Источники
+
+- [Comprehensible output — Wikipedia](https://en.wikipedia.org/wiki/Comprehensible_output)
+- [Top 10 research-backed techniques — The Language Gym](https://gianfrancoconti.com/2025/03/27/the-science-of-modern-language-teaching-success-the-top-10-research-backed-instructional-techniques/)
+- [Spaced retrieval and oral fluency — Frontiers in Education](https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2025.1715111/full)
+- [Behind the product: Duolingo streaks — Lenny's Podcast](https://www.getrecall.ai/summary/lennys-podcast/behind-the-product-duolingo-streaks-or-jackson-shuttleworth-group-pm-retention-team)
+- [Why Duolingo's gamification works (and when it doesn't)](https://dev.to/pocket_linguist/why-duolingos-gamification-works-and-when-it-doesnt-1d4)
+- [Best AI language learning apps 2026 — Upskillist](https://www.upskillist.com/blog/best-ai-language-learning-apps/)
+- [Top English learning apps 2026 — WynAI](https://www.wynai.pro/blog/listen-learn/top-12-english-learning-apps-in-2026-ai-powered-traditional-beyond-gamification-toward-real-communication)
+- [iOS 26 Liquid Glass reference — conorluddy](https://github.com/conorluddy/LiquidGlassReference)
+- [SwiftUI Liquid Glass skill — Dimillian](https://github.com/Dimillian/Skills/blob/main/swiftui-liquid-glass/SKILL.md)
+- [Splash screen best practices 2026 — UXPin](https://www.uxpin.com/studio/blog/splash-screen/)
+- [Mesh gradients in SwiftUI — Hacking with Swift](https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-a-mesh-gradient)

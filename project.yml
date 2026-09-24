@@ -39,6 +39,8 @@ targets:
         # Bundle ID менять нельзя: на бесплатном аккаунте лимит ~10 новых App ID
         # за 7 дней, и каждый новый идентификатор его расходует.
         PRODUCT_BUNDLE_IDENTIFIER: com.lahmatov.ajfm
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         MARKETING_VERSION: "0.1"
         CURRENT_PROJECT_VERSION: "1"
         TARGETED_DEVICE_FAMILY: "1"
@@ -46,7 +48,11 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: Карточки
-        UILaunchScreen: {}
+        # Статичный экран запуска в цвет первого экрана: по правилам Apple
+        # запуск должен ощущаться мгновенным, а анимация идёт уже внутри
+        # приложения — поверх загруженного содержимого, ничего не задерживая.
+        UILaunchScreen:
+          UIColorName: LaunchBackground
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         UIUserInterfaceStyle: Automatic

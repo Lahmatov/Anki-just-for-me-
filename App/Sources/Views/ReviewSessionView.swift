@@ -55,16 +55,27 @@ struct ReviewSessionView: View {
                 }
                 .padding()
             }
-
-            footer(model)
-                .background(.bar)
+            .safeAreaInset(edge: .bottom) {
+                footer(model)
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
+            }
         }
         .background(Color(.systemGroupedBackground))
     }
 
+    /// Слой управления сессией. Стекло — только здесь, над карточкой:
+    /// сама карточка — содержимое и остаётся плотной.
     @ViewBuilder
     private func footer(_ model: ReviewSessionModel) -> some View {
-        VStack(spacing: 12) {
+        GlassEffectContainer(spacing: 12) {
+            footerContent(model)
+        }
+    }
+
+    @ViewBuilder
+    private func footerContent(_ model: ReviewSessionModel) -> some View {
+        VStack(spacing: 10) {
             if model.isRevealed {
                 GradeButtons(model: model)
             } else if model.current?.type.requiresTyping == true {
@@ -72,31 +83,38 @@ struct ReviewSessionView: View {
                     Haptics.tap()
                     model.reveal()
                 } label: {
-                    Text("Проверить").frame(maxWidth: .infinity)
+                    Text("Проверить")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.glassProminent)
                 .controlSize(.large)
             } else if model.current?.type == .pronunciation {
                 Button {
                     Haptics.tap()
                     model.reveal()
                 } label: {
-                    Text("Показать").frame(maxWidth: .infinity)
+                    Text("Показать")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.glassProminent)
                 .controlSize(.large)
             }
 
             HStack(spacing: 12) {
                 Text("\(model.index + 1) из \(model.cards.count)")
+                    .contentTransition(.numericText())
                 if model.stats.answered > 0 {
                     Text("·")
                     Text("верно \(model.stats.correct + model.stats.typos) "
                          + "из \(model.stats.answered)")
+                        .contentTransition(.numericText())
                 }
             }
             .font(.caption)
             .foregroundStyle(.secondary)
+            .animation(.snappy, value: model.index)
         }
         .padding()
     }
@@ -242,6 +260,7 @@ struct CardPromptView: View {
                 Label(verdictText(check), systemImage: verdictIcon(check))
                     .foregroundStyle(verdictColor(check))
                     .font(.headline)
+                    .symbolEffect(.bounce, value: check.verdict)
                 if let hint = check.hint {
                     Text(hint).font(.subheadline).foregroundStyle(.secondary)
                 }
@@ -302,26 +321,38 @@ struct CardPromptView: View {
 struct GradeButtons: View {
     let model: ReviewSessionModel
 
+    /// Оценку, которую подсказывает проверка ответа, выделяем плотным стеклом —
+    /// выбор остаётся за человеком, но очевидный вариант под пальцем.
+    @ViewBuilder
+    private func gradeButton(_ grade: Grade) -> some View {
+        let button = Button {
+            Haptics.tap()
+            model.grade(grade)
+        } label: {
+            VStack(spacing: 2) {
+                Text(grade.title).font(.callout.weight(.medium))
+                // Интервал прямо на кнопке: выбор оценки должен быть
+                // осознанным, а не гаданием.
+                Text(model.interval(for: grade))
+                    .font(.caption2)
+                    .opacity(0.8)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 4)
+        }
+        .controlSize(.large)
+
+        if model.suggestedGrade == grade {
+            button.buttonStyle(.glassProminent)
+        } else {
+            button.buttonStyle(.glass)
+        }
+    }
+
     var body: some View {
         HStack(spacing: 8) {
             ForEach(Grade.allCases, id: \.rawValue) { grade in
-                Button {
-                    Haptics.tap()
-                    model.grade(grade)
-                } label: {
-                    VStack(spacing: 2) {
-                        Text(grade.title).font(.callout)
-                        // Интервал прямо на кнопке: выбор оценки должен быть
-                        // осознанным, а не гаданием.
-                        Text(model.interval(for: grade))
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 6)
-                }
-                .buttonStyle(.bordered)
-                .tint(model.suggestedGrade == grade ? .accentColor : nil)
+                gradeButton(grade)
             }
         }
     }
@@ -356,9 +387,11 @@ struct SessionSummaryView: View {
                     .padding(.horizontal)
             }
 
-            Button("Готово", action: onDone)
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+            Button(action: onDone) {
+                Text("Готово").font(.headline).frame(maxWidth: 220)
+            }
+            .buttonStyle(.glassProminent)
+            .controlSize(.large)
         }
         .padding()
     }

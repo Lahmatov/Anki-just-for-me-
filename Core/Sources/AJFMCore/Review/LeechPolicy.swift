@@ -44,15 +44,6 @@ public enum LeechPolicy {
 
     /// Формулировка для экрана.
     public static func summary(lapses: Int) -> String {
-        "Забыто \(lapses) \(pluralForgot(lapses))"
-    }
-
-    private static func pluralForgot(_ count: Int) -> String {
-        let remainder100 = count % 100
-        if remainder100 >= 11 && remainder100 <= 14 { return "раз" }
-        switch count % 10 {
-        case 2, 3, 4: return "раза"
-        default: return "раз"
-        }
+        "Забыто " + RussianPlural.phrase(lapses, one: "раз", few: "раза", many: "раз")
     }
 }

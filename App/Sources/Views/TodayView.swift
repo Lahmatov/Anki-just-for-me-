@@ -8,7 +8,10 @@ struct TodayView: View {
     @Query private var cards: [Card]
     @Query private var notes: [Note]
 
+    @Query private var reviews: [Review]
+
     @State private var summary: QueueSummary?
+    @State private var streak: StreakStatus?
     @State private var isSessionActive = false
 
     var body: some View {
@@ -17,18 +20,6 @@ struct TodayView: View {
                 Section {
                     if let summary, !summary.isEmpty {
                         counters(summary)
-                        Button {
-                            Haptics.tap()
-                            isSessionActive = true
-                        } label: {
-                            Label("Учить \(summary.total) карточек", systemImage: "play.fill")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 6)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                     } else if notes.isEmpty {
                         ContentUnavailableView(
                             "Пока пусто",
@@ -44,6 +35,10 @@ struct TodayView: View {
                                 "Карточек по сроку нет. Это нормально — интервальное "
                                 + "повторение и должно оставлять свободные дни."))
                     }
+                }
+
+                if let streak, streak.days > 0 {
+                    streakSection(streak)
                 }
 
                 if let summary, summary.heldBack > 0 {
@@ -75,11 +70,30 @@ struct TodayView: View {
                     }
                 }
             }
+            .safeAreaInset(edge: .bottom) {
+                if let summary, !summary.isEmpty {
+                    Button {
+                        Haptics.tap()
+                        isSessionActive = true
+                    } label: {
+                        Label("Учить \(summary.total) карточек", systemImage: "play.fill")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 4)
+                            .contentTransition(.numericText())
+                    }
+                    .buttonStyle(.glassProminent)
+                    .controlSize(.large)
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
+                }
+            }
             .navigationTitle("Сегодня")
             .navigationDestination(isPresented: $isSessionActive) {
                 ReviewSessionView(deck: nil)
             }
             .onAppear(perform: refresh)
+            .onChange(of: reviews.count) { _, _ in refresh() }
             .onChange(of: isSessionActive) { _, active in
                 if !active { refresh() }
             }
@@ -106,6 +120,7 @@ struct TodayView: View {
                 .font(.system(.title, design: .rounded, weight: .semibold))
                 .foregroundStyle(value == 0 ? Color.secondary : color)
                 .monospacedDigit()
+                .contentTransition(.numericText())
             Text(title)
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -117,6 +132,48 @@ struct TodayView: View {
 
     private func refresh() {
         summary = (try? ReviewService(context: context).todayQueue())?.summary
+        streak = ProgressService(context: context).streakStatus()
+    }
+
+    /// Серия дней. Исследования удержания однозначны: ежедневная серия с
+    /// заморозками — одна из сильнейших причин вернуться завтра. Заморозка
+    /// убирает катастрофу «один пропуск — и сто дней в ноль», из-за которой
+    /// бросают приложение целиком.
+    @ViewBuilder
+    private func streakSection(_ streak: StreakStatus) -> some View {
+        Section {
+            HStack(spacing: 14) {
+                Image(systemName: "flame.fill")
+                    .font(.title2)
+                    .foregroundStyle(streak.studiedToday ? Color.orange : Color.secondary)
+                    .symbolEffect(.bounce, value: streak.days)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(RussianPlural.days(streak.days) + " подряд")
+                        .font(.headline)
+                        .contentTransition(.numericText())
+                    Text(streak.isAtRisk
+                         ? "Сегодня ещё не занимался"
+                         : "Сегодня засчитано")
+                        .font(.caption)
+                        .foregroundStyle(streak.isAtRisk ? Color.orange : Color.secondary)
+                }
+
+                Spacer()
+
+                Label("\(streak.freezesLeft)", systemImage: "snowflake")
+                    .font(.callout.weight(.medium))
+                    .foregroundStyle(.cyan)
+                    .accessibilityLabel("Заморозок осталось: \(streak.freezesLeft)")
+            }
+            .padding(.vertical, 2)
+        } footer: {
+            Text(streak.frozenDays.isEmpty
+                 ? "Пропущенный день прикроет заморозка — их две в месяц. "
+                   + "Серия не обнулится от одного пропуска."
+                 : "Заморозка уже прикрыла пропуск. Замороженные дни серию не рвут, "
+                   + "но и в счёт не идут.")
+        }
     }
 }
 

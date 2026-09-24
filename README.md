@@ -67,6 +67,8 @@
 | [docs/research.md](docs/research.md) | Подводные камни, цены на API, тренды в изучении языков |
 | [docs/architecture.md](docs/architecture.md) | Стек, модель данных, движок повторений |
 | [docs/backlog.md](docs/backlog.md) | Итерации и задачи |
+| [docs/feature-ideas.md](docs/feature-ideas.md) | Что можно добавить дальше, по приоритету |
+| [docs/design.md](docs/design.md) | Правила оформления, Liquid Glass, запуск |
 | [docs/decisions.md](docs/decisions.md) | Принятые решения и почему |
 | [docs/deck-format.md](docs/deck-format.md) | Формат набора карточек |
 | [schema/deck.schema.json](schema/deck.schema.json) | JSON Schema формата |
