@@ -123,17 +123,19 @@ struct LaunchIntroView: View {
             fanned = true
             pulse = true
             glow = true
-            try? await Task.sleep(for: .seconds(0.1))
-            finish(duration: LaunchAnimationStyle.brief.duration)
+            finish(duration: style.duration)
 
         case .full:
             UserDefaults.standard.set(Date(), forKey: SettingsKey.lastLaunchAnimation)
-            withAnimation(.easeOut(duration: 0.5)) { glow = true }
-            withAnimation(.spring(duration: 0.5, bounce: 0.3)) { fanned = true }
-            try? await Task.sleep(for: .seconds(0.4))
+            // Фазы — доли общей длительности из политики: так обещанный
+            // в тестах предел и реальная анимация не разъедутся.
+            let phase = style.duration / 3
+            withAnimation(.easeOut(duration: phase)) { glow = true }
+            withAnimation(.spring(duration: phase, bounce: 0.3)) { fanned = true }
+            try? await Task.sleep(for: .seconds(phase))
             pulse = true
-            try? await Task.sleep(for: .seconds(0.4))
-            finish(duration: 0.4)
+            try? await Task.sleep(for: .seconds(phase))
+            finish(duration: phase)
         }
     }
 

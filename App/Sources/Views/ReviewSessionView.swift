@@ -40,11 +40,14 @@ struct ReviewSessionView: View {
     @ViewBuilder
     private func sessionBody(_ model: ReviewSessionModel) -> some View {
         VStack(spacing: 0) {
-            ProgressView(value: model.progress)
-                .progressViewStyle(.linear)
-                .tint(.accentColor)
-                .padding(.horizontal)
-                .padding(.top, 4)
+            VStack(spacing: 6) {
+                ProgressView(value: model.progress)
+                    .progressViewStyle(.linear)
+                    .tint(.accentColor)
+                sessionCaption(model)
+            }
+            .padding(.horizontal)
+            .padding(.top, 4)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: Design.stackSpacing) {
@@ -101,22 +104,28 @@ struct ReviewSessionView: View {
                 .buttonStyle(.glassProminent)
                 .controlSize(.large)
             }
-
-            HStack(spacing: 12) {
-                Text("\(model.index + 1) из \(model.cards.count)")
-                    .contentTransition(.numericText())
-                if model.stats.answered > 0 {
-                    Text("·")
-                    Text("верно \(model.stats.correct + model.stats.typos) "
-                         + "из \(model.stats.answered)")
-                        .contentTransition(.numericText())
-                }
-            }
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .animation(.snappy, value: model.index)
         }
-        .padding()
+    }
+
+    /// Счёт сессии — рядом с полосой прогресса, а не в стеклянном подвале:
+    /// под стеклом мелкий серый текст сливается с карточкой, которая
+    /// прокручивается под ним.
+    private func sessionCaption(_ model: ReviewSessionModel) -> some View {
+        HStack(spacing: 12) {
+            Text("\(model.index + 1) из \(model.cards.count)")
+                .contentTransition(.numericText())
+            if model.stats.answered > 0 {
+                Text("·")
+                Text("верно \(model.stats.correct + model.stats.typos) "
+                     + "из \(model.stats.answered)")
+                    .contentTransition(.numericText())
+            }
+            Spacer()
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .monospacedDigit()
+        .animation(.snappy, value: model.index)
     }
 }
 

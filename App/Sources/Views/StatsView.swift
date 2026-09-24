@@ -140,7 +140,7 @@ struct StatsView: View {
             Text("Слов в долгосрочной памяти")
         } footer: {
             Text("Та самая метрика, по которой считаются награды: "
-                 + "интервал дорос до \(Int(ReviewState.matureIntervalDays)) дней.")
+                 + "интервал дорос до \(RussianPlural.days(Int(ReviewState.matureIntervalDays))).")
         }
     }
 

@@ -170,4 +170,32 @@ final class ProgressServiceTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(week.daysStudied, 1)
         XCTAssertEqual(week.target, 5)
     }
+
+    func testStreakBridgesAGapWithAFreezeAndIgnoresManualReviews() throws {
+        let (context, importer, service) = try makeEnvironment()
+        try importWords(importer, count: 1, types: [.recognition])
+        let card = try XCTUnwrap(try context.fetch(FetchDescriptor<Card>()).first)
+
+        let calendar = Calendar.current
+        func noon(_ day: Int) -> Date {
+            calendar.date(from: DateComponents(year: 2026, month: 3, day: day, hour: 12))!
+        }
+        func review(on day: Int, honest: Bool) {
+            let entry = Review(
+                card: card, grade: 3, timeSpent: 1, algorithm: "fsrs6", isHonest: honest)
+            entry.timestamp = noon(day)
+            context.insert(entry)
+        }
+        review(on: 10, honest: true)
+        // 11-го только правка руками: день не засчитан, его прикрывает заморозка.
+        review(on: 11, honest: false)
+        review(on: 12, honest: true)
+        try context.save()
+
+        let streak = service.streakStatus(now: noon(12))
+        XCTAssertEqual(streak.days, 2)
+        XCTAssertEqual(streak.frozenDays.count, 1)
+        XCTAssertEqual(streak.freezesLeft, 1)
+        XCTAssertTrue(streak.studiedToday)
+    }
 }

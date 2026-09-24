@@ -52,8 +52,41 @@ final class StreakWithFreezesTests: XCTestCase {
         let result = status([date(3, 5), date(3, 9)], now: date(3, 9, 20))
         // Три пропуска подряд, а заморозок две — дыру не закрыть.
         XCTAssertEqual(result.days, 1)
-        XCTAssertTrue(result.frozenDays.isEmpty, "частично заморозки не тратятся")
-        XCTAssertEqual(result.freezesLeft, 2)
+        XCTAssertTrue(result.frozenDays.isEmpty, "от прерванной серии заморозок не остаётся")
+        // Первые два дня заморозки честно прикрывали — в тот момент никто
+        // не знал, что пропуск затянется. Задним числом они не возвращаются.
+        XCTAssertEqual(result.freezesLeft, 0)
+    }
+
+    func testBrokenStreakDoesNotRefillTheMonthlyAllowance() {
+        // 3 и 4 марта прикрыты, 6-го заморозок уже нет — серия рвётся.
+        // Пересчёт назад от сегодняшнего дня «нашёл» бы для 6-го свежую
+        // заморозку и выдал три прикрытых дня за месяц вместо двух.
+        let result = status([date(3, 1), date(3, 2), date(3, 5), date(3, 7)], now: date(3, 7, 20))
+        XCTAssertEqual(result.days, 1)
+        XCTAssertTrue(result.frozenDays.isEmpty)
+        XCTAssertEqual(result.freezesLeft, 0)
+    }
+
+    func testFrozenDaysStayFrozenWhenViewedLater() {
+        // Решение о заморозке принимается один раз и потом не пересматривается.
+        let before = status([date(3, 8), date(3, 10)], now: date(3, 10, 20))
+        let after = status(
+            [date(3, 8), date(3, 10), date(3, 11), date(3, 12)], now: date(3, 12, 20))
+        XCTAssertEqual(before.frozenDays, [date(3, 9, 4)])
+        XCTAssertEqual(after.frozenDays, before.frozenDays)
+        XCTAssertEqual(after.days, 4)
+        XCTAssertEqual(after.freezesLeft, 1)
+    }
+
+    func testMonthBoundaryDoesNotDoubleTheGap() {
+        // Пропуски 28 февраля, 1 и 2 марта. По месячному лимиту хватило бы
+        // и февральских, и мартовских, но подряд больше двух не прикрываем —
+        // иначе через границу месяца проходила бы дыра в четыре дня.
+        let result = status([date(2, 26), date(2, 27), date(3, 3)], now: date(3, 3, 20))
+        XCTAssertEqual(result.days, 1)
+        XCTAssertTrue(result.frozenDays.isEmpty)
+        XCTAssertEqual(result.freezesLeft, 1, "1 марта заморозка всё же потрачена")
     }
 
     func testTwoDayGapUsesBothFreezes() {

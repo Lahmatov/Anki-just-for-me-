@@ -35,7 +35,7 @@ struct DeckDetailView: View {
                 }
                 .disabled(missing.isEmpty)
                 if !missing.isEmpty {
-                    Text("Без живого примера: \(missing.count) слов")
+                    Text("Без живого примера: \(RussianPlural.words(missing.count))")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

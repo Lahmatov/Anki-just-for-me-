@@ -28,7 +28,8 @@ struct DifficultCardsView: View {
                     "Проблемных нет",
                     systemImage: "checkmark.circle",
                     description: Text(
-                        "Ни одна карточка не провалилась \(threshold) раз. "
+                        "Ни одна карточка не провалилась "
+                        + RussianPlural.phrase(threshold, one: "раз", few: "раза", many: "раз") + ". "
                         + "Это хорошая новость."))
             } else {
                 Section {

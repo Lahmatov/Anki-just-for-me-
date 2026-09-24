@@ -43,7 +43,7 @@ struct RetellView: View {
             Button("Хорошо") { importResult = nil }
         } message: {
             if let importResult {
-                Text("«\(importResult.deckName)»: \(importResult.addedNotes) слов.")
+                Text("«\(importResult.deckName)»: \(RussianPlural.words(importResult.addedNotes)).")
             }
         }
     }
@@ -142,7 +142,7 @@ struct RetellView: View {
                 Text(timeString(model.recorder.elapsed))
                     .monospacedDigit()
                 Spacer()
-                Text("\(model.recorder.wordCount) слов")
+                Text(RussianPlural.words(model.recorder.wordCount))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -246,7 +246,7 @@ struct RetellView: View {
             Button("Новый пересказ") { model.reset() }
         } footer: {
             Text(model.deckCandidateCount > 0
-                 ? "Соберём \(model.deckCandidateCount) карточек: слова, которых не хватило, "
+                 ? "Соберём \(RussianPlural.cardsAccusative(model.deckCandidateCount)): слова, которых не хватило, "
                    + "и повторяющиеся ошибки. Это и есть смысл всей затеи — пересказ "
                    + "превращается в то, что можно выучить."
                  : "Ошибок не нашлось — делать карточки не из чего.")

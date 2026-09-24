@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import AJFMCore
 
 /// Содержимое одной папки: вложенные папки и наборы. `folder == nil` — корень.
 struct FolderContentsView: View {
@@ -45,7 +46,7 @@ struct FolderContentsView: View {
                             Label {
                                 VStack(alignment: .leading) {
                                     Text(child.name)
-                                    Text("\(child.totalNoteCount) слов")
+                                    Text(RussianPlural.words(child.totalNoteCount))
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -95,6 +96,7 @@ struct DeckRow: View {
 
     private var subtitle: String {
         let cards = deck.notes.reduce(0) { $0 + $1.cards.count }
-        return "\(deck.notes.count) слов · \(cards) карточек · \(deck.scheduler.title)"
+        return RussianPlural.words(deck.notes.count) + " · " + RussianPlural.cards(cards)
+            + " · " + deck.scheduler.title
     }
 }

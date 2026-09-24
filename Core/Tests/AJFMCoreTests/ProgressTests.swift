@@ -254,25 +254,4 @@ final class StreakCalculatorTests: XCTestCase {
             studyDays: studied, target: 5, now: date(13), cutoffHour: 4, calendar: calendar)
         XCTAssertTrue(progress.isReached)
     }
-
-    func testFreezesAreCountedPerMonth() {
-        let used = [date(3), date(7)]
-        XCTAssertEqual(
-            StreakCalculator.freezesLeft(
-                usedDates: used, allowancePerMonth: 2, now: date(20), calendar: calendar),
-            0)
-        XCTAssertEqual(
-            StreakCalculator.freezesLeft(
-                usedDates: [date(3)], allowancePerMonth: 2, now: date(20), calendar: calendar),
-            1)
-    }
-
-    func testFreezesResetNextMonth() {
-        let lastMonth = calendar.date(from: DateComponents(year: 2026, month: 2, day: 10))!
-        XCTAssertEqual(
-            StreakCalculator.freezesLeft(
-                usedDates: [lastMonth, lastMonth], allowancePerMonth: 2,
-                now: date(10), calendar: calendar),
-            2)
-    }
 }

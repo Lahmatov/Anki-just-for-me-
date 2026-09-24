@@ -32,12 +32,11 @@ public struct WeekProgress: Equatable, Sendable {
     }
 }
 
-/// Счёт учебных дней.
+/// Счёт учебных дней: серия подряд с заморозками и недельная цель.
 ///
-/// Намеренно мягкая механика: цель недельная, а не ежедневная. Полоска
-/// «дней подряд» отлично мотивирует ровно до первого пропуска, после
-/// которого её обычно бросают вместе с приложением. Недельная цель
-/// переживает пропущенный вторник.
+/// Две мерки дополняют друг друга. Серия тянет вернуться завтра, а заморозка
+/// снимает страх, что один пропуск обнулит всё. Недельная цель мягче —
+/// она просто прощает пропущенный вторник.
 public enum StreakCalculator {
 
     /// Учебные дни, к которым относятся повторы. Занятие в час ночи
@@ -86,9 +85,21 @@ public enum StreakCalculator {
     /// катастрофу «один пропуск — и сто дней в ноль», из-за которой бросают
     /// приложение целиком, но не убирает ежедневного стимула вернуться.
     ///
-    /// Пропущенный день прикрывается сам, если в его месяце остались заморозки.
-    /// Прикрывается только разрыв внутри серии: тратить заморозки на дни до
-    /// самого первого занятия незачем.
+    /// Считается проходом **вперёд** по дням — так, как это переживает сам
+    /// человек. Прошёл день без занятий — заморозка тратится сразу, и это
+    /// решение потом не пересматривается. Пересчёт назад от сегодняшнего дня
+    /// перекладывал бы заморозки задним числом: пропуск, который вчера был
+    /// показан как незащищённый, сегодня оказывался бы прикрыт, а после
+    /// разрыва серии месячный лимит сбрасывался бы и позволял больше двух.
+    ///
+    /// Правила:
+    /// - заморозка тратится, только если есть что защищать — серия больше нуля;
+    /// - в месяц их не больше `freezesPerMonth`, и потраченные остаются
+    ///   потраченными, даже если серия потом всё-таки прервалась;
+    /// - подряд их тоже не больше `freezesPerMonth`: иначе дыра через границу
+    ///   месяца прикрывалась бы вдвое длиннее обещанного;
+    /// - замороженные дни цепочку не рвут, но в счёт не идут;
+    /// - сегодняшний день ещё не кончился, поэтому пропуском не считается.
     public static func streakStatus(
         studyDays: Set<Date>, now: Date = Date(), cutoffHour: Int,
         freezesPerMonth: Int = 2, calendar: Calendar = .current
@@ -98,53 +109,53 @@ public enum StreakCalculator {
         let studiedToday = studyDays.contains(today)
         let allowance = max(0, freezesPerMonth)
 
-        func previousDay(_ date: Date) -> Date {
-            calendar.date(byAdding: .day, value: -1, to: date)
-                ?? date.addingTimeInterval(-86_400)
-        }
         func monthKey(_ date: Date) -> DateComponents {
             calendar.dateComponents([.year, .month], from: date)
         }
-
-        var usedPerMonth: [DateComponents: Int] = [:]
-        var frozen: [Date] = []
-        var days = 0
-        let earliest = studyDays.min()
-
-        // Сегодняшний день ещё не кончился: если занятия не было, это не пропуск.
-        var day = studiedToday ? today : previousDay(today)
-
-        while let earliest, day >= earliest {
-            if studyDays.contains(day) {
-                days += 1
-                day = previousDay(day)
-                continue
-            }
-
-            // Пропуск. Пробуем закрыть всю дыру заморозками — но только если
-            // за ней снова есть занятия, иначе это не разрыв, а начало серии.
-            var gap: [Date] = []
-            var cursor = day
-            var tentative = usedPerMonth
-            while !studyDays.contains(cursor), cursor >= earliest {
-                let key = monthKey(cursor)
-                guard tentative[key, default: 0] < allowance else { break }
-                tentative[key, default: 0] += 1
-                gap.append(cursor)
-                cursor = previousDay(cursor)
-            }
-
-            guard studyDays.contains(cursor), !gap.isEmpty else { break }
-            usedPerMonth = tentative
-            frozen.append(contentsOf: gap)
-            day = cursor
+        func nextDay(_ date: Date) -> Date {
+            calendar.date(byAdding: .day, value: 1, to: date)
+                ?? date.addingTimeInterval(86_400)
         }
 
-        let usedThisMonth = usedPerMonth[monthKey(today), default: 0]
+        guard let earliest = studyDays.min() else {
+            return StreakStatus(
+                days: 0, frozenDays: [], freezesLeft: allowance, studiedToday: false)
+        }
+
+        var usedPerMonth: [DateComponents: Int] = [:]
+        var streak = 0
+        var frozenInStreak: [Date] = []
+        var consecutiveFrozen = 0
+
+        var day = earliest
+        while day < today {
+            if studyDays.contains(day) {
+                streak += 1
+                consecutiveFrozen = 0
+            } else {
+                let key = monthKey(day)
+                let canFreeze = streak > 0
+                    && usedPerMonth[key, default: 0] < allowance
+                    && consecutiveFrozen < allowance
+                if canFreeze {
+                    usedPerMonth[key, default: 0] += 1
+                    consecutiveFrozen += 1
+                    frozenInStreak.append(day)
+                } else {
+                    streak = 0
+                    frozenInStreak = []
+                    consecutiveFrozen = 0
+                }
+            }
+            day = nextDay(day)
+        }
+
+        if studiedToday { streak += 1 }
+
         return StreakStatus(
-            days: days,
-            frozenDays: frozen,
-            freezesLeft: max(0, allowance - usedThisMonth),
+            days: streak,
+            frozenDays: frozenInStreak,
+            freezesLeft: max(0, allowance - usedPerMonth[monthKey(today), default: 0]),
             studiedToday: studiedToday)
     }
 
@@ -163,19 +174,5 @@ public enum StreakCalculator {
 
         let studied = studyDays.filter { $0 >= weekStart && $0 <= today }.count
         return WeekProgress(daysStudied: studied, target: max(1, target))
-    }
-
-    /// Сколько «заморозок» осталось в этом месяце.
-    ///
-    /// Заморозка прикрывает один пропущенный день. Механика нужна не для
-    /// поблажек, а чтобы одна командировка не обнуляла месяц усилий.
-    public static func freezesLeft(
-        usedDates: [Date], allowancePerMonth: Int, now: Date = Date(),
-        calendar: Calendar = .current
-    ) -> Int {
-        let usedThisMonth = usedDates.filter {
-            calendar.isDate($0, equalTo: now, toGranularity: .month)
-        }.count
-        return max(0, allowancePerMonth - usedThisMonth)
     }
 }

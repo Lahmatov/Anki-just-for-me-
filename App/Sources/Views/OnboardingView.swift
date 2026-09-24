@@ -38,9 +38,15 @@ struct OnboardingView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 if plan.count > 1 {
-                    ProgressView(value: Double(index + 1), total: Double(plan.count))
-                        .padding(.horizontal)
-                        .padding(.top, 8)
+                    VStack(alignment: .trailing, spacing: 4) {
+                        ProgressView(value: Double(index + 1), total: Double(plan.count))
+                        Text("\(index + 1) из \(plan.count)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .monospacedDigit()
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
                 }
 
                 ScrollView {
@@ -145,7 +151,7 @@ struct OnboardingView: View {
                         Haptics.failure()
                     }
                 } label: {
-                    Label(starterCount > 0 ? "Добавить \(starterCount) слов" : "Добавить набор",
+                    Label(starterCount > 0 ? "Добавить \(RussianPlural.words(starterCount))" : "Добавить набор",
                           systemImage: "plus.circle")
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 4)
@@ -202,12 +208,12 @@ struct OnboardingView: View {
                 .font(.system(.title2, design: .rounded, weight: .semibold))
 
             Text("Выученным слово считается, когда интервал дорастает до "
-                 + "\(Int(ReviewState.matureIntervalDays)) дней. За вечер такое "
+                 + "\(RussianPlural.days(Int(ReviewState.matureIntervalDays))). За вечер такое "
                  + "не накликать — поэтому награда за них честная.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
 
-            Stepper("Цель: \(goalWords) слов", value: $goalWords, in: 20...500, step: 10)
+            Stepper("Цель: \(RussianPlural.words(goalWords))", value: $goalWords, in: 20...500, step: 10)
 
             TextField("Награда: пицца, диск с игрой…", text: $goalReward)
                 .textFieldStyle(.roundedBorder)
@@ -258,27 +264,18 @@ struct OnboardingView: View {
 
     // MARK: - Навигация
 
-    @ViewBuilder
     private var footer: some View {
-        VStack(spacing: 8) {
-            Button {
-                Haptics.tap()
-                advance()
-            } label: {
-                Text(isLastStep ? "Начать" : "Дальше")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 4)
-            }
-            .buttonStyle(.glassProminent)
-            .controlSize(.large)
-
-            if plan.count > 1 {
-                Text("\(index + 1) из \(plan.count)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+        Button {
+            Haptics.tap()
+            advance()
+        } label: {
+            Text(isLastStep ? "Начать" : "Дальше")
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 4)
         }
+        .buttonStyle(.glassProminent)
+        .controlSize(.large)
     }
 
     private var isLastStep: Bool { index >= plan.count - 1 }

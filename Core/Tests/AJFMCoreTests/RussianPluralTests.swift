@@ -49,4 +49,18 @@ final class RussianPluralTests: XCTestCase {
         XCTAssertEqual(RussianPlural.cards(2), "2 карточки")
         XCTAssertEqual(RussianPlural.cards(11), "11 карточек")
     }
+
+    func testExtremeValuesDoNotCrash() {
+        // abs(Int.min) переполняется; число берём по модулю без знака.
+        XCTAssertEqual(day(Int.min), "дней")  // …808
+        XCTAssertEqual(day(Int.max), "дней")  // …807
+    }
+
+    func testAccusativeChangesOnlyTheSingular() {
+        XCTAssertEqual(RussianPlural.cardsAccusative(1), "1 карточку")
+        XCTAssertEqual(RussianPlural.cardsAccusative(21), "21 карточку")
+        XCTAssertEqual(RussianPlural.cardsAccusative(3), "3 карточки")
+        XCTAssertEqual(RussianPlural.cardsAccusative(11), "11 карточек")
+        XCTAssertEqual(RussianPlural.cardsAccusative(25), "25 карточек")
+    }
 }

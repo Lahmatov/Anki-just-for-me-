@@ -71,7 +71,7 @@ struct RewardsView: View {
                 }
                 ProgressView(value: week.fraction)
             }
-            Stepper("Цель: \(weeklyTarget) дней в неделю", value: $weeklyTarget, in: 1...7)
+            Stepper("Цель: \(RussianPlural.days(weeklyTarget)) в неделю", value: $weeklyTarget, in: 1...7)
         } footer: {
             Text("Недельная цель — в дополнение к серии дней на главном экране. "
                  + "Серия тянет вернуться завтра, а неделя прощает пропущенный "
@@ -90,10 +90,10 @@ struct RewardsView: View {
                     Text(active.reward).font(.headline)
                     ProgressView(value: progress.fraction)
                     HStack {
-                        Text("\(progress.done) из \(progress.goal) слов")
+                        Text("\(progress.done) из \(RussianPlural.words(progress.goal))")
                         Spacer()
                         if let days = progress.daysLeft, days > 0 {
-                            Text("\(days) дн до срока")
+                            Text("\(RussianPlural.days(days)) до срока")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -116,7 +116,7 @@ struct RewardsView: View {
                 Text("Текущая цель")
             } footer: {
                 Text("Считаются слова, дожившие до интервала в "
-                     + "\(Int(ReviewState.matureIntervalDays)) дней, и только те, что "
+                     + "\(RussianPlural.days(Int(ReviewState.matureIntervalDays))), и только те, что "
                      + "появились после начала цели. Просмотры не в счёт — иначе "
                      + "награду можно накликать за вечер.")
             }
@@ -165,7 +165,7 @@ struct RewardsView: View {
             ForEach(contracts.filter(\.isCompleted)) { contract in
                 VStack(alignment: .leading, spacing: 2) {
                     Text(contract.reward)
-                    Text("\(contract.goal) слов · "
+                    Text(RussianPlural.words(contract.goal) + " · "
                          + (contract.completedAt ?? contract.startedAt)
                             .formatted(date: .abbreviated, time: .omitted))
                         .font(.caption)
@@ -208,7 +208,7 @@ struct RewardEarnedView: View {
                 .font(.title2)
                 .multilineTextAlignment(.center)
 
-            Text("\(contract.goal) слов дошли до долгосрочной памяти. "
+            Text("В долгосрочной памяти — \(RussianPlural.words(contract.goal)). "
                  + "Это не просмотры — это реально выученные слова.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
@@ -245,10 +245,10 @@ struct NewContractView: View {
         NavigationStack {
             Form {
                 Section {
-                    Stepper("Цель: \(goal) слов", value: $goal, in: 10...2000, step: 10)
+                    Stepper("Цель: \(RussianPlural.words(goal))", value: $goal, in: 10...2000, step: 10)
                     TextField("Награда: пицца, диск с игрой…", text: $reward)
                 } footer: {
-                    Text("Сейчас в долгосрочной памяти \(currentMature) слов. "
+                    Text("Сейчас в долгосрочной памяти \(RussianPlural.words(currentMature)). "
                          + "Цель считается от этого числа, а не с нуля.")
                 }
 

@@ -21,14 +21,11 @@ struct ProgressService {
     }
 
     func stats() -> LearningStats {
-        let reviews = (try? context.fetch(FetchDescriptor<Review>())) ?? []
-        // Награды считаются только по честным повторам — правки руками не в счёт.
-        let honest = reviews.filter(\.isHonest)
+        let honest = honestReviews()
         let retells = (try? context.fetch(FetchDescriptor<RetellSession>())) ?? []
         let notes = (try? context.fetch(FetchDescriptor<Note>())) ?? []
 
-        let days = StreakCalculator.studyDays(
-            from: honest.map(\.timestamp), cutoffHour: cutoffHour)
+        let days = studyDays(of: honest)
 
         return LearningStats(
             matureWords: matureWordCount(),
@@ -47,20 +44,27 @@ struct ProgressService {
     }
 
     /// Серия учебных дней с автоматическими заморозками.
-    func streakStatus(freezesPerMonth: Int = 2) -> StreakStatus {
-        let reviews = (try? context.fetch(FetchDescriptor<Review>())) ?? []
-        let days = StreakCalculator.studyDays(
-            from: reviews.filter(\.isHonest).map(\.timestamp), cutoffHour: cutoffHour)
-        return StreakCalculator.streakStatus(
-            studyDays: days, cutoffHour: cutoffHour, freezesPerMonth: freezesPerMonth)
+    func streakStatus(freezesPerMonth: Int = 2, now: Date = Date()) -> StreakStatus {
+        StreakCalculator.streakStatus(
+            studyDays: studyDays(of: honestReviews()), now: now,
+            cutoffHour: cutoffHour, freezesPerMonth: freezesPerMonth)
     }
 
-    func weekProgress(target: Int = 5) -> WeekProgress {
-        let reviews = (try? context.fetch(FetchDescriptor<Review>())) ?? []
-        let days = StreakCalculator.studyDays(
-            from: reviews.filter(\.isHonest).map(\.timestamp), cutoffHour: cutoffHour)
-        return StreakCalculator.weekProgress(
-            studyDays: days, target: target, cutoffHour: cutoffHour)
+    func weekProgress(target: Int = 5, now: Date = Date()) -> WeekProgress {
+        StreakCalculator.weekProgress(
+            studyDays: studyDays(of: honestReviews()), target: target, now: now,
+            cutoffHour: cutoffHour)
+    }
+
+    /// Награды, серия и неделя считаются только по честным повторам — правки
+    /// руками не в счёт. Одно место, чтобы три цифры не разошлись, если
+    /// правило «честности» когда-нибудь поменяется.
+    private func honestReviews() -> [Review] {
+        ((try? context.fetch(FetchDescriptor<Review>())) ?? []).filter(\.isHonest)
+    }
+
+    private func studyDays(of reviews: [Review]) -> Set<Date> {
+        StreakCalculator.studyDays(from: reviews.map(\.timestamp), cutoffHour: cutoffHour)
     }
 
     // MARK: - Контракты

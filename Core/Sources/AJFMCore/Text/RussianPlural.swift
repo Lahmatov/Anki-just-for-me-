@@ -7,7 +7,8 @@ import Foundation
 public enum RussianPlural {
 
     public static func form(_ count: Int, one: String, few: String, many: String) -> String {
-        let value = abs(count)
+        // magnitude, а не abs: abs(Int.min) не помещается в Int и роняет процесс.
+        let value = count.magnitude
         let lastTwo = value % 100
         if (11...14).contains(lastTwo) { return many }
         switch value % 10 {
@@ -32,5 +33,12 @@ public enum RussianPlural {
 
     public static func cards(_ count: Int) -> String {
         phrase(count, one: "карточка", few: "карточки", many: "карточек")
+    }
+
+    /// Винительный падеж — для глаголов: «учить 1 карточку», а не «1 карточка».
+    /// Во множественном числе он совпадает с родительным, так что меняется
+    /// только форма на единицу.
+    public static func cardsAccusative(_ count: Int) -> String {
+        phrase(count, one: "карточку", few: "карточки", many: "карточек")
     }
 }

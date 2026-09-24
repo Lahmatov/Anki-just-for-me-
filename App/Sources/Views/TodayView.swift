@@ -8,8 +8,6 @@ struct TodayView: View {
     @Query private var cards: [Card]
     @Query private var notes: [Note]
 
-    @Query private var reviews: [Review]
-
     @State private var summary: QueueSummary?
     @State private var streak: StreakStatus?
     @State private var isSessionActive = false
@@ -76,7 +74,7 @@ struct TodayView: View {
                         Haptics.tap()
                         isSessionActive = true
                     } label: {
-                        Label("Учить \(summary.total) карточек", systemImage: "play.fill")
+                        Label("Учить \(RussianPlural.cardsAccusative(summary.total))", systemImage: "play.fill")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 4)
@@ -93,7 +91,6 @@ struct TodayView: View {
                 ReviewSessionView(deck: nil)
             }
             .onAppear(perform: refresh)
-            .onChange(of: reviews.count) { _, _ in refresh() }
             .onChange(of: isSessionActive) { _, active in
                 if !active { refresh() }
             }
@@ -203,7 +200,7 @@ struct StatsSection: View {
         } footer: {
             Text(
                 "Слово считается выученным, когда интервал дорос до "
-                + "\(Int(ReviewState.matureIntervalDays)) дней. Именно эта цифра, "
+                + "\(RussianPlural.days(Int(ReviewState.matureIntervalDays))). Именно эта цифра, "
                 + "а не число просмотров, пойдёт в зачёт будущих наград.")
         }
     }

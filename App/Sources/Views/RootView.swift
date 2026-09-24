@@ -126,8 +126,8 @@ struct RootView: View {
             }
             Button("Отмена", role: .cancel) { pendingRestore = nil }
         } message: { pending in
-            Text("В файле \(pending.preview.decks) наборов, "
-                 + "\(pending.preview.notes) слов, из них выучено "
+            Text("В файле: наборов — \(pending.preview.decks), "
+                 + "\(RussianPlural.words(pending.preview.notes)), из них выучено "
                  + "\(pending.preview.matureWords). Бэкап от "
                  + pending.preview.exportedAt.formatted(date: .abbreviated, time: .shortened)
                  + ". Текущее содержимое будет заменено целиком.")
@@ -263,7 +263,8 @@ struct RootView: View {
     }
 
     private func summary(of result: ImportResult) -> String {
-        var lines = ["«\(result.deckName)»: \(result.addedNotes) слов, \(result.addedCards) карточек."]
+        var lines = ["«\(result.deckName)»: \(RussianPlural.words(result.addedNotes)), "
+            + "\(RussianPlural.cards(result.addedCards))."]
         if result.skippedDuplicates > 0 {
             lines.append("Пропущено дублей: \(result.skippedDuplicates).")
         }
