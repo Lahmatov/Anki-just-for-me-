@@ -21,13 +21,13 @@ public enum OnboardingStep: String, CaseIterable, Sendable, Identifiable {
 
     public var title: String {
         switch self {
-        case .language: return "Язык"
-        case .howItWorks: return "Как это работает"
-        case .level: return "Уровень"
-        case .starterDeck: return "С чего начать"
-        case .voice: return "Голос"
-        case .goal: return "Зачем это всё"
-        case .reminder: return "Когда"
+        case .language: return tr("Язык", "Idioma", "Language")
+        case .howItWorks: return tr("Как это работает", "Como funciona", "How it works")
+        case .level: return tr("Уровень", "Nível", "Level")
+        case .starterDeck: return tr("С чего начать", "Por onde começar", "Where to start")
+        case .voice: return tr("Голос", "Voz", "Voice")
+        case .goal: return tr("Зачем это всё", "Para quê", "What for")
+        case .reminder: return tr("Когда", "Quando", "When")
         }
     }
 }

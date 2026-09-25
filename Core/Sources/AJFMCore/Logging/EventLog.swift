@@ -18,10 +18,10 @@ public enum LogLevel: String, Codable, Sendable, CaseIterable, Comparable {
 
     public var title: String {
         switch self {
-        case .debug: return "Отладка"
-        case .info: return "Событие"
-        case .warning: return "Внимание"
-        case .error: return "Ошибка"
+        case .debug: return tr("Отладка", "Depuração", "Debug")
+        case .info: return tr("Событие", "Evento", "Event")
+        case .warning: return tr("Внимание", "Atenção", "Warning")
+        case .error: return tr("Ошибка", "Erro", "Error")
         }
     }
 
@@ -40,13 +40,13 @@ public enum LogCategory: String, Codable, Sendable, CaseIterable {
 
     public var title: String {
         switch self {
-        case .importing: return "Импорт"
-        case .review: return "Повторения"
-        case .speech: return "Речь"
-        case .network: return "Сеть"
-        case .backup: return "Бэкап"
-        case .rewards: return "Награды"
-        case .app: return "Приложение"
+        case .importing: return tr("Импорт", "Importação", "Import")
+        case .review: return tr("Повторения", "Revisões", "Reviews")
+        case .speech: return tr("Речь", "Fala", "Speech")
+        case .network: return tr("Сеть", "Rede", "Network")
+        case .backup: return tr("Бэкап", "Cópia de segurança", "Backup")
+        case .rewards: return tr("Награды", "Recompensas", "Rewards")
+        case .app: return tr("Приложение", "Aplicação", "App")
         }
     }
 }

@@ -71,7 +71,9 @@ final class PronunciationService {
         bestConfidence = 0
 
         guard let recognizer, recognizer.isAvailable else {
-            status = .failed("Распознавание английской речи недоступно на этом устройстве.")
+            status = .failed(tr("Распознавание английской речи недоступно на этом устройстве.",
+                                "O reconhecimento de fala em inglês não está disponível neste dispositivo.",
+                                "English speech recognition isn't available on this device."))
             return
         }
 
@@ -82,7 +84,9 @@ final class PronunciationService {
         } catch {
             cleanUp()
             Log.failure(.speech, "Запись не началась", error)
-            status = .failed("Не получилось начать запись: \(error.localizedDescription)")
+            status = .failed(tr("Не получилось начать запись: ",
+                                "Não foi possível começar a gravar: ",
+                                "Couldn't start recording: ") + error.localizedDescription)
         }
     }
 
@@ -178,7 +182,9 @@ final class PronunciationService {
             finish()
         } else if error != nil, status == .recording {
             cleanUp()
-            status = .failed("Распознавание прервалось. Попробуй ещё раз.")
+            status = .failed(tr("Распознавание прервалось. Попробуй ещё раз.",
+                                "O reconhecimento foi interrompido. Tenta outra vez.",
+                                "Recognition was interrupted. Try again."))
         }
     }
 

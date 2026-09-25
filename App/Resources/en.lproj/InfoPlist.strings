@@ -1,0 +1,4 @@
+/* The name under the icon and the permission prompts — shown by iOS. */
+"CFBundleDisplayName" = "Flashcards";
+"NSMicrophoneUsageDescription" = "To check your pronunciation, the app needs access to the microphone. Recordings stay on the device.";
+"NSSpeechRecognitionUsageDescription" = "Speech recognition runs on the device and is used to compare the word you said with the one you're learning.";

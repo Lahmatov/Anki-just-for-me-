@@ -45,6 +45,15 @@ public enum AppLanguage: String, CaseIterable, Codable, Sendable {
         }
     }
 
+    /// Локаль для дат и чисел: «25 сент.», «25/09», «Sep 25».
+    public var localeIdentifier: String {
+        switch self {
+        case .russian: return "ru_RU"
+        case .portuguese: return "pt_PT"
+        case .english: return "en_US"
+        }
+    }
+
     /// Для английского интерфейса «перевод» — это короткое толкование
     /// простыми словами, как в учебном словаре.
     public var translatesIntoItself: Bool { self == .english }

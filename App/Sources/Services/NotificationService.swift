@@ -1,5 +1,6 @@
 import Foundation
 import UserNotifications
+import AJFMCore
 
 /// Локальные напоминания о повторении.
 ///
@@ -18,8 +19,10 @@ enum NotificationService {
         center.removePendingNotificationRequests(withIdentifiers: [dailyReminderID])
 
         let content = UNMutableNotificationContent()
-        content.title = "Время повторить"
-        content.body = "Карточки ждут. Пятнадцать минут — и день закрыт."
+        content.title = tr("Время повторить", "Hora de rever", "Time to review")
+        content.body = tr("Карточки ждут. Пятнадцать минут — и день закрыт.",
+                          "Os cartões estão à espera. Quinze minutos e o dia fica feito.",
+                          "Your cards are waiting. Fifteen minutes and the day is done.")
         content.sound = .default
 
         var components = DateComponents()

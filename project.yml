@@ -1,6 +1,9 @@
 name: AJFM
 options:
   bundleIdPrefix: com.lahmatov
+  # Исходный язык — русский; португальский и английский переводы лежат
+  # в .lproj рядом с ресурсами, строки интерфейса — в коде (tr).
+  developmentLanguage: ru
   deploymentTarget:
     iOS: "26.0"
   createIntermediateGroups: true
@@ -48,6 +51,13 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: Карточки
+        # Языки, которые iOS предложит в настройках приложения. Имя под иконкой
+        # и тексты запросов разрешений переводятся через InfoPlist.strings.
+        CFBundleLocalizations:
+          - ru
+          - pt-PT
+          - en
+        CFBundleDevelopmentRegion: ru
         # Статичный экран запуска в цвет первого экрана: по правилам Apple
         # запуск должен ощущаться мгновенным, а анимация идёт уже внутри
         # приложения — поверх загруженного содержимого, ничего не задерживая.

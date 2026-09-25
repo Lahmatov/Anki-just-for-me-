@@ -157,7 +157,7 @@ final class PromptTemplatesTests: XCTestCase {
 
     func testNewDeckPromptCarriesSourceAndWords() {
         let prompt = PromptTemplates.newDeck(
-            source: "Breaking Bad S03E05", words: ["leverage", "pull off"])
+            source: "Breaking Bad S03E05", words: ["leverage", "pull off"], language: .russian)
 
         XCTAssertTrue(prompt.contains("Breaking Bad S03E05"))
         XCTAssertTrue(prompt.contains("leverage, pull off"))
@@ -165,21 +165,32 @@ final class PromptTemplatesTests: XCTestCase {
     }
 
     func testPromptDemandsExamplesFromTheEpisode() {
-        let prompt = PromptTemplates.newDeck(source: "X", words: [])
+        let prompt = PromptTemplates.newDeck(source: "X", words: [], language: .russian)
         // Словарный пример работает хуже фразы из сцены, которую ты видел.
-        XCTAssertTrue(prompt.contains("реальная фраза из этой серии"))
-        XCTAssertTrue(prompt.contains("не словарный пример"))
+        XCTAssertTrue(prompt.contains("a real line from this episode"))
+        XCTAssertTrue(prompt.contains("not a dictionary example"))
     }
 
     func testPromptCapsDeckSize() {
-        XCTAssertTrue(PromptTemplates.newDeck(source: "X", words: []).contains("30 слов"))
+        XCTAssertTrue(PromptTemplates.newDeck(source: "X", words: [], language: .russian)
+            .contains("no more than 30 words"))
     }
 
     func testEmptyWordListLeavesAPlaceholder() {
-        XCTAssertTrue(PromptTemplates.newDeck(source: "X", words: []).contains("вставь сюда"))
+        XCTAssertTrue(PromptTemplates.newDeck(source: "X", words: [], language: .russian)
+            .contains("<paste the words"))
     }
 
-    func testTextPromptAsksForAmericanTranscription() {
-        XCTAssertTrue(PromptTemplates.deckFromText(source: "X").contains("американская"))
+    func testPromptNamesTheListOfWords() {
+        // Из-за этого сломался первый импорт: модель назвала список по-своему.
+        XCTAssertTrue(PromptTemplates.newDeck(source: "X", words: [], language: .russian)
+            .contains(#"called "notes""#))
+    }
+
+    func testTranslationsFollowTheInterfaceLanguage() {
+        XCTAssertTrue(PromptTemplates.newDeck(source: "X", words: [], language: .portuguese)
+            .contains("European Portuguese"))
+        XCTAssertTrue(PromptTemplates.newDeck(source: "X", words: [], language: .english)
+            .contains("plain-English definition"))
     }
 }

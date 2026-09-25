@@ -30,11 +30,11 @@ struct DeckRequestView: View {
                     ProgressView()
                 }
             }
-            .navigationTitle("Набор через Claude")
+            .navigationTitle(tr("Набор через Claude", "Baralho com o Claude", "Deck with Claude"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Закрыть") { dismiss() }
+                    Button(CommonText.close) { dismiss() }
                 }
             }
         }
@@ -44,12 +44,12 @@ struct DeckRequestView: View {
         }
         .interactiveDismissDisabled(model?.step == .working)
         .alert(
-            "Не записалось",
+            tr("Не записалось", "Não foi guardado", "Couldn't save"),
             isPresented: Binding(
                 get: { applyError != nil }, set: { if !$0 { applyError = nil } }),
             presenting: applyError
         ) { _ in
-            Button("Понятно") { applyError = nil }
+            Button(CommonText.gotIt) { applyError = nil }
         } message: { message in
             Text(message)
         }
@@ -68,15 +68,21 @@ struct DeckRequestView: View {
         Form {
             Section {
                 TextField(
-                    "Friends 1x03, слова для собеседования…",
+                    tr("Friends 1x03, слова для собеседования…",
+                       "Friends 1x03, palavras para uma entrevista…",
+                       "Friends 1x03, words for a job interview…"),
                     text: $model.topic, axis: .vertical)
                     .lineLimit(2...5)
                     .focused($topicFocused)
             } header: {
-                Text("Что нужно")
+                Text(tr("Что нужно", "O que precisas", "What you need"))
             } footer: {
-                Text("Коротко, как в чате. Название серии, тема или ситуация — "
-                     + "модель сама решит, какие слова взять.")
+                Text(tr("Коротко, как в чате. Название серии, тема или ситуация — "
+                            + "модель сама решит, какие слова взять.",
+                        "Curto, como num chat. Nome do episódio, tema ou situação — "
+                            + "o modelo decide que palavras escolher.",
+                        "Short, like in a chat. An episode, a topic or a situation — "
+                            + "the model decides which words to pick."))
             }
 
             Section {
@@ -85,32 +91,44 @@ struct DeckRequestView: View {
                         Label(name, systemImage: "captions.bubble")
                             .lineLimit(1)
                         Spacer()
-                        Button("Убрать", role: .destructive) { model.removeSubtitles() }
+                        Button(tr("Убрать", "Remover", "Remove"), role: .destructive) {
+                            model.removeSubtitles()
+                        }
                             .font(.app(.callout))
                     }
                 } else {
-                    Button("Приложить субтитры", systemImage: "captions.bubble") {
+                    Button(tr("Приложить субтитры", "Anexar legendas", "Attach subtitles"),
+                           systemImage: "captions.bubble") {
                         showSubtitlePicker = true
                     }
                 }
             } footer: {
-                Text("С субтитрами примеры — настоящие реплики из серии. "
-                     + "Без них — просто хорошие примеры, цитатами они не притворяются.")
+                Text(tr("С субтитрами примеры — настоящие реплики из серии. "
+                            + "Без них — просто хорошие примеры, цитатами они не притворяются.",
+                        "Com legendas, os exemplos são falas reais do episódio. Sem elas, "
+                            + "são só bons exemplos — não se fazem passar por citações.",
+                        "With subtitles, examples are real lines from the episode. Without "
+                            + "them they're just good examples — they don't pose as quotes."))
             }
 
             Section {
                 Stepper(
-                    "Слов: \(model.wordCount)", value: $model.wordCount,
+                    tr("Слов: ", "Palavras: ", "Words: ") + "\(model.wordCount)",
+                    value: $model.wordCount,
                     in: DeckRequest.wordCountRange, step: 5)
-                Picker("Мой уровень", selection: $model.level) {
-                    Text("Не знаю").tag(CEFRLevel?.none)
+                Picker(tr("Мой уровень", "O meu nível", "My level"), selection: $model.level) {
+                    Text(tr("Не знаю", "Não sei", "Don't know")).tag(CEFRLevel?.none)
                     ForEach(CEFRLevel.allCases, id: \.self) { level in
                         Text(level.rawValue).tag(CEFRLevel?.some(level))
                     }
                 }
             } footer: {
-                Text("Слова подбираются на ступень выше твоего уровня — "
-                     + "уже не очевидные, но ещё часто встречающиеся.")
+                Text(tr("Слова подбираются на ступень выше твоего уровня — "
+                            + "уже не очевидные, но ещё часто встречающиеся.",
+                        "As palavras ficam um degrau acima do teu nível — já não óbvias, "
+                            + "mas ainda frequentes.",
+                        "Words are picked one step above your level — no longer obvious, "
+                            + "but still common."))
             }
 
             if !model.hasAPIKey {
@@ -119,14 +137,19 @@ struct DeckRequestView: View {
 
             Section {
                 LabeledContent(
-                    "Примерно", value: String(format: "$%.2f", model.estimatedCost))
+                    tr("Примерно", "Cerca de", "About"),
+                    value: String(format: "$%.2f", model.estimatedCost))
                 LabeledContent(
-                    "В этом месяце",
-                    value: String(format: "$%.2f из $%.0f",
+                    tr("В этом месяце", "Este mês", "This month"),
+                    value: String(format: "$%.2f / $%.0f",
                                   model.usage.monthCost, model.usage.limit))
             } footer: {
-                Text("Слова, которые уже есть в базе, модель пропустит сама, "
-                     + "а повторы превью покажет отдельно.")
+                Text(tr("Слова, которые уже есть в базе, модель пропустит сама, "
+                            + "а повторы превью покажет отдельно.",
+                        "O modelo salta as palavras que já tens, e a pré-visualização "
+                            + "mostra os duplicados à parte.",
+                        "The model skips words you already have, and the preview "
+                            + "shows duplicates separately."))
             }
 
             if case .failed(let message) = model.step {
@@ -157,7 +180,8 @@ struct DeckRequestView: View {
 
     private var apiKeySection: some View {
         Section {
-            SecureField("Ключ API Anthropic", text: $apiKey)
+            SecureField(tr("Ключ API Anthropic", "Chave da API da Anthropic", "Anthropic API key"),
+                        text: $apiKey)
                 .autocorrectionDisabled()
                 .textInputAutocapitalization(.never)
                 .onChange(of: apiKey) { _, value in
@@ -165,10 +189,14 @@ struct DeckRequestView: View {
                                  for: Keychain.claudeAPIKey)
                 }
         } header: {
-            Text("Нужен ключ")
+            Text(tr("Нужен ключ", "É precisa uma chave", "A key is needed"))
         } footer: {
-            Text("Один раз: console.anthropic.com → API Keys → Create Key. "
-                 + "Ключ хранится в Keychain телефона и уходит только в Anthropic.")
+            Text(tr("Один раз: console.anthropic.com → API Keys → Create Key. "
+                        + "Ключ хранится в Keychain телефона и уходит только в Anthropic.",
+                    "Uma vez: console.anthropic.com → API Keys → Create Key. "
+                        + "A chave fica no Keychain do telemóvel e só vai para a Anthropic.",
+                    "Once: console.anthropic.com → API Keys → Create Key. "
+                        + "The key stays in the phone's Keychain and only goes to Anthropic."))
         }
     }
 
@@ -189,10 +217,10 @@ struct DeckRequestView: View {
             HStack(spacing: 10) {
                 if model.step == .working {
                     ProgressView()
-                    Text("Подбираю слова…")
+                    Text(tr("Подбираю слова…", "A escolher palavras…", "Picking words…"))
                 } else {
                     Image(systemName: "sparkles")
-                    Text("Сделать набор")
+                    Text(tr("Сделать набор", "Criar baralho", "Make the deck"))
                 }
             }
             .font(.app(.headline))
@@ -216,11 +244,10 @@ struct DeckRequestView: View {
             Text(result.deckName)
                 .font(.app(.title2, weight: .semibold))
                 .multilineTextAlignment(.center)
-            Text(RussianPlural.words(result.addedNotes) + " · "
-                 + RussianPlural.cards(result.addedCards))
+            Text(Counted.words(result.addedNotes) + " · " + Counted.cards(result.addedCards))
                 .foregroundStyle(.secondary)
             if let model, model.lastCost > 0 {
-                Text(String(format: "Стоило $%.3f", model.lastCost))
+                Text(tr("Стоило ", "Custou ", "Cost ") + String(format: "$%.3f", model.lastCost))
                     .font(.app(.footnote))
                     .foregroundStyle(.tertiary)
             }
@@ -228,7 +255,7 @@ struct DeckRequestView: View {
             Button {
                 dismiss()
             } label: {
-                Text("Готово")
+                Text(CommonText.done)
                     .font(.app(.headline))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)

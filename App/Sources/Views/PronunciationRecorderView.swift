@@ -28,14 +28,18 @@ struct PronunciationRecorderView: View {
                     .font(.app(.callout))
                     .foregroundStyle(.orange)
             case .processing:
-                ProgressView("Разбираю…")
+                ProgressView(tr("Разбираю…", "A analisar…", "Analyzing…"))
             default:
                 EmptyView()
             }
 
             if permissionDenied {
-                Text("Нужны разрешения на микрофон и распознавание речи — "
-                     + "их можно включить в настройках iOS.")
+                Text(tr("Нужны разрешения на микрофон и распознавание речи — "
+                            + "их можно включить в настройках iOS.",
+                        "São precisas permissões para o microfone e o reconhecimento de "
+                            + "fala — podes ativá-las nas definições do iOS.",
+                        "Microphone and speech recognition permissions are needed — "
+                            + "you can turn them on in iOS Settings."))
                     .font(.app(.caption))
                     .foregroundStyle(.orange)
             }
@@ -66,19 +70,23 @@ struct PronunciationRecorderView: View {
     @ViewBuilder
     private var controls: some View {
         HStack(spacing: 12) {
-            SpeakButton(text: word, label: "Эталон")
+            SpeakButton(text: word, label: tr("Эталон", "Referência", "Reference"))
 
             if service.isRecording {
-                Button("Стоп", systemImage: "stop.circle.fill") { service.stop() }
+                Button(tr("Стоп", "Parar", "Stop"), systemImage: "stop.circle.fill") {
+                    service.stop()
+                }
                     .buttonStyle(.borderedProminent)
                     .tint(.red)
             } else {
-                Button("Записать", systemImage: "mic.circle.fill") { record() }
+                Button(tr("Записать", "Gravar", "Record"), systemImage: "mic.circle.fill") {
+                    record()
+                }
                     .buttonStyle(.borderedProminent)
             }
 
             if service.hasRecording, !service.isRecording {
-                Button("Я", systemImage: "play.circle") { service.playRecording() }
+                Button(tr("Я", "Eu", "Me"), systemImage: "play.circle") { service.playRecording() }
                     .buttonStyle(.bordered)
             }
         }
@@ -96,7 +104,9 @@ struct PronunciationRecorderView: View {
                 .foregroundStyle(.secondary)
 
             if assessment.confidence > 0 {
-                Text("Уверенность распознавателя: \(Int(assessment.confidence * 100))%")
+                Text(tr("Уверенность распознавателя: ", "Confiança do reconhecedor: ",
+                        "Recognizer confidence: ")
+                     + "\(Int(assessment.confidence * 100))%")
                     .font(.app(.caption2))
                     .foregroundStyle(.tertiary)
             }
@@ -110,10 +120,14 @@ struct PronunciationRecorderView: View {
             }
 
             HStack {
-                Button("Ещё раз", systemImage: "arrow.clockwise") { record() }
+                Button(tr("Ещё раз", "Outra vez", "Again"), systemImage: "arrow.clockwise") {
+                    record()
+                }
                     .buttonStyle(.bordered)
                 if service.hasRecording {
-                    Button("Сравнить с эталоном", systemImage: "waveform") {
+                    Button(tr("Сравнить с эталоном", "Comparar com a referência",
+                              "Compare with the reference"),
+                           systemImage: "waveform") {
                         service.playRecording()
                     }
                     .buttonStyle(.bordered)
@@ -126,9 +140,14 @@ struct PronunciationRecorderView: View {
     private func title(for assessment: PronunciationAssessment) -> String {
         switch assessment.verdict {
         // Формулировки намеренно сдержанные: «Отлично!» здесь было бы враньём.
-        case .matched: return assessment.isReliable ? "Слово узнано" : "Похоже на нужное слово"
-        case .mismatched: return "Прозвучало другое слово"
-        case .unclear: return "Не разобрал"
+        case .matched:
+            return assessment.isReliable
+                ? tr("Слово узнано", "Palavra reconhecida", "Word recognized")
+                : tr("Похоже на нужное слово", "Parece a palavra certa", "Sounds like the right word")
+        case .mismatched:
+            return tr("Прозвучало другое слово", "Soou outra palavra", "It sounded like another word")
+        case .unclear:
+            return tr("Не разобрал", "Não percebi", "Couldn't make it out")
         }
     }
 

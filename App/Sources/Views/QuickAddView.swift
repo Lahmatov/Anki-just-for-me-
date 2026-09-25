@@ -18,7 +18,7 @@ struct QuickAddView: View {
     @State private var example = ""
     @State private var note = ""
     @State private var selectedDeckID: PersistentIdentifier?
-    @State private var newDeckName = "Из головы"
+    @State private var newDeckName = QuickAddView.defaultDeckName
     @State private var duplicateWarning: String?
 
     private var trimmedTerm: String {
@@ -34,11 +34,12 @@ struct QuickAddView: View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("Слово или фраза", text: $term)
+                    TextField(tr("Слово или фраза", "Palavra ou expressão", "Word or phrase"),
+                              text: $term)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                         .onChange(of: term) { _, _ in checkDuplicate() }
-                    TextField("Перевод", text: $translation)
+                    TextField(tr("Перевод", "Tradução", "Translation"), text: $translation)
                 } footer: {
                     if let duplicateWarning {
                         Label(duplicateWarning, systemImage: "exclamationmark.triangle")
@@ -47,40 +48,49 @@ struct QuickAddView: View {
                 }
 
                 Section {
-                    TextField("Пример (по желанию)", text: $example, axis: .vertical)
+                    TextField(tr("Пример (по желанию)", "Exemplo (opcional)", "Example (optional)"),
+                              text: $example, axis: .vertical)
                         .autocorrectionDisabled()
-                    TextField("Заметка (по желанию)", text: $note, axis: .vertical)
+                    TextField(tr("Заметка (по желанию)", "Nota (opcional)", "Note (optional)"),
+                              text: $note, axis: .vertical)
                 } footer: {
-                    Text("Пример сильно помогает запоминанию. Если его нет сейчас — "
-                         + "потом подставится из субтитров серии.")
+                    Text(tr("Пример сильно помогает запоминанию. Если его нет сейчас — "
+                                + "потом подставится из субтитров серии.",
+                            "Um exemplo ajuda muito a memorizar. Se não tens um agora, "
+                                + "entra depois a partir das legendas do episódio.",
+                            "An example helps a lot with remembering. If you don't have one "
+                                + "now, it can come from the episode's subtitles later."))
                 }
 
                 Section {
                     if decks.isEmpty {
-                        TextField("Название набора", text: $newDeckName)
+                        TextField(tr("Название набора", "Nome do baralho", "Deck name"),
+                                  text: $newDeckName)
                     } else {
-                        Picker("Набор", selection: $selectedDeckID) {
-                            Text("Новый набор").tag(PersistentIdentifier?.none)
+                        Picker(tr("Набор", "Baralho", "Deck"), selection: $selectedDeckID) {
+                            Text(tr("Новый набор", "Novo baralho", "New deck"))
+                                .tag(PersistentIdentifier?.none)
                             ForEach(decks) { deck in
                                 Text(deck.name).tag(PersistentIdentifier?.some(deck.persistentModelID))
                             }
                         }
                         if selectedDeckID == nil {
-                            TextField("Название набора", text: $newDeckName)
+                            TextField(tr("Название набора", "Nome do baralho", "Deck name"),
+                                      text: $newDeckName)
                         }
                     }
                 } header: {
-                    Text("Куда положить")
+                    Text(tr("Куда положить", "Onde guardar", "Where to put it"))
                 }
             }
-            .navigationTitle("Новое слово")
+            .navigationTitle(tr("Новое слово", "Nova palavra", "New word"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Отмена") { dismiss() }
+                    Button(CommonText.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Добавить") { save() }.disabled(!canSave)
+                    Button(tr("Добавить", "Adicionar", "Add")) { save() }.disabled(!canSave)
                 }
             }
             .onAppear {
@@ -98,9 +108,14 @@ struct QuickAddView: View {
         let existing = (try? context.fetch(FetchDescriptor<Note>()))?
             .first { $0.normalizedTerm == normalized }
         duplicateWarning = existing.map {
-            "Уже есть в наборе «\($0.deck?.name ?? "без набора")»"
+            let deckName = $0.deck?.name ?? tr("без набора", "sem baralho", "no deck")
+            return tr("Уже есть в наборе «\(deckName)»", "Já existe no baralho «\(deckName)»",
+                      "Already in the deck “\(deckName)”")
         }
     }
+
+    /// Набор для слов, добавленных руками, — «из головы», а не из серии.
+    static var defaultDeckName: String { tr("Из головы", "Da minha cabeça", "From my head") }
 
     private func save() {
         let data = NoteData(
@@ -111,7 +126,7 @@ struct QuickAddView: View {
                 ? nil
                 : SentenceMiner.makeCloze(sentence: example, term: trimmedTerm),
             note: note.isEmpty ? nil : note,
-            tags: ["вручную"])
+            tags: [tr("вручную", "manual", "manual")])
 
         let deck = targetDeck()
         let note = Note(data: data)
@@ -138,7 +153,7 @@ struct QuickAddView: View {
         }
         let name = newDeckName.trimmingCharacters(in: .whitespacesAndNewlines)
         let deck = Deck(
-            name: name.isEmpty ? "Из головы" : name,
+            name: name.isEmpty ? Self.defaultDeckName : name,
             scheduler: .fsrs6,
             cardTypes: ImportPlanner.defaultCardTypes)
         context.insert(deck)

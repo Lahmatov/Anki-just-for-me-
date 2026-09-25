@@ -74,7 +74,7 @@ final class PronunciationEvaluatorTests: XCTestCase {
 final class MinimalPairsTests: XCTestCase {
 
     func testLibraryIsNotEmptyAndWellFormed() {
-        let pairs = MinimalPairLibrary.forRussianSpeakers
+        let pairs = MinimalPairLibrary.all
         XCTAssertGreaterThan(pairs.count, 10)
 
         for pair in pairs {
@@ -86,13 +86,23 @@ final class MinimalPairsTests: XCTestCase {
         }
     }
 
+    func testEveryPairHasAHintInEveryLanguage() {
+        defer { Loc.language = .russian }
+        for language in AppLanguage.allCases {
+            Loc.language = language
+            for pair in MinimalPairLibrary.all {
+                XCTAssertFalse(pair.hint.isEmpty, "\(pair.id), \(language)")
+            }
+        }
+    }
+
     func testPairIdentifiersAreUnique() {
-        let ids = MinimalPairLibrary.forRussianSpeakers.map(\.id)
+        let ids = MinimalPairLibrary.all.map(\.id)
         XCTAssertEqual(Set(ids).count, ids.count)
     }
 
     func testCoversTheClassicRussianTraps() {
-        let pairs = MinimalPairLibrary.forRussianSpeakers
+        let pairs = MinimalPairLibrary.all
         let contrasts = pairs.map(\.contrast).joined(separator: " ")
         // Межзубные, различение долгих и кратких гласных, /v/ против /w/ —
         // три главные беды русскоязычного произношения.
@@ -111,7 +121,7 @@ final class MinimalPairsTests: XCTestCase {
     }
 
     func testOtherWordInPair() {
-        let pair = MinimalPair("ship", "sheep", contrast: "x", hint: "y")
+        let pair = MinimalPair("ship", "sheep", contrast: "x", ru: "y", pt: "y", en: "y")
         XCTAssertEqual(pair.other(than: "ship"), "sheep")
         XCTAssertEqual(pair.other(than: "sheep"), "ship")
         XCTAssertEqual(pair.other(than: "Ship"), "sheep")

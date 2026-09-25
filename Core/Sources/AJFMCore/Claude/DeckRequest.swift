@@ -7,10 +7,16 @@ public enum DeckRequestError: Error, Equatable, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .emptyTopic:
-            return "Напиши, по какой серии или теме нужен набор."
+            return tr("Напиши, по какой серии или теме нужен набор.",
+                      "Escreve para que série ou tema queres o baralho.",
+                      "Write which show or topic the deck is for.")
         case .subtitlesTooLong(let characters, let limit):
-            return "Субтитры слишком длинные: \(characters) символов при пределе \(limit). "
-                + "Похоже, это не одна серия, а сезон целиком."
+            return tr("Субтитры слишком длинные: \(characters) символов при пределе \(limit). "
+                        + "Похоже, это не одна серия, а сезон целиком.",
+                      "As legendas são longas demais: \(characters) caracteres para um limite "
+                        + "de \(limit). Parece uma temporada inteira, não um episódio.",
+                      "The subtitles are too long: \(characters) characters with a limit of "
+                        + "\(limit). Looks like a whole season, not one episode.")
         }
     }
 }

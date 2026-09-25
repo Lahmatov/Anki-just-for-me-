@@ -26,19 +26,21 @@ struct RootView: View {
     /// перестраивает экраны, но не выкидывает из настроек на «Сегодня».
     @State private var tab: AppTab = .today
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.manrope.rawValue
+    /// Пустая строка — язык не выбран явно, действует системный.
+    @AppStorage(SettingsKey.appLanguage) private var language = ""
 
     var body: some View {
         // Новый API вкладок: на iOS 26 таб-бар сам становится Liquid Glass
         // и прячется при прокрутке, освобождая место под содержимое.
         TabView(selection: $tab) {
-            Tab("Сегодня", systemImage: "calendar", value: AppTab.today) {
+            Tab(tr("Сегодня", "Hoje", "Today"), systemImage: "calendar", value: AppTab.today) {
                 TodayView()
             }
 
-            Tab("Наборы", systemImage: "folder", value: AppTab.decks) {
+            Tab(tr("Наборы", "Baralhos", "Decks"), systemImage: "folder", value: AppTab.decks) {
                 NavigationStack {
                     FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
-                        .navigationTitle("Наборы")
+                        .navigationTitle(tr("Наборы", "Baralhos", "Decks"))
                         .toolbar { toolbar }
                         .toolbar {
                             ToolbarItem(placement: .topBarLeading) {
@@ -52,23 +54,23 @@ struct RootView: View {
                 }
             }
 
-            Tab("Награды", systemImage: "trophy", value: AppTab.rewards) {
+            Tab(tr("Награды", "Recompensas", "Rewards"), systemImage: "trophy", value: AppTab.rewards) {
                 RewardsView()
             }
 
-            Tab("Речь", systemImage: "waveform", value: AppTab.speech) {
+            Tab(tr("Речь", "Fala", "Speech"), systemImage: "waveform", value: AppTab.speech) {
                 SpeakingHubView()
             }
 
-            Tab("Настройки", systemImage: "gearshape", value: AppTab.settings) {
+            Tab(tr("Настройки", "Definições", "Settings"), systemImage: "gearshape",
+                value: AppTab.settings) {
                 SettingsView()
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
-        // Шрифт по умолчанию для всех текстов без явного стиля, а смена
-        // шрифта перестраивает экраны целиком: тексты берут его при отрисовке.
-        .font(.app(.body))
-        .id(fontStyle)
+        // Смена шрифта или языка перестраивает экраны целиком: тексты берут
+        // и то и другое в момент отрисовки.
+        .id(fontStyle + language)
         .overlay {
             if showIntro {
                 LaunchIntroView {
@@ -110,13 +112,15 @@ struct RootView: View {
             }
         }
         .alert(
-            "Восстановить из бэкапа?",
+            tr("Восстановить из бэкапа?", "Restaurar a cópia de segurança?",
+               "Restore from backup?"),
             isPresented: Binding(
                 get: { pendingRestore != nil },
                 set: { if !$0 { pendingRestore = nil } }),
             presenting: pendingRestore
         ) { pending in
-            Button("Заменить всё", role: .destructive) {
+            Button(tr("Заменить всё", "Substituir tudo", "Replace everything"),
+                   role: .destructive) {
                 pendingRestore = nil
                 // Явный тип: у сервиса есть собственный Result.
                 let outcome: Swift.Result<RestoreService.Result, Error> = Result {
@@ -133,25 +137,34 @@ struct RootView: View {
                     }
                 }
             }
-            Button("Отмена", role: .cancel) { pendingRestore = nil }
+            Button(CommonText.cancel, role: .cancel) { pendingRestore = nil }
         } message: { pending in
-            Text("В файле: наборов — \(pending.preview.decks), "
-                 + "\(RussianPlural.words(pending.preview.notes)), из них выучено "
-                 + "\(pending.preview.matureWords). Бэкап от "
-                 + pending.preview.exportedAt.formatted(date: .abbreviated, time: .shortened)
-                 + ". Текущее содержимое будет заменено целиком.")
+            let date = pending.preview.exportedAt.formatted(date: .abbreviated, time: .shortened)
+            let words = Counted.words(pending.preview.notes)
+            let decks = Counted.decks(pending.preview.decks)
+            let mature = pending.preview.matureWords
+            Text(tr(
+                "В файле \(decks), \(words), из них выучено \(mature). Бэкап от \(date). "
+                    + "Текущее содержимое будет заменено целиком.",
+                "O ficheiro tem \(decks), \(words), das quais \(mature) aprendidas. Cópia de "
+                    + "\(date). O conteúdo atual será substituído por completo.",
+                "The file has \(decks), \(words), \(mature) of them learned. Backup from "
+                    + "\(date). Everything currently in the app will be replaced."))
         }
         .alert(
-            "Восстановлено",
+            tr("Восстановлено", "Restaurado", "Restored"),
             isPresented: Binding(
                 get: { restoreResult != nil },
                 set: { if !$0 { restoreResult = nil } })
         ) {
-            Button("Хорошо") { restoreResult = nil }
+            Button(CommonText.ok) { restoreResult = nil }
         } message: {
             if let restoreResult {
-                Text("Наборов: \(restoreResult.decks), слов: \(restoreResult.notes), "
-                     + "карточек: \(restoreResult.cards) — вместе с прогрессом.")
+                Text(Counted.decks(restoreResult.decks) + ", "
+                     + Counted.words(restoreResult.notes) + ", "
+                     + Counted.cards(restoreResult.cards)
+                     + tr(" — вместе с прогрессом.", " — com o progresso.",
+                          " — progress included."))
             }
         }
         .onOpenURL { url in
@@ -181,57 +194,76 @@ struct RootView: View {
             ShareSheet(url: file.url)
         }
         .alert(
-            "Не получилось",
+            CommonText.failedTitle,
             isPresented: Binding(get: { importError != nil }, set: { if !$0 { importError = nil } }),
             presenting: importError
         ) { _ in
-            Button("Понятно") { importError = nil }
+            Button(CommonText.gotIt) { importError = nil }
         } message: { error in
             Text(error.message)
         }
-        .alert("Запрос скопирован", isPresented: $promptCopied) {
-            Button("Понятно") { promptCopied = false }
+        .alert(tr("Запрос скопирован", "Pedido copiado", "Request copied"),
+               isPresented: $promptCopied) {
+            Button(CommonText.gotIt) { promptCopied = false }
         } message: {
-            Text("Вставь его мне в чат, подставив название серии и слова. "
-                 + "В ответ придёт готовый файл набора.")
+            Text(tr("Вставь его в чат с Claude, подставив название серии и слова. "
+                        + "В ответ придёт готовый файл набора.",
+                    "Cola-o no chat com o Claude, com o nome do episódio e as palavras. "
+                        + "A resposta traz o ficheiro do baralho pronto.",
+                    "Paste it into a chat with Claude, filling in the episode and the words. "
+                        + "The reply will be a ready deck file."))
         }
         .alert(
-            "Готово",
+            CommonText.done,
             isPresented: Binding(get: { lastResult != nil }, set: { if !$0 { lastResult = nil } })
         ) {
-            Button("Хорошо") { lastResult = nil }
+            Button(CommonText.ok) { lastResult = nil }
         } message: {
             if let lastResult {
                 Text(summary(of: lastResult))
             }
         }
+        // В самом конце, чтобы доставалось и листам: шрифт по умолчанию для
+        // текстов без явного стиля, даты и числа — по языку интерфейса.
+        .font(.app(.body))
+        .environment(\.locale, Locale(identifier: Loc.language.localeIdentifier))
     }
 
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         // Главный способ получить слова — отдельной кнопкой, а не в меню.
         ToolbarItem(placement: .topBarTrailing) {
-            Button("Набор через Claude", systemImage: "sparkles") {
+            Button(tr("Набор через Claude", "Baralho com o Claude", "Deck with Claude"),
+                   systemImage: "sparkles") {
                 showDeckRequest = true
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
-                Button("Новое слово", systemImage: "plus.circle") { showQuickAdd = true }
+                Button(tr("Новое слово", "Nova palavra", "New word"), systemImage: "plus.circle") {
+                    showQuickAdd = true
+                }
                 Divider()
-                Button("Импорт из файла", systemImage: "doc") { showFileImporter = true }
-                Button("Вставить из буфера", systemImage: "doc.on.clipboard") {
+                Button(tr("Импорт из файла", "Importar de ficheiro", "Import from file"),
+                       systemImage: "doc") { showFileImporter = true }
+                Button(tr("Вставить из буфера", "Colar da área de transferência", "Paste from clipboard"),
+                       systemImage: "doc.on.clipboard") {
                     showPasteImport = true
                 }
                 Divider()
-                Button("Сохранить бэкап", systemImage: "arrow.down.doc") { exportBackup() }
-                Button("Восстановить из бэкапа", systemImage: "arrow.up.doc") {
+                Button(tr("Сохранить бэкап", "Guardar cópia de segurança", "Save backup"),
+                       systemImage: "arrow.down.doc") { exportBackup() }
+                Button(tr("Восстановить из бэкапа", "Restaurar cópia de segurança", "Restore from backup"),
+                       systemImage: "arrow.up.doc") {
                     showRestoreImporter = true
                 }
                 Divider()
-                Button("Запрос для Claude", systemImage: "doc.on.clipboard.fill") {
+                Button(tr("Запрос для чата с Claude", "Pedido para o chat com o Claude",
+                          "Request for a Claude chat"),
+                       systemImage: "doc.on.clipboard.fill") {
                     UIPasteboard.general.string = PromptTemplates.newDeck(
-                        source: "название серии", words: [])
+                        source: tr("название серии", "nome do episódio", "episode name"),
+                        words: [])
                     promptCopied = true
                 }
             } label: {
@@ -281,10 +313,11 @@ struct RootView: View {
     }
 
     private func summary(of result: ImportResult) -> String {
-        var lines = ["«\(result.deckName)»: \(RussianPlural.words(result.addedNotes)), "
-            + "\(RussianPlural.cards(result.addedCards))."]
+        var lines = ["«\(result.deckName)»: \(Counted.words(result.addedNotes)), "
+            + "\(Counted.cards(result.addedCards))."]
         if result.skippedDuplicates > 0 {
-            lines.append("Пропущено дублей: \(result.skippedDuplicates).")
+            lines.append(tr("Пропущено дублей: ", "Duplicados ignorados: ", "Duplicates skipped: ")
+                + "\(result.skippedDuplicates).")
         }
         return lines.joined(separator: "\n")
     }

@@ -27,23 +27,39 @@ public enum LeechPolicy {
     /// слишком длинная фраза, два похожих слова, которые путаются между собой.
     public static func advice(lapses: Int, hasExample: Bool, termWordCount: Int) -> String {
         if !hasExample {
-            return "Добавь пример из сериала: слово без контекста почти не держится "
-                + "в памяти. Кинь субтитры в набор — примеры подставятся сами."
+            return tr("Добавь пример из сериала: слово без контекста почти не держится "
+                        + "в памяти. Кинь субтитры в набор — примеры подставятся сами.",
+                      "Junta um exemplo da série: uma palavra sem contexto quase não fica "
+                        + "na memória. Adiciona legendas ao baralho e os exemplos entram sozinhos.",
+                      "Add an example from the show: a word without context barely sticks. "
+                        + "Drop subtitles into the deck and examples fill in by themselves.")
         }
         if termWordCount > 4 {
-            return "Фраза длинная. Разбей её на части или оставь ключевое слово — "
-                + "целиком такие конструкции почти не запоминаются."
+            return tr("Фраза длинная. Разбей её на части или оставь ключевое слово — "
+                        + "целиком такие конструкции почти не запоминаются.",
+                      "A frase é longa. Divide-a em partes ou deixa só a palavra-chave — "
+                        + "construções inteiras assim quase não se memorizam.",
+                      "The phrase is long. Split it up or keep just the key word — "
+                        + "whole constructions like this rarely stick.")
         }
         if lapses >= 10 {
-            return "Десять провалов — карточка не работает. Перепиши её своими словами, "
-                + "придумай мнемонику или временно отложи: это слово пока не твоё."
+            return tr("Десять провалов — карточка не работает. Перепиши её своими словами, "
+                        + "придумай мнемонику или временно отложи: это слово пока не твоё.",
+                      "Dez falhas — o cartão não funciona. Reescreve-o por palavras tuas, "
+                        + "inventa uma mnemónica ou põe-no de parte: esta palavra ainda não é tua.",
+                      "Ten lapses — the card isn't working. Rewrite it in your own words, "
+                        + "make up a mnemonic or set it aside: this word isn't yours yet.")
         }
-        return "Проверь, не путается ли оно с похожим словом. Если да — заведи "
-            + "карточку с обоими сразу, чтобы разница была видна."
+        return tr("Проверь, не путается ли оно с похожим словом. Если да — заведи "
+                    + "карточку с обоими сразу, чтобы разница была видна.",
+                  "Vê se não a confundes com uma palavra parecida. Se sim, cria "
+                    + "um cartão com as duas, para a diferença ficar à vista.",
+                  "Check whether it gets mixed up with a similar word. If so, make "
+                    + "a card with both, so the difference is visible.")
     }
 
     /// Формулировка для экрана.
     public static func summary(lapses: Int) -> String {
-        "Забыто " + RussianPlural.phrase(lapses, one: "раз", few: "раза", many: "раз")
+        tr("Забыто ", "Esquecida ", "Forgotten ") + Counted.times(lapses)
     }
 }

@@ -26,7 +26,7 @@ struct ReviewSessionView: View {
                 ProgressView()
             }
         }
-        .navigationTitle(deck?.name ?? "Повторение")
+        .navigationTitle(deck?.name ?? tr("Повторение", "Revisão", "Review"))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             if model == nil {
@@ -86,7 +86,7 @@ struct ReviewSessionView: View {
                     Haptics.tap()
                     model.reveal()
                 } label: {
-                    Text("Проверить")
+                    Text(tr("Проверить", "Verificar", "Check"))
                         .font(.app(.headline))
                         .frame(maxWidth: .infinity)
                 }
@@ -97,7 +97,7 @@ struct ReviewSessionView: View {
                     Haptics.tap()
                     model.reveal()
                 } label: {
-                    Text("Показать")
+                    Text(tr("Показать", "Mostrar", "Show"))
                         .font(.app(.headline))
                         .frame(maxWidth: .infinity)
                 }
@@ -112,12 +112,13 @@ struct ReviewSessionView: View {
     /// прокручивается под ним.
     private func sessionCaption(_ model: ReviewSessionModel) -> some View {
         HStack(spacing: 12) {
-            Text("\(model.index + 1) из \(model.cards.count)")
+            Text("\(model.index + 1) " + tr("из", "de", "of") + " \(model.cards.count)")
                 .contentTransition(.numericText())
             if model.stats.answered > 0 {
                 Text("·")
-                Text("верно \(model.stats.correct + model.stats.typos) "
-                     + "из \(model.stats.answered)")
+                Text(tr("верно", "certas", "correct")
+                     + " \(model.stats.correct + model.stats.typos) "
+                     + tr("из", "de", "of") + " \(model.stats.answered)")
                     .contentTransition(.numericText())
             }
             Spacer()
@@ -156,7 +157,7 @@ struct CardPromptView: View {
             }
 
             if card.type.requiresTyping, !model.isRevealed {
-                TextField("Ответ", text: Binding(
+                TextField(tr("Ответ", "Resposta", "Answer"), text: Binding(
                     get: { model.typedAnswer },
                     set: { model.typedAnswer = $0 }))
                     .textFieldStyle(.roundedBorder)
@@ -209,10 +210,11 @@ struct CardPromptView: View {
             // чтобы разобрать речь на слух, а не прочитать подсказку.
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    SpeakButton(text: spokenText, label: "Прослушать")
-                    SpeakButton(text: spokenText, rate: .slow, label: "Медленно")
+                    SpeakButton(text: spokenText, label: CommonText.listen)
+                    SpeakButton(text: spokenText, rate: .slow, label: SpeechRate.slow.title)
                 }
-                Text("Можно слушать сколько угодно раз.")
+                Text(tr("Можно слушать сколько угодно раз.", "Podes ouvir quantas vezes quiseres.",
+                        "Listen as many times as you like."))
                     .font(.app(.caption))
                     .foregroundStyle(.secondary)
             }
@@ -220,8 +222,8 @@ struct CardPromptView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text(note?.translation ?? "").font(.app(.title, weight: .bold))
                 HStack {
-                    SpeakButton(text: note?.term ?? "", label: "Прослушать")
-                    SpeakButton(text: note?.term ?? "", rate: .slow, label: "Медленно")
+                    SpeakButton(text: note?.term ?? "", label: CommonText.listen)
+                    SpeakButton(text: note?.term ?? "", rate: .slow, label: SpeechRate.slow.title)
                 }
             }
         case .pronunciation:
@@ -230,11 +232,15 @@ struct CardPromptView: View {
                 if let ipa = note?.ipa, !ipa.isEmpty {
                     Text(ipa).font(.ipa(.body)).foregroundStyle(.secondary)
                 }
-                SpeakButton(text: note?.term ?? "", rate: .slow, label: "Медленно")
+                SpeakButton(text: note?.term ?? "", rate: .slow, label: SpeechRate.slow.title)
                 PronunciationRecorderView(word: note?.term ?? "")
                 if let pair = MinimalPairLibrary.pair(containing: note?.term ?? "") {
-                    Text("Это слово из минимальной пары «\(pair.first) — \(pair.second)». "
-                         + "Вкладка «Речь» проверит его строже.")
+                    Text(tr("Это слово из минимальной пары «\(pair.first) — \(pair.second)». "
+                                + "Вкладка «Речь» проверит его строже.",
+                            "Esta palavra faz parte do par mínimo «\(pair.first) — \(pair.second)». "
+                                + "O separador «Fala» verifica-a com mais rigor.",
+                            "This word is part of the minimal pair “\(pair.first) — \(pair.second)”. "
+                                + "The Speech tab checks it more strictly."))
                         .font(.app(.caption))
                         .foregroundStyle(.secondary)
                 }
@@ -304,9 +310,9 @@ struct CardPromptView: View {
 
     private func verdictText(_ check: AnswerCheck) -> String {
         switch check.verdict {
-        case .correct: return "Верно"
-        case .typo: return "Почти — опечатка"
-        case .wrong: return "Неверно"
+        case .correct: return tr("Верно", "Certo", "Correct")
+        case .typo: return tr("Почти — опечатка", "Quase — uma gralha", "Almost — a typo")
+        case .wrong: return tr("Неверно", "Errado", "Wrong")
         }
     }
 
@@ -379,19 +385,21 @@ struct SessionSummaryView: View {
 
             if stats.answered > 0 {
                 accuracyRing
-                Text("Сессия закончена")
+                Text(tr("Сессия закончена", "Sessão terminada", "Session complete"))
                     .font(.app(.title2, weight: .bold))
                 HStack(spacing: 10) {
-                    tile("Верно", stats.correct, .green)
-                    tile("Опечатки", stats.typos, .orange)
-                    tile("Мимо", stats.wrong, .red)
+                    tile(tr("Верно", "Certas", "Correct"), stats.correct, .green)
+                    tile(tr("Опечатки", "Gralhas", "Typos"), stats.typos, .orange)
+                    tile(tr("Мимо", "Erradas", "Wrong"), stats.wrong, .red)
                 }
             } else {
                 IconBadge(systemName: "checkmark", color: .green, size: 72)
                 VStack(spacing: 8) {
-                    Text("На сегодня всё")
+                    Text(tr("На сегодня всё", "Por hoje é tudo", "All done for today"))
                         .font(.app(.title2, weight: .bold))
-                    Text("Карточек по сроку нет. Возвращайся позже — или добавь новый набор.")
+                    Text(tr("Карточек по сроку нет. Возвращайся позже — или добавь новый набор.",
+                            "Não há cartões para agora. Volta mais tarde — ou junta um baralho novo.",
+                            "No cards are due. Come back later — or add a new deck."))
                         .font(.app(.subheadline))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
@@ -401,7 +409,7 @@ struct SessionSummaryView: View {
             Spacer()
 
             Button(action: onDone) {
-                Text("Готово")
+                Text(CommonText.done)
                     .font(.app(.headline))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
@@ -432,7 +440,7 @@ struct SessionSummaryView: View {
                 Text("\(Int((stats.accuracy * 100).rounded()))%")
                     .font(.app(.largeTitle, weight: .heavy))
                     .monospacedDigit()
-                Text("точность")
+                Text(tr("точность", "precisão", "accuracy"))
                     .font(.app(.caption, weight: .medium))
                     .foregroundStyle(.secondary)
             }

@@ -45,26 +45,34 @@ public enum SchedulerFactory {
 /// Человекочитаемая длительность: «10 мин», «3 дня», «2.5 мес».
 public enum IntervalFormatter {
     public static func short(_ interval: TimeInterval) -> String {
+        // Сокращения, а не склонения: на кнопке оценки место есть
+        // для «3 дн», но не для «3 дня».
+        let minute = tr("мин", "min", "min")
+        let hour = tr("ч", "h", "h")
+        let day = tr("дн", "d", "d")
+        let month = tr("мес", "mês", "mo")
+        let year = tr("г", "a", "y")
+
         let minutes = interval / 60
-        if minutes < 1 { return "<1 мин" }
-        if minutes < 60 { return "\(Int(minutes.rounded())) мин" }
+        if minutes < 1 { return "<1 \(minute)" }
+        if minutes < 60 { return "\(Int(minutes.rounded())) \(minute)" }
 
         let hours = minutes / 60
-        if hours < 24 { return "\(Int(hours.rounded())) ч" }
+        if hours < 24 { return "\(Int(hours.rounded())) \(hour)" }
 
         let days = hours / 24
-        if days < 30 { return "\(Int(days.rounded())) дн" }
+        if days < 30 { return "\(Int(days.rounded())) \(day)" }
 
         let months = days / 30.44
         if months < 12 {
             return months < 10
-                ? String(format: "%.1f мес", months)
-                : "\(Int(months.rounded())) мес"
+                ? String(format: "%.1f ", months) + month
+                : "\(Int(months.rounded())) \(month)"
         }
 
         let years = days / 365.25
         return years < 10
-            ? String(format: "%.1f г", years)
-            : "\(Int(years.rounded())) г"
+            ? String(format: "%.1f ", years) + year
+            : "\(Int(years.rounded())) \(year)"
     }
 }

@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import AJFMCore
 
 /// Второй путь доставки набора: скопировал JSON прямо из чата — вставил сюда.
 /// Работает, когда возиться с файлом лень.
@@ -18,7 +19,8 @@ struct PasteImportView: View {
                     .textInputAutocapitalization(.never)
                     .overlay(alignment: .topLeading) {
                         if text.isEmpty {
-                            Text("Вставь сюда JSON набора")
+                            Text(tr("Вставь сюда JSON набора", "Cola aqui o JSON do baralho",
+                                    "Paste the deck JSON here"))
                                 .foregroundStyle(.tertiary)
                                 .padding(.top, 8)
                                 .padding(.leading, 5)
@@ -27,19 +29,19 @@ struct PasteImportView: View {
                     }
             }
             .padding()
-            .navigationTitle("Вставить набор")
+            .navigationTitle(tr("Вставить набор", "Colar baralho", "Paste deck"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Отмена") { dismiss() }
+                    Button(CommonText.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Из буфера") {
+                    Button(tr("Из буфера", "Da área de transferência", "From clipboard")) {
                         text = UIPasteboard.general.string ?? text
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Разобрать") {
+                    Button(tr("Разобрать", "Ler", "Parse")) {
                         dismiss()
                         onSubmit(text)
                     }

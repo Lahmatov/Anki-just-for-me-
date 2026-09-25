@@ -13,7 +13,7 @@ struct MinimalPairsView: View {
     @State private var lastVerdict: PronunciationAssessment.Verdict?
     @State private var streak = 0
 
-    private var pairs: [MinimalPair] { MinimalPairLibrary.forRussianSpeakers }
+    private var pairs: [MinimalPair] { MinimalPairLibrary.all }
     private var pair: MinimalPair { pairs[pairIndex % pairs.count] }
     private var target: String { targetIsFirst ? pair.first : pair.second }
 
@@ -21,7 +21,8 @@ struct MinimalPairsView: View {
         List {
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Произнеси").font(.app(.caption)).foregroundStyle(.secondary)
+                        Text(tr("Произнеси", "Diz", "Say"))
+                            .font(.app(.caption)).foregroundStyle(.secondary)
                         Text(target).font(.app(.largeTitle, weight: .bold))
                         Text(pair.contrast).font(.app(.callout)).foregroundStyle(.secondary)
 
@@ -41,25 +42,31 @@ struct MinimalPairsView: View {
                         SpeakButton(text: pair.second, label: pair.second)
                     }
                 } header: {
-                    Text("Как различать")
+                    Text(tr("Как различать", "Como distinguir", "How to tell them apart"))
                 } footer: {
-                    Text("Послушай оба слова подряд — разница слышна лучше, "
-                         + "чем в каждом по отдельности.")
+                    Text(tr("Послушай оба слова подряд — разница слышна лучше, "
+                                + "чем в каждом по отдельности.",
+                            "Ouve as duas palavras seguidas — a diferença nota-se melhor "
+                                + "do que em cada uma sozinha.",
+                            "Listen to both words back to back — the difference is easier "
+                                + "to hear than in each one alone."))
                 }
 
                 Section {
-                    Button("Другое слово из пары") {
+                    Button(tr("Другое слово из пары", "A outra palavra do par",
+                              "The other word of the pair")) {
                         targetIsFirst.toggle()
                         lastVerdict = nil
                     }
-                    Button("Следующая пара") {
+                    Button(tr("Следующая пара", "Próximo par", "Next pair")) {
                         pairIndex += 1
                         targetIsFirst = Bool.random()
                         lastVerdict = nil
                     }
                 } footer: {
                     if streak > 0 {
-                        Text("Подряд верно: \(streak)")
+                        Text(tr("Подряд верно: ", "Certas seguidas: ", "Correct in a row: ")
+                             + "\(streak)")
                     }
                 }
 
@@ -82,12 +89,16 @@ struct MinimalPairsView: View {
                         }
                     }
                 } header: {
-                    Text("Все пары")
+                    Text(tr("Все пары", "Todos os pares", "All pairs"))
                 } footer: {
-                    Text("Подобраны под типичные трудности русскоязычных: межзубные, "
-                         + "различение долгих и кратких гласных, /v/ против /w/.")
+                    Text(tr("Подобраны под типичные трудности русскоязычных: межзубные, "
+                                + "различение долгих и кратких гласных, /v/ против /w/.",
+                            "Escolhidos para as dificuldades típicas de quem fala português: "
+                                + "sons interdentais, vogais longas e curtas, /æ/ e /ʌ/.",
+                            "Chosen for the typical trouble spots of non-native speakers: "
+                                + "the “th” sounds, long vs short vowels, /v/ vs /w/."))
                 }
         }
-        .navigationTitle("Произношение")
+        .navigationTitle(tr("Произношение", "Pronúncia", "Pronunciation"))
     }
 }

@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import AJFMCore
 
 /// Шрифт интерфейса — на выбор в настройках.
 ///
@@ -23,9 +24,9 @@ enum AppFont: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .manrope: return "Manrope"
-        case .system: return "Системный"
-        case .rounded: return "Скруглённый"
-        case .serif: return "С засечками"
+        case .system: return tr("Системный", "Do sistema", "System")
+        case .rounded: return tr("Скруглённый", "Arredondado", "Rounded")
+        case .serif: return tr("С засечками", "Com serifa", "Serif")
         }
     }
 

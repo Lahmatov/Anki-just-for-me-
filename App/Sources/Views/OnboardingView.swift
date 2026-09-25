@@ -43,7 +43,7 @@ struct OnboardingView: View {
                 if plan.count > 1 {
                     VStack(alignment: .trailing, spacing: 4) {
                         ProgressView(value: Double(index + 1), total: Double(plan.count))
-                        Text("\(index + 1) из \(plan.count)")
+                        Text("\(index + 1) " + tr("из", "de", "of") + " \(plan.count)")
                             .font(.app(.caption))
                             .foregroundStyle(.secondary)
                             .monospacedDigit()
@@ -69,7 +69,7 @@ struct OnboardingView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Пропустить") { finish(keepingGoal: false) }
+                    Button(CommonText.skip) { finish(keepingGoal: false) }
                         .font(.app(.callout))
                 }
             }
@@ -100,10 +100,14 @@ struct OnboardingView: View {
     @ViewBuilder
     private var language: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Язык приложения")
+            Text(tr("Язык приложения", "Idioma da aplicação", "App language"))
                 .font(.app(.title2, weight: .semibold))
-            Text("На нём же будут переводы в карточках и разборы пересказов. "
-                 + "Поменять можно в любой момент в настройках.")
+            Text(tr("На нём же будут переводы в карточках и разборы пересказов. "
+                        + "Поменять можно в любой момент в настройках.",
+                    "É também o idioma das traduções nos cartões e das análises dos "
+                        + "recontos. Podes mudá-lo a qualquer momento nas definições.",
+                    "Card translations and retelling reviews will be in it too. "
+                        + "You can change it any time in Settings."))
                 .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
@@ -111,7 +115,7 @@ struct OnboardingView: View {
                 ForEach(AppLanguage.allCases, id: \.self) { option in
                     Button {
                         Haptics.tap()
-                        storedLanguage = option.rawValue
+                        withAnimation(.snappy) { AppSettings.setLanguage(option) }
                     } label: {
                         HStack {
                             Text(option.nativeName)
@@ -143,16 +147,23 @@ struct OnboardingView: View {
     @ViewBuilder
     private var level: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Какой у тебя уровень")
+            Text(tr("Какой у тебя уровень", "Qual é o teu nível", "What's your level"))
                 .font(.app(.title2, weight: .semibold))
-            Text("От него зависит, какие слова подбирать: слишком простые "
-                 + "скучны, слишком редкие не пригодятся. Тест — три минуты, "
-                 + "слово за словом: знаешь или нет.")
+            Text(tr("От него зависит, какие слова подбирать: слишком простые "
+                        + "скучны, слишком редкие не пригодятся. Тест — три минуты, "
+                        + "слово за словом: знаешь или нет.",
+                    "Dele depende que palavras escolher: as demasiado fáceis aborrecem, "
+                        + "as demasiado raras não servem. O teste leva três minutos, "
+                        + "palavra a palavra: sabes ou não.",
+                    "It decides which words to pick: too easy is boring, too rare is "
+                        + "useless. The test takes three minutes, word by word: "
+                        + "do you know it or not."))
                 .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
             if let chosen = storedLevel.flatMap(CEFRLevel.init(rawValue:)) {
-                Label("Уровень \(chosen.rawValue)", systemImage: "checkmark.circle")
+                Label(tr("Уровень", "Nível", "Level") + " \(chosen.rawValue)",
+                      systemImage: "checkmark.circle")
                     .font(.app(.headline))
                     .foregroundStyle(.green)
             }
@@ -161,7 +172,9 @@ struct OnboardingView: View {
                 Haptics.tap()
                 showPlacementTest = true
             } label: {
-                Label(storedLevel == nil ? "Пройти тест" : "Пройти ещё раз",
+                Label(storedLevel == nil
+                      ? tr("Пройти тест", "Fazer o teste", "Take the test")
+                      : tr("Пройти ещё раз", "Repetir", "Take it again"),
                       systemImage: "text.magnifyingglass")
                     .font(.app(.headline))
                     .frame(maxWidth: .infinity)
@@ -170,11 +183,12 @@ struct OnboardingView: View {
             .buttonStyle(.bordered)
             .controlSize(.large)
 
-            Picker("Или выбрать самому", selection: Binding(
+            Picker(tr("Или выбрать самому", "Ou escolher eu", "Or pick it myself"),
+                   selection: Binding(
                 get: { storedLevel.flatMap(CEFRLevel.init(rawValue:)) },
                 set: { storedLevel = $0?.rawValue })
             ) {
-                Text("Не выбран").tag(CEFRLevel?.none)
+                Text(CommonText.notSelected).tag(CEFRLevel?.none)
                 ForEach(CEFRLevel.allCases, id: \.self) { level in
                     Text(level.rawValue).tag(CEFRLevel?.some(level))
                 }
@@ -190,19 +204,37 @@ struct OnboardingView: View {
     @ViewBuilder
     private var howItWorks: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Text("Главный круг")
+            Text(tr("Главный круг", "O ciclo principal", "The main loop"))
                 .font(.app(.title2, weight: .semibold))
 
-            loop("1", "Смотришь серию", "Как обычно, в оригинале.")
-            loop("2", "Пересказываешь вслух", "Две-три минуты по-английски: о чём была, что понял.")
-            loop("3", "Получаешь разбор", "Что понял верно, что переврал, и как звучал язык — "
-                 + "строго по субтитрам серии.")
-            loop("4", "Ошибки становятся карточками", "Слова, которых не хватило, "
-                 + "и грамматика, в которой споткнулся.")
-            loop("5", "Учишь их", "И следующий пересказ выходит лучше.")
+            loop("1", tr("Смотришь серию", "Vês um episódio", "You watch an episode"),
+                 tr("Как обычно, в оригинале.", "Como sempre, na versão original.",
+                    "As usual, in the original."))
+            loop("2", tr("Пересказываешь вслух", "Recontas em voz alta", "You retell it out loud"),
+                 tr("Две-три минуты по-английски: о чём была, что понял.",
+                    "Dois ou três minutos em inglês: de que tratou, o que percebeste.",
+                    "Two or three minutes in English: what it was about, what you got."))
+            loop("3", tr("Получаешь разбор", "Recebes uma análise", "You get a review"),
+                 tr("Что понял верно, что переврал и как звучал язык — строго по субтитрам серии.",
+                    "O que percebeste bem, o que trocaste e como soou a língua — "
+                        + "sempre segundo as legendas.",
+                    "What you got right, what you mixed up and how your English sounded — "
+                        + "strictly by the subtitles."))
+            loop("4", tr("Ошибки становятся карточками", "Os erros viram cartões",
+                         "Mistakes become cards"),
+                 tr("Слова, которых не хватило, и грамматика, в которой споткнулся.",
+                    "As palavras que faltaram e a gramática em que tropeçaste.",
+                    "The words you were missing and the grammar you tripped over."))
+            loop("5", tr("Учишь их", "Estudas", "You learn them"),
+                 tr("И следующий пересказ выходит лучше.", "E o próximo reconto sai melhor.",
+                    "And the next retelling comes out better."))
 
-            Text("Карточки можно и просто импортировать — попросив у меня набор "
-                 + "по серии. Но круг выше и есть то, ради чего всё затевалось.")
+            Text(tr("Слова можно и просто попросить у Claude — кнопкой «Набор через Claude». "
+                        + "Но круг выше и есть то, ради чего всё затевалось.",
+                    "Também podes simplesmente pedir palavras ao Claude — no botão "
+                        + "«Baralho com o Claude». Mas o ciclo acima é a razão de tudo isto.",
+                    "You can also just ask Claude for words — with the “Deck with Claude” "
+                        + "button. But the loop above is what this is all about."))
                 .font(.app(.callout))
                 .foregroundStyle(.secondary)
         }
@@ -226,17 +258,26 @@ struct OnboardingView: View {
     @ViewBuilder
     private var starterDeck: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Двадцать слов для начала")
+            Text(tr("Слова для начала", "Palavras para começar", "Words to start with"))
                 .font(.app(.title2, weight: .semibold))
 
-            Text("Это лексика самого пересказа: turn out, end up, eventually, "
-                 + "cliffhanger. Без неё рассказать о серии трудно, так что она "
-                 + "пригодится с первого же раза.")
+            Text(tr("Это лексика самого пересказа: turn out, end up, eventually, "
+                        + "cliffhanger. Без неё рассказать о серии трудно, так что она "
+                        + "пригодится с первого же раза.",
+                    "É o vocabulário do próprio reconto: turn out, end up, eventually, "
+                        + "cliffhanger. Sem ele é difícil contar um episódio, por isso "
+                        + "serve logo da primeira vez.",
+                    "This is the vocabulary of retelling itself: turn out, end up, "
+                        + "eventually, cliffhanger. It's hard to retell an episode "
+                        + "without it, so it helps from the very first time."))
                 .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
             if starterInstalled {
-                Label("Добавлено — набор «Лексика для пересказа»", systemImage: "checkmark.circle")
+                Label(tr("Добавлено — стартовый набор уже в «Наборах»",
+                         "Adicionado — o baralho inicial já está em «Baralhos»",
+                         "Added — the starter deck is in Decks"),
+                      systemImage: "checkmark.circle")
                     .foregroundStyle(.green)
                     .font(.app(.callout))
             } else {
@@ -251,7 +292,10 @@ struct OnboardingView: View {
                         Haptics.failure()
                     }
                 } label: {
-                    Label(starterCount > 0 ? "Добавить \(RussianPlural.words(starterCount))" : "Добавить набор",
+                    Label(tr("Добавить", "Adicionar", "Add") + " "
+                            + (starterCount > 0
+                               ? Counted.words(starterCount)
+                               : tr("набор", "o baralho", "the deck")),
                           systemImage: "plus.circle")
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 4)
@@ -263,9 +307,12 @@ struct OnboardingView: View {
                     // Молчаливый отказ оставил бы человека с пустой базой
                     // и без понимания, что пошло не так.
                     Label(
-                        "Набор не установился. Ничего страшного: импортируй "
-                        + "examples/retelling-vocabulary.json вручную или попроси "
-                        + "у Claude новый.",
+                        tr("Набор не установился. Ничего страшного: попроси слова у Claude "
+                                + "кнопкой «Набор через Claude» на вкладке «Наборы».",
+                           "O baralho não foi instalado. Não faz mal: pede palavras ao Claude "
+                                + "no botão «Baralho com o Claude», no separador «Baralhos».",
+                           "The deck didn't install. No problem: ask Claude for words with "
+                                + "the “Deck with Claude” button on the Decks tab."),
                         systemImage: "exclamationmark.triangle")
                         .font(.app(.footnote))
                         .foregroundStyle(.orange)
@@ -278,23 +325,30 @@ struct OnboardingView: View {
     @ViewBuilder
     private var voice: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Голос звучит роботом")
+            Text(tr("Голос звучит роботом", "A voz soa robótica", "The voice sounds robotic"))
                 .font(.app(.title2, weight: .semibold))
 
-            Text("Система по умолчанию ставит сжатый голос — для изучения "
-                 + "произношения он плохо годится. Хороший скачивается бесплатно "
-                 + "и один раз.")
+            Text(tr("Система по умолчанию ставит сжатый голос — для изучения "
+                        + "произношения он плохо годится. Хороший скачивается бесплатно "
+                        + "и один раз.",
+                    "Por omissão, o sistema usa uma voz comprimida — não serve bem para "
+                        + "aprender pronúncia. Uma boa descarrega-se de graça, uma vez só.",
+                    "By default the system uses a compressed voice — not great for "
+                        + "learning pronunciation. A good one is a free, one-time download."))
                 .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
-            SpeakButton(text: "This is how it sounds right now.", label: "Послушать сейчас")
+            SpeakButton(text: "This is how it sounds right now.",
+                        label: tr("Послушать сейчас", "Ouvir agora", "Listen now"))
 
             Text(VoiceSelector.downloadHint)
                 .font(.app(.footnote))
                 .foregroundStyle(.secondary)
                 .padding(.top, 4)
 
-            Text("Приложение подхватит новый голос само.")
+            Text(tr("Приложение подхватит новый голос само.",
+                    "A aplicação passa a usar a nova voz sozinha.",
+                    "The app will pick up the new voice by itself."))
                 .font(.app(.footnote))
                 .foregroundStyle(.tertiary)
         }
@@ -304,21 +358,32 @@ struct OnboardingView: View {
     @ViewBuilder
     private var goal: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Пообещай себе награду")
+            Text(tr("Пообещай себе награду", "Promete a ti mesmo uma recompensa",
+                    "Promise yourself a reward"))
                 .font(.app(.title2, weight: .semibold))
 
-            Text("Выученным слово считается, когда интервал дорастает до "
-                 + "\(RussianPlural.days(Int(ReviewState.matureIntervalDays))). За вечер такое "
-                 + "не накликать — поэтому награда за них честная.")
+            let matureDays = Counted.days(Int(ReviewState.matureIntervalDays))
+            Text(tr("Выученным слово считается, когда интервал дорастает до \(matureDays). "
+                        + "За вечер такое не накликать — поэтому награда за них честная.",
+                    "Uma palavra conta como aprendida quando o intervalo chega a "
+                        + "\(matureDays). Não se consegue isso numa noite — por isso "
+                        + "a recompensa é honesta.",
+                    "A word counts as learned once its interval reaches \(matureDays). "
+                        + "You can't click through that in an evening — so the reward "
+                        + "is honest."))
                 .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
-            Stepper("Цель: \(RussianPlural.words(goalWords))", value: $goalWords, in: 20...500, step: 10)
+            Stepper(tr("Цель: ", "Objetivo: ", "Goal: ") + Counted.words(goalWords),
+                    value: $goalWords, in: 20...500, step: 10)
 
-            TextField("Награда: пицца, диск с игрой…", text: $goalReward)
+            TextField(tr("Награда: пицца, диск с игрой…", "Recompensa: pizza, um jogo…",
+                         "Reward: pizza, a new game…"), text: $goalReward)
                 .textFieldStyle(.roundedBorder)
 
-            Text("Можно пропустить и завести позже на вкладке «Награды».")
+            Text(tr("Можно пропустить и завести позже на вкладке «Награды».",
+                    "Podes saltar e criá-lo depois no separador «Recompensas».",
+                    "You can skip this and set it up later on the Rewards tab."))
                 .font(.app(.footnote))
                 .foregroundStyle(.tertiary)
         }
@@ -328,19 +393,23 @@ struct OnboardingView: View {
     @ViewBuilder
     private var reminder: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Когда напоминать")
+            Text(tr("Когда напоминать", "Quando lembrar", "When to remind you"))
                 .font(.app(.title2, weight: .semibold))
 
-            Text("Интервальное повторение работает, только если возвращаться "
-                 + "каждый день. Пятнадцати минут хватает.")
+            Text(tr("Интервальное повторение работает, только если возвращаться "
+                        + "каждый день. Пятнадцати минут хватает.",
+                    "A repetição espaçada só funciona se voltares todos os dias. "
+                        + "Quinze minutos chegam.",
+                    "Spaced repetition only works if you come back every day. "
+                        + "Fifteen minutes is enough."))
                 .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
-            Toggle("Напоминать", isOn: $reminderEnabled)
+            Toggle(tr("Напоминать", "Lembrar", "Remind me"), isOn: $reminderEnabled)
 
             if reminderEnabled {
                 DatePicker(
-                    "Время",
+                    tr("Время", "Hora", "Time"),
                     selection: Binding(
                         get: {
                             Calendar.current.date(from: DateComponents(
@@ -355,7 +424,9 @@ struct OnboardingView: View {
                     displayedComponents: .hourAndMinute)
             }
 
-            Text("Это локальное уведомление — работает без платного аккаунта.")
+            Text(tr("Это локальное уведомление — работает без платного аккаунта.",
+                    "É uma notificação local — funciona sem conta paga.",
+                    "It's a local notification — no paid account needed."))
                 .font(.app(.footnote))
                 .foregroundStyle(.tertiary)
         }
@@ -369,7 +440,7 @@ struct OnboardingView: View {
             Haptics.tap()
             advance()
         } label: {
-            Text(isLastStep ? "Начать" : "Дальше")
+            Text(isLastStep ? tr("Начать", "Começar", "Start") : CommonText.next)
                 .font(.app(.headline))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)
@@ -384,7 +455,7 @@ struct OnboardingView: View {
         // Нажал «Дальше» на шаге языка, ничего не трогая, — согласился
         // с системным. Запоминаем, чтобы не спрашивать снова.
         if step == .language, storedLanguage == nil {
-            storedLanguage = currentLanguage.rawValue
+            AppSettings.setLanguage(currentLanguage)
         }
         if isLastStep {
             finish(keepingGoal: true)

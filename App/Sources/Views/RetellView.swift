@@ -19,7 +19,7 @@ struct RetellView: View {
                 ProgressView()
             }
         }
-        .navigationTitle("Пересказ")
+        .navigationTitle(tr("Пересказ", "Reconto", "Retelling"))
         .onAppear {
             if model == nil { model = RetellFlowModel(context: context) }
         }
@@ -35,15 +35,15 @@ struct RetellView: View {
             }
         }
         .alert(
-            "Набор создан",
+            tr("Набор создан", "Baralho criado", "Deck created"),
             isPresented: Binding(
                 get: { importResult != nil },
                 set: { if !$0 { importResult = nil } })
         ) {
-            Button("Хорошо") { importResult = nil }
+            Button(CommonText.ok) { importResult = nil }
         } message: {
             if let importResult {
-                Text("«\(importResult.deckName)»: \(RussianPlural.words(importResult.addedNotes)).")
+                Text("«\(importResult.deckName)»: \(Counted.words(importResult.addedNotes)).")
             }
         }
     }
@@ -63,7 +63,10 @@ struct RetellView: View {
             case .editingTranscript:
                 transcriptSection(model)
             case .analyzing:
-                Section { ProgressView("Разбираю пересказ…") }
+                Section {
+                    ProgressView(tr("Разбираю пересказ…", "A analisar o reconto…",
+                                    "Reviewing your retelling…"))
+                }
             case .done:
                 if let report = model.report {
                     reportSections(report, model: model)
@@ -72,7 +75,7 @@ struct RetellView: View {
                 Section {
                     Label(message, systemImage: "exclamationmark.triangle")
                         .foregroundStyle(.orange)
-                    Button("Начать заново") { model.reset() }
+                    Button(tr("Начать заново", "Recomeçar", "Start over")) { model.reset() }
                 }
             }
 
@@ -88,12 +91,14 @@ struct RetellView: View {
     private func subtitleSection(_ model: RetellFlowModel) -> some View {
         Section {
             if let summary = model.subtitleSummary {
-                LabeledContent("Субтитры", value: summary)
-                TextField("Название серии", text: Binding(
+                LabeledContent(tr("Субтитры", "Legendas", "Subtitles"), value: summary)
+                TextField(tr("Название серии", "Nome do episódio", "Episode name"), text: Binding(
                     get: { model.episodeTitle }, set: { model.episodeTitle = $0 }))
                 if let track = model.track, track.duration > 60 {
                     VStack(alignment: .leading) {
-                        Text("Досмотрел до \(Int(model.watchedUpToMinutes)) мин")
+                        Text(tr("Досмотрел до ", "Vi até ao minuto ", "Watched up to ")
+                             + "\(Int(model.watchedUpToMinutes))"
+                             + tr(" мин", "", " min"))
                             .font(.app(.callout))
                         Slider(
                             value: Binding(
@@ -104,32 +109,49 @@ struct RetellView: View {
                     }
                 }
             } else {
-                Button("Загрузить субтитры серии", systemImage: "doc.text") {
+                Button(tr("Загрузить субтитры серии", "Carregar as legendas do episódio",
+                          "Load the episode's subtitles"),
+                       systemImage: "doc.text") {
                     showSubtitleImporter = true
                 }
             }
         } header: {
-            Text("Серия")
+            Text(tr("Серия", "Episódio", "Episode"))
         } footer: {
             Text(model.track == nil
-                 ? "Субтитры обязательны. Без них модель судит о содержании по своим "
-                   + "воспоминаниям о сериале и начинает сообщать об ошибках, которых "
-                   + "не было — а доверие к разбору теряется с первого такого случая."
-                 : "Разбор увидит субтитры только до отмеченной минуты — чтобы не "
-                   + "проговориться о том, чего ты ещё не смотрел.")
+                 ? tr("Субтитры обязательны. Без них модель судит о содержании по своим "
+                        + "воспоминаниям о сериале и начинает сообщать об ошибках, которых "
+                        + "не было — а доверие к разбору теряется с первого такого случая.",
+                      "As legendas são obrigatórias. Sem elas, o modelo julga o conteúdo "
+                        + "pelo que se lembra da série e aponta erros que não existiram — "
+                        + "e a confiança na análise perde-se logo à primeira.",
+                      "Subtitles are required. Without them the model judges the content "
+                        + "from its memory of the show and reports mistakes that never "
+                        + "happened — and trust in the review is gone after the first one.")
+                 : tr("Разбор увидит субтитры только до отмеченной минуты — чтобы не "
+                        + "проговориться о том, чего ты ещё не смотрел.",
+                      "A análise só vê as legendas até ao minuto marcado — para não "
+                        + "revelar o que ainda não viste.",
+                      "The review only sees subtitles up to the marked minute — so it "
+                        + "won't spoil what you haven't watched yet."))
         }
     }
 
     @ViewBuilder
     private func recordSection(_ model: RetellFlowModel) -> some View {
         Section {
-            Button("Начать пересказ", systemImage: "mic.circle.fill") {
+            Button(tr("Начать пересказ", "Começar o reconto", "Start retelling"),
+                   systemImage: "mic.circle.fill") {
                 model.startRecording()
             }
             .buttonStyle(.borderedProminent)
         } footer: {
-            Text("Говори по-английски две-пять минут: о чём была серия, что случилось, "
-                 + "что ты понял. Ошибки — это нормально, они и станут карточками.")
+            Text(tr("Говори по-английски две-пять минут: о чём была серия, что случилось, "
+                        + "что ты понял. Ошибки — это нормально, они и станут карточками.",
+                    "Fala em inglês dois a cinco minutos: de que tratou o episódio, o que "
+                        + "aconteceu, o que percebeste. Errar é normal — os erros viram cartões.",
+                    "Speak English for two to five minutes: what the episode was about, what "
+                        + "happened, what you understood. Mistakes are fine — they become cards."))
         }
     }
 
@@ -142,7 +164,7 @@ struct RetellView: View {
                 Text(timeString(model.recorder.elapsed))
                     .monospacedDigit()
                 Spacer()
-                Text(RussianPlural.words(model.recorder.wordCount))
+                Text(Counted.words(model.recorder.wordCount))
                     .font(.app(.caption))
                     .foregroundStyle(.secondary)
             }
@@ -151,11 +173,13 @@ struct RetellView: View {
                     .font(.app(.callout))
                     .foregroundStyle(.secondary)
             }
-            Button("Закончить", systemImage: "stop.circle.fill") { model.stopRecording() }
+            Button(tr("Закончить", "Terminar", "Finish"), systemImage: "stop.circle.fill") {
+                model.stopRecording()
+            }
                 .buttonStyle(.borderedProminent)
                 .tint(.red)
         } header: {
-            Text("Идёт запись")
+            Text(tr("Идёт запись", "A gravar", "Recording"))
         }
     }
 
@@ -167,24 +191,31 @@ struct RetellView: View {
                 .frame(minHeight: 200)
                 .font(.app(.callout))
 
-            Button("Разобрать", systemImage: "sparkles") {
+            Button(tr("Разобрать", "Analisar", "Review"), systemImage: "sparkles") {
                 Task { await model.analyze() }
             }
             .buttonStyle(.borderedProminent)
             .disabled(!model.canAnalyze)
 
             LabeledContent(
-                "Обойдётся примерно в",
+                tr("Обойдётся примерно в", "Vai custar cerca de", "Will cost about"),
                 value: String(format: "$%.3f", model.estimatedCost))
                 .font(.app(.caption))
-            Button("Перезаписать") { model.reset() }
+            Button(tr("Перезаписать", "Gravar de novo", "Record again")) { model.reset() }
                 .font(.app(.caption))
         } header: {
-            Text("Расшифровка — поправь ошибки")
+            Text(tr("Расшифровка — поправь ошибки", "Transcrição — corrige os erros",
+                    "Transcript — fix the mistakes"))
         } footer: {
-            Text("Распознавание путается на акценте. Если оставить «serious» там, где "
-                 + "ты сказал «furious», разбор решит, что ты не понял сцену — "
-                 + "и будет неправ. Пара минут правки того стоит.")
+            Text(tr("Распознавание путается на акценте. Если оставить «serious» там, где "
+                        + "ты сказал «furious», разбор решит, что ты не понял сцену — "
+                        + "и будет неправ. Пара минут правки того стоит.",
+                    "O reconhecimento confunde-se com o sotaque. Se ficar «serious» onde "
+                        + "disseste «furious», a análise vai achar que não percebeste a cena — "
+                        + "e vai estar errada. Vale a pena corrigir dois minutos.",
+                    "Recognition stumbles on accents. Leave “serious” where you said "
+                        + "“furious” and the review will think you misunderstood the scene — "
+                        + "and be wrong. A couple of minutes of fixing is worth it."))
         }
     }
 
@@ -192,32 +223,36 @@ struct RetellView: View {
     private func reportSections(_ report: RetellReport, model: RetellFlowModel) -> some View {
         Section {
             HStack {
-                Text("Понимание")
+                Text(tr("Понимание", "Compreensão", "Understanding"))
                 Spacer()
                 Text("\(report.understanding.coveragePercent)%")
                     .font(.app(.title3, weight: .bold))
             }
             ProgressView(value: report.understanding.coverage)
         } header: {
-            Text("Итог")
+            Text(tr("Итог", "Resultado", "Result"))
         } footer: {
-            Text(String(format: "Разбор стоил $%.3f", model.lastCost))
+            Text(tr("Разбор стоил ", "A análise custou ", "The review cost ")
+                 + String(format: "$%.3f", model.lastCost))
         }
 
         if !report.topPriorities.isEmpty {
-            Section("Над чем поработать") {
+            Section(tr("Над чем поработать", "No que trabalhar", "What to work on")) {
                 ForEach(report.topPriorities, id: \.self) { item in
                     Label(item, systemImage: "target")
                 }
             }
         }
 
-        pointSection("Понял верно", report.understanding.correct, icon: "checkmark", color: .green)
-        pointSection("Понял неверно", report.understanding.incorrect, icon: "xmark", color: .red)
-        pointSection("Упустил", report.understanding.missed, icon: "eye.slash", color: .orange)
+        pointSection(tr("Понял верно", "Percebeste bem", "Understood correctly"),
+                     report.understanding.correct, icon: "checkmark", color: .green)
+        pointSection(tr("Понял неверно", "Percebeste mal", "Misunderstood"),
+                     report.understanding.incorrect, icon: "xmark", color: .red)
+        pointSection(tr("Упустил", "Escapou-te", "Missed"),
+                     report.understanding.missed, icon: "eye.slash", color: .orange)
 
         if !report.language.grammar.isEmpty {
-            Section("Грамматика") {
+            Section(tr("Грамматика", "Gramática", "Grammar")) {
                 ForEach(Array(report.language.grammar.enumerated()), id: \.offset) { item in
                     correctionRow(item.element)
                 }
@@ -225,7 +260,7 @@ struct RetellView: View {
         }
 
         if !report.language.vocabulary.isEmpty {
-            Section("Словарь") {
+            Section(tr("Словарь", "Vocabulário", "Vocabulary")) {
                 ForEach(Array(report.language.vocabulary.enumerated()), id: \.offset) { item in
                     correctionRow(item.element)
                 }
@@ -233,23 +268,32 @@ struct RetellView: View {
         }
 
         if let fluency = report.language.fluencyNote, !fluency.isEmpty {
-            Section("Беглость") { Text(fluency) }
+            Section(tr("Беглость", "Fluência", "Fluency")) { Text(fluency) }
         }
 
         Section {
-            Button("Сделать карточки из ошибок", systemImage: "rectangle.stack.badge.plus") {
+            Button(tr("Сделать карточки из ошибок", "Criar cartões com os erros",
+                      "Turn mistakes into cards"),
+                   systemImage: "rectangle.stack.badge.plus") {
                 importResult = model.makeDeck()
             }
             .buttonStyle(.borderedProminent)
             .disabled(model.deckCandidateCount == 0)
 
-            Button("Новый пересказ") { model.reset() }
+            Button(tr("Новый пересказ", "Novo reconto", "New retelling")) { model.reset() }
         } footer: {
             Text(model.deckCandidateCount > 0
-                 ? "Соберём \(RussianPlural.cardsAccusative(model.deckCandidateCount)): слова, которых не хватило, "
-                   + "и повторяющиеся ошибки. Это и есть смысл всей затеи — пересказ "
-                   + "превращается в то, что можно выучить."
-                 : "Ошибок не нашлось — делать карточки не из чего.")
+                 ? tr("Соберём ", "Vamos criar ", "We'll make ")
+                    + Counted.cardsAccusative(model.deckCandidateCount)
+                    + tr(": слова, которых не хватило, и повторяющиеся ошибки. Это и есть "
+                            + "смысл всей затеи — пересказ превращается в то, что можно выучить.",
+                         ": as palavras que faltaram e os erros repetidos. É esse o sentido "
+                            + "de tudo — o reconto transforma-se em algo que se pode aprender.",
+                         ": the words you were missing and the repeated mistakes. That's the "
+                            + "whole point — a retelling turns into something you can learn.")
+                 : tr("Ошибок не нашлось — делать карточки не из чего.",
+                      "Não há erros — não há de que fazer cartões.",
+                      "No mistakes found — nothing to make cards from."))
         }
     }
 
@@ -273,7 +317,10 @@ struct RetellView: View {
                             Text(comment).font(.app(.caption))
                         }
                         if item.element.mayBeMisheard == true {
-                            Label("возможно, ошибка распознавания", systemImage: "waveform.badge.exclamationmark")
+                            Label(tr("возможно, ошибка распознавания",
+                                     "talvez um erro de reconhecimento",
+                                     "possibly a recognition error"),
+                                  systemImage: "waveform.badge.exclamationmark")
                                 .font(.app(.caption2))
                                 .foregroundStyle(.tertiary)
                         }
@@ -299,11 +346,12 @@ struct RetellView: View {
 
     @ViewBuilder
     private var historySection: some View {
-        Section("История") {
+        Section(tr("История", "Histórico", "History")) {
             ForEach(history) { session in
                 VStack(alignment: .leading, spacing: 2) {
                     Text(session.episodeTitle)
-                    Text("Понимание \(Int(session.coverage * 100))% · "
+                    Text(tr("Понимание", "Compreensão", "Understanding")
+                         + " \(Int(session.coverage * 100))% · "
                          + session.createdAt.formatted(date: .abbreviated, time: .omitted))
                         .font(.app(.caption))
                         .foregroundStyle(.secondary)

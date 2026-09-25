@@ -38,7 +38,9 @@ final class RetellFlowModel {
     var subtitleSummary: String? {
         guard let track else { return nil }
         let minutes = Int(track.duration / 60)
-        return "\(track.cues.count) реплик, \(minutes) минут"
+        return trCount(track.cues.count, ru: ("реплика", "реплики", "реплик"),
+                       pt: ("fala", "falas"), en: ("line", "lines"))
+            + ", " + Counted.minutes(minutes)
     }
 
     var canAnalyze: Bool {
@@ -66,7 +68,9 @@ final class RetellFlowModel {
     func loadSubtitles(from data: Data) {
         guard let raw = String(data: data, encoding: .utf8)
                 ?? String(data: data, encoding: .isoLatin1) else {
-            step = .failed("Не удалось прочитать файл субтитров.")
+            step = .failed(tr("Не удалось прочитать файл субтитров.",
+                              "Não foi possível ler o ficheiro de legendas.",
+                              "Couldn't read the subtitle file."))
             return
         }
         do {
@@ -88,7 +92,9 @@ final class RetellFlowModel {
     func startRecording() {
         Task {
             guard await PronunciationService.requestPermissions() else {
-                step = .failed("Нужны разрешения на микрофон и распознавание речи.")
+                step = .failed(tr("Нужны разрешения на микрофон и распознавание речи.",
+                                  "São precisas permissões para o microfone e o reconhecimento de fala.",
+                                  "Microphone and speech recognition permissions are needed."))
                 return
             }
             recorder.reset()
@@ -149,15 +155,22 @@ final class RetellFlowModel {
                     .network, "Ответ модели не разобрался",
                     detail: outcome.decodeError ?? "причина неизвестна")
                 try? context.save()
-                step = .failed(
-                    "Модель ответила, но разобрать ответ не вышло: "
-                    + (outcome.decodeError ?? "неизвестная причина")
-                    + ". Деньги за запрос уже учтены.")
+                let reason = outcome.decodeError
+                    ?? tr("неизвестная причина", "motivo desconhecido", "unknown reason")
+                step = .failed(tr(
+                    "Модель ответила, но разобрать ответ не вышло: \(reason). "
+                        + "Деньги за запрос уже учтены.",
+                    "O modelo respondeu, mas não foi possível ler a resposta: \(reason). "
+                        + "O custo do pedido já foi contabilizado.",
+                    "The model replied, but the reply couldn't be read: \(reason). "
+                        + "The request's cost has already been counted."))
                 return
             }
 
             context.insert(RetellSession(
-                episodeTitle: episodeTitle.isEmpty ? "Без названия" : episodeTitle,
+                episodeTitle: episodeTitle.isEmpty
+                    ? tr("Без названия", "Sem título", "Untitled")
+                    : episodeTitle,
                 transcript: transcript,
                 report: parsed,
                 cost: outcome.usage.cost,
@@ -189,8 +202,10 @@ final class RetellFlowModel {
     @discardableResult
     func makeDeck() -> ImportResult? {
         guard let report else { return nil }
-        let name = episodeTitle.isEmpty ? "Пересказ" : "Пересказ: \(episodeTitle)"
-        guard let file = report.makeDeck(name: name, folder: "Пересказы") else { return nil }
+        let retelling = tr("Пересказ", "Reconto", "Retelling")
+        let name = episodeTitle.isEmpty ? retelling : "\(retelling): \(episodeTitle)"
+        let folder = tr("Пересказы", "Recontos", "Retellings")
+        guard let file = report.makeDeck(name: name, folder: folder) else { return nil }
 
         let importer = ImportService(context: context)
         let plan = ImportPlanner.plan(
@@ -207,7 +222,8 @@ final class RetellFlowModel {
     private func existingTerms() throws -> [String: String] {
         var map: [String: String] = [:]
         for note in try context.fetch(FetchDescriptor<Note>()) where map[note.normalizedTerm] == nil {
-            map[note.normalizedTerm] = note.deck?.name ?? "без набора"
+            map[note.normalizedTerm] = note.deck?.name
+                ?? tr("без набора", "sem baralho", "no deck")
         }
         return map
     }

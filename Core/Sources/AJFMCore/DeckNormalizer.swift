@@ -11,7 +11,9 @@ import Foundation
 public enum DeckNormalizer {
 
     /// Название набора, если в файле его нет вовсе.
-    public static let fallbackDeckName = "Новый набор"
+    public static var fallbackDeckName: String {
+        tr("Новый набор", "Novo baralho", "New deck")
+    }
 
     public static func normalize(data: Data) throws -> Data {
         let object = try jsonObject(from: data)
@@ -31,7 +33,9 @@ public enum DeckNormalizer {
             return direct
         }
         guard var text = String(data: data, encoding: .utf8) else {
-            throw DeckParseError.notJSON("не удалось прочитать текст как UTF-8")
+            throw DeckParseError.notJSON(tr("не удалось прочитать текст как UTF-8",
+                                            "não foi possível ler o texto como UTF-8",
+                                            "couldn't read the text as UTF-8"))
         }
         if text.hasPrefix("\u{FEFF}") { text.removeFirst() }
 
@@ -41,7 +45,9 @@ public enum DeckNormalizer {
                 return object
             }
         }
-        throw DeckParseError.notJSON("в тексте не нашлось JSON-объекта")
+        throw DeckParseError.notJSON(tr("в тексте не нашлось JSON-объекта",
+                                        "não há nenhum objeto JSON no texto",
+                                        "there's no JSON object in the text"))
     }
 
     private static func isContainer(_ object: Any) -> Bool {
@@ -85,7 +91,9 @@ public enum DeckNormalizer {
             return try build(meta: [:], root: [:], notes: array)
         }
         guard let root = object as? [String: Any] else {
-            throw DeckParseError.notJSON("ожидался объект или список")
+            throw DeckParseError.notJSON(tr("ожидался объект или список",
+                                            "esperava-se um objeto ou uma lista",
+                                            "expected an object or a list"))
         }
 
         if let format = string(root["format"]), format != DeckFile.formatID {

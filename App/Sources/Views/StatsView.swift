@@ -28,7 +28,7 @@ struct StatsView: View {
             growthSection
             activitySection
         }
-        .navigationTitle("Статистика")
+        .navigationTitle(tr("Статистика", "Estatísticas", "Statistics"))
         .navigationBarTitleDisplayMode(.inline)
     }
 
@@ -41,14 +41,16 @@ struct StatsView: View {
 
         Section {
             if Forecast.total(days) == 0 {
-                Text("Впереди пусто — все карточки либо новые, либо далеко за горизонтом.")
+                Text(tr("Впереди пусто — все карточки либо новые, либо далеко за горизонтом.",
+                        "Nada pela frente — os cartões são todos novos ou estão muito longe.",
+                        "Nothing ahead — all cards are either new or far beyond the horizon."))
                     .font(.app(.callout))
                     .foregroundStyle(.secondary)
             } else {
                 Chart(days) { day in
                     BarMark(
-                        x: .value("День", day.date, unit: .day),
-                        y: .value("Карточек", day.dueCount),
+                        x: .value(tr("День", "Dia", "Day"), day.date, unit: .day),
+                        y: .value(tr("Карточек", "Cartões", "Cards"), day.dueCount),
                         width: .fixed(6))
                         .foregroundStyle(Color.accentColor)
                         .cornerRadius(4)
@@ -77,22 +79,26 @@ struct StatsView: View {
                 .frame(height: 160)
 
                 LabeledContent(
-                    "В среднем в день",
+                    tr("В среднем в день", "Média por dia", "Average per day"),
                     value: String(format: "%.0f", Forecast.averagePerDay(days)))
                     .font(.app(.caption))
                 if let peak {
                     LabeledContent(
-                        "Пик",
+                        tr("Пик", "Pico", "Peak"),
                         value: "\(peak.dueCount) — "
                             + peak.date.formatted(.dateTime.day().month(.abbreviated)))
                         .font(.app(.caption))
                 }
             }
         } header: {
-            Text("Нагрузка на 30 дней")
+            Text(tr("Нагрузка на 30 дней", "Carga para 30 dias", "Workload for 30 days"))
         } footer: {
-            Text("Видно заранее, если через две недели свалится горб. "
-                 + "Тогда стоит временно сбавить приток новых слов.")
+            Text(tr("Видно заранее, если через две недели свалится горб. "
+                        + "Тогда стоит временно сбавить приток новых слов.",
+                    "Vê-se com antecedência se daqui a duas semanas vem um pico. "
+                        + "Nesse caso, reduz por uns tempos as palavras novas.",
+                    "You'll see in advance if a spike is coming in two weeks. "
+                        + "Then it's worth slowing down new words for a while."))
         }
     }
 
@@ -102,15 +108,19 @@ struct StatsView: View {
     private var growthSection: some View {
         Section {
             if snapshots.count < 2 {
-                Text("Кривая появится через пару дней: она строится из ежедневных "
-                     + "снимков, а история до установки приложения нигде не хранится.")
+                Text(tr("Кривая появится через пару дней: она строится из ежедневных "
+                            + "снимков, а история до установки приложения нигде не хранится.",
+                        "A curva aparece daqui a uns dias: é feita de registos diários, e o "
+                            + "histórico de antes da instalação não está guardado em lado nenhum.",
+                        "The curve will appear in a couple of days: it's built from daily "
+                            + "snapshots, and history before the app was installed isn't stored."))
                     .font(.app(.callout))
                     .foregroundStyle(.secondary)
             } else {
                 Chart(snapshots) { snapshot in
                     LineMark(
-                        x: .value("Дата", snapshot.date, unit: .day),
-                        y: .value("Слов", snapshot.matureWords))
+                        x: .value(tr("Дата", "Data", "Date"), snapshot.date, unit: .day),
+                        y: .value(tr("Слов", "Palavras", "Words"), snapshot.matureWords))
                         .lineStyle(StrokeStyle(lineWidth: 2))
                         .foregroundStyle(Color.green)
                         .interpolationMethod(.monotone)
@@ -131,16 +141,19 @@ struct StatsView: View {
 
                 if let last = snapshots.last, let first = snapshots.first {
                     LabeledContent(
-                        "Прирост за период",
+                        tr("Прирост за период", "Aumento no período", "Growth over the period"),
                         value: "+\(max(0, last.matureWords - first.matureWords))")
                         .font(.app(.caption))
                 }
             }
         } header: {
-            Text("Слов в долгосрочной памяти")
+            Text(tr("Слов в долгосрочной памяти", "Palavras na memória de longo prazo",
+                    "Words in long-term memory"))
         } footer: {
-            Text("Та самая метрика, по которой считаются награды: "
-                 + "интервал дорос до \(RussianPlural.days(Int(ReviewState.matureIntervalDays))).")
+            Text(tr("Та самая метрика, по которой считаются награды: интервал дорос до ",
+                    "A métrica que conta para as recompensas: o intervalo chegou a ",
+                    "The metric rewards are counted by: the interval reached ")
+                 + Counted.days(Int(ReviewState.matureIntervalDays)) + ".")
         }
     }
 
@@ -151,14 +164,14 @@ struct StatsView: View {
         let weeks = activity
         Section {
             if weeks.allSatisfy({ $0.dueCount == 0 }) {
-                Text("Повторов пока не было.")
+                Text(tr("Повторов пока не было.", "Ainda não houve revisões.", "No reviews yet."))
                     .font(.app(.callout))
                     .foregroundStyle(.secondary)
             } else {
                 Chart(weeks) { week in
                     BarMark(
-                        x: .value("Неделя", week.date, unit: .weekOfYear),
-                        y: .value("Повторов", week.dueCount),
+                        x: .value(tr("Неделя", "Semana", "Week"), week.date, unit: .weekOfYear),
+                        y: .value(tr("Повторов", "Revisões", "Reviews"), week.dueCount),
                         width: .fixed(16))
                         .foregroundStyle(Color.accentColor.opacity(0.7))
                         .cornerRadius(4)
@@ -178,9 +191,11 @@ struct StatsView: View {
                 .frame(height: 140)
             }
         } header: {
-            Text("Повторов по неделям")
+            Text(tr("Повторов по неделям", "Revisões por semana", "Reviews per week"))
         } footer: {
-            Text("Считаются только честные повторы из сессий.")
+            Text(tr("Считаются только честные повторы из сессий.",
+                    "Só contam as revisões honestas feitas em sessões.",
+                    "Only honest reviews from sessions count."))
         }
     }
 }

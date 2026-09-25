@@ -1,9 +1,13 @@
 import SwiftUI
 import SwiftData
+import AJFMCore
 
 @main
 struct AJFMApp: App {
     init() {
+        // Язык — до первой строки на экране: выбранный в настройках,
+        // а пока не выбран — системный.
+        Loc.language = AppSettings.language
         // До первого экрана: заголовки навигации создаются один раз
         // и потом шрифт уже не подхватывают.
         AppFont.current.applyToNavigationBars()

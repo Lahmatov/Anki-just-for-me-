@@ -22,24 +22,27 @@ struct ImportPreviewView: View {
         NavigationStack {
             List {
                 Section {
-                    LabeledContent("Набор", value: plan.deckName)
+                    LabeledContent(tr("Набор", "Baralho", "Deck"), value: plan.deckName)
                     if !plan.folderPath.isEmpty {
-                        LabeledContent("Папка", value: plan.folderPath.joined(separator: " / "))
+                        LabeledContent(tr("Папка", "Pasta", "Folder"),
+                                       value: plan.folderPath.joined(separator: " / "))
                     }
-                    LabeledContent("Алгоритм", value: plan.scheduler.title)
+                    LabeledContent(tr("Алгоритм", "Algoritmo", "Algorithm"), value: plan.scheduler.title)
                     LabeledContent(
-                        "Карточки",
+                        tr("Карточки", "Cartões", "Cards"),
                         value: plan.cardTypes.map(\.title).joined(separator: ", "))
                 }
 
                 Section {
-                    LabeledContent("Добавится слов", value: "\(addedCount)")
+                    LabeledContent(tr("Добавится слов", "Palavras a adicionar", "Words to add"),
+                                   value: "\(addedCount)")
                     LabeledContent(
-                        "Карточек", value: "\(addedCount * max(plan.cardTypes.count, 1))")
+                        tr("Карточек", "Cartões", "Cards"),
+                        value: "\(addedCount * max(plan.cardTypes.count, 1))")
                 }
 
                 if !plan.warnings.isEmpty {
-                    Section("Обрати внимание") {
+                    Section(tr("Обрати внимание", "Atenção", "Heads up")) {
                         ForEach(plan.warnings, id: \.self) { warning in
                             Label(warning, systemImage: "exclamationmark.triangle")
                                 .font(.app(.callout))
@@ -58,17 +61,20 @@ struct ImportPreviewView: View {
                             }
                         }
                         if !duplicatesFromOtherDecks.isEmpty {
-                            Toggle("Добавить всё равно", isOn: $includeDuplicates)
+                            Toggle(tr("Добавить всё равно", "Adicionar mesmo assim", "Add anyway"),
+                                   isOn: $includeDuplicates)
                         }
                     } header: {
-                        Text("Дубли — \(plan.duplicates.count)")
+                        Text(tr("Дубли", "Duplicados", "Duplicates") + " — \(plan.duplicates.count)")
                     } footer: {
-                        Text("Повторы внутри самого файла не добавляются никогда.")
+                        Text(tr("Повторы внутри самого файла не добавляются никогда.",
+                                "As repetições dentro do próprio ficheiro nunca são adicionadas.",
+                                "Repeats within the file itself are never added."))
                     }
                 }
 
                 if !plan.newNotes.isEmpty {
-                    Section("Новые слова") {
+                    Section(tr("Новые слова", "Palavras novas", "New words")) {
                         ForEach(Array(plan.newNotes.enumerated()), id: \.offset) { item in
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(item.element.term).fontWeight(.medium)
@@ -80,14 +86,14 @@ struct ImportPreviewView: View {
                     }
                 }
             }
-            .navigationTitle("Импорт набора")
+            .navigationTitle(tr("Импорт набора", "Importar baralho", "Import deck"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Отмена") { dismiss() }
+                    Button(CommonText.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Добавить") { onConfirm(includeDuplicates) }
+                    Button(tr("Добавить", "Adicionar", "Add")) { onConfirm(includeDuplicates) }
                         .disabled(addedCount == 0)
                 }
             }

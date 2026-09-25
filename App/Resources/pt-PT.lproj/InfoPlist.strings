@@ -1,0 +1,4 @@
+/* Nome sob o ícone e explicações dos pedidos de permissão — mostrados pelo iOS. */
+"CFBundleDisplayName" = "Cartões";
+"NSMicrophoneUsageDescription" = "Para verificar a pronúncia, a aplicação precisa de acesso ao microfone. A gravação fica no dispositivo.";
+"NSSpeechRecognitionUsageDescription" = "O reconhecimento de fala funciona localmente e serve para comparar a palavra dita com a que estás a aprender.";

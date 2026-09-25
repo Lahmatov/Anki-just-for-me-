@@ -1,0 +1,299 @@
+{
+  "format": "ajfm-deck",
+  "version": 1,
+  "deck": {
+    "name": "Vocabulário para recontar",
+    "folder": "Base",
+    "language": "en-US",
+    "scheduler": "fsrs6",
+    "cardTypes": [
+      "recognition",
+      "recall",
+      "listening",
+      "pronunciation"
+    ],
+    "source": "palavras sem as quais é difícil contar de que tratou o episódio"
+  },
+  "notes": [
+    {
+      "term": "plot",
+      "translation": "enredo",
+      "ipa": "/plɑːt/",
+      "partOfSpeech": "noun",
+      "example": "The plot of this episode is about a betrayal.",
+      "exampleTranslation": "O enredo deste episódio é sobre uma traição.",
+      "cloze": "The ___ of this episode is about a betrayal.",
+      "tags": [
+        "reconto"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "term": "to turn out",
+      "translation": "acabar por ser, revelar-se",
+      "ipa": "/tɜːrn aʊt/",
+      "partOfSpeech": "phrasal verb",
+      "example": "It turned out that he was lying the whole time.",
+      "exampleTranslation": "Afinal ele esteve a mentir o tempo todo.",
+      "cloze": "It ___ ___ that he was lying the whole time.",
+      "note": "O verbo principal de um reconto: quase todas as reviravoltas se contam com ele.",
+      "tags": [
+        "reconto",
+        "phrasal"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "term": "to find out",
+      "translation": "descobrir, ficar a saber",
+      "ipa": "/faɪnd aʊt/",
+      "partOfSpeech": "phrasal verb",
+      "example": "She finds out that her brother knew about it.",
+      "exampleTranslation": "Ela descobre que o irmão sabia de tudo.",
+      "cloze": "She ___ ___ that her brother knew about it.",
+      "tags": [
+        "reconto",
+        "phrasal"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "term": "to reveal",
+      "translation": "revelar, mostrar",
+      "ipa": "/rɪˈviːl/",
+      "partOfSpeech": "verb",
+      "example": "The ending reveals who was behind it.",
+      "exampleTranslation": "O final revela quem estava por trás disto.",
+      "cloze": "The ending ___ who was behind it.",
+      "tags": [
+        "reconto"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "term": "to betray",
+      "translation": "trair",
+      "ipa": "/bɪˈtreɪ/",
+      "partOfSpeech": "verb",
+      "example": "He betrays his best friend to save himself.",
+      "exampleTranslation": "Ele trai o melhor amigo para se salvar.",
+      "cloze": "He ___ his best friend to save himself.",
+      "tags": [
+        "reconto"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "term": "to end up",
+      "translation": "acabar por",
+      "ipa": "/end ʌp/",
+      "partOfSpeech": "phrasal verb",
+      "example": "They end up working together.",
+      "exampleTranslation": "Acabam por trabalhar juntos.",
+      "cloze": "They ___ ___ working together.",
+      "note": "Depois de «end up» o verbo leva -ing: end up working, e não end up to work.",
+      "tags": [
+        "reconto",
+        "phrasal"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "term": "meanwhile",
+      "translation": "entretanto",
+      "ipa": "/ˈmiːnwaɪl/",
+      "partOfSpeech": "adverb",
+      "example": "Meanwhile, the police are getting closer.",
+      "exampleTranslation": "Entretanto, a polícia está cada vez mais perto.",
+      "cloze": "___, the police are getting closer.",
+      "note": "Conector para linhas paralelas — sem ele o reconto vira uma lista.",
+      "tags": [
+        "reconto",
+        "conectores"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "term": "eventually",
+      "translation": "acabar por, no fim",
+      "ipa": "/ɪˈventʃuəli/",
+      "partOfSpeech": "adverb",
+      "example": "Eventually he agrees to help.",
+      "exampleTranslation": "No fim ele aceita ajudar.",
+      "cloze": "___ he agrees to help.",
+      "note": "Falso amigo: não é «eventualmente» (talvez), é «no fim de contas».",
+      "tags": [
+        "reconto",
+        "conectores"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "term": "to get away with",
+      "translation": "safar-se, sair impune",
+      "ipa": "/ɡet əˈweɪ wɪð/",
+      "partOfSpeech": "idiom",
+      "example": "He almost gets away with it.",
+      "exampleTranslation": "Ele quase se safa.",
+      "cloze": "He almost ___ ___ ___ it.",
+      "tags": [
+        "reconto",
+        "idiom"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "term": "flashback",
+      "translation": "cena do passado",
+      "ipa": "/ˈflæʃbæk/",
+      "partOfSpeech": "noun",
+      "example": "A flashback shows what happened ten years ago.",
+      "exampleTranslation": "Uma cena do passado mostra o que aconteceu há dez anos.",
+      "cloze": "A ___ shows what happened ten years ago.",
+      "tags": [
+        "reconto",
+        "cinema"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "term": "cliffhanger",
+      "translation": "final em suspenso",
+      "ipa": "/ˈklɪfhæŋər/",
+      "partOfSpeech": "noun",
+      "example": "The episode ends on a cliffhanger.",
+      "exampleTranslation": "O episódio acaba em suspenso, na parte mais interessante.",
+      "cloze": "The episode ends on a ___.",
+      "tags": [
+        "reconto",
+        "cinema"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "term": "to make up one's mind",
+      "translation": "decidir-se",
+      "ipa": "/meɪk ʌp wʌnz maɪnd/",
+      "partOfSpeech": "idiom",
+      "example": "She finally makes up her mind to leave.",
+      "exampleTranslation": "Ela finalmente decide-se a partir.",
+      "cloze": "She finally ___ ___ her ___ to leave.",
+      "tags": [
+        "reconto",
+        "idiom"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "term": "on purpose",
+      "translation": "de propósito",
+      "ipa": "/ɑːn ˈpɜːrpəs/",
+      "partOfSpeech": "phrase",
+      "example": "He did it on purpose, not by accident.",
+      "exampleTranslation": "Ele fê-lo de propósito, não por acaso.",
+      "cloze": "He did it ___ ___, not by accident.",
+      "tags": [
+        "reconto"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "term": "to stand up to",
+      "translation": "fazer frente a",
+      "ipa": "/stænd ʌp tuː/",
+      "partOfSpeech": "phrasal verb",
+      "example": "She finally stands up to her boss.",
+      "exampleTranslation": "Ela finalmente faz frente ao chefe.",
+      "cloze": "She finally ___ ___ ___ her boss.",
+      "tags": [
+        "reconto",
+        "phrasal"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "term": "twist",
+      "translation": "reviravolta",
+      "ipa": "/twɪst/",
+      "partOfSpeech": "noun",
+      "example": "There is a twist at the end.",
+      "exampleTranslation": "Há uma reviravolta no final.",
+      "cloze": "There is a ___ at the end.",
+      "tags": [
+        "reconto",
+        "cinema"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "term": "to cover up",
+      "translation": "encobrir, abafar",
+      "ipa": "/ˈkʌvər ʌp/",
+      "partOfSpeech": "phrasal verb",
+      "example": "They try to cover up the whole thing.",
+      "exampleTranslation": "Tentam abafar o caso todo.",
+      "cloze": "They try to ___ ___ the whole thing.",
+      "tags": [
+        "reconto",
+        "phrasal"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "term": "to blame someone for",
+      "translation": "culpar alguém por",
+      "ipa": "/bleɪm ˈsʌmwʌn fɔːr/",
+      "partOfSpeech": "phrase",
+      "example": "He blames his partner for the failure.",
+      "exampleTranslation": "Ele culpa o parceiro pelo fracasso.",
+      "cloze": "He ___ his partner ___ the failure.",
+      "note": "A preposição é «for»: blame him for it, e não blame him of it.",
+      "tags": [
+        "reconto"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "term": "reluctantly",
+      "translation": "a contragosto",
+      "ipa": "/rɪˈlʌktəntli/",
+      "partOfSpeech": "adverb",
+      "example": "He reluctantly agrees to the plan.",
+      "exampleTranslation": "Ele aceita o plano a contragosto.",
+      "cloze": "He ___ agrees to the plan.",
+      "tags": [
+        "reconto"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "term": "to look forward to",
+      "translation": "estar ansioso por",
+      "ipa": "/lʊk ˈfɔːrwərd tuː/",
+      "partOfSpeech": "phrasal verb",
+      "example": "I'm looking forward to the next episode.",
+      "exampleTranslation": "Estou ansioso pelo próximo episódio.",
+      "cloze": "I'm ___ ___ ___ the next episode.",
+      "note": "Aqui «to» é preposição, por isso segue-se -ing: looking forward to seeing.",
+      "tags": [
+        "reconto",
+        "phrasal"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "term": "subplot",
+      "translation": "enredo secundário",
+      "ipa": "/ˈsʌbplɑːt/",
+      "partOfSpeech": "noun",
+      "example": "There is a subplot about his brother.",
+      "exampleTranslation": "Há um enredo secundário sobre o irmão dele.",
+      "cloze": "There is a ___ about his brother.",
+      "tags": [
+        "reconto",
+        "cinema"
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}

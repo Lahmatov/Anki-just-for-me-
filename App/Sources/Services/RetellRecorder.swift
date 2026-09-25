@@ -82,7 +82,9 @@ final class RetellRecorder {
     func start() {
         guard status != .recording else { return }
         guard let recognizer, recognizer.isAvailable else {
-            status = .failed("Распознавание английской речи недоступно.")
+            status = .failed(tr("Распознавание английской речи недоступно.",
+                                "O reconhecimento de fala em inglês não está disponível.",
+                                "English speech recognition isn't available."))
             return
         }
 
@@ -118,7 +120,9 @@ final class RetellRecorder {
         } catch {
             cleanUp()
             Log.failure(.speech, "Запись пересказа не началась", error)
-            status = .failed("Не получилось начать запись: \(error.localizedDescription)")
+            status = .failed(tr("Не получилось начать запись: ",
+                                "Não foi possível começar a gravar: ",
+                                "Couldn't start recording: ") + error.localizedDescription)
         }
     }
 

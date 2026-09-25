@@ -9,10 +9,10 @@ public enum Grade: Int, Codable, CaseIterable, Sendable {
 
     public var title: String {
         switch self {
-        case .again: return "Забыл"
-        case .hard: return "Трудно"
-        case .good: return "Хорошо"
-        case .easy: return "Легко"
+        case .again: return tr("Забыл", "Esqueci", "Again")
+        case .hard: return tr("Трудно", "Difícil", "Hard")
+        case .good: return tr("Хорошо", "Bem", "Good")
+        case .easy: return tr("Легко", "Fácil", "Easy")
         }
     }
 }
@@ -22,10 +22,10 @@ public enum LearningState: String, Codable, CaseIterable, Sendable {
 
     public var title: String {
         switch self {
-        case .new: return "Новая"
-        case .learning: return "Учится"
-        case .review: return "Повторение"
-        case .relearning: return "Переучивается"
+        case .new: return tr("Новая", "Novo", "New")
+        case .learning: return tr("Учится", "A aprender", "Learning")
+        case .review: return tr("Повторение", "Revisão", "Review")
+        case .relearning: return tr("Переучивается", "A reaprender", "Relearning")
         }
     }
 }

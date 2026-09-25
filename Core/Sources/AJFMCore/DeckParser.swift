@@ -11,18 +11,33 @@ public enum DeckParseError: Error, Equatable, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .notJSON(let detail):
-            return "Не похоже на JSON: \(detail)"
+            return tr("Не похоже на JSON: \(detail)",
+                      "Não parece JSON: \(detail)",
+                      "Doesn't look like JSON: \(detail)")
         case .wrongFormat(let found):
-            return "Чужой формат файла: «\(found)». Ожидается «\(DeckFile.formatID)»."
+            return tr("Чужой формат файла: «\(found)». Ожидается «\(DeckFile.formatID)».",
+                      "Formato de ficheiro estranho: «\(found)». Esperava-se «\(DeckFile.formatID)».",
+                      "Unknown file format: “\(found)”. Expected “\(DeckFile.formatID)”.")
         case .unsupportedVersion(let found, let supported):
-            return "Версия формата \(found) новее поддерживаемой (\(supported)). Обнови приложение."
+            return tr("Версия формата \(found) новее поддерживаемой (\(supported)). Обнови приложение.",
+                      "A versão do formato \(found) é mais recente do que a suportada (\(supported)). "
+                        + "Atualiza a aplicação.",
+                      "Format version \(found) is newer than supported (\(supported)). Update the app.")
         case .emptyDeckName:
-            return "У набора пустое название."
+            return tr("У набора пустое название.",
+                      "O baralho não tem nome.",
+                      "The deck has no name.")
         case .noNotes:
-            return "Не нашёл в файле списка слов. Он должен называться «notes» "
-                + "(подойдут и «cards», «words») и содержать хотя бы одно слово."
+            return tr("Не нашёл в файле списка слов. Он должен называться «notes» "
+                        + "(подойдут и «cards», «words») и содержать хотя бы одно слово.",
+                      "Não encontrei a lista de palavras no ficheiro. Deve chamar-se «notes» "
+                        + "(também servem «cards», «words») e ter pelo menos uma palavra.",
+                      "Couldn't find a list of words in the file. It should be called “notes” "
+                        + "(“cards” or “words” work too) and contain at least one word.")
         case .missingField(let index, let field):
-            return "В слове №\(index + 1) не заполнено поле «\(field)»."
+            return tr("В слове №\(index + 1) не заполнено поле «\(field)».",
+                      "Na palavra n.º \(index + 1) falta o campo «\(field)».",
+                      "Word #\(index + 1) is missing the “\(field)” field.")
         }
     }
 }
@@ -64,7 +79,9 @@ public enum DeckParser {
 
     public static func parse(string: String) throws -> DeckFile {
         guard let data = string.data(using: .utf8) else {
-            throw DeckParseError.notJSON("не удалось прочитать текст как UTF-8")
+            throw DeckParseError.notJSON(tr("не удалось прочитать текст как UTF-8",
+                                            "não foi possível ler o texto como UTF-8",
+                                            "couldn't read the text as UTF-8"))
         }
         return try parse(data: data)
     }
@@ -78,10 +95,16 @@ public enum DeckParser {
     private static func describe(_ error: DecodingError) -> String {
         switch error {
         case .keyNotFound(let key, _):
-            return "нет обязательного поля «\(key.stringValue)»"
+            return tr("нет обязательного поля «\(key.stringValue)»",
+                      "falta o campo obrigatório «\(key.stringValue)»",
+                      "the required field “\(key.stringValue)” is missing")
         case .typeMismatch(_, let context), .valueNotFound(_, let context):
             let path = context.codingPath.map(\.stringValue).joined(separator: " → ")
-            return path.isEmpty ? context.debugDescription : "поле «\(path)» заполнено неверно"
+            return path.isEmpty
+                ? context.debugDescription
+                : tr("поле «\(path)» заполнено неверно",
+                     "o campo «\(path)» está mal preenchido",
+                     "the “\(path)” field has a wrong value")
         case .dataCorrupted(let context):
             return context.debugDescription
         @unknown default:

@@ -124,8 +124,8 @@ public enum SchedulerID: String, Codable, CaseIterable, Sendable {
         switch self {
         case .fsrs6: return "FSRS-6"
         case .sm2: return "SM-2"
-        case .leitner: return "Лейтнер"
-        case .cram: return "Зубрёжка"
+        case .leitner: return tr("Лейтнер", "Leitner", "Leitner")
+        case .cram: return tr("Зубрёжка", "Marranço", "Cramming")
         }
     }
 }
@@ -135,12 +135,12 @@ public enum CardType: String, Codable, CaseIterable, Sendable {
 
     public var title: String {
         switch self {
-        case .recognition: return "Узнавание"
-        case .recall: return "Воспроизведение"
-        case .listening: return "На слух"
-        case .spelling: return "Написание"
-        case .pronunciation: return "Произношение"
-        case .cloze: return "Пропуск"
+        case .recognition: return tr("Узнавание", "Reconhecimento", "Recognition")
+        case .recall: return tr("Воспроизведение", "Recordação", "Recall")
+        case .listening: return tr("На слух", "Audição", "Listening")
+        case .spelling: return tr("Написание", "Ortografia", "Spelling")
+        case .pronunciation: return tr("Произношение", "Pronúncia", "Pronunciation")
+        case .cloze: return tr("Пропуск", "Lacuna", "Cloze")
         }
     }
 }

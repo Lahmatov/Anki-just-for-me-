@@ -11,7 +11,7 @@ final class StarterDeckTests: XCTestCase {
         // при сборке, первый запуск встретит пустым экраном — ровно тем,
         // ради чего набор и добавлен.
         let data = try XCTUnwrap(
-            StarterDeck.data(), "starter-deck.json не попал в ресурсы приложения")
+            StarterDeck.data(), "starter-deck-ru.json не попал в ресурсы приложения")
         let file = try DeckParser.parse(data: data)
 
         XCTAssertEqual(file.format, DeckFile.formatID)
@@ -55,5 +55,43 @@ final class StarterDeckTests: XCTestCase {
         let queue = try ReviewService(context: context).todayQueue()
         XCTAssertFalse(queue.isEmpty)
         XCTAssertGreaterThan(queue.summary.new, 0)
+    }
+
+    // MARK: - Языки
+
+    func testEveryLanguageHasTheSameWords() throws {
+        let reference = try DeckParser.parse(
+            data: try XCTUnwrap(StarterDeck.data(for: .russian))).notes.map(\.term)
+        for language in AppLanguage.allCases {
+            let data = try XCTUnwrap(
+                StarterDeck.data(for: language), "нет стартового набора для \(language)")
+            let file = try DeckParser.parse(data: data)
+            XCTAssertEqual(file.notes.map(\.term), reference, "\(language)")
+            for note in file.notes {
+                XCTAssertFalse(note.translation.isEmpty, "\(language), \(note.term)")
+            }
+        }
+    }
+
+    func testTranslationsAreActuallyTranslated() throws {
+        // Файл-копия с русскими переводами под чужим именем — худшая ошибка
+        // локализации: всё «работает», а учить по нему нельзя.
+        let russian = try DeckParser.parse(data: try XCTUnwrap(StarterDeck.data(for: .russian)))
+        for language in [AppLanguage.portuguese, .english] {
+            let other = try DeckParser.parse(data: try XCTUnwrap(StarterDeck.data(for: language)))
+            XCTAssertNotEqual(other.deck.name, russian.deck.name, "\(language)")
+            XCTAssertNotEqual(
+                other.notes.map(\.translation), russian.notes.map(\.translation), "\(language)")
+        }
+    }
+
+    func testInstallUsesTheInterfaceLanguage() throws {
+        defer { Loc.language = .russian }
+        Loc.language = .portuguese
+        let context = try TestDB.makeContext()
+        StarterDeck.install(into: context)
+
+        let deck = try XCTUnwrap(try context.fetch(FetchDescriptor<Deck>()).first)
+        XCTAssertEqual(deck.name, "Vocabulário para recontar")
     }
 }

@@ -38,6 +38,14 @@ extension AppSettings {
         return AppLanguage.resolve(preferred: Locale.preferredLanguages)
     }
 
+    /// Сменить язык: сначала для строк, потом в хранилище — запись в
+    /// хранилище перестраивает экраны, и к этому моменту строки уже
+    /// должны отдаваться на новом языке.
+    static func setLanguage(_ language: AppLanguage) {
+        Loc.language = language
+        UserDefaults.standard.set(language.rawValue, forKey: SettingsKey.appLanguage)
+    }
+
     /// Уровень по тесту, если тест пройден.
     static var englishLevel: CEFRLevel? {
         UserDefaults.standard.string(forKey: SettingsKey.englishLevel)

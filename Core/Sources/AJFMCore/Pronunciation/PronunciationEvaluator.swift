@@ -57,7 +57,9 @@ public enum PronunciationEvaluator {
             return PronunciationAssessment(
                 verdict: .unclear, recognized: "", expected: expected,
                 confidence: confidence, alternatives: alternatives,
-                message: "Ничего не распознал. Попробуй ближе к микрофону и без спешки.",
+                message: tr("Ничего не распознал. Попробуй ближе к микрофону и без спешки.",
+                            "Não reconheci nada. Tenta mais perto do microfone e sem pressa.",
+                            "Nothing recognized. Try closer to the microphone and without rushing."),
                 isReliable: false)
         }
 
@@ -66,9 +68,15 @@ public enum PronunciationEvaluator {
                 verdict: .matched, recognized: recognized, expected: expected,
                 confidence: confidence, alternatives: alternatives,
                 message: reliable
-                    ? "Распознано как «\(recognized)» — то, что нужно."
-                    : "Распознано как «\(recognized)», но распознаватель не уверен. "
-                        + "Он подгоняет услышанное под словарь, так что это ещё не гарантия.",
+                    ? tr("Распознано как «\(recognized)» — то, что нужно.",
+                         "Reconhecido como «\(recognized)» — é isso mesmo.",
+                         "Recognized as “\(recognized)” — just right.")
+                    : tr("Распознано как «\(recognized)», но распознаватель не уверен. "
+                            + "Он подгоняет услышанное под словарь, так что это ещё не гарантия.",
+                         "Reconhecido como «\(recognized)», mas sem certeza. O reconhecedor "
+                            + "ajusta o que ouve ao dicionário, por isso ainda não é garantia.",
+                         "Recognized as “\(recognized)”, but not confidently. The recognizer "
+                            + "fits what it hears to the dictionary, so this is no guarantee yet."),
                 isReliable: reliable)
         }
 
@@ -76,24 +84,43 @@ public enum PronunciationEvaluator {
             return PronunciationAssessment(
                 verdict: .unclear, recognized: recognized, expected: expected,
                 confidence: confidence, alternatives: alternatives,
-                message: "Разобрал плохо — послышалось «\(recognized)». "
-                    + "Скорее всего, дело в записи, а не в тебе. Попробуй ещё раз.",
+                message: tr("Разобрал плохо — послышалось «\(recognized)». "
+                                + "Скорее всего, дело в записи, а не в тебе. Попробуй ещё раз.",
+                            "Percebi mal — pareceu «\(recognized)». "
+                                + "Provavelmente é da gravação, não de ti. Tenta outra vez.",
+                            "Hard to make out — sounded like “\(recognized)”. "
+                                + "Most likely it's the recording, not you. Try again."),
                 isReliable: false)
         }
 
         return PronunciationAssessment(
             verdict: .mismatched, recognized: recognized, expected: expected,
             confidence: confidence, alternatives: alternatives,
-            message: "Услышал «\(recognized)» вместо «\(expected)». "
-                + "Это уже настоящий сигнал: распознаватель обычно подгоняет "
-                + "результат под знакомые слова, и если он услышал другое — "
-                + "звучало действительно иначе.",
+            message: tr("Услышал «\(recognized)» вместо «\(expected)». "
+                            + "Это уже настоящий сигнал: распознаватель обычно подгоняет "
+                            + "результат под знакомые слова, и если он услышал другое — "
+                            + "звучало действительно иначе.",
+                        "Ouvi «\(recognized)» em vez de «\(expected)». "
+                            + "Isto já é um sinal a sério: o reconhecedor costuma ajustar "
+                            + "o resultado a palavras conhecidas, e se ouviu outra coisa, "
+                            + "soou mesmo diferente.",
+                        "Heard “\(recognized)” instead of “\(expected)”. "
+                            + "That's a real signal: the recognizer usually bends results "
+                            + "toward familiar words, so if it heard something else, "
+                            + "it really sounded different."),
             isReliable: true)
     }
 
     /// Честное предупреждение о пределах проверки на устройстве.
-    public static let onDeviceDisclaimer =
-        "Проверка на устройстве мягкая: распознаватель подгоняет услышанное под "
-        + "знакомые слова и может засчитать неточное произношение. Настоящую "
-        + "проверку дают минимальные пары и разбор по звукам."
+    public static var onDeviceDisclaimer: String {
+        tr("Проверка на устройстве мягкая: распознаватель подгоняет услышанное под "
+            + "знакомые слова и может засчитать неточное произношение. Настоящую "
+            + "проверку дают минимальные пары и разбор по звукам.",
+           "A verificação no dispositivo é branda: o reconhecedor ajusta o que ouve "
+            + "a palavras conhecidas e pode aceitar uma pronúncia imprecisa. A "
+            + "verificação a sério vem dos pares mínimos e da análise por sons.",
+           "On-device checking is lenient: the recognizer fits what it hears to "
+            + "familiar words and may accept imprecise pronunciation. The real "
+            + "check comes from minimal pairs and sound-by-sound analysis.")
+    }
 }

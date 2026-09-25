@@ -6,26 +6,40 @@ final class RetellPromptTests: XCTestCase {
     func testSystemPromptForbidsRelyingOnModelMemory() {
         // Вся фича держится на этом: без запрета модель начинает
         // сообщать об ошибках, которых не было.
-        let system = RetellPrompt.system
-        XCTAssertTrue(system.contains("ИСКЛЮЧИТЕЛЬНО по приложенным"))
-        XCTAssertTrue(system.contains("Не опирайся на свои знания"))
+        let system = RetellPrompt.system(for: .russian)
+        XCTAssertTrue(system.contains("ONLY by the attached"))
+        XCTAssertTrue(system.contains("Do not rely on your own knowledge"))
     }
 
     func testSystemPromptRequiresQuotes() {
-        XCTAssertTrue(RetellPrompt.system.contains("цитату из субтитров"))
+        XCTAssertTrue(RetellPrompt.system(for: .russian).contains("short quote from the subtitles"))
     }
 
     func testSystemPromptAccountsForSpeechRecognitionErrors() {
         // Акцент не должен превращаться в «ошибку понимания».
-        XCTAssertTrue(RetellPrompt.system.contains("mayBeMisheard"))
+        XCTAssertTrue(RetellPrompt.system(for: .russian).contains("mayBeMisheard"))
     }
 
     func testSystemPromptLimitsTheNumberOfRemarks() {
-        XCTAssertTrue(RetellPrompt.system.contains("не больше трёх"))
+        XCTAssertTrue(RetellPrompt.system(for: .russian).contains("No more than three"))
     }
 
     func testSystemPromptSeparatesUnderstandingFromLanguage() {
-        XCTAssertTrue(RetellPrompt.system.contains("никогда не смешивай"))
+        XCTAssertTrue(RetellPrompt.system(for: .russian).contains("never mix them"))
+    }
+
+    func testExplanationsComeInTheLearnersLanguage() {
+        XCTAssertTrue(RetellPrompt.system(for: .russian).contains("native language is Russian"))
+        XCTAssertTrue(RetellPrompt.system(for: .portuguese).contains("European Portuguese"))
+        XCTAssertTrue(RetellPrompt.system(for: .english)
+            .contains("explanation (claim, comment, why, fluencyNote, topPriorities, "
+                      + "translation) in English"))
+    }
+
+    func testDefaultSystemPromptFollowsTheInterface() {
+        defer { Loc.language = .russian }
+        Loc.language = .portuguese
+        XCTAssertEqual(RetellPrompt.system, RetellPrompt.system(for: .portuguese))
     }
 
     func testUserMessageCarriesBothSources() {
@@ -38,21 +52,21 @@ final class RetellPromptTests: XCTestCase {
         XCTAssertTrue(message.contains("You have no leverage."))
         XCTAssertTrue(message.contains("He said he has no power."))
         XCTAssertTrue(message.contains("Breaking Bad S03E05"))
-        XCTAssertTrue(message.contains("<субтитры>"))
-        XCTAssertTrue(message.contains("<пересказ>"))
+        XCTAssertTrue(message.contains("<subtitles>"))
+        XCTAssertTrue(message.contains("<retelling>"))
     }
 
     func testUserMessageMentionsTrimmingWhenWatchedPartially() {
         let message = RetellPrompt.userMessage(
             subtitles: "...", retell: "...", episodeTitle: nil, watchedUpTo: 1500)
-        XCTAssertTrue(message.contains("25-й минуты"))
+        XCTAssertTrue(message.contains("up to minute 25"))
     }
 
     func testUserMessageWorksWithoutOptionalParts() {
         let message = RetellPrompt.userMessage(
             subtitles: "sub", retell: "retell", episodeTitle: nil, watchedUpTo: nil)
-        XCTAssertFalse(message.contains("Серия:"))
-        XCTAssertFalse(message.contains("досмотрел"))
+        XCTAssertFalse(message.contains("Episode:"))
+        XCTAssertFalse(message.contains("watched up to"))
     }
 
     func testTokenEstimateIsInTheRightBallpark() {

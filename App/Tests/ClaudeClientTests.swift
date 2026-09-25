@@ -174,8 +174,12 @@ final class ClaudeClientTests: XCTestCase {
     }
 
     func testMissingKeyIsExplained() {
-        let message = ClaudeClientError.noAPIKey.localizedDescription
-        XCTAssertTrue(message.contains("настройках"))
+        // Тестовый хост запускается на языке симулятора — язык задаём явно.
+        defer { Loc.language = AppSettings.language }
+        Loc.language = .russian
+        XCTAssertTrue(ClaudeClientError.noAPIKey.localizedDescription.contains("настройках"))
+        Loc.language = .portuguese
+        XCTAssertTrue(ClaudeClientError.noAPIKey.localizedDescription.contains("definições"))
     }
 
     func testBudgetErrorShowsNumbers() {

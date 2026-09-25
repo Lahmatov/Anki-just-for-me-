@@ -42,7 +42,7 @@ public enum AnswerChecker {
     ) -> AnswerCheck {
         let typed = normalize(input)
         guard !typed.isEmpty else {
-            return AnswerCheck(verdict: .wrong, matched: nil, hint: "Пустой ответ")
+            return AnswerCheck(verdict: .wrong, matched: nil, hint: tr("Пустой ответ", "Resposta vazia", "Empty answer"))
         }
 
         let candidates = ([expected] + synonyms)
@@ -59,7 +59,9 @@ public enum AnswerChecker {
         for candidate in candidates where TermNormalizer.normalize(candidate.normalized) == typedCore {
             return AnswerCheck(
                 verdict: .correct, matched: candidate.original,
-                hint: "Засчитано: артикли и «to» не считаются ошибкой")
+                hint: tr("Засчитано: артикли и «to» не считаются ошибкой",
+                         "Aceite: artigos e «to» não contam como erro",
+                         "Accepted: articles and “to” don't count as mistakes"))
         }
 
         if !strict {
@@ -70,14 +72,20 @@ public enum AnswerChecker {
                 if editDistance(typed, candidate.normalized, limit: 1) <= 1 {
                     return AnswerCheck(
                         verdict: .typo, matched: candidate.original,
-                        hint: "Опечатка: правильно «\(candidate.original)»")
+                        hint: tr("Опечатка: правильно «\(candidate.original)»",
+                                 "Gralha: o correto é «\(candidate.original)»",
+                                 "Typo: it's “\(candidate.original)”"))
                 }
             }
         }
 
         return AnswerCheck(
             verdict: .wrong, matched: candidates.first?.original,
-            hint: candidates.first.map { "Правильно: «\($0.original)»" })
+            hint: candidates.first.map {
+                tr("Правильно: «\($0.original)»",
+                   "Correto: «\($0.original)»",
+                   "Correct: “\($0.original)”")
+            })
     }
 
     /// Приводит ответ к виду, в котором его можно сравнивать: регистр, пробелы,

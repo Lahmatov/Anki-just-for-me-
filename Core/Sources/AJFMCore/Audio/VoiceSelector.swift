@@ -11,9 +11,9 @@ public enum VoiceQuality: Int, Comparable, Sendable, CaseIterable {
 
     public var title: String {
         switch self {
-        case .compact: return "базовое"
-        case .enhanced: return "улучшенное"
-        case .premium: return "высшее"
+        case .compact: return tr("базовое", "básica", "basic")
+        case .enhanced: return tr("улучшенное", "melhorada", "enhanced")
+        case .premium: return tr("высшее", "premium", "premium")
         }
     }
 }
@@ -67,9 +67,16 @@ public enum VoiceSelector {
         return best.quality == .compact
     }
 
-    public static let downloadHint =
-        "Голос звучит роботом? Настройки → Универсальный доступ → Устный контент → "
-        + "Голоса → English (US): скачай голос с пометкой «Улучшенный» или «Премиум»."
+    /// Путь в системных настройках — на языке интерфейса: его сверяют
+    /// глазами с экраном айфона, и названия пунктов должны совпадать.
+    public static var downloadHint: String {
+        tr("Голос звучит роботом? Настройки → Универсальный доступ → Устный контент → "
+            + "Голоса → English (US): скачай голос с пометкой «Улучшенный» или «Премиум».",
+           "A voz soa robótica? Definições → Acessibilidade → Conteúdo falado → "
+            + "Vozes → Inglês (EUA): descarrega uma voz marcada «Melhorada» ou «Premium».",
+           "Sounds robotic? Settings → Accessibility → Spoken Content → "
+            + "Voices → English (US): download a voice marked Enhanced or Premium.")
+    }
 
     /// `en-US` совпадает с `en-US`, но не с `en-GB`. Сравнение регистронезависимое,
     /// а дефис и подчёркивание считаются одним и тем же разделителем.
@@ -89,8 +96,8 @@ public enum SpeechRate: String, CaseIterable, Sendable {
 
     public var title: String {
         switch self {
-        case .slow: return "Медленно"
-        case .normal: return "Обычно"
+        case .slow: return tr("Медленно", "Devagar", "Slow")
+        case .normal: return tr("Обычно", "Normal", "Normal")
         }
     }
 

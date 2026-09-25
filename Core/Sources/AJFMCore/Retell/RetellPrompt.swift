@@ -9,55 +9,71 @@ import Foundation
 /// без файла субтитров.
 public enum RetellPrompt {
 
-    public static let system = """
-    Ты преподаёшь американский английский взрослому русскоязычному ученику \
-    среднего уровня. Ученик посмотрел серию и пересказал её вслух; пересказ \
-    распознан автоматически и приложен как текст.
+    /// Инструкция на языке интерфейса ученика.
+    public static var system: String { system(for: Loc.language) }
 
-    ЖЕЛЕЗНОЕ ПРАВИЛО: об содержании серии суди ИСКЛЮЧИТЕЛЬНО по приложенным \
-    субтитрам. Не опирайся на свои знания об этом сериале — ты можешь помнить \
-    его неточно или не помнить вовсе. Если утверждение ученика невозможно \
-    проверить по субтитрам, так и скажи, а не объявляй его ошибкой. Под каждое \
-    утверждение о содержании давай короткую цитату из субтитров.
+    /// Сама инструкция — по-английски: так она одинаково понятна модели
+    /// при любом языке ученика. Объяснения в разборе — на родном языке
+    /// ученика, цитаты и его собственные слова — как есть, по-английски.
+    public static func system(for language: AppLanguage) -> String {
+        """
+        You teach American English to an adult learner whose native language is \
+        \(language.promptName). The learner watched an episode and retold it out \
+        loud; the retelling was transcribed automatically and is attached as text.
 
-    Пересказ получен распознаванием речи с акцентом. Если слово выглядит как \
-    ошибка распознавания, а не как ошибка понимания или грамматики, пометь его \
-    mayBeMisheard и не считай ошибкой ученика.
+        THE IRON RULE: judge the content of the episode ONLY by the attached \
+        subtitles. Do not rely on your own knowledge of the show — you may remember \
+        it inaccurately or not at all. If a claim cannot be checked against the \
+        subtitles, say so instead of calling it a mistake. Back every claim about \
+        the content with a short quote from the subtitles.
 
-    Разделяй две вещи и никогда не смешивай:
-    1. Понимание содержания — что понято верно, что переврано, что упущено.
-    2. Качество английского — грамматика, словарь, беглость.
+        The retelling comes from speech recognition of accented speech. If a word \
+        looks like a recognition error rather than a mistake of understanding or \
+        grammar, mark it mayBeMisheard and do not count it against the learner.
 
-    Замечаний в topPriorities — не больше трёх, самых важных. Ученик читает \
-    разбор после каждой серии; стена текста гарантирует, что читать перестанут.
+        Keep two things apart and never mix them:
+        1. Understanding of the content — what was understood correctly, what was \
+        distorted, what was missed.
+        2. Quality of the English — grammar, vocabulary, fluency.
 
-    Тон: спокойный и конкретный. Не хвали без повода и не ругай. \
-    Вместо «поработай над грамматикой» — что именно, где именно и как правильно.
+        No more than three items in topPriorities, the most important ones. The \
+        learner reads the review after every episode; a wall of text guarantees \
+        they stop reading.
 
-    Отвечай ТОЛЬКО валидным JSON по схеме ниже, без markdown-обёртки и \
-    пояснений до или после.
-    """
+        Tone: calm and specific. No praise without a reason and no scolding. \
+        Instead of "work on your grammar" — what exactly, where exactly, and how \
+        it should be.
+
+        Write every explanation (claim, comment, why, fluencyNote, topPriorities, \
+        translation) in \(language.promptName). Quotes from the subtitles and the \
+        learner's own words stay in English exactly as they are.
+
+        Reply ONLY with valid JSON following the schema below, with no markdown \
+        wrapper and no text before or after it.
+        """
+    }
 
     public static let responseSchema = """
     {
       "understanding": {
-        "correct":   [{"claim": "...", "quote": "цитата из субтитров"}],
-        "incorrect": [{"claim": "...", "quote": "...", "comment": "как на самом деле",
+        "correct":   [{"claim": "...", "quote": "a quote from the subtitles"}],
+        "incorrect": [{"claim": "...", "quote": "...", "comment": "what actually happened",
                        "mayBeMisheard": false}],
-        "missed":    [{"claim": "что упущено", "quote": "..."}],
+        "missed":    [{"claim": "what was missed", "quote": "..."}],
         "coverage": 0.7
       },
       "language": {
         "grammar":    [{"said": "he don't know", "better": "he doesn't know",
-                        "why": "третье лицо единственного числа"}],
+                        "why": "third person singular"}],
         "vocabulary": [{"said": "bad guy", "better": "antagonist",
-                        "why": "точнее и естественнее"}],
-        "fluencyNote": "темп, паузы, слова-паразиты — одной фразой, либо null",
-        "suggestedWords": [{"term": "antagonist", "translation": "злодей, антагонист",
-                            "example": "фраза из субтитров с этим словом",
+                        "why": "more precise and natural"}],
+        "fluencyNote": "pace, pauses, filler words — one sentence, or null",
+        "suggestedWords": [{"term": "antagonist",
+                            "translation": "translation into the learner's language",
+                            "example": "a line from the subtitles with this word",
                             "insteadOf": "bad guy"}]
       },
-      "topPriorities": ["не больше трёх пунктов"]
+      "topPriorities": ["no more than three items"]
     }
     """
 
@@ -71,29 +87,30 @@ public enum RetellPrompt {
         var parts: [String] = []
 
         if let episodeTitle, !episodeTitle.isEmpty {
-            parts.append("Серия: \(episodeTitle)")
+            parts.append("Episode: \(episodeTitle)")
         }
         if let watchedUpTo {
             let minutes = Int(watchedUpTo / 60)
             parts.append(
-                "Ученик досмотрел до \(minutes)-й минуты; субтитры обрезаны по этому месту.")
+                "The learner watched up to minute \(minutes); "
+                + "the subtitles are cut at that point.")
         }
 
         parts.append("""
-        СУБТИТРЫ СЕРИИ (единственный источник правды о содержании):
-        <субтитры>
+        EPISODE SUBTITLES (the only source of truth about the content):
+        <subtitles>
         \(subtitles)
-        </субтитры>
+        </subtitles>
         """)
 
         parts.append("""
-        ПЕРЕСКАЗ УЧЕНИКА (расшифровка речи):
-        <пересказ>
+        THE LEARNER'S RETELLING (speech transcript):
+        <retelling>
         \(retell)
-        </пересказ>
+        </retelling>
         """)
 
-        parts.append("Верни разбор строго по схеме:\n\(responseSchema)")
+        parts.append("Return the review strictly following the schema:\n\(responseSchema)")
 
         return parts.joined(separator: "\n\n")
     }

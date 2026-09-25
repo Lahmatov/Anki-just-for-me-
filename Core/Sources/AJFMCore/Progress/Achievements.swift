@@ -68,65 +68,92 @@ public struct Achievement: Equatable, Sendable, Identifiable {
 /// И ни одна не выдаётся за количество кликов — только за результат.
 public enum AchievementCatalog {
 
-    public static let all: [Achievement] = [
+    /// Вычисляемое, а не хранимое: названия зависят от языка интерфейса.
+    public static var all: [Achievement] { [
         Achievement(
-            id: "mature-10", title: "Первый десяток",
-            detail: "10 слов дожили до долгосрочной памяти",
+            id: "mature-10", title: tr("Первый десяток", "Primeira dezena", "First ten"),
+            detail: tr("10 слов дожили до долгосрочной памяти",
+                       "10 palavras chegaram à memória de longo prazo",
+                       "10 words made it to long-term memory"),
             metric: .matureWords, threshold: 10, symbol: "leaf"),
         Achievement(
-            id: "mature-50", title: "Полсотни",
-            detail: "50 слов в долгосрочной памяти",
+            id: "mature-50", title: tr("Полсотни", "Meia centena", "Fifty"),
+            detail: tr("50 слов в долгосрочной памяти",
+                       "50 palavras na memória de longo prazo",
+                       "50 words in long-term memory"),
             metric: .matureWords, threshold: 50, symbol: "tree"),
         Achievement(
-            id: "mature-150", title: "Сто пятьдесят",
-            detail: "150 слов — обычный размер первой серьёзной цели",
+            id: "mature-150", title: tr("Сто пятьдесят", "Cento e cinquenta", "A hundred and fifty"),
+            detail: tr("150 слов — обычный размер первой серьёзной цели",
+                       "150 palavras — o tamanho habitual do primeiro objetivo a sério",
+                       "150 words — the usual size of a first serious goal"),
             metric: .matureWords, threshold: 150, symbol: "books.vertical"),
         Achievement(
-            id: "mature-500", title: "Пятьсот",
-            detail: "500 слов в долгосрочной памяти",
+            id: "mature-500", title: tr("Пятьсот", "Quinhentas", "Five hundred"),
+            detail: tr("500 слов в долгосрочной памяти",
+                       "500 palavras na memória de longo prazo",
+                       "500 words in long-term memory"),
             metric: .matureWords, threshold: 500, symbol: "graduationcap"),
         Achievement(
-            id: "mature-1000", title: "Тысяча",
-            detail: "На этом словаре уже смотрят сериалы без субтитров",
+            id: "mature-1000", title: tr("Тысяча", "Mil", "A thousand"),
+            detail: tr("На этом словаре уже смотрят сериалы без субтитров",
+                       "Com este vocabulário já se veem séries sem legendas",
+                       "With this vocabulary people watch shows without subtitles"),
             metric: .matureWords, threshold: 1000, symbol: "crown"),
 
         Achievement(
-            id: "streak-7", title: "Неделя подряд",
-            detail: "7 учебных дней без пропусков",
+            id: "streak-7", title: tr("Неделя подряд", "Uma semana seguida", "A week in a row"),
+            detail: tr("7 учебных дней без пропусков",
+                       "7 dias de estudo sem falhas",
+                       "7 study days without a gap"),
             metric: .streakDays, threshold: 7, symbol: "calendar"),
         Achievement(
-            id: "streak-30", title: "Месяц подряд",
-            detail: "30 учебных дней без пропусков",
+            id: "streak-30", title: tr("Месяц подряд", "Um mês seguido", "A month in a row"),
+            detail: tr("30 учебных дней без пропусков",
+                       "30 dias de estudo sem falhas",
+                       "30 study days without a gap"),
             metric: .streakDays, threshold: 30, symbol: "calendar.badge.checkmark"),
 
         Achievement(
-            id: "reviews-1000", title: "Тысяча повторов",
-            detail: "1000 честных повторений в сессиях",
+            id: "reviews-1000", title: tr("Тысяча повторов", "Mil revisões", "A thousand reviews"),
+            detail: tr("1000 честных повторений в сессиях",
+                       "1000 revisões honestas em sessões",
+                       "1000 honest reviews in sessions"),
             metric: .honestReviews, threshold: 1000, symbol: "arrow.triangle.2.circlepath"),
 
         Achievement(
-            id: "retell-1", title: "Первый пересказ",
-            detail: "Рассказал серию по-английски вслух",
+            id: "retell-1", title: tr("Первый пересказ", "Primeiro reconto", "First retelling"),
+            detail: tr("Рассказал серию по-английски вслух",
+                       "Contaste um episódio em inglês, em voz alta",
+                       "Retold an episode out loud in English"),
             metric: .retellCount, threshold: 1, symbol: "text.bubble"),
         Achievement(
-            id: "retell-10", title: "Десять пересказов",
-            detail: "Десять серий пересказаны вслух",
+            id: "retell-10", title: tr("Десять пересказов", "Dez recontos", "Ten retellings"),
+            detail: tr("Десять серий пересказаны вслух",
+                       "Dez episódios recontados em voz alta",
+                       "Ten episodes retold out loud"),
             metric: .retellCount, threshold: 10, symbol: "person.wave.2"),
         Achievement(
-            id: "retell-coverage-80", title: "Понял почти всё",
-            detail: "Пересказ покрыл 80% событий серии",
+            id: "retell-coverage-80", title: tr("Понял почти всё", "Percebeste quase tudo", "Got almost everything"),
+            detail: tr("Пересказ покрыл 80% событий серии",
+                       "O reconto cobriu 80% dos acontecimentos do episódio",
+                       "The retelling covered 80% of the episode"),
             metric: .retellCoverage, threshold: 0.8, symbol: "eye"),
 
         Achievement(
-            id: "pronunciation-20", title: "Двадцать подряд",
-            detail: "20 минимальных пар подряд без ошибки",
+            id: "pronunciation-20", title: tr("Двадцать подряд", "Vinte seguidos", "Twenty in a row"),
+            detail: tr("20 минимальных пар подряд без ошибки",
+                       "20 pares mínimos seguidos sem erro",
+                       "20 minimal pairs in a row without a mistake"),
             metric: .pronunciationStreak, threshold: 20, symbol: "waveform"),
 
         Achievement(
-            id: "perfect-10", title: "Десять чистых сессий",
-            detail: "10 сессий без единой ошибки",
+            id: "perfect-10", title: tr("Десять чистых сессий", "Dez sessões limpas", "Ten clean sessions"),
+            detail: tr("10 сессий без единой ошибки",
+                       "10 sessões sem um único erro",
+                       "10 sessions without a single mistake"),
             metric: .perfectSessions, threshold: 10, symbol: "checkmark.seal"),
-    ]
+    ] }
 
     public static func unlocked(for stats: LearningStats) -> [Achievement] {
         all.filter { $0.isUnlocked(by: stats) }

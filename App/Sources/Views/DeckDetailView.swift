@@ -19,32 +19,39 @@ struct DeckDetailView: View {
     var body: some View {
         List {
             Section {
-                LabeledContent("Алгоритм", value: deck.scheduler.title)
+                LabeledContent(tr("Алгоритм", "Algoritmo", "Algorithm"), value: deck.scheduler.title)
                 LabeledContent(
-                    "Типы карточек",
+                    tr("Типы карточек", "Tipos de cartão", "Card types"),
                     value: deck.cardTypes.map(\.title).joined(separator: ", "))
                 if let source = deck.source, !source.isEmpty {
-                    LabeledContent("Источник", value: source)
+                    LabeledContent(tr("Источник", "Origem", "Source"), value: source)
                 }
             }
 
             Section {
                 let missing = EnrichService(context: context).notesWithoutExamples(in: deck)
-                Button("Добавить примеры из субтитров", systemImage: "text.quote") {
+                Button(tr("Добавить примеры из субтитров", "Juntar exemplos das legendas",
+                          "Add examples from subtitles"),
+                       systemImage: "text.quote") {
                     showSubtitleImporter = true
                 }
                 .disabled(missing.isEmpty)
                 if !missing.isEmpty {
-                    Text("Без живого примера: \(RussianPlural.words(missing.count))")
+                    Text(tr("Без живого примера: ", "Sem exemplo real: ", "Without a real example: ")
+                         + Counted.words(missing.count))
                         .font(.app(.caption))
                         .foregroundStyle(.secondary)
                 }
             } footer: {
-                Text("Подставит фразы из серии вместо словарных примеров. "
-                     + "Фраза из сцены, которую ты видел, запоминается лучше.")
+                Text(tr("Подставит фразы из серии вместо словарных примеров. "
+                            + "Фраза из сцены, которую ты видел, запоминается лучше.",
+                        "Troca os exemplos de dicionário por falas do episódio. "
+                            + "Uma frase de uma cena que viste fica melhor na memória.",
+                        "Replaces dictionary examples with lines from the episode. "
+                            + "A line from a scene you saw sticks better."))
             }
 
-            Section("Слова (\(notes.count))") {
+            Section(tr("Слова", "Palavras", "Words") + " (\(notes.count))") {
                 ForEach(notes) { note in
                     NavigationLink {
                         NoteDetailView(note: note)
@@ -62,14 +69,17 @@ struct DeckDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Поделиться", systemImage: "square.and.arrow.up") { export() }
+                Button(tr("Поделиться", "Partilhar", "Share"), systemImage: "square.and.arrow.up") {
+                    export()
+                }
             }
         }
         .safeAreaInset(edge: .bottom) {
             NavigationLink {
                 ReviewSessionView(deck: deck)
             } label: {
-                Label("Учить этот набор", systemImage: "play.fill")
+                Label(tr("Учить этот набор", "Estudar este baralho", "Study this deck"),
+                      systemImage: "play.fill")
                     .font(.app(.headline))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
@@ -89,29 +99,34 @@ struct DeckDetailView: View {
             guard let data = try? Data(contentsOf: url),
                   let raw = String(data: data, encoding: .utf8),
                   let track = try? SubtitleParser.parse(raw) else {
-                exportError = "Не удалось прочитать субтитры."
+                exportError = tr("Не удалось прочитать субтитры.",
+                                 "Não foi possível ler as legendas.",
+                                 "Couldn't read the subtitles.")
                 return
             }
             enrichResult = EnrichService(context: context).enrich(deck: deck, with: track)
         }
         .alert(
-            "Примеры добавлены",
+            tr("Примеры добавлены", "Exemplos adicionados", "Examples added"),
             isPresented: Binding(
                 get: { enrichResult != nil }, set: { if !$0 { enrichResult = nil } })
         ) {
-            Button("Хорошо") { enrichResult = nil }
+            Button(CommonText.ok) { enrichResult = nil }
         } message: {
             if let enrichResult {
-                Text("Дополнено слов: \(enrichResult.enriched). "
-                     + "Не нашлось в субтитрах: \(enrichResult.skipped).")
+                Text(tr("Дополнено слов: ", "Palavras completadas: ", "Words updated: ")
+                     + "\(enrichResult.enriched). "
+                     + tr("Не нашлось в субтитрах: ", "Não encontradas nas legendas: ",
+                          "Not found in the subtitles: ")
+                     + "\(enrichResult.skipped).")
             }
         }
         .alert(
-            "Не получилось",
+            CommonText.failedTitle,
             isPresented: Binding(get: { exportError != nil }, set: { if !$0 { exportError = nil } }),
             presenting: exportError
         ) { _ in
-            Button("Понятно") { exportError = nil }
+            Button(CommonText.gotIt) { exportError = nil }
         } message: { message in
             Text(message)
         }

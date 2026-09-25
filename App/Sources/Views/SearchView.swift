@@ -45,7 +45,7 @@ struct SearchView: View {
                 }
             }
 
-            Section("Найдено: \(results.count)") {
+            Section(tr("Найдено: ", "Encontradas: ", "Found: ") + "\(results.count)") {
                 ForEach(results) { note in
                     NavigationLink {
                         NoteDetailView(note: note)
@@ -63,8 +63,9 @@ struct SearchView: View {
                 }
             }
         }
-        .searchable(text: $query, prompt: "Слово или перевод")
-        .navigationTitle("Поиск")
+        .searchable(text: $query, prompt: tr("Слово или перевод", "Palavra ou tradução",
+                                             "Word or translation"))
+        .navigationTitle(tr("Поиск", "Pesquisa", "Search"))
     }
 }
 
@@ -84,12 +85,13 @@ struct NoteDetailView: View {
                 }
                 Text(note.translation)
                 if !note.synonyms.isEmpty {
-                    LabeledContent("Синонимы", value: note.synonyms.joined(separator: ", "))
+                    LabeledContent(tr("Синонимы", "Sinónimos", "Synonyms"),
+                                   value: note.synonyms.joined(separator: ", "))
                 }
             }
 
             if let example = note.example, !example.isEmpty {
-                Section("В контексте") {
+                Section(tr("В контексте", "Em contexto", "In context")) {
                     HStack(alignment: .top) {
                         Text(example).italic()
                         SpeakButton(text: example, compact: true)
@@ -101,10 +103,10 @@ struct NoteDetailView: View {
             }
 
             if let userNote = note.userNote, !userNote.isEmpty {
-                Section("Заметка") { Text(userNote) }
+                Section(tr("Заметка", "Nota", "Note")) { Text(userNote) }
             }
 
-            Section("Прогресс") {
+            Section(tr("Прогресс", "Progresso", "Progress")) {
                 ForEach(note.cards.sorted { $0.typeRaw < $1.typeRaw }) { card in
                     HStack {
                         Text(card.type.title)
@@ -126,11 +128,17 @@ struct NoteDetailView: View {
                 NavigationLink {
                     YouGlishScreen(word: note.term)
                 } label: {
-                    Label("Как это звучит у людей", systemImage: "play.rectangle")
+                    Label(tr("Как это звучит у людей", "Como soa na boca das pessoas",
+                             "How real people say it"),
+                          systemImage: "play.rectangle")
                 }
             } footer: {
-                Text("Открывает YouGlish: то же слово в реальных видео "
-                     + "с американским произношением.")
+                Text(tr("Открывает YouGlish: то же слово в реальных видео "
+                            + "с американским произношением.",
+                        "Abre o YouGlish: a mesma palavra em vídeos reais "
+                            + "com pronúncia americana.",
+                        "Opens YouGlish: the same word in real videos "
+                            + "with American pronunciation."))
             }
         }
         .navigationTitle(note.term)

@@ -43,7 +43,8 @@ struct ImportService {
         let notes = try context.fetch(FetchDescriptor<Note>())
         var map: [String: String] = [:]
         for note in notes where map[note.normalizedTerm] == nil {
-            map[note.normalizedTerm] = note.deck?.name ?? "без набора"
+            map[note.normalizedTerm] = note.deck?.name
+                ?? tr("без набора", "sem baralho", "no deck")
         }
         return map
     }

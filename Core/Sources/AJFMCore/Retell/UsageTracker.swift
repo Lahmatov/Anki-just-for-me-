@@ -35,17 +35,27 @@ public struct ModelPricing: Equatable, Sendable {
 
 public enum ClaudeModel {
     public static let opus5 = ModelPricing(
-        id: "claude-opus-5", title: "Opus 5 — лучший разбор",
+        id: "claude-opus-5", title: "Opus 5",
         inputPerMillion: 5, outputPerMillion: 25, supportsAdaptiveThinking: true,
         supportsServerFallback: true)
     public static let sonnet5 = ModelPricing(
-        id: "claude-sonnet-5", title: "Sonnet 5 — втрое дешевле",
+        id: "claude-sonnet-5", title: "Sonnet 5",
         inputPerMillion: 2, outputPerMillion: 10, supportsAdaptiveThinking: true)
     public static let haiku45 = ModelPricing(
-        id: "claude-haiku-4-5", title: "Haiku 4.5 — самый дешёвый",
+        id: "claude-haiku-4-5", title: "Haiku 4.5",
         inputPerMillion: 1, outputPerMillion: 5, supportsAdaptiveThinking: false)
 
     public static let all = [opus5, sonnet5, haiku45]
+
+    /// Чем модель хороша — для выбора в настройках.
+    public static func summary(for model: ModelPricing) -> String {
+        switch model.id {
+        case opus5.id: return tr("лучший разбор", "a melhor análise", "the best review")
+        case sonnet5.id: return tr("втрое дешевле", "três vezes mais barato", "three times cheaper")
+        case haiku45.id: return tr("самый дешёвый", "o mais barato", "the cheapest")
+        default: return ""
+        }
+    }
 
     public static func pricing(for id: String) -> ModelPricing {
         all.first { $0.id == id } ?? opus5

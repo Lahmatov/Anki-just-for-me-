@@ -63,7 +63,9 @@ final class DeckRequestModel {
     func loadSubtitles(from data: Data, name: String) {
         guard let raw = String(data: data, encoding: .utf8)
                 ?? String(data: data, encoding: .isoLatin1) else {
-            step = .failed("Не удалось прочитать файл субтитров.")
+            step = .failed(tr("Не удалось прочитать файл субтитров.",
+                              "Não foi possível ler o ficheiro de legendas.",
+                              "Couldn't read the subtitle file."))
             return
         }
         // Таймкоды модели не нужны и стоят денег — оставляем только реплики.

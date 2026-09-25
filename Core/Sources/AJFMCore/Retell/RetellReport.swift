@@ -34,9 +34,13 @@ public struct RetellReport: Codable, Equatable, Sendable {
         guard decodedUnderstanding != nil || decodedLanguage != nil else {
             throw DecodingError.dataCorrupted(DecodingError.Context(
                 codingPath: decoder.codingPath,
-                debugDescription:
+                debugDescription: tr(
                     "в ответе нет ни разбора понимания, ни разбора языка — "
-                    + "похоже, он оборвался"))
+                        + "похоже, он оборвался",
+                    "a resposta não traz nem a análise da compreensão nem a da língua — "
+                        + "parece ter sido cortada",
+                    "the reply has neither the understanding review nor the language "
+                        + "review — it looks cut off")))
         }
 
         understanding = decodedUnderstanding
@@ -161,22 +165,29 @@ extension RetellReport {
         var notes: [NoteData] = []
 
         for word in language.suggestedWords {
-            let hint = word.insteadOf.map { "Ты сказал «\($0)»." }
+            let hint = word.insteadOf.map {
+                tr("Ты сказал «\($0)».", "Disseste «\($0)».", "You said “\($0)”.")
+            }
             notes.append(NoteData(
                 term: word.term,
                 translation: word.translation,
                 example: word.example,
                 note: hint,
-                tags: ["пересказ", "словарь"]))
+                tags: [tr("пересказ", "reconto", "retelling"),
+                       tr("словарь", "vocabulário", "vocabulary")]))
         }
 
         for correction in language.grammar {
             notes.append(NoteData(
                 term: correction.better,
-                translation: correction.why ?? "Правильная форма",
+                translation: correction.why
+                    ?? tr("Правильная форма", "Forma correta", "Correct form"),
                 example: correction.better,
-                note: "Было: «\(correction.said)»",
-                tags: ["пересказ", "грамматика"]))
+                note: tr("Было: «\(correction.said)»",
+                         "Antes: «\(correction.said)»",
+                         "You said: “\(correction.said)”"),
+                tags: [tr("пересказ", "reconto", "retelling"),
+                       tr("грамматика", "gramática", "grammar")]))
         }
 
         guard !notes.isEmpty else { return nil }
@@ -188,7 +199,7 @@ extension RetellReport {
                 language: "en-US",
                 scheduler: .fsrs6,
                 cardTypes: [.recognition, .recall],
-                source: "разбор пересказа"),
+                source: tr("разбор пересказа", "análise do reconto", "retelling review")),
             notes: notes)
     }
 
@@ -196,6 +207,8 @@ extension RetellReport {
     public var summaryLine: String {
         let coverage = understanding.coveragePercent
         let mistakes = language.grammar.count + language.vocabulary.count
-        return "Понимание \(coverage)% · замечаний по языку: \(mistakes)"
+        return tr("Понимание \(coverage)% · замечаний по языку: \(mistakes)",
+                  "Compreensão \(coverage)% · observações de língua: \(mistakes)",
+                  "Understanding \(coverage)% · language notes: \(mistakes)")
     }
 }

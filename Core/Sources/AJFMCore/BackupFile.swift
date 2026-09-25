@@ -78,11 +78,17 @@ public enum BackupError: Error, Equatable, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .wrongFormat(let found):
-            return "Это не бэкап, а «\(found)». Восстанавливать из него нечего."
+            return tr("Это не бэкап, а «\(found)». Восстанавливать из него нечего.",
+                      "Isto não é uma cópia de segurança, é «\(found)». Não há nada a restaurar.",
+                      "This isn't a backup, it's “\(found)”. There's nothing to restore.")
         case .notABackup:
-            return "Это не файл бэкапа: в нём нет поля формата."
+            return tr("Это не файл бэкапа: в нём нет поля формата.",
+                      "Isto não é uma cópia de segurança: falta o campo de formato.",
+                      "This isn't a backup file: it has no format field.")
         case .unsupportedVersion(let found, let supported):
-            return "Бэкап версии \(found) новее поддерживаемой (\(supported))."
+            return tr("Бэкап версии \(found) новее поддерживаемой (\(supported)).",
+                      "A cópia da versão \(found) é mais recente do que a suportada (\(supported)).",
+                      "Backup version \(found) is newer than supported (\(supported)).")
         }
     }
 }

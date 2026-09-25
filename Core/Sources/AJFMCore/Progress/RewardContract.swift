@@ -96,15 +96,24 @@ public enum RewardCalculator {
     ) -> String {
         if contract.isCompleted {
             return contract.hadManualAdjustments
-                ? "Выполнено, но прогресс правился руками."
-                : "Заслужено: \(contract.reward)."
+                ? tr("Выполнено, но прогресс правился руками.",
+                     "Cumprido, mas o progresso foi corrigido à mão.",
+                     "Done, but the progress was edited by hand.")
+                : tr("Заслужено: \(contract.reward).",
+                     "Merecido: \(contract.reward).",
+                     "Earned: \(contract.reward).")
         }
         if progress.isReached {
-            return "Цель достигнута. \(contract.reward) — иди забирай."
+            return tr("Цель достигнута. \(contract.reward) — иди забирай.",
+                      "Objetivo cumprido. \(contract.reward) — vai buscar.",
+                      "Goal reached. \(contract.reward) — go and claim it.")
         }
         if let days = progress.daysLeft, days <= 0 {
-            return "Срок вышел: \(progress.done) из \(progress.goal)."
+            return tr("Срок вышел: \(progress.done) из \(progress.goal).",
+                      "O prazo acabou: \(progress.done) de \(progress.goal).",
+                      "Time's up: \(progress.done) of \(progress.goal).")
         }
-        return "До цели ещё \(progress.remaining) слов."
+        return tr("До цели ещё ", "Faltam ", "") + Counted.words(progress.remaining)
+            + tr(".", " para o objetivo.", " to go.")
     }
 }

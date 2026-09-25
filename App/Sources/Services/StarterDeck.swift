@@ -8,13 +8,18 @@ import AJFMCore
 /// и непонятно, работает ли вообще что-нибудь. Поэтому в приложение вшит
 /// стартовый набор: двадцать слов, без которых трудно рассказать, о чём была
 /// серия. Он же служит проверкой, что импорт жив.
+///
+/// Слова одни и те же, а переводы — на языке интерфейса: для английского
+/// интерфейса это короткие толкования, как в учебном словаре.
 @MainActor
 enum StarterDeck {
-    static let resourceName = "starter-deck"
+    static func resourceName(for language: AppLanguage = Loc.language) -> String {
+        "starter-deck-\(language.rawValue)"
+    }
 
-    static func data() -> Data? {
+    static func data(for language: AppLanguage = Loc.language) -> Data? {
         guard let url = Bundle.main.url(
-            forResource: resourceName, withExtension: "json") else {
+            forResource: resourceName(for: language), withExtension: "json") else {
             Log.warning(.app, "Стартовый набор не найден в ресурсах приложения")
             return nil
         }

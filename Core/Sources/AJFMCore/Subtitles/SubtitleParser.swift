@@ -51,8 +51,13 @@ public enum SubtitleParseError: Error, Equatable, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .empty: return "Файл субтитров пуст."
-        case .noCues: return "В файле не нашлось ни одной реплики с таймкодами."
+        case .empty:
+            return tr("Файл субтитров пуст.", "O ficheiro de legendas está vazio.",
+                      "The subtitle file is empty.")
+        case .noCues:
+            return tr("В файле не нашлось ни одной реплики с таймкодами.",
+                      "O ficheiro não tem nenhuma fala com marcas de tempo.",
+                      "The file has no lines with timecodes.")
         }
     }
 }

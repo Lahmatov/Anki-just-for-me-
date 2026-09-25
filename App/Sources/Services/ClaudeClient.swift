@@ -13,20 +13,35 @@ enum ClaudeClientError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .noAPIKey:
-            return "Не задан ключ API — добавь его в настройках."
+            return tr("Не задан ключ API — добавь его в настройках.",
+                      "Falta a chave da API — adiciona-a nas definições.",
+                      "No API key — add it in Settings.")
         case .budgetExceeded(let spent, let limit):
             return String(
-                format: "Месячный лимит исчерпан: потрачено $%.2f из $%.2f.", spent, limit)
+                format: tr("Месячный лимит исчерпан: потрачено $%.2f из $%.2f.",
+                           "O limite mensal esgotou-se: gastos $%.2f de $%.2f.",
+                           "Monthly limit reached: $%.2f spent of $%.2f."),
+                spent, limit)
         case .http(let status, let message):
-            return "Сервер ответил \(status): \(message)"
+            return tr("Сервер ответил \(status): \(message)",
+                      "O servidor respondeu \(status): \(message)",
+                      "The server replied \(status): \(message)")
         case .emptyResponse:
-            return "Модель вернула пустой ответ."
+            return tr("Модель вернула пустой ответ.",
+                      "O modelo devolveu uma resposta vazia.",
+                      "The model returned an empty reply.")
         case .refused:
-            return "Модель отказалась отвечать на этот запрос. Попробуй сформулировать иначе."
+            return tr("Модель отказалась отвечать на этот запрос. Попробуй сформулировать иначе.",
+                      "O modelo recusou-se a responder. Tenta formular de outra maneira.",
+                      "The model declined this request. Try phrasing it differently.")
         case .truncated:
-            return "Ответ не поместился и обрезан. Попробуй попросить меньше слов."
+            return tr("Ответ не поместился и обрезан. Попробуй попросить меньше слов.",
+                      "A resposta não coube e foi cortada. Tenta pedir menos palavras.",
+                      "The reply didn't fit and was cut off. Try asking for fewer words.")
         case .badJSON(let detail):
-            return "Не удалось разобрать ответ модели: \(detail)"
+            return tr("Не удалось разобрать ответ модели: \(detail)",
+                      "Não foi possível ler a resposta do modelo: \(detail)",
+                      "Couldn't read the model's reply: \(detail)")
         }
     }
 }
@@ -161,7 +176,9 @@ struct ClaudeClient {
 
     static func decodeReport(from text: String) throws -> RetellReport {
         guard let json = extractJSONObject(from: text) else {
-            throw ClaudeClientError.badJSON("в ответе нет JSON-объекта")
+            throw ClaudeClientError.badJSON(tr("в ответе нет JSON-объекта",
+                                               "a resposta não tem nenhum objeto JSON",
+                                               "the reply has no JSON object"))
         }
         do {
             return try JSONDecoder().decode(RetellReport.self, from: Data(json.utf8))
@@ -184,7 +201,8 @@ struct ClaudeClient {
         guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let error = json["error"] as? [String: Any],
               let message = error["message"] as? String else {
-            return String(data: data, encoding: .utf8) ?? "неизвестная ошибка"
+            return String(data: data, encoding: .utf8)
+                ?? tr("неизвестная ошибка", "erro desconhecido", "unknown error")
         }
         return message
     }

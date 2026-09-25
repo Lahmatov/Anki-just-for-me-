@@ -28,15 +28,22 @@ struct FolderContentsView: View {
         List {
             if childFolders.isEmpty && decks.isEmpty {
                 ContentUnavailableView {
-                    Label("Пока пусто", systemImage: "rectangle.stack")
+                    Label(tr("Пока пусто", "Ainda vazio", "Nothing here yet"),
+                          systemImage: "rectangle.stack")
                 } description: {
                     Text(folder == nil
-                         ? "Напиши, какую серию смотришь, — Claude подберёт слова. "
-                           + "Файл набора можно открыть через меню «…»."
-                         : "В этой папке пока ничего нет.")
+                         ? tr("Напиши, какую серию смотришь, — Claude подберёт слова. "
+                                + "Файл набора можно открыть через меню «…».",
+                              "Escreve que episódio estás a ver e o Claude escolhe as palavras. "
+                                + "Um ficheiro de baralho abre-se no menu «…».",
+                              "Write which episode you're watching and Claude will pick the "
+                                + "words. A deck file can be opened from the “…” menu.")
+                         : tr("В этой папке пока ничего нет.", "Esta pasta ainda está vazia.",
+                              "This folder is empty."))
                 } actions: {
                     if folder == nil {
-                        Button("Набор через Claude", systemImage: "sparkles") {
+                        Button(tr("Набор через Claude", "Baralho com o Claude", "Deck with Claude"),
+                               systemImage: "sparkles") {
                             showDeckRequest = true
                         }
                         .buttonStyle(.glassProminent)
@@ -46,7 +53,7 @@ struct FolderContentsView: View {
             }
 
             if !childFolders.isEmpty {
-                Section("Папки") {
+                Section(tr("Папки", "Pastas", "Folders")) {
                     ForEach(childFolders) { child in
                         NavigationLink {
                             FolderContentsView(folder: child, onExport: onExport)
@@ -57,7 +64,7 @@ struct FolderContentsView: View {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(child.name)
                                         .font(.app(.body, weight: .medium))
-                                    Text(RussianPlural.words(child.totalNoteCount))
+                                    Text(Counted.words(child.totalNoteCount))
                                         .font(.app(.caption))
                                         .foregroundStyle(.secondary)
                                 }
@@ -69,7 +76,7 @@ struct FolderContentsView: View {
             }
 
             if !decks.isEmpty {
-                Section("Наборы") {
+                Section(tr("Наборы", "Baralhos", "Decks")) {
                     ForEach(decks) { deck in
                         NavigationLink {
                             DeckDetailView(deck: deck, onExport: onExport)
@@ -112,7 +119,7 @@ struct DeckRow: View {
 
     private var subtitle: String {
         let cards = deck.notes.reduce(0) { $0 + $1.cards.count }
-        return RussianPlural.words(deck.notes.count) + " · " + RussianPlural.cards(cards)
+        return Counted.words(deck.notes.count) + " · " + Counted.cards(cards)
             + " · " + deck.scheduler.title
     }
 }

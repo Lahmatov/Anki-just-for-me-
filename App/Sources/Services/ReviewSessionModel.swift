@@ -130,7 +130,9 @@ final class ReviewSessionModel {
         check = AnswerCheck(
             verdict: isCorrect ? .correct : .wrong,
             matched: correct,
-            hint: isCorrect ? nil : "Правильно: «\(correct)»")
+            hint: isCorrect ? nil : tr("Правильно: «\(correct)»",
+                                       "Correto: «\(correct)»",
+                                       "Correct: “\(correct)”"))
         stats.answered += 1
         if isCorrect { stats.correct += 1 } else { stats.wrong += 1 }
         isRevealed = true
@@ -171,12 +173,12 @@ extension CardType {
     /// Что делать пользователю — подпись над карточкой.
     var instruction: String {
         switch self {
-        case .recognition: return "Выбери перевод"
-        case .recall: return "Напиши по-английски"
-        case .listening: return "Запиши то, что слышишь"
-        case .spelling: return "Напиши слово без ошибок"
-        case .pronunciation: return "Произнеси вслух"
-        case .cloze: return "Вставь пропущенное слово"
+        case .recognition: return tr("Выбери перевод", "Escolhe a tradução", "Pick the translation")
+        case .recall: return tr("Напиши по-английски", "Escreve em inglês", "Write it in English")
+        case .listening: return tr("Запиши то, что слышишь", "Escreve o que ouves", "Type what you hear")
+        case .spelling: return tr("Напиши слово без ошибок", "Escreve a palavra sem erros", "Spell the word correctly")
+        case .pronunciation: return tr("Произнеси вслух", "Diz em voz alta", "Say it out loud")
+        case .cloze: return tr("Вставь пропущенное слово", "Preenche a palavra em falta", "Fill in the missing word")
         }
     }
 }

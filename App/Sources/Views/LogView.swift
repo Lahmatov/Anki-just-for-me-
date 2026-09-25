@@ -20,15 +20,15 @@ struct LogView: View {
     var body: some View {
         List {
             Section {
-                Picker("Уровень", selection: $minimumLevel) {
-                    Text("Всё").tag(LogLevel.debug)
-                    Text("События").tag(LogLevel.info)
-                    Text("Проблемы").tag(LogLevel.warning)
+                Picker(tr("Уровень", "Nível", "Level"), selection: $minimumLevel) {
+                    Text(tr("Всё", "Tudo", "Everything")).tag(LogLevel.debug)
+                    Text(tr("События", "Eventos", "Events")).tag(LogLevel.info)
+                    Text(tr("Проблемы", "Problemas", "Problems")).tag(LogLevel.warning)
                 }
                 .pickerStyle(.segmented)
 
-                Picker("Раздел", selection: $category) {
-                    Text("Все разделы").tag(LogCategory?.none)
+                Picker(tr("Раздел", "Secção", "Section"), selection: $category) {
+                    Text(tr("Все разделы", "Todas as secções", "All sections")).tag(LogCategory?.none)
                     ForEach(LogCategory.allCases, id: \.self) { item in
                         Text(item.title).tag(LogCategory?.some(item))
                     }
@@ -37,30 +37,33 @@ struct LogView: View {
 
             if entries.isEmpty {
                 ContentUnavailableView(
-                    "Пока пусто",
+                    tr("Пока пусто", "Ainda vazio", "Nothing yet"),
                     systemImage: "text.alignleft",
-                    description: Text("События появятся по мере работы с приложением."))
+                    description: Text(tr("События появятся по мере работы с приложением.",
+                                         "Os eventos aparecem à medida que usas a aplicação.",
+                                         "Events will show up as you use the app.")))
             } else {
-                Section("Записей: \(entries.count)") {
+                Section(tr("Записей: ", "Registos: ", "Entries: ") + "\(entries.count)") {
                     ForEach(entries) { entry in
                         LogRow(entry: entry)
                     }
                 }
             }
         }
-        .navigationTitle("Журнал")
+        .navigationTitle(tr("Журнал", "Registo", "Log"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
-                    Button("Поделиться журналом", systemImage: "square.and.arrow.up") {
+                    Button(tr("Поделиться журналом", "Partilhar o registo", "Share the log"),
+                           systemImage: "square.and.arrow.up") {
                         share()
                     }
-                    Button("Обновить", systemImage: "arrow.clockwise") {
+                    Button(tr("Обновить", "Atualizar", "Refresh"), systemImage: "arrow.clockwise") {
                         refreshToken = UUID()
                     }
                     Divider()
-                    Button("Очистить", systemImage: "trash", role: .destructive) {
+                    Button(tr("Очистить", "Limpar", "Clear"), systemImage: "trash", role: .destructive) {
                         EventLog.shared.clear()
                         refreshToken = UUID()
                     }
@@ -109,7 +112,7 @@ struct LogRow: View {
                     .font(.app(.caption2))
                     .foregroundStyle(.secondary)
                 if entry.detail != nil, !expanded {
-                    Text("подробнее")
+                    Text(tr("подробнее", "mais", "more"))
                         .font(.app(.caption2))
                         .foregroundStyle(.tertiary)
                 }
