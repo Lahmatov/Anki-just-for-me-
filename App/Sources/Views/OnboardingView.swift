@@ -41,7 +41,7 @@ struct OnboardingView: View {
                     VStack(alignment: .trailing, spacing: 4) {
                         ProgressView(value: Double(index + 1), total: Double(plan.count))
                         Text("\(index + 1) из \(plan.count)")
-                            .font(.caption)
+                            .font(.app(.caption))
                             .foregroundStyle(.secondary)
                             .monospacedDigit()
                     }
@@ -67,7 +67,7 @@ struct OnboardingView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Пропустить") { finish(keepingGoal: false) }
-                        .font(.callout)
+                        .font(.app(.callout))
                 }
             }
         }
@@ -91,7 +91,7 @@ struct OnboardingView: View {
     private var howItWorks: some View {
         VStack(alignment: .leading, spacing: 18) {
             Text("Главный круг")
-                .font(.system(.title2, design: .rounded, weight: .semibold))
+                .font(.app(.title2, weight: .semibold))
 
             loop("1", "Смотришь серию", "Как обычно, в оригинале.")
             loop("2", "Пересказываешь вслух", "Две-три минуты по-английски: о чём была, что понял.")
@@ -103,7 +103,7 @@ struct OnboardingView: View {
 
             Text("Карточки можно и просто импортировать — попросив у меня набор "
                  + "по серии. Но круг выше и есть то, ради чего всё затевалось.")
-                .font(.callout)
+                .font(.app(.callout))
                 .foregroundStyle(.secondary)
         }
         .cardSurface()
@@ -112,13 +112,13 @@ struct OnboardingView: View {
     private func loop(_ number: String, _ title: String, _ detail: String) -> some View {
         HStack(alignment: .top, spacing: 12) {
             Text(number)
-                .font(.system(.footnote, design: .rounded, weight: .bold))
+                .font(.app(.footnote, weight: .bold))
                 .foregroundStyle(.white)
                 .frame(width: 24, height: 24)
                 .background(Circle().fill(Color.accentColor))
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.headline)
-                Text(detail).font(.callout).foregroundStyle(.secondary)
+                Text(title).font(.app(.headline))
+                Text(detail).font(.app(.callout)).foregroundStyle(.secondary)
             }
         }
     }
@@ -127,18 +127,18 @@ struct OnboardingView: View {
     private var starterDeck: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Двадцать слов для начала")
-                .font(.system(.title2, design: .rounded, weight: .semibold))
+                .font(.app(.title2, weight: .semibold))
 
             Text("Это лексика самого пересказа: turn out, end up, eventually, "
                  + "cliffhanger. Без неё рассказать о серии трудно, так что она "
                  + "пригодится с первого же раза.")
-                .font(.callout)
+                .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
             if starterInstalled {
                 Label("Добавлено — набор «Лексика для пересказа»", systemImage: "checkmark.circle")
                     .foregroundStyle(.green)
-                    .font(.callout)
+                    .font(.app(.callout))
             } else {
                 Button {
                     Haptics.tap()
@@ -167,7 +167,7 @@ struct OnboardingView: View {
                         + "examples/retelling-vocabulary.json вручную или попроси "
                         + "у Claude новый.",
                         systemImage: "exclamationmark.triangle")
-                        .font(.footnote)
+                        .font(.app(.footnote))
                         .foregroundStyle(.orange)
                 }
             }
@@ -179,23 +179,23 @@ struct OnboardingView: View {
     private var voice: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Голос звучит роботом")
-                .font(.system(.title2, design: .rounded, weight: .semibold))
+                .font(.app(.title2, weight: .semibold))
 
             Text("Система по умолчанию ставит сжатый голос — для изучения "
                  + "произношения он плохо годится. Хороший скачивается бесплатно "
                  + "и один раз.")
-                .font(.callout)
+                .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
             SpeakButton(text: "This is how it sounds right now.", label: "Послушать сейчас")
 
             Text(VoiceSelector.downloadHint)
-                .font(.footnote)
+                .font(.app(.footnote))
                 .foregroundStyle(.secondary)
                 .padding(.top, 4)
 
             Text("Приложение подхватит новый голос само.")
-                .font(.footnote)
+                .font(.app(.footnote))
                 .foregroundStyle(.tertiary)
         }
         .cardSurface()
@@ -205,12 +205,12 @@ struct OnboardingView: View {
     private var goal: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Пообещай себе награду")
-                .font(.system(.title2, design: .rounded, weight: .semibold))
+                .font(.app(.title2, weight: .semibold))
 
             Text("Выученным слово считается, когда интервал дорастает до "
                  + "\(RussianPlural.days(Int(ReviewState.matureIntervalDays))). За вечер такое "
                  + "не накликать — поэтому награда за них честная.")
-                .font(.callout)
+                .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
             Stepper("Цель: \(RussianPlural.words(goalWords))", value: $goalWords, in: 20...500, step: 10)
@@ -219,7 +219,7 @@ struct OnboardingView: View {
                 .textFieldStyle(.roundedBorder)
 
             Text("Можно пропустить и завести позже на вкладке «Награды».")
-                .font(.footnote)
+                .font(.app(.footnote))
                 .foregroundStyle(.tertiary)
         }
         .cardSurface()
@@ -229,11 +229,11 @@ struct OnboardingView: View {
     private var reminder: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Когда напоминать")
-                .font(.system(.title2, design: .rounded, weight: .semibold))
+                .font(.app(.title2, weight: .semibold))
 
             Text("Интервальное повторение работает, только если возвращаться "
                  + "каждый день. Пятнадцати минут хватает.")
-                .font(.callout)
+                .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
             Toggle("Напоминать", isOn: $reminderEnabled)
@@ -256,7 +256,7 @@ struct OnboardingView: View {
             }
 
             Text("Это локальное уведомление — работает без платного аккаунта.")
-                .font(.footnote)
+                .font(.app(.footnote))
                 .foregroundStyle(.tertiary)
         }
         .cardSurface()
@@ -270,7 +270,7 @@ struct OnboardingView: View {
             advance()
         } label: {
             Text(isLastStep ? "Начать" : "Дальше")
-                .font(.headline)
+                .font(.app(.headline))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)
         }

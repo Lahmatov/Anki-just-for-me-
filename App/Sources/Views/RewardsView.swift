@@ -87,31 +87,31 @@ struct RewardsView: View {
                 contract: active, currentMatureWords: matureWords)
             Section {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(active.reward).font(.headline)
+                    Text(active.reward).font(.app(.headline))
                     ProgressView(value: progress.fraction)
                     HStack {
                         Text("\(progress.done) из \(RussianPlural.words(progress.goal))")
                         Spacer()
                         if let days = progress.daysLeft, days > 0 {
                             Text("\(RussianPlural.days(days)) до срока")
-                                .font(.caption)
+                                .font(.app(.caption))
                                 .foregroundStyle(.secondary)
                         }
                     }
-                    .font(.subheadline)
+                    .font(.app(.subheadline))
 
                     Text(RewardCalculator.statusLine(contract: active, progress: progress))
-                        .font(.callout)
+                        .font(.app(.callout))
                         .foregroundStyle(progress.isReached ? .green : .secondary)
 
                     if let pace = progress.requiredPerDay {
                         Text(String(format: "Нужно %.1f слова в день, чтобы успеть", pace))
-                            .font(.caption)
+                            .font(.app(.caption))
                             .foregroundStyle(.secondary)
                     }
                 }
                 Button("Отменить цель", role: .destructive) { service.delete(active) }
-                    .font(.caption)
+                    .font(.app(.caption))
             } header: {
                 Text("Текущая цель")
             } footer: {
@@ -141,7 +141,7 @@ struct RewardsView: View {
                     Label(next.title, systemImage: next.symbol)
                         .foregroundStyle(.secondary)
                     ProgressView(value: next.progress(in: current))
-                    Text(next.detail).font(.caption).foregroundStyle(.secondary)
+                    Text(next.detail).font(.app(.caption)).foregroundStyle(.secondary)
                 }
             }
             ForEach(unlocked) { achievement in
@@ -151,7 +151,7 @@ struct RewardsView: View {
                     VStack(alignment: .leading) {
                         Text(achievement.title)
                         Text(achievement.detail)
-                            .font(.caption)
+                            .font(.app(.caption))
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -168,11 +168,11 @@ struct RewardsView: View {
                     Text(RussianPlural.words(contract.goal) + " · "
                          + (contract.completedAt ?? contract.startedAt)
                             .formatted(date: .abbreviated, time: .omitted))
-                        .font(.caption)
+                        .font(.app(.caption))
                         .foregroundStyle(.secondary)
                     if contract.hadManualAdjustments {
                         Label("прогресс правился руками", systemImage: "hand.raised")
-                            .font(.caption2)
+                            .font(.app(.caption2))
                             .foregroundStyle(.orange)
                     }
                 }
@@ -202,15 +202,15 @@ struct RewardEarnedView: View {
                 .symbolEffect(.bounce, options: .repeat(2))
 
             Text("Заслужено")
-                .font(.largeTitle).bold()
+                .font(.app(.largeTitle, weight: .bold))
 
             Text(contract.reward)
-                .font(.title2)
+                .font(.app(.title2))
                 .multilineTextAlignment(.center)
 
             Text("В долгосрочной памяти — \(RussianPlural.words(contract.goal)). "
                  + "Это не просмотры — это реально выученные слова.")
-                .font(.callout)
+                .font(.app(.callout))
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
@@ -221,7 +221,7 @@ struct RewardEarnedView: View {
             // не следует, гасит мотивацию вместо того, чтобы её поддержать.
             Button(action: onDone) {
                 Text("Получил — ставим следующую цель")
-                    .font(.headline)
+                    .font(.app(.headline))
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.glassProminent)

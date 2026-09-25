@@ -86,7 +86,7 @@ struct DeckRequestView: View {
                             .lineLimit(1)
                         Spacer()
                         Button("Убрать", role: .destructive) { model.removeSubtitles() }
-                            .font(.callout)
+                            .font(.app(.callout))
                     }
                 } else {
                     Button("Приложить субтитры", systemImage: "captions.bubble") {
@@ -133,7 +133,7 @@ struct DeckRequestView: View {
                 Section {
                     Label(message, systemImage: "exclamationmark.triangle")
                         .foregroundStyle(.orange)
-                        .font(.callout)
+                        .font(.app(.callout))
                 }
             }
         }
@@ -195,7 +195,7 @@ struct DeckRequestView: View {
                     Text("Сделать набор")
                 }
             }
-            .font(.headline)
+            .font(.app(.headline))
             .frame(maxWidth: .infinity)
             .padding(.vertical, 4)
         }
@@ -214,14 +214,14 @@ struct DeckRequestView: View {
                 .foregroundStyle(.green)
                 .symbolEffect(.bounce, value: result.addedNotes)
             Text(result.deckName)
-                .font(.title2.weight(.semibold))
+                .font(.app(.title2, weight: .semibold))
                 .multilineTextAlignment(.center)
             Text(RussianPlural.words(result.addedNotes) + " · "
                  + RussianPlural.cards(result.addedCards))
                 .foregroundStyle(.secondary)
             if let model, model.lastCost > 0 {
                 Text(String(format: "Стоило $%.3f", model.lastCost))
-                    .font(.footnote)
+                    .font(.app(.footnote))
                     .foregroundStyle(.tertiary)
             }
             Spacer()
@@ -229,7 +229,7 @@ struct DeckRequestView: View {
                 dismiss()
             } label: {
                 Text("Готово")
-                    .font(.headline)
+                    .font(.app(.headline))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }

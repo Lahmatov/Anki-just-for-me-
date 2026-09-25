@@ -42,7 +42,7 @@ struct ImportPreviewView: View {
                     Section("Обрати внимание") {
                         ForEach(plan.warnings, id: \.self) { warning in
                             Label(warning, systemImage: "exclamationmark.triangle")
-                                .font(.callout)
+                                .font(.app(.callout))
                         }
                     }
                 }
@@ -53,7 +53,7 @@ struct ImportPreviewView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(item.element.note.term)
                                 Text(item.element.reason)
-                                    .font(.caption)
+                                    .font(.app(.caption))
                                     .foregroundStyle(.secondary)
                             }
                         }
@@ -73,7 +73,7 @@ struct ImportPreviewView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(item.element.term).fontWeight(.medium)
                                 Text(item.element.translation)
-                                    .font(.caption)
+                                    .font(.app(.caption))
                                     .foregroundStyle(.secondary)
                             }
                         }

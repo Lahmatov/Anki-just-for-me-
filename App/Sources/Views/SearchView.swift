@@ -35,7 +35,7 @@ struct SearchView: View {
                                     selectedTag = selectedTag == tag ? nil : tag
                                 } label: {
                                     Text("#\(tag)")
-                                        .font(.caption)
+                                        .font(.app(.caption))
                                 }
                                 .buttonStyle(.bordered)
                                 .tint(selectedTag == tag ? .accentColor : .secondary)
@@ -53,10 +53,10 @@ struct SearchView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(note.term).fontWeight(.medium)
                             Text(note.translation)
-                                .font(.caption)
+                                .font(.app(.caption))
                                 .foregroundStyle(.secondary)
                             if let deck = note.deck?.name {
-                                Text(deck).font(.caption2).foregroundStyle(.tertiary)
+                                Text(deck).font(.app(.caption2)).foregroundStyle(.tertiary)
                             }
                         }
                     }
@@ -76,11 +76,11 @@ struct NoteDetailView: View {
         List {
             Section {
                 HStack {
-                    Text(note.term).font(.title2).bold()
+                    Text(note.term).font(.app(.title2, weight: .bold))
                     SpeakButton(text: note.term, compact: true)
                 }
                 if let ipa = note.ipa, !ipa.isEmpty {
-                    Text(ipa).foregroundStyle(.secondary)
+                    Text(ipa).font(.ipa(.subheadline)).foregroundStyle(.secondary)
                 }
                 Text(note.translation)
                 if !note.synonyms.isEmpty {
@@ -95,7 +95,7 @@ struct NoteDetailView: View {
                         SpeakButton(text: example, compact: true)
                     }
                     if let translation = note.exampleTranslation, !translation.isEmpty {
-                        Text(translation).font(.caption).foregroundStyle(.secondary)
+                        Text(translation).font(.app(.caption)).foregroundStyle(.secondary)
                     }
                 }
             }
@@ -111,10 +111,10 @@ struct NoteDetailView: View {
                         Spacer()
                         VStack(alignment: .trailing, spacing: 2) {
                             Text(card.state.title)
-                                .font(.caption)
+                                .font(.app(.caption))
                             if card.intervalDays > 0 {
                                 Text(IntervalFormatter.short(card.intervalDays * 86_400))
-                                    .font(.caption2)
+                                    .font(.app(.caption2))
                                     .foregroundStyle(card.isMature ? .green : .secondary)
                             }
                         }

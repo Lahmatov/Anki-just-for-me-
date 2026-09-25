@@ -3,6 +3,12 @@ import SwiftData
 
 @main
 struct AJFMApp: App {
+    init() {
+        // До первого экрана: заголовки навигации создаются один раз
+        // и потом шрифт уже не подхватывают.
+        AppFont.current.applyToNavigationBars()
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()

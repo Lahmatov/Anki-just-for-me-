@@ -36,7 +36,7 @@ struct DeckDetailView: View {
                 .disabled(missing.isEmpty)
                 if !missing.isEmpty {
                     Text("Без живого примера: \(RussianPlural.words(missing.count))")
-                        .font(.caption)
+                        .font(.app(.caption))
                         .foregroundStyle(.secondary)
                 }
             } footer: {
@@ -70,7 +70,7 @@ struct DeckDetailView: View {
                 ReviewSessionView(deck: deck)
             } label: {
                 Label("Учить этот набор", systemImage: "play.fill")
-                    .font(.headline)
+                    .font(.app(.headline))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
@@ -134,20 +134,20 @@ struct NoteRow: View {
             HStack {
                 Text(note.term).fontWeight(.medium)
                 if let ipa = note.ipa, !ipa.isEmpty {
-                    Text(ipa).font(.caption).foregroundStyle(.secondary)
+                    Text(ipa).font(.ipa(.caption)).foregroundStyle(.secondary)
                 }
                 Spacer()
                 SpeakButton(text: note.term, compact: true)
                 Text("\(note.cards.count)")
-                    .font(.caption2)
+                    .font(.app(.caption2))
                     .foregroundStyle(.secondary)
             }
             Text(note.translation)
-                .font(.subheadline)
+                .font(.app(.subheadline))
                 .foregroundStyle(.secondary)
             if !note.tags.isEmpty {
                 Text(note.tags.map { "#\($0)" }.joined(separator: " "))
-                    .font(.caption2)
+                    .font(.app(.caption2))
                     .foregroundStyle(.tertiary)
             }
         }

@@ -42,7 +42,7 @@ struct StatsView: View {
         Section {
             if Forecast.total(days) == 0 {
                 Text("Впереди пусто — все карточки либо новые, либо далеко за горизонтом.")
-                    .font(.callout)
+                    .font(.app(.callout))
                     .foregroundStyle(.secondary)
             } else {
                 Chart(days) { day in
@@ -57,7 +57,7 @@ struct StatsView: View {
                         .annotation(position: .top) {
                             if day.date == peak?.date, day.dueCount > 0 {
                                 Text("\(day.dueCount)")
-                                    .font(.caption2)
+                                    .font(.app(.caption2))
                                     .foregroundStyle(.secondary)
                             }
                         }
@@ -79,13 +79,13 @@ struct StatsView: View {
                 LabeledContent(
                     "В среднем в день",
                     value: String(format: "%.0f", Forecast.averagePerDay(days)))
-                    .font(.caption)
+                    .font(.app(.caption))
                 if let peak {
                     LabeledContent(
                         "Пик",
                         value: "\(peak.dueCount) — "
                             + peak.date.formatted(.dateTime.day().month(.abbreviated)))
-                        .font(.caption)
+                        .font(.app(.caption))
                 }
             }
         } header: {
@@ -104,7 +104,7 @@ struct StatsView: View {
             if snapshots.count < 2 {
                 Text("Кривая появится через пару дней: она строится из ежедневных "
                      + "снимков, а история до установки приложения нигде не хранится.")
-                    .font(.callout)
+                    .font(.app(.callout))
                     .foregroundStyle(.secondary)
             } else {
                 Chart(snapshots) { snapshot in
@@ -133,7 +133,7 @@ struct StatsView: View {
                     LabeledContent(
                         "Прирост за период",
                         value: "+\(max(0, last.matureWords - first.matureWords))")
-                        .font(.caption)
+                        .font(.app(.caption))
                 }
             }
         } header: {
@@ -152,7 +152,7 @@ struct StatsView: View {
         Section {
             if weeks.allSatisfy({ $0.dueCount == 0 }) {
                 Text("Повторов пока не было.")
-                    .font(.callout)
+                    .font(.app(.callout))
                     .foregroundStyle(.secondary)
             } else {
                 Chart(weeks) { week in

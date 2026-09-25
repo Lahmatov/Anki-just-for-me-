@@ -94,30 +94,30 @@ struct LogRow: View {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Image(systemName: entry.level.symbol)
                     .foregroundStyle(color)
-                    .font(.caption)
+                    .font(.app(.caption))
                 Text(entry.message)
-                    .font(.callout)
+                    .font(.app(.callout))
                 Spacer()
                 Text(entry.date, format: .dateTime.hour().minute().second())
-                    .font(.caption2)
+                    .font(.app(.caption2))
                     .foregroundStyle(.tertiary)
                     .monospacedDigit()
             }
 
             HStack(spacing: 6) {
                 Text(entry.category.title)
-                    .font(.caption2)
+                    .font(.app(.caption2))
                     .foregroundStyle(.secondary)
                 if entry.detail != nil, !expanded {
                     Text("подробнее")
-                        .font(.caption2)
+                        .font(.app(.caption2))
                         .foregroundStyle(.tertiary)
                 }
             }
 
             if expanded, let detail = entry.detail {
                 Text(detail)
-                    .font(.caption)
+                    .font(.app(.caption))
                     .foregroundStyle(.secondary)
                     .textSelection(.enabled)
             }

@@ -87,7 +87,7 @@ struct ReviewSessionView: View {
                     model.reveal()
                 } label: {
                     Text("Проверить")
-                        .font(.headline)
+                        .font(.app(.headline))
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.glassProminent)
@@ -98,7 +98,7 @@ struct ReviewSessionView: View {
                     model.reveal()
                 } label: {
                     Text("Показать")
-                        .font(.headline)
+                        .font(.app(.headline))
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.glassProminent)
@@ -122,7 +122,7 @@ struct ReviewSessionView: View {
             }
             Spacer()
         }
-        .font(.caption)
+        .font(.app(.caption))
         .foregroundStyle(.secondary)
         .monospacedDigit()
         .animation(.snappy, value: model.index)
@@ -146,7 +146,7 @@ struct CardPromptView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(card.type.instruction)
-                .font(.caption)
+                .font(.app(.caption))
                 .foregroundStyle(.secondary)
 
             prompt
@@ -162,7 +162,7 @@ struct CardPromptView: View {
                     .textFieldStyle(.roundedBorder)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
-                    .font(.title3)
+                    .font(.app(.title3))
                     .onSubmit { model.reveal() }
             }
 
@@ -197,13 +197,13 @@ struct CardPromptView: View {
         switch card.type {
         case .recognition:
             Text(note?.term ?? "")
-                .font(.system(.largeTitle, design: .rounded, weight: .semibold))
+                .font(.app(.largeTitle, weight: .semibold))
         case .recall:
             Text(note?.translation ?? "")
-                .font(.system(.title, design: .rounded, weight: .semibold))
+                .font(.app(.title, weight: .semibold))
         case .cloze:
             Text(note?.cloze ?? note?.example ?? note?.translation ?? "")
-                .font(.title2)
+                .font(.app(.title2))
         case .listening:
             // Ни слова, ни перевода на экране: смысл карточки в том,
             // чтобы разобрать речь на слух, а не прочитать подсказку.
@@ -213,12 +213,12 @@ struct CardPromptView: View {
                     SpeakButton(text: spokenText, rate: .slow, label: "Медленно")
                 }
                 Text("Можно слушать сколько угодно раз.")
-                    .font(.caption)
+                    .font(.app(.caption))
                     .foregroundStyle(.secondary)
             }
         case .spelling:
             VStack(alignment: .leading, spacing: 12) {
-                Text(note?.translation ?? "").font(.title).bold()
+                Text(note?.translation ?? "").font(.app(.title, weight: .bold))
                 HStack {
                     SpeakButton(text: note?.term ?? "", label: "Прослушать")
                     SpeakButton(text: note?.term ?? "", rate: .slow, label: "Медленно")
@@ -226,16 +226,16 @@ struct CardPromptView: View {
             }
         case .pronunciation:
             VStack(alignment: .leading, spacing: 8) {
-                Text(note?.term ?? "").font(.largeTitle).bold()
+                Text(note?.term ?? "").font(.app(.largeTitle, weight: .bold))
                 if let ipa = note?.ipa, !ipa.isEmpty {
-                    Text(ipa).foregroundStyle(.secondary)
+                    Text(ipa).font(.ipa(.body)).foregroundStyle(.secondary)
                 }
                 SpeakButton(text: note?.term ?? "", rate: .slow, label: "Медленно")
                 PronunciationRecorderView(word: note?.term ?? "")
                 if let pair = MinimalPairLibrary.pair(containing: note?.term ?? "") {
                     Text("Это слово из минимальной пары «\(pair.first) — \(pair.second)». "
                          + "Вкладка «Речь» проверит его строже.")
-                        .font(.caption)
+                        .font(.app(.caption))
                         .foregroundStyle(.secondary)
                 }
             }
@@ -251,7 +251,7 @@ struct CardPromptView: View {
                     model.choose(option)
                 } label: {
                     Text(option)
-                        .font(.body)
+                        .font(.app(.body))
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 10)
@@ -268,36 +268,36 @@ struct CardPromptView: View {
             if let check = model.check {
                 Label(verdictText(check), systemImage: verdictIcon(check))
                     .foregroundStyle(verdictColor(check))
-                    .font(.headline)
+                    .font(.app(.headline))
                     .symbolEffect(.bounce, value: check.verdict)
                 if let hint = check.hint {
-                    Text(hint).font(.subheadline).foregroundStyle(.secondary)
+                    Text(hint).font(.app(.subheadline)).foregroundStyle(.secondary)
                 }
             }
 
             Divider()
 
             HStack {
-                Text(note?.term ?? "").font(.title2).bold()
+                Text(note?.term ?? "").font(.app(.title2, weight: .bold))
                 SpeakButton(text: note?.term ?? "", compact: true)
             }
             if let ipa = note?.ipa, !ipa.isEmpty {
-                Text(ipa).foregroundStyle(.secondary)
+                Text(ipa).font(.ipa(.body)).foregroundStyle(.secondary)
             }
-            Text(note?.translation ?? "").font(.body)
+            Text(note?.translation ?? "").font(.app(.body))
 
             if let example = note?.example, !example.isEmpty {
                 HStack(alignment: .top) {
-                    Text(example).font(.callout).italic()
+                    Text(example).font(.app(.callout)).italic()
                     SpeakButton(text: example, compact: true)
                 }
                 .padding(.top, 4)
             }
             if let translation = note?.exampleTranslation, !translation.isEmpty {
-                Text(translation).font(.caption).foregroundStyle(.secondary)
+                Text(translation).font(.app(.caption)).foregroundStyle(.secondary)
             }
             if let userNote = note?.userNote, !userNote.isEmpty {
-                Text(userNote).font(.caption).foregroundStyle(.orange)
+                Text(userNote).font(.app(.caption)).foregroundStyle(.orange)
             }
         }
     }
@@ -339,11 +339,11 @@ struct GradeButtons: View {
             model.grade(grade)
         } label: {
             VStack(spacing: 2) {
-                Text(grade.title).font(.callout.weight(.medium))
+                Text(grade.title).font(.app(.callout, weight: .medium))
                 // Интервал прямо на кнопке: выбор оценки должен быть
                 // осознанным, а не гаданием.
                 Text(model.interval(for: grade))
-                    .font(.caption2)
+                    .font(.app(.caption2))
                     .opacity(0.8)
             }
             .frame(maxWidth: .infinity)
@@ -371,37 +371,98 @@ struct SessionSummaryView: View {
     let stats: SessionStats
     var onDone: () -> Void
 
-    var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: stats.answered == 0 ? "checkmark.circle" : "flag.checkered")
-                .font(.system(size: 48))
-                .foregroundStyle(.secondary)
+    @State private var shownAccuracy = 0.0
 
-            Text(stats.answered == 0 ? "На сегодня всё" : "Сессия закончена")
-                .font(.title2).bold()
+    var body: some View {
+        VStack(spacing: 28) {
+            Spacer()
 
             if stats.answered > 0 {
-                VStack(spacing: 6) {
-                    Text("Отвечено: \(stats.answered)")
-                    Text("Верно: \(stats.correct) · опечаток: \(stats.typos) · мимо: \(stats.wrong)")
-                        .foregroundStyle(.secondary)
-                    Text("Точность: \(Int(stats.accuracy * 100))%")
-                        .font(.headline)
+                accuracyRing
+                Text("Сессия закончена")
+                    .font(.app(.title2, weight: .bold))
+                HStack(spacing: 10) {
+                    tile("Верно", stats.correct, .green)
+                    tile("Опечатки", stats.typos, .orange)
+                    tile("Мимо", stats.wrong, .red)
                 }
-                .font(.subheadline)
             } else {
-                Text("Карточек по сроку нет. Возвращайся позже — или добавь новый набор.")
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal)
+                IconBadge(systemName: "checkmark", color: .green, size: 72)
+                VStack(spacing: 8) {
+                    Text("На сегодня всё")
+                        .font(.app(.title2, weight: .bold))
+                    Text("Карточек по сроку нет. Возвращайся позже — или добавь новый набор.")
+                        .font(.app(.subheadline))
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.secondary)
+                }
             }
 
+            Spacer()
+
             Button(action: onDone) {
-                Text("Готово").font(.headline).frame(maxWidth: 220)
+                Text("Готово")
+                    .font(.app(.headline))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 4)
             }
             .buttonStyle(.glassProminent)
             .controlSize(.large)
         }
         .padding()
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.8).delay(0.15)) {
+                shownAccuracy = stats.accuracy
+            }
+        }
+    }
+
+    /// Точность кольцом: цифра, ради которой сессию и проходят,
+    /// должна читаться с первого взгляда.
+    private var accuracyRing: some View {
+        ZStack {
+            Circle()
+                .stroke(Color(.tertiarySystemFill), lineWidth: 14)
+            Circle()
+                .trim(from: 0, to: shownAccuracy)
+                .stroke(ringColor.gradient,
+                        style: StrokeStyle(lineWidth: 14, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+            VStack(spacing: 0) {
+                Text("\(Int((stats.accuracy * 100).rounded()))%")
+                    .font(.app(.largeTitle, weight: .heavy))
+                    .monospacedDigit()
+                Text("точность")
+                    .font(.app(.caption, weight: .medium))
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(width: 168, height: 168)
+        .accessibilityElement(children: .combine)
+    }
+
+    private var ringColor: Color {
+        switch stats.accuracy {
+        case 0.9...: return .green
+        case 0.7..<0.9: return .accentColor
+        default: return .orange
+        }
+    }
+
+    private func tile(_ title: String, _ value: Int, _ color: Color) -> some View {
+        VStack(spacing: 2) {
+            Text("\(value)")
+                .font(.app(.title2, weight: .bold))
+                .monospacedDigit()
+                .foregroundStyle(value == 0 ? Color.secondary : color)
+            Text(title)
+                .font(.app(.caption, weight: .medium))
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(.secondarySystemGroupedBackground)))
     }
 }

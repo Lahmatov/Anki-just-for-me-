@@ -9,32 +9,32 @@ struct SpeakingHubView: View {
                     NavigationLink {
                         RetellView()
                     } label: {
-                        Label {
+                        HStack(spacing: 14) {
+                            IconBadge(systemName: "text.bubble.fill", color: .purple)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Пересказать серию")
+                                    .font(.app(.body, weight: .medium))
                                 Text("Наговори, о чём была серия, — разберём "
                                      + "понимание и язык")
-                                    .font(.caption)
+                                    .font(.app(.caption))
                                     .foregroundStyle(.secondary)
                             }
-                        } icon: {
-                            Image(systemName: "text.bubble")
                         }
                     }
 
                     NavigationLink {
                         MinimalPairsView()
                     } label: {
-                        Label {
+                        HStack(spacing: 14) {
+                            IconBadge(systemName: "waveform", color: .pink)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Минимальные пары")
+                                    .font(.app(.body, weight: .medium))
                                 Text("ship или sheep — единственная честная "
                                      + "проверка произношения без облака")
-                                    .font(.caption)
+                                    .font(.app(.caption))
                                     .foregroundStyle(.secondary)
                             }
-                        } icon: {
-                            Image(systemName: "waveform")
                         }
                     }
                 } footer: {

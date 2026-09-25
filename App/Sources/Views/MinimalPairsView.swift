@@ -21,9 +21,9 @@ struct MinimalPairsView: View {
         List {
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Произнеси").font(.caption).foregroundStyle(.secondary)
-                        Text(target).font(.largeTitle).bold()
-                        Text(pair.contrast).font(.callout).foregroundStyle(.secondary)
+                        Text("Произнеси").font(.app(.caption)).foregroundStyle(.secondary)
+                        Text(target).font(.app(.largeTitle, weight: .bold))
+                        Text(pair.contrast).font(.app(.callout)).foregroundStyle(.secondary)
 
                         PronunciationRecorderView(word: target, pair: pair) { assessment in
                             lastVerdict = assessment.verdict
@@ -35,7 +35,7 @@ struct MinimalPairsView: View {
                 }
 
                 Section {
-                    Text(pair.hint).font(.callout)
+                    Text(pair.hint).font(.app(.callout))
                     HStack {
                         SpeakButton(text: pair.first, label: pair.first)
                         SpeakButton(text: pair.second, label: pair.second)
@@ -69,7 +69,7 @@ struct MinimalPairsView: View {
                             Text("\(item.first) — \(item.second)")
                             Spacer()
                             Text(item.contrast)
-                                .font(.caption)
+                                .font(.app(.caption))
                                 .foregroundStyle(.secondary)
                         }
                         .contentShape(Rectangle())

@@ -94,7 +94,7 @@ struct RetellView: View {
                 if let track = model.track, track.duration > 60 {
                     VStack(alignment: .leading) {
                         Text("Досмотрел до \(Int(model.watchedUpToMinutes)) мин")
-                            .font(.callout)
+                            .font(.app(.callout))
                         Slider(
                             value: Binding(
                                 get: { model.watchedUpToMinutes },
@@ -143,12 +143,12 @@ struct RetellView: View {
                     .monospacedDigit()
                 Spacer()
                 Text(RussianPlural.words(model.recorder.wordCount))
-                    .font(.caption)
+                    .font(.app(.caption))
                     .foregroundStyle(.secondary)
             }
             if !model.recorder.fullText.isEmpty {
                 Text(model.recorder.fullText)
-                    .font(.callout)
+                    .font(.app(.callout))
                     .foregroundStyle(.secondary)
             }
             Button("Закончить", systemImage: "stop.circle.fill") { model.stopRecording() }
@@ -165,7 +165,7 @@ struct RetellView: View {
             TextEditor(text: Binding(
                 get: { model.transcript }, set: { model.transcript = $0 }))
                 .frame(minHeight: 200)
-                .font(.callout)
+                .font(.app(.callout))
 
             Button("Разобрать", systemImage: "sparkles") {
                 Task { await model.analyze() }
@@ -176,9 +176,9 @@ struct RetellView: View {
             LabeledContent(
                 "Обойдётся примерно в",
                 value: String(format: "$%.3f", model.estimatedCost))
-                .font(.caption)
+                .font(.app(.caption))
             Button("Перезаписать") { model.reset() }
-                .font(.caption)
+                .font(.app(.caption))
         } header: {
             Text("Расшифровка — поправь ошибки")
         } footer: {
@@ -195,7 +195,7 @@ struct RetellView: View {
                 Text("Понимание")
                 Spacer()
                 Text("\(report.understanding.coveragePercent)%")
-                    .font(.title3).bold()
+                    .font(.app(.title3, weight: .bold))
             }
             ProgressView(value: report.understanding.coverage)
         } header: {
@@ -265,16 +265,16 @@ struct RetellView: View {
                             .foregroundStyle(color)
                         if let quote = item.element.quote, !quote.isEmpty {
                             Text("«\(quote)»")
-                                .font(.caption)
+                                .font(.app(.caption))
                                 .italic()
                                 .foregroundStyle(.secondary)
                         }
                         if let comment = item.element.comment, !comment.isEmpty {
-                            Text(comment).font(.caption)
+                            Text(comment).font(.app(.caption))
                         }
                         if item.element.mayBeMisheard == true {
                             Label("возможно, ошибка распознавания", systemImage: "waveform.badge.exclamationmark")
-                                .font(.caption2)
+                                .font(.app(.caption2))
                                 .foregroundStyle(.tertiary)
                         }
                     }
@@ -288,11 +288,11 @@ struct RetellView: View {
         VStack(alignment: .leading, spacing: 2) {
             HStack {
                 Text(correction.said).strikethrough().foregroundStyle(.secondary)
-                Image(systemName: "arrow.right").font(.caption2)
+                Image(systemName: "arrow.right").font(.app(.caption2))
                 Text(correction.better).bold()
             }
             if let why = correction.why, !why.isEmpty {
-                Text(why).font(.caption).foregroundStyle(.secondary)
+                Text(why).font(.app(.caption)).foregroundStyle(.secondary)
             }
         }
     }
@@ -305,7 +305,7 @@ struct RetellView: View {
                     Text(session.episodeTitle)
                     Text("Понимание \(Int(session.coverage * 100))% · "
                          + session.createdAt.formatted(date: .abbreviated, time: .omitted))
-                        .font(.caption)
+                        .font(.app(.caption))
                         .foregroundStyle(.secondary)
                 }
             }

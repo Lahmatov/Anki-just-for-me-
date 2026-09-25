@@ -22,16 +22,20 @@ struct RootView: View {
     @State private var restoreResult: RestoreService.Result?
     /// Заставка видна с первого кадра: иначе содержимое мелькнуло бы до неё.
     @State private var showIntro = true
+    /// Вкладка хранится снаружи пересоздаваемого дерева: смена шрифта
+    /// перестраивает экраны, но не выкидывает из настроек на «Сегодня».
+    @State private var tab: AppTab = .today
+    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.manrope.rawValue
 
     var body: some View {
         // Новый API вкладок: на iOS 26 таб-бар сам становится Liquid Glass
         // и прячется при прокрутке, освобождая место под содержимое.
-        TabView {
-            Tab("Сегодня", systemImage: "calendar") {
+        TabView(selection: $tab) {
+            Tab("Сегодня", systemImage: "calendar", value: AppTab.today) {
                 TodayView()
             }
 
-            Tab("Наборы", systemImage: "folder") {
+            Tab("Наборы", systemImage: "folder", value: AppTab.decks) {
                 NavigationStack {
                     FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
                         .navigationTitle("Наборы")
@@ -48,19 +52,23 @@ struct RootView: View {
                 }
             }
 
-            Tab("Награды", systemImage: "trophy") {
+            Tab("Награды", systemImage: "trophy", value: AppTab.rewards) {
                 RewardsView()
             }
 
-            Tab("Речь", systemImage: "waveform") {
+            Tab("Речь", systemImage: "waveform", value: AppTab.speech) {
                 SpeakingHubView()
             }
 
-            Tab("Настройки", systemImage: "gearshape") {
+            Tab("Настройки", systemImage: "gearshape", value: AppTab.settings) {
                 SettingsView()
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
+        // Шрифт по умолчанию для всех текстов без явного стиля, а смена
+        // шрифта перестраивает экраны целиком: тексты берут его при отрисовке.
+        .font(.app(.body))
+        .id(fontStyle)
         .overlay {
             if showIntro {
                 LaunchIntroView {
@@ -302,6 +310,10 @@ extension RootView {
         }
         onboarding = OnboardingPlanBuilder.make(context: context)
     }
+}
+
+enum AppTab: Hashable {
+    case today, decks, rewards, speech, settings
 }
 
 struct PendingRestore: Identifiable {

@@ -14,6 +14,7 @@ struct SettingsView: View {
         AppSettings.default.desiredRetention
 
     @AppStorage(SettingsKey.autoSpeak) private var autoSpeak = true
+    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.manrope.rawValue
     @AppStorage(SettingsKey.claudeModel) private var claudeModel = ClaudeModel.opus5.id
     @AppStorage(SettingsKey.monthlyBudget) private var monthlyBudget = 10.0
     @State private var apiKey = ""
@@ -29,6 +30,8 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                appearanceSection
+
                 Section {
                     Stepper("Новых в день: \(newPerDay)", value: $newPerDay, in: 0...200, step: 5)
                     Stepper(
@@ -86,7 +89,7 @@ struct SettingsView: View {
                     }
                     if speech.shouldSuggestBetterVoice {
                         Text(VoiceSelector.downloadHint)
-                            .font(.caption)
+                            .font(.app(.caption))
                             .foregroundStyle(.orange)
                     }
                 } header: {
@@ -162,6 +165,38 @@ struct SettingsView: View {
             .onChange(of: reminderEnabled) { _, enabled in
                 Task { await applyReminder(enabled: enabled) }
             }
+        }
+    }
+
+    private var appearanceSection: some View {
+        Section {
+            Picker("Шрифт", selection: Binding(
+                get: { AppFont(rawValue: fontStyle) ?? .manrope },
+                set: { choice in
+                    // Заголовки навигации — UIKit: им шрифт нужно отдать до того,
+                    // как экраны перестроятся с новым выбором.
+                    choice.applyToNavigationBars()
+                    fontStyle = choice.rawValue
+                })
+            ) {
+                ForEach(AppFont.allCases) { font in
+                    Text(font.title)
+                        .font(font.font(.body, weight: nil))
+                        .tag(font)
+                }
+            }
+            .pickerStyle(.navigationLink)
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Turn out · оказаться")
+                    .font(.app(.title3, weight: .semibold))
+                Text("It turned out he was right all along. Оказалось, он был прав.")
+                    .font(.app(.subheadline))
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.vertical, 4)
+        } header: {
+            Text("Оформление")
         }
     }
 

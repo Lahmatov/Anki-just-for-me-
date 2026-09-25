@@ -48,20 +48,20 @@ struct DifficultCardsView: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(card.note?.term ?? "—").fontWeight(.medium)
                                 Text(card.note?.translation ?? "")
-                                    .font(.caption)
+                                    .font(.app(.caption))
                                     .foregroundStyle(.secondary)
                                 HStack {
                                     Text(LeechPolicy.summary(lapses: card.lapses))
                                     Text("·")
                                     Text(card.type.title)
                                 }
-                                .font(.caption2)
+                                .font(.app(.caption2))
                                 .foregroundStyle(.orange)
                             }
                         }
 
                         Text(advice(for: card))
-                            .font(.caption)
+                            .font(.app(.caption))
                             .foregroundStyle(.secondary)
                     }
                 }

@@ -16,7 +16,7 @@ struct PronunciationRecorderView: View {
 
             if service.isRecording, !service.partialText.isEmpty {
                 Text(service.partialText)
-                    .font(.callout)
+                    .font(.app(.callout))
                     .foregroundStyle(.secondary)
             }
 
@@ -25,7 +25,7 @@ struct PronunciationRecorderView: View {
                 resultView(assessment)
             case .failed(let message):
                 Label(message, systemImage: "exclamationmark.triangle")
-                    .font(.callout)
+                    .font(.app(.callout))
                     .foregroundStyle(.orange)
             case .processing:
                 ProgressView("Разбираю…")
@@ -36,7 +36,7 @@ struct PronunciationRecorderView: View {
             if permissionDenied {
                 Text("Нужны разрешения на микрофон и распознавание речи — "
                      + "их можно включить в настройках iOS.")
-                    .font(.caption)
+                    .font(.app(.caption))
                     .foregroundStyle(.orange)
             }
         }
@@ -88,16 +88,16 @@ struct PronunciationRecorderView: View {
     private func resultView(_ assessment: PronunciationAssessment) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Label(title(for: assessment), systemImage: icon(for: assessment))
-                .font(.headline)
+                .font(.app(.headline))
                 .foregroundStyle(color(for: assessment))
 
             Text(assessment.message)
-                .font(.callout)
+                .font(.app(.callout))
                 .foregroundStyle(.secondary)
 
             if assessment.confidence > 0 {
                 Text("Уверенность распознавателя: \(Int(assessment.confidence * 100))%")
-                    .font(.caption2)
+                    .font(.app(.caption2))
                     .foregroundStyle(.tertiary)
             }
 
@@ -105,7 +105,7 @@ struct PronunciationRecorderView: View {
                 // Без этой оговорки экран обманывает: совпадение слова
                 // не означает правильного произношения.
                 Text(PronunciationEvaluator.onDeviceDisclaimer)
-                    .font(.caption2)
+                    .font(.app(.caption2))
                     .foregroundStyle(.tertiary)
             }
 
@@ -119,7 +119,7 @@ struct PronunciationRecorderView: View {
                     .buttonStyle(.bordered)
                 }
             }
-            .font(.caption)
+            .font(.app(.caption))
         }
     }
 

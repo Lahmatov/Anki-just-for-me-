@@ -8,6 +8,7 @@ struct FolderContentsView: View {
     var onExport: (ExportedFile) -> Void
 
     @Environment(\.modelContext) private var context
+    @State private var showDeckRequest = false
     @Query private var allFolders: [Folder]
     @Query private var allDecks: [Deck]
 
@@ -26,14 +27,22 @@ struct FolderContentsView: View {
     var body: some View {
         List {
             if childFolders.isEmpty && decks.isEmpty {
-                ContentUnavailableView(
-                    "Пусто",
-                    systemImage: "tray",
-                    description: Text(
-                        folder == nil
-                        ? "Попроси Claude сделать набор карточек и импортируй файл через меню наверху."
-                        : "В этой папке пока ничего нет.")
-                )
+                ContentUnavailableView {
+                    Label("Пока пусто", systemImage: "rectangle.stack")
+                } description: {
+                    Text(folder == nil
+                         ? "Напиши, какую серию смотришь, — Claude подберёт слова. "
+                           + "Файл набора можно открыть через меню «…»."
+                         : "В этой папке пока ничего нет.")
+                } actions: {
+                    if folder == nil {
+                        Button("Набор через Claude", systemImage: "sparkles") {
+                            showDeckRequest = true
+                        }
+                        .buttonStyle(.glassProminent)
+                    }
+                }
+                .listRowBackground(Color.clear)
             }
 
             if !childFolders.isEmpty {
@@ -43,15 +52,15 @@ struct FolderContentsView: View {
                             FolderContentsView(folder: child, onExport: onExport)
                                 .navigationTitle(child.name)
                         } label: {
-                            Label {
-                                VStack(alignment: .leading) {
+                            HStack(spacing: 14) {
+                                IconBadge(systemName: "folder.fill", color: .blue)
+                                VStack(alignment: .leading, spacing: 2) {
                                     Text(child.name)
+                                        .font(.app(.body, weight: .medium))
                                     Text(RussianPlural.words(child.totalNoteCount))
-                                        .font(.caption)
+                                        .font(.app(.caption))
                                         .foregroundStyle(.secondary)
                                 }
-                            } icon: {
-                                Image(systemName: "folder")
                             }
                         }
                     }
@@ -72,6 +81,9 @@ struct FolderContentsView: View {
                 }
             }
         }
+        .sheet(isPresented: $showDeckRequest) {
+            DeckRequestView()
+        }
     }
 
     private func delete<T: PersistentModel>(_ items: [T], at offsets: IndexSet) {
@@ -86,11 +98,15 @@ struct DeckRow: View {
     let deck: Deck
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(deck.name)
-            Text(subtitle)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+        HStack(spacing: 14) {
+            IconBadge(systemName: "rectangle.stack.fill")
+            VStack(alignment: .leading, spacing: 2) {
+                Text(deck.name)
+                    .font(.app(.body, weight: .medium))
+                Text(subtitle)
+                    .font(.app(.caption))
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 
