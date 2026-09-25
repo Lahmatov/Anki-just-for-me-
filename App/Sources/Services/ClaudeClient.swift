@@ -6,6 +6,8 @@ enum ClaudeClientError: LocalizedError {
     case budgetExceeded(spent: Double, limit: Double)
     case http(status: Int, message: String)
     case emptyResponse
+    case refused
+    case truncated
     case badJSON(String)
 
     var errorDescription: String? {
@@ -19,13 +21,17 @@ enum ClaudeClientError: LocalizedError {
             return "Сервер ответил \(status): \(message)"
         case .emptyResponse:
             return "Модель вернула пустой ответ."
+        case .refused:
+            return "Модель отказалась отвечать на этот запрос. Попробуй сформулировать иначе."
+        case .truncated:
+            return "Ответ не поместился и обрезан. Попробуй попросить меньше слов."
         case .badJSON(let detail):
             return "Не удалось разобрать ответ модели: \(detail)"
         }
     }
 }
 
-/// Клиент Claude API для разбора пересказов.
+/// Клиент Claude API: разбор пересказов и наборы по запросу.
 ///
 /// Официального SDK для Swift нет, поэтому работаем с HTTP напрямую.
 struct ClaudeClient {
@@ -45,41 +51,30 @@ struct ClaudeClient {
         var decodeError: String?
     }
 
-    func analyze(
-        subtitles: String,
-        retell: String,
-        episodeTitle: String?,
-        watchedUpTo: TimeInterval?
-    ) async throws -> Outcome {
+    /// Ответ модели и его цена.
+    struct Completion {
+        var text: String?
+        var usage: UsageRecord
+        var stopReason: ClaudeStopReason
+    }
+
+    /// Один запрос к Messages API. Расход возвращается всегда, даже когда
+    /// текст пустой или обрезан, — вызывающий обязан его записать.
+    func complete(_ request: ClaudeRequest) async throws -> Completion {
         guard !apiKey.isEmpty else { throw ClaudeClientError.noAPIKey }
 
-        let userMessage = RetellPrompt.userMessage(
-            subtitles: subtitles, retell: retell,
-            episodeTitle: episodeTitle, watchedUpTo: watchedUpTo)
-
-        var body: [String: Any] = [
-            "model": model,
-            "max_tokens": 8_000,
-            "system": RetellPrompt.system,
-            "messages": [["role": "user", "content": userMessage]],
-        ]
-        // Разбор пересказа — задача с рассуждением: модель сверяет утверждения
-        // с субтитрами и подбирает цитаты. Но самые дешёвые модели этих
-        // параметров не принимают вовсе и вернут ошибку.
-        if ClaudeModel.pricing(for: model).supportsAdaptiveThinking {
-            body["thinking"] = ["type": "adaptive"]
-            body["output_config"] = ["effort": "high"]
+        var urlRequest = URLRequest(url: Self.endpoint)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue(apiKey, forHTTPHeaderField: "x-api-key")
+        urlRequest.setValue(Self.apiVersion, forHTTPHeaderField: "anthropic-version")
+        urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
+        if let beta = request.betaHeader {
+            urlRequest.setValue(beta, forHTTPHeaderField: "anthropic-beta")
         }
+        urlRequest.httpBody = try JSONSerialization.data(withJSONObject: try request.body())
+        urlRequest.timeoutInterval = 180
 
-        var request = URLRequest(url: Self.endpoint)
-        request.httpMethod = "POST"
-        request.setValue(apiKey, forHTTPHeaderField: "x-api-key")
-        request.setValue(Self.apiVersion, forHTTPHeaderField: "anthropic-version")
-        request.setValue("application/json", forHTTPHeaderField: "content-type")
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
-        request.timeoutInterval = 180
-
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
 
         if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
             throw ClaudeClientError.http(
@@ -88,22 +83,58 @@ struct ClaudeClient {
         }
 
         let parsed = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
-        let usage = Self.usageRecord(from: parsed, model: model)
+        return Completion(
+            text: Self.extractText(from: parsed),
+            usage: Self.usageRecord(from: parsed, model: request.model.id),
+            stopReason: ClaudeStopReason(raw: parsed["stop_reason"] as? String))
+    }
 
-        guard let text = Self.extractText(from: parsed), !text.isEmpty else {
+    func analyze(
+        subtitles: String,
+        retell: String,
+        episodeTitle: String?,
+        watchedUpTo: TimeInterval?
+    ) async throws -> Outcome {
+        // Разбор пересказа — задача с рассуждением: модель сверяет утверждения
+        // с субтитрами и подбирает цитаты, поэтому усилие высокое.
+        let completion = try await complete(ClaudeRequest(
+            model: ClaudeModel.pricing(for: model),
+            system: RetellPrompt.system,
+            userMessage: RetellPrompt.userMessage(
+                subtitles: subtitles, retell: retell,
+                episodeTitle: episodeTitle, watchedUpTo: watchedUpTo),
+            maxTokens: 8_000,
+            effort: .high))
+
+        if let problem = Self.problem(with: completion) {
             return Outcome(
-                usage: usage, report: nil, rawText: "",
-                decodeError: ClaudeClientError.emptyResponse.localizedDescription)
+                usage: completion.usage, report: nil, rawText: completion.text ?? "",
+                decodeError: problem)
         }
-
+        let text = completion.text ?? ""
         do {
             return Outcome(
-                usage: usage, report: try Self.decodeReport(from: text),
+                usage: completion.usage, report: try Self.decodeReport(from: text),
                 rawText: text, decodeError: nil)
         } catch {
             return Outcome(
-                usage: usage, report: nil, rawText: text,
+                usage: completion.usage, report: nil, rawText: text,
                 decodeError: error.localizedDescription)
+        }
+    }
+
+    /// Почему текст ответа нельзя использовать, или nil, если можно.
+    static func problem(with completion: Completion) -> String? {
+        switch completion.stopReason {
+        case .refused:
+            return ClaudeClientError.refused.localizedDescription
+        case .truncated:
+            return ClaudeClientError.truncated.localizedDescription
+        case .finished, .other:
+            guard let text = completion.text, !text.isEmpty else {
+                return ClaudeClientError.emptyResponse.localizedDescription
+            }
+            return nil
         }
     }
 

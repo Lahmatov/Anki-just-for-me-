@@ -55,20 +55,11 @@ final class RetellFlowModel {
             .cost(inputTokens: input, outputTokens: 1_500)
     }
 
-    var selectedModel: String {
-        UserDefaults.standard.string(forKey: SettingsKey.claudeModel) ?? ClaudeModel.opus5.id
-    }
+    var selectedModel: String { ClaudeBudget(context: context).model.id }
 
-    var monthlyLimit: Double {
-        let stored = UserDefaults.standard.double(forKey: SettingsKey.monthlyBudget)
-        return stored > 0 ? stored : 10
-    }
+    var monthlyLimit: Double { ClaudeBudget(context: context).monthlyLimit }
 
-    var usage: UsageSummary {
-        let records = ((try? context.fetch(FetchDescriptor<UsageEntry>())) ?? [])
-            .map(\.asRecord)
-        return UsageTracker.summary(records: records, limit: monthlyLimit)
-    }
+    var usage: UsageSummary { ClaudeBudget(context: context).usage }
 
     // MARK: - Субтитры
 

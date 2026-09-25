@@ -166,4 +166,40 @@ final class ImportServiceTests: XCTestCase {
             XCTAssertEqual(error as? DeckParseError, .wrongFormat(found: "quizlet"))
         }
     }
+
+    // MARK: - Набор по запросу
+
+    func testPlanFromDeckFileMarksExistingWordsAsDuplicates() throws {
+        let (_, service) = try makeEnvironment()
+        try service.apply(try service.makePlan(from: TestDB.deckFile(notes: notes("leverage"))))
+
+        let generated = DeckFile(
+            deck: DeckMeta(name: "От Claude", folder: DeckRequest.folder),
+            notes: notes("leverage", "turn out"))
+        let plan = try service.makePlan(from: generated)
+
+        XCTAssertEqual(plan.newNotes.map(\.term), ["turn out"])
+        XCTAssertEqual(plan.duplicates.map(\.note.term), ["leverage"])
+    }
+
+    func testRecentTermsComeNewestFirstAndAreCapped() throws {
+        let (context, service) = try makeEnvironment()
+        try service.apply(try service.makePlan(from: TestDB.deckFile(
+            name: "A", notes: notes("old1", "old2", "old3"))))
+        let notesInBase = try context.fetch(FetchDescriptor<Note>())
+        for (offset, note) in notesInBase.enumerated() {
+            note.createdAt = Date(timeIntervalSince1970: Double(offset))
+        }
+        let newest = try XCTUnwrap(notesInBase.last)
+        try context.save()
+
+        let recent = service.recentTerms(limit: 2)
+        XCTAssertEqual(recent.count, 2)
+        XCTAssertEqual(recent.first, newest.term)
+    }
+
+    func testRecentTermsOfEmptyBase() throws {
+        let (_, service) = try makeEnvironment()
+        XCTAssertEqual(service.recentTerms(limit: 10), [])
+    }
 }

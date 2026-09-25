@@ -184,4 +184,40 @@ final class ClaudeClientTests: XCTestCase {
         XCTAssertTrue(message.contains("10.50"))
         XCTAssertTrue(message.contains("10.00"))
     }
+
+    // MARK: - Можно ли верить ответу
+
+    private func completion(_ text: String?, _ stop: ClaudeStopReason) -> ClaudeClient.Completion {
+        ClaudeClient.Completion(
+            text: text,
+            usage: UsageRecord(date: Date(), model: "m", inputTokens: 1, outputTokens: 1,
+                               cost: 0.01),
+            stopReason: stop)
+    }
+
+    func testFinishedTextIsUsable() {
+        XCTAssertNil(ClaudeClient.problem(with: completion("{}", .finished)))
+    }
+
+    func testRefusalIsReportedEvenWithText() {
+        // Частичный текст при отказе не должен выдаваться за ответ.
+        XCTAssertEqual(
+            ClaudeClient.problem(with: completion("{\"na", .refused)),
+            ClaudeClientError.refused.localizedDescription)
+    }
+
+    func testTruncatedJSONIsNotParsed() {
+        XCTAssertEqual(
+            ClaudeClient.problem(with: completion("{\"notes\": [", .truncated)),
+            ClaudeClientError.truncated.localizedDescription)
+    }
+
+    func testEmptyTextIsAProblem() {
+        XCTAssertEqual(
+            ClaudeClient.problem(with: completion(nil, .finished)),
+            ClaudeClientError.emptyResponse.localizedDescription)
+        XCTAssertEqual(
+            ClaudeClient.problem(with: completion("", .other("pause_turn"))),
+            ClaudeClientError.emptyResponse.localizedDescription)
+    }
 }

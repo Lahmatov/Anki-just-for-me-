@@ -22,6 +22,27 @@ enum SettingsKey {
     static let reminderEnabled = "reminderEnabled"
     static let reminderHour = "reminderHour"
     static let reminderMinute = "reminderMinute"
+    static let appLanguage = "appLanguage"
+    static let englishLevel = "englishLevel"
+    static let fontStyle = "fontStyle"
+}
+
+extension AppSettings {
+    /// Язык интерфейса и переводов. Пока человек не выбрал сам — берётся
+    /// из системы, так что первый запуск сразу на понятном языке.
+    static var language: AppLanguage {
+        if let raw = UserDefaults.standard.string(forKey: SettingsKey.appLanguage),
+           let chosen = AppLanguage(rawValue: raw) {
+            return chosen
+        }
+        return AppLanguage.resolve(preferred: Locale.preferredLanguages)
+    }
+
+    /// Уровень по тесту, если тест пройден.
+    static var englishLevel: CEFRLevel? {
+        UserDefaults.standard.string(forKey: SettingsKey.englishLevel)
+            .flatMap(CEFRLevel.init(rawValue:))
+    }
 }
 
 struct AppSettings {

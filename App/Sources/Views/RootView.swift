@@ -16,6 +16,7 @@ struct RootView: View {
     @State private var promptCopied = false
     @State private var showRestoreImporter = false
     @State private var showQuickAdd = false
+    @State private var showDeckRequest = false
     @State private var onboarding: OnboardingPlan?
     @State private var pendingRestore: PendingRestore?
     @State private var restoreResult: RestoreService.Result?
@@ -152,6 +153,9 @@ struct RootView: View {
         .sheet(isPresented: $showQuickAdd) {
             QuickAddView()
         }
+        .sheet(isPresented: $showDeckRequest) {
+            DeckRequestView()
+        }
         .sheet(item: $onboarding) { plan in
             OnboardingView(plan: plan)
         }
@@ -197,6 +201,12 @@ struct RootView: View {
 
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
+        // Главный способ получить слова — отдельной кнопкой, а не в меню.
+        ToolbarItem(placement: .topBarTrailing) {
+            Button("Набор через Claude", systemImage: "sparkles") {
+                showDeckRequest = true
+            }
+        }
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
                 Button("Новое слово", systemImage: "plus.circle") { showQuickAdd = true }

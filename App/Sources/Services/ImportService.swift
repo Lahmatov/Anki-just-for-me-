@@ -24,6 +24,19 @@ struct ImportService {
         return ImportPlanner.plan(file: file, existingTerms: try existingTerms())
     }
 
+    func makePlan(from file: DeckFile) throws -> ImportPlan {
+        ImportPlanner.plan(file: file, existingTerms: try existingTerms())
+    }
+
+    /// Недавно добавленные слова — первыми: именно их модели важнее всего
+    /// не повторить в новом наборе.
+    func recentTerms(limit: Int) -> [String] {
+        var descriptor = FetchDescriptor<Note>(
+            sortBy: [SortDescriptor(\.createdAt, order: .reverse)])
+        descriptor.fetchLimit = limit
+        return ((try? context.fetch(descriptor)) ?? []).map(\.term)
+    }
+
     /// Нормализованный термин → название набора, где он уже лежит.
     /// Слов в личной базе тысячи, так что читаем всё разом и сравниваем в памяти.
     private func existingTerms() throws -> [String: String] {

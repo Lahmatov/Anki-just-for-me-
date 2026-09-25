@@ -9,16 +9,22 @@ public struct ModelPricing: Equatable, Sendable {
     /// Понимает ли модель adaptive-рассуждение и параметр усилия.
     /// У Haiku их нет — запрос с ними вернёт ошибку.
     public var supportsAdaptiveThinking: Bool
+    /// Может ли API при отказе классификатора безопасности сам повторить
+    /// запрос на другой модели (`fallbacks: "default"`). Для словарных
+    /// наборов отказ почти невероятен, но ложные срабатывания бывают,
+    /// а повтор на сервере дешевле, чем ошибка на экране.
+    public var supportsServerFallback: Bool
 
     public init(
         id: String, title: String, inputPerMillion: Double, outputPerMillion: Double,
-        supportsAdaptiveThinking: Bool
+        supportsAdaptiveThinking: Bool, supportsServerFallback: Bool = false
     ) {
         self.id = id
         self.title = title
         self.inputPerMillion = inputPerMillion
         self.outputPerMillion = outputPerMillion
         self.supportsAdaptiveThinking = supportsAdaptiveThinking
+        self.supportsServerFallback = supportsServerFallback
     }
 
     public func cost(inputTokens: Int, outputTokens: Int) -> Double {
@@ -30,7 +36,8 @@ public struct ModelPricing: Equatable, Sendable {
 public enum ClaudeModel {
     public static let opus5 = ModelPricing(
         id: "claude-opus-5", title: "Opus 5 — лучший разбор",
-        inputPerMillion: 5, outputPerMillion: 25, supportsAdaptiveThinking: true)
+        inputPerMillion: 5, outputPerMillion: 25, supportsAdaptiveThinking: true,
+        supportsServerFallback: true)
     public static let sonnet5 = ModelPricing(
         id: "claude-sonnet-5", title: "Sonnet 5 — втрое дешевле",
         inputPerMillion: 2, outputPerMillion: 10, supportsAdaptiveThinking: true)
