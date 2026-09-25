@@ -19,7 +19,8 @@ public enum DeckParseError: Error, Equatable, LocalizedError {
         case .emptyDeckName:
             return "У набора пустое название."
         case .noNotes:
-            return "В наборе нет ни одного слова."
+            return "Не нашёл в файле списка слов. Он должен называться «notes» "
+                + "(подойдут и «cards», «words») и содержать хотя бы одно слово."
         case .missingField(let index, let field):
             return "В слове №\(index + 1) не заполнено поле «\(field)»."
         }
@@ -28,9 +29,11 @@ public enum DeckParseError: Error, Equatable, LocalizedError {
 
 public enum DeckParser {
     public static func parse(data: Data) throws -> DeckFile {
+        // Сначала приводим к формату: модель могла назвать поля по-своему.
+        let canonical = try DeckNormalizer.normalize(data: data)
         let file: DeckFile
         do {
-            file = try JSONDecoder().decode(DeckFile.self, from: data)
+            file = try JSONDecoder().decode(DeckFile.self, from: canonical)
         } catch let error as DecodingError {
             throw DeckParseError.notJSON(describe(error))
         } catch {
