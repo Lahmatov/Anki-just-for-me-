@@ -118,7 +118,10 @@ struct ClaudeClient {
             userMessage: RetellPrompt.userMessage(
                 subtitles: subtitles, retell: retell,
                 episodeTitle: episodeTitle, watchedUpTo: watchedUpTo),
-            maxTokens: 8_000,
+            // Рассуждение тратит тот же лимит, что и ответ: при 8 тысячах
+            // длинный разбор обрезался посреди JSON. Платится только
+            // сгенерированное, так что запас ничего не стоит.
+            maxTokens: 16_000,
             effort: .high))
 
         if let problem = Self.problem(with: completion) {
