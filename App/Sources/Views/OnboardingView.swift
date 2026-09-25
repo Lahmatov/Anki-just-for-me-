@@ -18,6 +18,8 @@ struct OnboardingView: View {
     @AppStorage(SettingsKey.reminderEnabled) private var reminderEnabled = false
     @AppStorage(SettingsKey.reminderHour) private var reminderHour = 20
     @AppStorage(SettingsKey.reminderMinute) private var reminderMinute = 0
+    @AppStorage(SettingsKey.appLanguage) private var storedLanguage: String?
+    @AppStorage(SettingsKey.englishLevel) private var storedLevel: String?
 
     let plan: OnboardingPlan
 
@@ -26,6 +28,7 @@ struct OnboardingView: View {
     @State private var starterFailed = false
     @State private var goalWords = 150
     @State private var goalReward = ""
+    @State private var showPlacementTest = false
 
     /// Считается один раз: читать файл на каждую перерисовку незачем.
     private var starterCount: Int { StarterDeck.wordCount() }
@@ -79,11 +82,108 @@ struct OnboardingView: View {
     @ViewBuilder
     private func content(for step: OnboardingStep) -> some View {
         switch step {
+        case .language: language
         case .howItWorks: howItWorks
+        case .level: level
         case .starterDeck: starterDeck
         case .voice: voice
         case .goal: goal
         case .reminder: reminder
+        }
+    }
+
+    /// Выбранный язык, а пока не выбран — системный.
+    private var currentLanguage: AppLanguage {
+        storedLanguage.flatMap(AppLanguage.init(rawValue:)) ?? AppSettings.language
+    }
+
+    @ViewBuilder
+    private var language: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Язык приложения")
+                .font(.app(.title2, weight: .semibold))
+            Text("На нём же будут переводы в карточках и разборы пересказов. "
+                 + "Поменять можно в любой момент в настройках.")
+                .font(.app(.callout))
+                .foregroundStyle(.secondary)
+
+            VStack(spacing: 8) {
+                ForEach(AppLanguage.allCases, id: \.self) { option in
+                    Button {
+                        Haptics.tap()
+                        storedLanguage = option.rawValue
+                    } label: {
+                        HStack {
+                            Text(option.nativeName)
+                                .font(.app(.body, weight: .medium))
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            if option == currentLanguage {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(Color.accentColor)
+                                    .transition(.scale.combined(with: .opacity))
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 14)
+                        .background(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .fill(option == currentLanguage
+                                      ? Color.accentColor.opacity(0.12)
+                                      : Color(.tertiarySystemFill)))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .animation(.snappy, value: currentLanguage)
+        }
+        .cardSurface()
+    }
+
+    @ViewBuilder
+    private var level: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Какой у тебя уровень")
+                .font(.app(.title2, weight: .semibold))
+            Text("От него зависит, какие слова подбирать: слишком простые "
+                 + "скучны, слишком редкие не пригодятся. Тест — три минуты, "
+                 + "слово за словом: знаешь или нет.")
+                .font(.app(.callout))
+                .foregroundStyle(.secondary)
+
+            if let chosen = storedLevel.flatMap(CEFRLevel.init(rawValue:)) {
+                Label("Уровень \(chosen.rawValue)", systemImage: "checkmark.circle")
+                    .font(.app(.headline))
+                    .foregroundStyle(.green)
+            }
+
+            Button {
+                Haptics.tap()
+                showPlacementTest = true
+            } label: {
+                Label(storedLevel == nil ? "Пройти тест" : "Пройти ещё раз",
+                      systemImage: "text.magnifyingglass")
+                    .font(.app(.headline))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 4)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+
+            Picker("Или выбрать самому", selection: Binding(
+                get: { storedLevel.flatMap(CEFRLevel.init(rawValue:)) },
+                set: { storedLevel = $0?.rawValue })
+            ) {
+                Text("Не выбран").tag(CEFRLevel?.none)
+                ForEach(CEFRLevel.allCases, id: \.self) { level in
+                    Text(level.rawValue).tag(CEFRLevel?.some(level))
+                }
+            }
+            .font(.app(.callout))
+        }
+        .cardSurface()
+        .sheet(isPresented: $showPlacementTest) {
+            PlacementTestView { storedLevel = $0.rawValue }
         }
     }
 
@@ -281,6 +381,11 @@ struct OnboardingView: View {
     private var isLastStep: Bool { index >= plan.count - 1 }
 
     private func advance() {
+        // Нажал «Дальше» на шаге языка, ничего не трогая, — согласился
+        // с системным. Запоминаем, чтобы не спрашивать снова.
+        if step == .language, storedLanguage == nil {
+            storedLanguage = currentLanguage.rawValue
+        }
         if isLastStep {
             finish(keepingGoal: true)
         } else {

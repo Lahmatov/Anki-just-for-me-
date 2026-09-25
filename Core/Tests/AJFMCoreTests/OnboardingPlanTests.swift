@@ -5,8 +5,31 @@ final class OnboardingPlanTests: XCTestCase {
 
     func testFirstLaunchShowsEverything() {
         let plan = OnboardingPlan.make(
-            hasWords: false, needsBetterVoice: true, hasGoal: false, hasReminder: false)
+            hasWords: false, needsBetterVoice: true, hasGoal: false, hasReminder: false,
+            hasChosenLanguage: false, hasLevel: false)
         XCTAssertEqual(plan.steps, OnboardingStep.allCases)
+    }
+
+    func testLanguageComesFirstUntilChosen() {
+        let plan = OnboardingPlan.make(
+            hasWords: true, needsBetterVoice: false, hasGoal: true, hasReminder: true,
+            hasChosenLanguage: false)
+        XCTAssertEqual(plan.steps, [.language, .howItWorks])
+    }
+
+    func testLevelStepComesRightAfterTheExplanation() {
+        let plan = OnboardingPlan.make(
+            hasWords: false, needsBetterVoice: false, hasGoal: true, hasReminder: true,
+            hasLevel: false)
+        XCTAssertEqual(plan.steps, [.howItWorks, .level, .starterDeck])
+    }
+
+    func testLanguageAndLevelAreSkippedOnceSet() {
+        let plan = OnboardingPlan.make(
+            hasWords: true, needsBetterVoice: false, hasGoal: true, hasReminder: true,
+            hasChosenLanguage: true, hasLevel: true)
+        XCTAssertFalse(plan.steps.contains(.language))
+        XCTAssertFalse(plan.steps.contains(.level))
     }
 
     func testHowItWorksIsAlwaysThere() {

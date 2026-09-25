@@ -2,8 +2,12 @@ import Foundation
 
 /// Шаг знакомства с приложением.
 public enum OnboardingStep: String, CaseIterable, Sendable, Identifiable {
+    /// Язык интерфейса и переводов. Первым: всё остальное читается на нём.
+    case language
     /// Как вообще устроен главный контур.
     case howItWorks
+    /// Короткий тест словаря — от уровня зависит, какие слова подбирать.
+    case level
     /// Положить в базу стартовый набор, чтобы не встречать пустым экраном.
     case starterDeck
     /// Проверить голос и подсказать, где скачать получше.
@@ -17,7 +21,9 @@ public enum OnboardingStep: String, CaseIterable, Sendable, Identifiable {
 
     public var title: String {
         switch self {
+        case .language: return "Язык"
         case .howItWorks: return "Как это работает"
+        case .level: return "Уровень"
         case .starterDeck: return "С чего начать"
         case .voice: return "Голос"
         case .goal: return "Зачем это всё"
@@ -50,10 +56,19 @@ public struct OnboardingPlan: Equatable, Sendable, Identifiable {
         hasWords: Bool,
         needsBetterVoice: Bool,
         hasGoal: Bool,
-        hasReminder: Bool
+        hasReminder: Bool,
+        hasChosenLanguage: Bool = true,
+        hasLevel: Bool = true
     ) -> OnboardingPlan {
-        var steps: [OnboardingStep] = [.howItWorks]
+        var steps: [OnboardingStep] = []
 
+        // Язык спрашиваем, пока его не выбрали явно: системный подставлен
+        // заранее, так что шаг — одно подтверждение.
+        if !hasChosenLanguage { steps.append(.language) }
+        steps.append(.howItWorks)
+        // Уровень — до стартового набора и целей: от него зависит, какие
+        // слова предлагать.
+        if !hasLevel { steps.append(.level) }
         if !hasWords { steps.append(.starterDeck) }
         // Про голос говорим, только если система выдаёт сжатый: иначе это
         // совет починить то, что не сломано.

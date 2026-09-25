@@ -7,11 +7,15 @@ import AJFMCore
 final class OnboardingPlanBuilderTests: XCTestCase {
 
     override func setUp() {
-        UserDefaults.standard.removeObject(forKey: SettingsKey.reminderEnabled)
+        for key in [SettingsKey.reminderEnabled, SettingsKey.appLanguage, SettingsKey.englishLevel] {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
 
     override func tearDown() {
-        UserDefaults.standard.removeObject(forKey: SettingsKey.reminderEnabled)
+        for key in [SettingsKey.reminderEnabled, SettingsKey.appLanguage, SettingsKey.englishLevel] {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
 
     func testEmptyAppGetsStarterDeckStep() throws {
@@ -79,5 +83,20 @@ final class OnboardingPlanBuilderTests: XCTestCase {
     func testPlanIsNeverEmpty() throws {
         let context = try TestDB.makeContext()
         XCTAssertFalse(OnboardingPlanBuilder.make(context: context).isEmpty)
+    }
+
+    func testFreshInstallAsksLanguageAndLevel() throws {
+        let plan = OnboardingPlanBuilder.make(context: try TestDB.makeContext())
+        XCTAssertEqual(plan.steps.first, .language)
+        XCTAssertTrue(plan.steps.contains(.level))
+    }
+
+    func testChosenLanguageAndLevelAreNotAskedAgain() throws {
+        UserDefaults.standard.set(AppLanguage.portuguese.rawValue, forKey: SettingsKey.appLanguage)
+        UserDefaults.standard.set(CEFRLevel.b1.rawValue, forKey: SettingsKey.englishLevel)
+
+        let plan = OnboardingPlanBuilder.make(context: try TestDB.makeContext())
+        XCTAssertFalse(plan.steps.contains(.language))
+        XCTAssertFalse(plan.steps.contains(.level))
     }
 }

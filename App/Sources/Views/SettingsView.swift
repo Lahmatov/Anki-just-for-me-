@@ -15,6 +15,8 @@ struct SettingsView: View {
 
     @AppStorage(SettingsKey.autoSpeak) private var autoSpeak = true
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.manrope.rawValue
+    @AppStorage(SettingsKey.englishLevel) private var storedLevel: String?
+    @State private var showPlacementTest = false
     @AppStorage(SettingsKey.claudeModel) private var claudeModel = ClaudeModel.opus5.id
     @AppStorage(SettingsKey.monthlyBudget) private var monthlyBudget = 10.0
     @State private var apiKey = ""
@@ -30,6 +32,7 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                levelSection
                 appearanceSection
 
                 Section {
@@ -165,6 +168,29 @@ struct SettingsView: View {
             .onChange(of: reminderEnabled) { _, enabled in
                 Task { await applyReminder(enabled: enabled) }
             }
+        }
+    }
+
+    private var levelSection: some View {
+        Section {
+            Picker("Уровень английского", selection: Binding(
+                get: { storedLevel.flatMap(CEFRLevel.init(rawValue:)) },
+                set: { storedLevel = $0?.rawValue })
+            ) {
+                Text("Не выбран").tag(CEFRLevel?.none)
+                ForEach(CEFRLevel.allCases, id: \.self) { level in
+                    Text(level.rawValue).tag(CEFRLevel?.some(level))
+                }
+            }
+            Button("Пройти тест словаря", systemImage: "text.magnifyingglass") {
+                showPlacementTest = true
+            }
+        } footer: {
+            Text("По уровню подбираются слова в наборах от Claude — на ступень выше, "
+                 + "чтобы не было ни скучно, ни бесполезно редко.")
+        }
+        .sheet(isPresented: $showPlacementTest) {
+            PlacementTestView { storedLevel = $0.rawValue }
         }
     }
 

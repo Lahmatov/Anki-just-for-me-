@@ -13,6 +13,8 @@ enum OnboardingPlanBuilder {
             hasWords: !notes.isEmpty,
             needsBetterVoice: SpeechService.shared.shouldSuggestBetterVoice,
             hasGoal: ProgressService(context: context).activeContract != nil,
-            hasReminder: defaults.bool(forKey: SettingsKey.reminderEnabled))
+            hasReminder: defaults.bool(forKey: SettingsKey.reminderEnabled),
+            hasChosenLanguage: defaults.string(forKey: SettingsKey.appLanguage) != nil,
+            hasLevel: AppSettings.englishLevel != nil)
     }
 }
