@@ -16,6 +16,8 @@ enum SettingsKey {
     static let perfectSessions = "perfectSessions"
     static let weeklyTarget = "weeklyTarget"
     static let lastBackupDate = "lastBackupDate"
+    static let lastCloudBackupDate = "lastCloudBackupDate"
+    static let deviceID = "deviceID"
     static let leechThreshold = "leechThreshold"
     static let onboardingDone = "onboardingDone"
     static let lastLaunchAnimation = "lastLaunchAnimation"

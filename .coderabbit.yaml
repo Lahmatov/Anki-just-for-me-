@@ -1,0 +1,108 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# Настройки ИИ-ревью CodeRabbit. Собраны из примеров awesome-coderabbit
+# (starter, security, testing, quality) и переписаны под этот проект:
+# Swift, SwiftUI, SwiftData, логика в Core/, правила из CLAUDE.md.
+language: "ru-RU"
+tone_instructions: >-
+  Коротко и по делу. Проект — личное iOS-приложение одного человека;
+  замечай ошибки, риски и нарушения правил проекта, а не вкусовщину.
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  in_progress_fortune: false
+  collapse_walkthrough: true
+  auto_review:
+    enabled: true
+    drafts: false
+
+  path_instructions:
+    - path: "Core/Sources/**/*.swift"
+      instructions: |
+        Ядро без Apple-фреймворков (только Foundation), тестируется `swift test`.
+        - Любая новая логика — с юнит-тестами в Core/Tests в том же PR:
+          алгоритмы повторений, разбор форматов (включая битый ввод),
+          формулы прогресса и наград.
+        - Публичные структуры, которые создаются из приложения, обязаны иметь `public init`.
+        - Строки для экрана — только через `tr(ru, pt, en)`; счётные — через `Counted`/`trCount`.
+        - Запросы к Neon — только с параметрами `$1…`; значения не вклеиваются в SQL.
+    - path: "App/Sources/**/*.swift"
+      instructions: |
+        Приложение: SwiftUI + SwiftData, iOS 26.
+        - Логика, которую можно вынести в Core, должна жить там.
+        - Секреты (ключ Claude, строка подключения Neon) — только в Keychain,
+          никогда в UserDefaults, журнале, логах или репозитории.
+        - Журнал (`Log.*`) не должен содержать секретов и персональных данных.
+        - Строки для экрана — через `tr(...)`; русский текст вне `tr` запрещён
+          (кроме журнала).
+        - Оформление — пиксельный ретро-стиль: `cardSurface`, `pixelFrame`,
+          `.buttonStyle(.retro)`, `RetroProgressBar`, шрифт через `Font.app`.
+    - path: "App/Tests/**/*.swift"
+      instructions: |
+        Тесты базы — на `ModelConfiguration(isStoredInMemoryOnly: true)`.
+        Тест, меняющий `Loc.language` или UserDefaults, обязан вернуть их обратно.
+    - path: "Core/Tests/**/*.swift"
+      instructions: |
+        Один тест — одно утверждение о поведении. Обязательны негативные случаи:
+        битый JSON, пустые поля, дубли, деление на ноль. Алгоритмы повторений
+        сверяются с эталонными векторами py-fsrs.
+    - path: "project.yml"
+      instructions: |
+        Bundle ID `com.lahmatov.ajfm` менять нельзя: на бесплатном аккаунте Apple
+        лимит новых App ID.
+    - path: "docs/**/*.md"
+      instructions: |
+        Решения, влияющие на архитектуру, должны попадать в docs/decisions.md.
+
+  finishing_touches:
+    docstrings:
+      enabled: false
+    unit_tests:
+      enabled: false
+
+  pre_merge_checks:
+    docstrings:
+      mode: "off"
+    title:
+      mode: "off"
+    description:
+      mode: "off"
+    issue_assessment:
+      mode: "off"
+    custom_checks:
+      - name: "Тесты для новой логики"
+        mode: "warning"
+        instructions: >-
+          Правило проекта (CLAUDE.md): любая новая логика приезжает с юнит-тестами
+          в том же PR. Отметь новые или изменённые функции в Core/Sources и
+          сервисах App/Sources/Services без соответствующих тестов, исправления
+          ошибок без регрессионного теста и новые пути ошибок без теста на них.
+          Не отмечай вёрстку SwiftUI и обёртки над системными контролами.
+      - name: "Секреты только в Keychain"
+        mode: "error"
+        instructions: >-
+          Провал, если ключ API, строка подключения к базе, пароль или токен
+          попадает в код, UserDefaults/@AppStorage, журнал (`Log.*`, `print`),
+          файл бэкапа или репозиторий. Разрешено: Keychain.set/Keychain.get.
+      - name: "Параметризованные SQL-запросы"
+        mode: "error"
+        instructions: >-
+          Для всех новых или изменённых `NeonQuery`: провал, если значение из
+          данных пользователя или базы вклеено в текст SQL интерполяцией или
+          конкатенацией. Значения — только параметрами `$1, $2…`. Имена таблиц
+          из констант кода допустимы.
+      - name: "Переводы на три языка"
+        mode: "warning"
+        instructions: >-
+          Строки, видимые пользователю, должны идти через `tr(ru, pt, en)` со
+          всеми тремя переводами по смыслу (португальский — европейский).
+          Отметь пустые или скопированные без перевода аргументы и русский
+          текст вне `tr` вне журнала.
+
+knowledge_base:
+  issues:
+    scope: local
+  pull_requests:
+    scope: local

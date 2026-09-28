@@ -79,6 +79,8 @@ struct RootView: View {
             Log.info(.app, "Приложение запущено")
             BackupService(context: context).backupIfNeeded()
             SnapshotService.recordIfNeeded(context: context)
+            // Облако — последним: сеть может думать долго, а остальное локально.
+            await CloudBackupService(context: context).uploadIfNeeded()
         }
         .fileImporter(
             isPresented: $showFileImporter,

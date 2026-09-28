@@ -45,4 +45,6 @@ enum Keychain {
     }
 
     static let claudeAPIKey = "claude-api-key"
+    /// Строка подключения Neon — в ней пароль от базы.
+    static let neonConnection = "neon-connection-string"
 }

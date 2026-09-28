@@ -38,6 +38,7 @@ struct SettingsView: View {
                 loadSection
                 speechSection
                 claudeSection
+                cloudSection
                 reminderSection
                 aboutSection
             }
@@ -272,6 +273,30 @@ struct SettingsView: View {
                     "Decks on request and retelling reviews. The key lives in the Keychain "
                         + "and goes nowhere but Anthropic. The limit isn't about saving — "
                         + "it's so a bug can't quietly eat the budget."))
+        }
+    }
+
+    private var cloudSection: some View {
+        Section {
+            NavigationLink {
+                CloudBackupView()
+            } label: {
+                LabeledContent {
+                    Text(CloudBackupService.isConfigured
+                         ? tr("подключено", "ligado", "connected")
+                         : tr("не подключено", "desligado", "not connected"))
+                } label: {
+                    Label(tr("Облачный бэкап", "Cópia na nuvem", "Cloud backup"),
+                          systemImage: "icloud")
+                }
+            }
+        } footer: {
+            Text(tr("Снимок базы раз в сутки уходит в Neon — бесплатный облачный Postgres. "
+                        + "С него можно восстановиться на новом телефоне.",
+                    "Uma vez por dia, uma cópia da base vai para o Neon — Postgres na nuvem, "
+                        + "grátis. Dá para restaurar num telemóvel novo.",
+                    "Once a day a snapshot goes to Neon — free cloud Postgres. "
+                        + "You can restore from it on a new phone."))
         }
     }
 

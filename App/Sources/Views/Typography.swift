@@ -4,10 +4,12 @@ import AJFMCore
 
 /// Шрифт интерфейса — на выбор в настройках.
 ///
-/// По умолчанию — пиксельный Pixelify Sans: он держит ретро-стиль
-/// оформления (см. docs/design.md) и при этом читается в мелком кегле,
-/// с кириллицей и всеми португальскими диакритиками. Остальные варианты —
-/// для тех, кому пиксели надоедят: Manrope и системные.
+/// По умолчанию — «ретро»: пиксельный Pixelify Sans в заголовках, кнопках
+/// и словах на карточках, а весь остальной текст — Rubik. Пиксельный шрифт
+/// хорош крупно, но абзац пояснения им читать тяжело, поэтому мелкий текст
+/// набран обычным гротеском с мягкими формами, который не спорит с пикселями.
+/// У обоих есть кириллица и все португальские диакритики. Остальные
+/// варианты — для тех, кому пиксели надоедят: Manrope и системные.
 enum AppFont: String, CaseIterable, Identifiable {
     case pixel
     case manrope
@@ -24,7 +26,7 @@ enum AppFont: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .pixel: return tr("Пиксельный", "Pixel", "Pixel")
+        case .pixel: return tr("Ретро", "Retro", "Retro")
         case .manrope: return "Manrope"
         case .system: return tr("Системный", "Do sistema", "System")
         case .rounded: return tr("Скруглённый", "Arredondado", "Rounded")
@@ -55,12 +57,21 @@ enum AppFont: String, CaseIterable, Identifiable {
         style == .headline ? .semibold : .regular
     }
 
-    /// Имя начертания в бандле. У Pixelify Sans нет ExtraBold — тяжёлые
-    /// веса сводятся к Bold.
-    func customName(_ weight: Font.Weight) -> String? {
+    /// Стили, которые в ретро-теме набираются пиксельным шрифтом: крупные
+    /// и короткие. Всё мельче `headline` — читаемым Rubik.
+    static func isPixelStyle(_ style: Font.TextStyle) -> Bool {
+        switch style {
+        case .largeTitle, .title, .title2, .title3, .headline: return true
+        default: return false
+        }
+    }
+
+    /// Имя начертания в бандле. У Pixelify Sans и Rubik в бандле нет
+    /// ExtraBold — тяжёлые веса сводятся к Bold.
+    func customName(_ weight: Font.Weight, style: Font.TextStyle = .headline) -> String? {
         let family: String
         switch self {
-        case .pixel: family = "PixelifySans"
+        case .pixel: family = Self.isPixelStyle(style) ? "PixelifySans" : "Rubik"
         case .manrope: family = "Manrope"
         case .system, .rounded, .serif: return nil
         }
@@ -74,8 +85,10 @@ enum AppFont: String, CaseIterable, Identifiable {
     }
 
     /// Пиксельный шрифт при той же высоте кажется мельче гротеска —
-    /// чуть крупнее, чтобы мелкие подписи читались.
-    private var scale: CGFloat { self == .pixel ? 1.08 : 1 }
+    /// заголовки чуть крупнее.
+    private func scale(_ style: Font.TextStyle) -> CGFloat {
+        self == .pixel && Self.isPixelStyle(style) ? 1.08 : 1
+    }
 
     private var design: Font.Design {
         switch self {
@@ -86,8 +99,8 @@ enum AppFont: String, CaseIterable, Identifiable {
     }
 
     func font(_ style: Font.TextStyle, weight: Font.Weight?) -> Font {
-        if let name = customName(weight ?? Self.defaultWeight(style)) {
-            return .custom(name, size: Self.baseSize(style) * scale, relativeTo: style)
+        if let name = customName(weight ?? Self.defaultWeight(style), style: style) {
+            return .custom(name, size: Self.baseSize(style) * scale(style), relativeTo: style)
         }
         return .system(style, design: design, weight: weight)
     }
@@ -114,7 +127,7 @@ enum AppFont: String, CaseIterable, Identifiable {
         switch self {
         case .pixel, .manrope:
             let name = customName(weight == .bold ? .bold : .semibold) ?? ""
-            base = UIFont(name: name, size: size * scale)
+            base = UIFont(name: name, size: size * scale(.headline))
                 ?? .systemFont(ofSize: size, weight: weight)
         case .system, .rounded, .serif:
             let system = UIFont.systemFont(ofSize: size, weight: weight)

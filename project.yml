@@ -79,6 +79,10 @@ targets:
           - PixelifySans-SemiBold.ttf
           - PixelifySans-Bold.ttf
           - PressStart2P-Regular.ttf
+          - Rubik-Regular.ttf
+          - Rubik-Medium.ttf
+          - Rubik-SemiBold.ttf
+          - Rubik-Bold.ttf
         # Благодаря этому приложение появляется в шторке «Поделиться» для .json —
         # так набор долетает из Файлов, iCloud Drive или мессенджера.
         LSSupportsOpeningDocumentsInPlace: true
