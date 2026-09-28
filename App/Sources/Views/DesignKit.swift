@@ -125,6 +125,12 @@ struct ChunkyButtonStyle: ButtonStyle {
 
     @Environment(\.isEnabled) private var isEnabled
 
+    /// Явный инициализатор: из-за приватного `isEnabled` поэлементный
+    /// был бы недоступен за пределами файла.
+    init(kind: Kind = .primary) {
+        self.kind = kind
+    }
+
     private var fill: Color {
         switch kind {
         case .primary: return Theme.primary

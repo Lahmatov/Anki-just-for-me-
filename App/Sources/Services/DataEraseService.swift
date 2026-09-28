@@ -57,13 +57,15 @@ struct DataEraseService {
         for file in files { try? fileManager.removeItem(at: file) }
     }
 
-    /// Всё локальное разом. Журнал событий пишет итог последним — и тоже
-    /// очищается при следующем запуске вместе с настройками.
+    /// Всё локальное разом. Журнал очищается, и в нём остаётся одна запись —
+    /// о том, что данные удалены.
     func eraseEverythingLocal() throws {
         try eraseDatabase()
         Self.eraseSecrets()
         Self.eraseLocalBackups()
         Self.eraseSettings()
+        // Журнал на экране хранит названия наборов и слова из ошибок.
+        EventLog.shared.clear()
         Log.info(.app, "Все данные удалены")
     }
 }

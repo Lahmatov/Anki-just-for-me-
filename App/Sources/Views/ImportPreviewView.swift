@@ -31,7 +31,7 @@ struct ImportPreviewView: View {
     var body: some View {
         NavigationStack {
             List {
-                if let cover = plan.coverURL.flatMap(URL.init(string:)) {
+                if let cover = plan.coverURL.flatMap({ URL(string: $0) }) {
                     Section {
                         HStack(spacing: 14) {
                             CoverImage(url: cover, width: 64)

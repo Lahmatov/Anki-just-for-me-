@@ -378,20 +378,21 @@ struct SessionSummaryView: View {
     @State private var shownAccuracy = 0.0
 
     var body: some View {
-        VStack(spacing: 28) {
+        VStack(spacing: 20) {
             Spacer()
 
             if stats.answered > 0 {
+                MascotView(mood: stats.accuracy >= 0.7 ? .cheer : .hello, size: 120)
                 accuracyRing
                 Text(tr("Сессия закончена", "Sessão terminada", "Session complete"))
                     .font(.app(.title2, weight: .bold))
                 HStack(spacing: 10) {
-                    tile(tr("Верно", "Certas", "Correct"), stats.correct, .green)
-                    tile(tr("Опечатки", "Gralhas", "Typos"), stats.typos, .orange)
-                    tile(tr("Мимо", "Erradas", "Wrong"), stats.wrong, .red)
+                    tile(tr("Верно", "Certas", "Correct"), stats.correct, Theme.green)
+                    tile(tr("Опечатки", "Gralhas", "Typos"), stats.typos, Theme.orange)
+                    tile(tr("Мимо", "Erradas", "Wrong"), stats.wrong, Theme.red)
                 }
             } else {
-                IconBadge(systemName: "checkmark", color: .green, size: 72)
+                MascotView(mood: .sleepy, size: 160)
                 VStack(spacing: 8) {
                     Text(tr("На сегодня всё", "Por hoje é tudo", "All done for today"))
                         .font(.app(.title2, weight: .bold))

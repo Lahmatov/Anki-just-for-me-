@@ -24,14 +24,19 @@ struct DifficultCardsView: View {
     var body: some View {
         List {
             if difficult.isEmpty {
-                ContentUnavailableView(
-                    tr("Проблемных нет", "Sem problemas", "No trouble"),
-                    systemImage: "checkmark.circle",
-                    description: Text(
-                        tr("Ни одна карточка не провалилась ", "Nenhum cartão falhou ",
-                           "No card has failed ")
-                        + Counted.times(threshold) + ". "
-                        + tr("Это хорошая новость.", "É uma boa notícia.", "That's good news.")))
+                ContentUnavailableView {
+                    VStack(spacing: 8) {
+                        MascotView(mood: .cheer, size: 130)
+                        Text(tr("Проблемных нет", "Sem problemas", "No trouble"))
+                            .font(.app(.title2))
+                            .foregroundStyle(Theme.ink)
+                    }
+                } description: {
+                    Text(tr("Ни одна карточка не провалилась ", "Nenhum cartão falhou ",
+                            "No card has failed ")
+                         + Counted.times(threshold) + ". "
+                         + tr("Это хорошая новость.", "É uma boa notícia.", "That's good news."))
+                }
             } else {
                 Section {
                     Stepper(tr("Порог: ", "Limite: ", "Threshold: ")

@@ -28,8 +28,12 @@ struct FolderContentsView: View {
         List {
             if childFolders.isEmpty && decks.isEmpty {
                 ContentUnavailableView {
-                    Label(tr("Пока пусто", "Ainda vazio", "Nothing here yet"),
-                          systemImage: "rectangle.stack")
+                    VStack(spacing: 8) {
+                        MascotView(mood: .cards, size: 130)
+                        Text(tr("Пока пусто", "Ainda vazio", "Nothing here yet"))
+                            .font(.app(.title2))
+                            .foregroundStyle(Theme.ink)
+                    }
                 } description: {
                     Text(folder == nil
                          ? tr("Напиши, какую серию смотришь, — Claude подберёт слова. "
@@ -107,7 +111,7 @@ struct DeckRow: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            if let cover = deck.coverURL.flatMap(URL.init(string:)) {
+            if let cover = deck.coverURL.flatMap({ URL(string: $0) }) {
                 CoverImage(url: cover, width: 34)
             } else {
                 IconBadge(systemName: "rectangle.stack.fill")
