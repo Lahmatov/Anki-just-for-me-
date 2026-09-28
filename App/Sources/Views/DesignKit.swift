@@ -1,10 +1,11 @@
 import SwiftUI
 import UIKit
 
-/// Общие примитивы оформления — пиксельный ретро-стиль в духе RetroUI
-/// (github.com/Dksie09/RetroUI): толстые чёрные рамки со ступенчатыми
-/// углами, жёсткие тени без размытия, кнопки, которые «вдавливаются»,
-/// кремовый фон и фиолетовый акцент. Подробности — docs/design.md.
+/// Общие примитивы оформления — игровой стиль обучающих приложений
+/// (Duolingo, Busuu, Speak): светлый фон, белые карточки с серой рамкой
+/// и «губой» снизу, толстые скруглённые кнопки, которые вдавливаются при
+/// нажатии, крупный скруглённый шрифт Nunito и маскот — лось Мончик.
+/// Подробности — docs/design.md.
 ///
 /// Правила, которым подчиняется всё остальное:
 /// 1. Цвет означает смысл (верно, ошибка, зрелость), а не украшает.
@@ -13,13 +14,14 @@ import UIKit
 enum Design {
     static let cardPadding: CGFloat = 18
     static let stackSpacing: CGFloat = 18
+    static let cornerRadius: CGFloat = 18
 
     /// Цвет состояния карточки — один и тот же во всех экранах.
     static func color(for state: LearningStateColor) -> Color {
         switch state {
-        case .new: return .blue
-        case .learning: return .orange
-        case .review: return .green
+        case .new: return Theme.blue
+        case .learning: return Theme.orange
+        case .review: return Theme.green
         case .mature: return .mint
         }
     }
@@ -27,91 +29,75 @@ enum Design {
     enum LearningStateColor { case new, learning, review, mature }
 }
 
-/// Цвета ретро-темы. Живут в каталоге ассетов: у каждого светлый и тёмный
-/// вариант, контраст проверен расчётом (docs/design.md).
-enum Retro {
-    static let background = Color("RetroBackground")
-    static let surface = Color("RetroSurface")
-    static let ink = Color("RetroInk")
-    static let muted = Color("RetroMuted")
-    static let shadow = Color("RetroShadow")
-    static let cardShadow = Color("RetroCardShadow")
-    static let primary = Color("RetroPrimary")
-    static let onPrimary = Color("RetroOnPrimary")
-    static let secondary = Color("RetroSecondary")
+/// Цвета темы. Основные живут в каталоге ассетов со светлым и тёмным
+/// вариантом, контраст проверяет tools/make_theme.py. Яркие акценты
+/// одинаковы в обеих темах — на них лежит белый или чёрный текст крупно.
+enum Theme {
+    static let background = Color("ThemeBackground")
+    static let surface = Color("ThemeSurface")
+    static let border = Color("ThemeBorder")
+    static let ink = Color("ThemeInk")
+    static let muted = Color("ThemeMuted")
+    static let primary = Color("ThemePrimary")
+    static let primaryLip = Color("ThemePrimaryLip")
+    static let onPrimary = Color("ThemeOnPrimary")
+    static let tint = Color("ThemeTint")
 
-    /// Размер «пикселя»: толщина рамки и ступенька угла.
-    static let pixel: CGFloat = 3
-    /// Сдвиг жёсткой тени.
-    static let shadowOffset: CGFloat = 4
+    /// Сияние, озёра, закат над Мончетундрой и лосиная шерсть.
+    static let green = Color(red: 0.16, green: 0.72, blue: 0.47)
+    static let blue = Color(red: 0.11, green: 0.62, blue: 0.93)
+    static let orange = Color(red: 1.00, green: 0.59, blue: 0.00)
+    static let gold = Color(red: 1.00, green: 0.78, blue: 0.00)
+    static let red = Color(red: 0.93, green: 0.30, blue: 0.30)
+    static let purple = Color(red: 0.66, green: 0.45, blue: 0.95)
+    static let moose = Color(red: 0.55, green: 0.35, blue: 0.24)
+
+    /// Толщина рамки и высота «губы» под карточкой или кнопкой.
+    static let stroke: CGFloat = 2
+    static let lip: CGFloat = 4
 }
 
-/// Прямоугольник со ступенчатыми углами — как рамка в пиксельной графике.
-struct PixelRect: Shape {
-    var step: CGFloat = Retro.pixel
-
-    func path(in rect: CGRect) -> Path {
-        let s = min(step, rect.width / 2, rect.height / 2)
-        let minX = rect.minX, minY = rect.minY, maxX = rect.maxX, maxY = rect.maxY
-        var path = Path()
-        path.move(to: CGPoint(x: minX + s, y: minY))
-        path.addLine(to: CGPoint(x: maxX - s, y: minY))
-        path.addLine(to: CGPoint(x: maxX - s, y: minY + s))
-        path.addLine(to: CGPoint(x: maxX, y: minY + s))
-        path.addLine(to: CGPoint(x: maxX, y: maxY - s))
-        path.addLine(to: CGPoint(x: maxX - s, y: maxY - s))
-        path.addLine(to: CGPoint(x: maxX - s, y: maxY))
-        path.addLine(to: CGPoint(x: minX + s, y: maxY))
-        path.addLine(to: CGPoint(x: minX + s, y: maxY - s))
-        path.addLine(to: CGPoint(x: minX, y: maxY - s))
-        path.addLine(to: CGPoint(x: minX, y: minY + s))
-        path.addLine(to: CGPoint(x: minX + s, y: minY + s))
-        path.closeSubpath()
-        return path
-    }
-}
-
-/// Пиксельная рамка с жёсткой тенью. Рисуется заливками, а не обводкой:
-/// обводка ступенчатого контура на углах даёт «лесенку» разной толщины,
-/// а внутренняя фигура, сдвинутая на пиксель, — ровную рамку.
-struct PixelFrame: ViewModifier {
-    var fill: Color = Retro.surface
-    var border: Color = Retro.ink
-    var shadow: Color? = Retro.cardShadow
-    var pixel: CGFloat = Retro.pixel
+/// Карточка: белая заливка, серая рамка и утолщение снизу — объём
+/// без размытых теней, которые на телефоне выглядят грязно.
+struct Panel: ViewModifier {
+    var fill: Color = Theme.surface
+    var border: Color = Theme.border
+    var lip: Bool = true
+    var radius: CGFloat = Design.cornerRadius
 
     func body(content: Content) -> some View {
-        content.background {
-            ZStack {
-                if let shadow {
-                    PixelRect(step: pixel)
-                        .fill(shadow)
-                        .offset(x: Retro.shadowOffset, y: Retro.shadowOffset)
+        let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
+        content
+            .background {
+                ZStack {
+                    if lip {
+                        shape.fill(border).offset(y: Theme.lip)
+                    }
+                    shape.fill(fill)
+                    shape.strokeBorder(border, lineWidth: Theme.stroke)
                 }
-                PixelRect(step: pixel).fill(border)
-                PixelRect(step: pixel).fill(fill).padding(pixel)
             }
-        }
+            .padding(.bottom, lip ? Theme.lip : 0)
     }
 }
 
 extension View {
-    func pixelFrame(
-        fill: Color = Retro.surface, border: Color = Retro.ink,
-        shadow: Color? = Retro.cardShadow, pixel: CGFloat = Retro.pixel
+    func panel(
+        fill: Color = Theme.surface, border: Color = Theme.border,
+        lip: Bool = true, radius: CGFloat = Design.cornerRadius
     ) -> some View {
-        modifier(PixelFrame(fill: fill, border: border, shadow: shadow, pixel: pixel))
+        modifier(Panel(fill: fill, border: border, lip: lip, radius: radius))
     }
 
-    /// Фон экрана со списком или формой: кремовый вместо системного серого.
-    func retroScreen() -> some View {
+    /// Фон экрана со списком или формой: светлый вместо системного серого.
+    func themedScreen() -> some View {
         scrollContentBackground(.hidden)
-            .background(Retro.background.ignoresSafeArea())
+            .background(Theme.background.ignoresSafeArea())
     }
 }
 
-/// Поверхность карточки — пиксельная рамка с тенью. Выделенная карточка
-/// (ответ открыт) получает тень акцентного цвета.
+/// Поверхность карточки. Выделенная карточка (ответ открыт) получает
+/// рамку главного цвета.
 struct CardSurface: ViewModifier {
     var emphasized = false
 
@@ -119,10 +105,7 @@ struct CardSurface: ViewModifier {
         content
             .padding(Design.cardPadding)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .pixelFrame(shadow: emphasized ? Retro.primary : Retro.cardShadow)
-            // Тень выступает за рамку — место под неё, чтобы соседи не наезжали.
-            .padding(.trailing, Retro.shadowOffset)
-            .padding(.bottom, Retro.shadowOffset)
+            .panel(border: emphasized ? Theme.primary : Theme.border)
     }
 }
 
@@ -134,9 +117,9 @@ extension View {
 
 // MARK: - Кнопки
 
-/// Кнопка RetroUI: пиксельная рамка, жёсткая тень, при нажатии кнопка
-/// «вдавливается» на место тени. Нажатие видно без анимаций и стекла.
-struct RetroButtonStyle: ButtonStyle {
+/// Толстая кнопка: заливка и тёмная «губа» снизу. При нажатии кнопка
+/// опускается на высоту губы — нажатие видно и чувствуется без анимаций.
+struct ChunkyButtonStyle: ButtonStyle {
     enum Kind { case primary, secondary, destructive }
     var kind: Kind = .primary
 
@@ -144,78 +127,87 @@ struct RetroButtonStyle: ButtonStyle {
 
     private var fill: Color {
         switch kind {
-        case .primary: return Retro.primary
-        case .secondary: return Retro.secondary
-        case .destructive: return Color(red: 0.93, green: 0.36, blue: 0.33)
+        case .primary: return Theme.primary
+        case .secondary: return Theme.surface
+        case .destructive: return Theme.red
+        }
+    }
+
+    private var lip: Color {
+        switch kind {
+        case .primary: return Theme.primaryLip
+        case .secondary: return Theme.border
+        case .destructive: return Color(red: 0.72, green: 0.18, blue: 0.18)
         }
     }
 
     private var foreground: Color {
         switch kind {
-        case .primary: return Retro.onPrimary
-        case .secondary: return Retro.ink
-        case .destructive: return .black
+        case .primary: return Theme.onPrimary
+        case .secondary: return Theme.ink
+        case .destructive: return .white
         }
     }
 
     func makeBody(configuration: Configuration) -> some View {
         let pressed = configuration.isPressed
+        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
         return configuration.label
-            .foregroundStyle(foreground)
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
-            .frame(minHeight: 44)
+            .fontWeight(.bold)
+            .foregroundStyle(isEnabled ? foreground : Theme.muted)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 11)
+            .frame(minHeight: 46)
             .background {
                 ZStack {
                     if !pressed {
-                        PixelRect()
-                            .fill(Retro.shadow)
-                            .offset(x: Retro.shadowOffset, y: Retro.shadowOffset)
+                        shape.fill(isEnabled ? lip : Theme.border).offset(y: Theme.lip)
                     }
-                    PixelRect().fill(Retro.ink)
-                    PixelRect().fill(fill).padding(Retro.pixel)
+                    shape.fill(isEnabled ? fill : Theme.border.opacity(0.6))
+                    if kind == .secondary {
+                        shape.strokeBorder(Theme.border, lineWidth: Theme.stroke)
+                    }
                 }
             }
-            .offset(x: pressed ? Retro.shadowOffset : 0, y: pressed ? Retro.shadowOffset : 0)
-            .padding(.trailing, Retro.shadowOffset)
-            .padding(.bottom, Retro.shadowOffset)
-            .opacity(isEnabled ? 1 : 0.45)
+            .offset(y: pressed ? Theme.lip : 0)
+            .padding(.bottom, Theme.lip)
             .contentShape(Rectangle())
+            .animation(.snappy(duration: 0.08), value: pressed)
     }
 }
 
-extension ButtonStyle where Self == RetroButtonStyle {
-    static var retro: RetroButtonStyle { RetroButtonStyle(kind: .primary) }
-    static var retroSecondary: RetroButtonStyle { RetroButtonStyle(kind: .secondary) }
-    static var retroDestructive: RetroButtonStyle { RetroButtonStyle(kind: .destructive) }
+extension ButtonStyle where Self == ChunkyButtonStyle {
+    static var chunky: ChunkyButtonStyle { ChunkyButtonStyle(kind: .primary) }
+    static var chunkySecondary: ChunkyButtonStyle { ChunkyButtonStyle(kind: .secondary) }
+    static var chunkyDestructive: ChunkyButtonStyle { ChunkyButtonStyle(kind: .destructive) }
 }
 
 // MARK: - Поля ввода
 
-/// Поле ввода в пиксельной рамке, без тени: тень у кнопок означает
-/// «нажми меня», а поле нажимать не нужно.
-struct RetroTextFieldStyle: TextFieldStyle {
+/// Поле ввода в скруглённой рамке, без губы: губа означает «нажми меня»,
+/// а поле нажимать не нужно.
+struct SoftTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
-            .pixelFrame(shadow: nil)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .panel(fill: Theme.background, lip: false, radius: 14)
     }
 }
 
-extension TextFieldStyle where Self == RetroTextFieldStyle {
-    static var retro: RetroTextFieldStyle { RetroTextFieldStyle() }
+extension TextFieldStyle where Self == SoftTextFieldStyle {
+    static var soft: SoftTextFieldStyle { SoftTextFieldStyle() }
 }
 
 // MARK: - Прогресс
 
-/// Полоса прогресса из отдельных блоков, как индикатор загрузки в старых
-/// играх. Заполняется целыми блоками — плавная полоса выбивалась бы из стиля.
-struct RetroProgressBar: View {
+/// Толстая полоса прогресса со светлым бликом сверху, как в игровых
+/// обучающих приложениях: заполнение видно издалека и одним взглядом.
+struct ChunkyProgressBar: View {
     var value: Double
     var total: Double = 1
-    var tint: Color = Retro.primary
-    var height: CGFloat = 20
+    var tint: Color = Theme.primary
+    var height: CGFloat = 16
 
     private var fraction: Double {
         guard total > 0, value.isFinite else { return 0 }
@@ -224,21 +216,25 @@ struct RetroProgressBar: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let block: CGFloat = 8
-            let gap: CGFloat = 2
-            let inner = max(0, geometry.size.width - 2 * Retro.pixel - 6)
-            let capacity = Int((inner + gap) / (block + gap))
-            let filled = Int((Double(capacity) * fraction).rounded(.down))
-            HStack(spacing: gap) {
-                ForEach(0..<max(filled, 0), id: \.self) { _ in
-                    Rectangle().fill(tint).frame(width: block)
+            let width = geometry.size.width * fraction
+            ZStack(alignment: .leading) {
+                Capsule().fill(Theme.border)
+                if fraction > 0 {
+                    Capsule()
+                        .fill(tint)
+                        .frame(width: max(width, height))
+                        .overlay(alignment: .top) {
+                            Capsule()
+                                .fill(.white.opacity(0.3))
+                                .frame(height: height * 0.28)
+                                .padding(.horizontal, height * 0.45)
+                                .padding(.top, height * 0.2)
+                        }
                 }
             }
-            .padding(Retro.pixel + 3)
-            .frame(width: geometry.size.width, height: height, alignment: .leading)
         }
         .frame(height: height)
-        .pixelFrame(shadow: nil)
+        .animation(.spring(duration: 0.4), value: fraction)
         .accessibilityElement()
         .accessibilityValue("\(Int((fraction * 100).rounded()))%")
     }
@@ -246,26 +242,21 @@ struct RetroProgressBar: View {
 
 // MARK: - Значки и строки
 
-/// Значок строки: символ на цветном пиксельном квадрате.
+/// Значок строки: символ на цветном скруглённом квадрате.
 ///
 /// Голые серые значки делают списки одинаковыми; цветная плашка даёт глазу
 /// якорь и различает разделы, не добавляя текста.
 struct IconBadge: View {
     let systemName: String
-    var color: Color = Retro.primary
-    var size: CGFloat = 32
+    var color: Color = Theme.primary
+    var size: CGFloat = 34
 
     var body: some View {
         Image(systemName: systemName)
             .font(.system(size: size * 0.46, weight: .bold))
-            .foregroundStyle(.black)
+            .foregroundStyle(.white)
             .frame(width: size, height: size)
-            .background {
-                ZStack {
-                    PixelRect(step: 2).fill(Retro.ink)
-                    PixelRect(step: 2).fill(color).padding(2)
-                }
-            }
+            .background(color, in: RoundedRectangle(cornerRadius: size * 0.3, style: .continuous))
             .accessibilityHidden(true)
     }
 }
@@ -275,7 +266,7 @@ struct CardLink<Destination: View>: View {
     let title: String
     var subtitle: String?
     let systemImage: String
-    var color: Color = Retro.primary
+    var color: Color = Theme.primary
     @ViewBuilder var destination: () -> Destination
 
     var body: some View {
@@ -284,26 +275,24 @@ struct CardLink<Destination: View>: View {
                 IconBadge(systemName: systemImage, color: color)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .font(.app(.body, weight: .semibold))
-                        .foregroundStyle(Retro.ink)
+                        .font(.app(.body, weight: .bold))
+                        .foregroundStyle(Theme.ink)
                     if let subtitle {
                         Text(subtitle)
                             .font(.app(.caption))
-                            .foregroundStyle(Retro.muted)
+                            .foregroundStyle(Theme.muted)
                             .multilineTextAlignment(.leading)
                     }
                 }
                 Spacer(minLength: 0)
                 Image(systemName: "chevron.right")
                     .font(.system(size: 13, weight: .heavy))
-                    .foregroundStyle(Retro.ink)
+                    .foregroundStyle(Theme.muted)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .pixelFrame()
-            .padding(.trailing, Retro.shadowOffset)
-            .padding(.bottom, Retro.shadowOffset)
+            .panel()
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -316,8 +305,8 @@ struct CardSectionHeader: View {
 
     var body: some View {
         Text(title)
-            .font(.app(.footnote, weight: .bold))
-            .foregroundStyle(Retro.muted)
+            .font(.app(.footnote, weight: .heavy))
+            .foregroundStyle(Theme.muted)
             .textCase(.uppercase)
             .padding(.horizontal, 4)
             .padding(.top, 8)

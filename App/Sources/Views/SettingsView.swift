@@ -14,7 +14,7 @@ struct SettingsView: View {
         AppSettings.default.desiredRetention
 
     @AppStorage(SettingsKey.autoSpeak) private var autoSpeak = true
-    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.rubik.rawValue
+    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
     @AppStorage(SettingsKey.englishLevel) private var storedLevel: String?
     @State private var showPlacementTest = false
     @AppStorage(SettingsKey.claudeModel) private var claudeModel = ClaudeModel.opus5.id
@@ -43,10 +43,10 @@ struct SettingsView: View {
                 reminderSection
                 aboutSection
             }
-            .retroScreen()
+            .themedScreen()
             .navigationTitle(tr("Настройки", "Definições", "Settings"))
             .onAppear { apiKey = Keychain.get(Keychain.claudeAPIKey) ?? "" }
-            .sheet(item: $onboarding) { plan in
+            .fullScreenCover(item: $onboarding) { plan in
                 OnboardingView(plan: plan)
             }
             .onChange(of: reminderEnabled) { _, enabled in

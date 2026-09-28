@@ -41,7 +41,7 @@ struct ReviewSessionView: View {
     private func sessionBody(_ model: ReviewSessionModel) -> some View {
         VStack(spacing: 0) {
             VStack(spacing: 6) {
-                RetroProgressBar(value: model.progress)
+                ChunkyProgressBar(value: model.progress)
                 sessionCaption(model)
             }
             .padding(.horizontal)
@@ -62,7 +62,7 @@ struct ReviewSessionView: View {
                     .padding(.bottom, 8)
             }
         }
-        .background(Retro.background)
+        .background(Theme.background)
     }
 
     /// Слой управления сессией. Стекло — только здесь, над карточкой:
@@ -88,7 +88,7 @@ struct ReviewSessionView: View {
                         .font(.app(.headline))
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.retro)
+                .buttonStyle(.chunky)
                 .controlSize(.large)
             } else if model.current?.type == .pronunciation {
                 Button {
@@ -99,7 +99,7 @@ struct ReviewSessionView: View {
                         .font(.app(.headline))
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.retro)
+                .buttonStyle(.chunky)
                 .controlSize(.large)
             }
         }
@@ -158,7 +158,7 @@ struct CardPromptView: View {
                 TextField(tr("Ответ", "Resposta", "Answer"), text: Binding(
                     get: { model.typedAnswer },
                     set: { model.typedAnswer = $0 }))
-                    .textFieldStyle(.retro)
+                    .textFieldStyle(.soft)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
                     .font(.app(.title3))
@@ -260,7 +260,7 @@ struct CardPromptView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 10)
                 }
-                .buttonStyle(.retroSecondary)
+                .buttonStyle(.chunkySecondary)
                 .controlSize(.large)
             }
         }
@@ -356,9 +356,9 @@ struct GradeButtons: View {
         .controlSize(.large)
 
         if model.suggestedGrade == grade {
-            button.buttonStyle(.retro)
+            button.buttonStyle(.chunky)
         } else {
-            button.buttonStyle(.retroSecondary)
+            button.buttonStyle(.chunkySecondary)
         }
     }
 
@@ -412,12 +412,12 @@ struct SessionSummaryView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.retro)
+            .buttonStyle(.chunky)
             .controlSize(.large)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Retro.background.ignoresSafeArea())
+        .background(Theme.background.ignoresSafeArea())
         .onAppear {
             withAnimation(.easeOut(duration: 0.8).delay(0.15)) {
                 shownAccuracy = stats.accuracy
@@ -425,7 +425,7 @@ struct SessionSummaryView: View {
         }
     }
 
-    /// Точность крупной пиксельной цифрой и полосой из блоков: цифра,
+    /// Точность крупной цифрой и толстой полосой: цифра,
     /// ради которой сессию и проходят, должна читаться с первого взгляда.
     private var accuracyRing: some View {
         VStack(spacing: 14) {
@@ -434,11 +434,11 @@ struct SessionSummaryView: View {
                 .scaleEffect(1.6)
                 .padding(.vertical, 12)
                 .monospacedDigit()
-            RetroProgressBar(value: shownAccuracy, tint: ringColor)
+            ChunkyProgressBar(value: shownAccuracy, tint: ringColor)
             Text(tr("точность", "precisão", "accuracy"))
                 .font(.app(.caption, weight: .bold))
                 .textCase(.uppercase)
-                .foregroundStyle(Retro.muted)
+                .foregroundStyle(Theme.muted)
         }
         .cardSurface()
         .accessibilityElement(children: .combine)
@@ -447,7 +447,7 @@ struct SessionSummaryView: View {
     private var ringColor: Color {
         switch stats.accuracy {
         case 0.9...: return .green
-        case 0.7..<0.9: return Retro.primary
+        case 0.7..<0.9: return Theme.primary
         default: return .orange
         }
     }
@@ -464,8 +464,6 @@ struct SessionSummaryView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
-        .pixelFrame()
-        .padding(.trailing, Retro.shadowOffset)
-        .padding(.bottom, Retro.shadowOffset)
+        .panel()
     }
 }

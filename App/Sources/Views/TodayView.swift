@@ -57,7 +57,7 @@ struct TodayView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 24)
             }
-            .background(Retro.background)
+            .background(Theme.background)
             .navigationTitle(tr("Сегодня", "Hoje", "Today"))
             .navigationDestination(isPresented: $isSessionActive) {
                 ReviewSessionView(deck: nil)
@@ -113,7 +113,7 @@ struct TodayView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.retro)
+            .buttonStyle(.chunky)
             .controlSize(.large)
 
             if summary.heldBack > 0 {
@@ -145,7 +145,7 @@ struct TodayView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
-        .pixelFrame(fill: value == 0 ? Retro.secondary : color.opacity(0.2), shadow: nil)
+        .panel(fill: value == 0 ? Theme.tint : color.opacity(0.2), lip: false)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(title): \(value)")
     }
@@ -198,7 +198,7 @@ struct TodayView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.retro)
+            .buttonStyle(.chunky)
             .controlSize(.large)
 
             Button {
@@ -218,7 +218,7 @@ struct TodayView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.retroSecondary)
+            .buttonStyle(.chunkySecondary)
             .controlSize(.large)
 
             if starterFailed {
@@ -269,7 +269,7 @@ struct TodayView: View {
                     .foregroundStyle(.cyan)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
-                    .pixelFrame(fill: Color.cyan.opacity(0.15), border: .cyan, shadow: nil, pixel: 2)
+                    .panel(fill: Color.cyan.opacity(0.15), border: .cyan, lip: false)
                     .accessibilityLabel(
                         tr("Заморозок осталось: ", "Congelamentos restantes: ", "Freezes left: ")
                         + "\(streak.freezesLeft)")
@@ -320,7 +320,7 @@ struct TodayView: View {
                 let progress = RewardCalculator.progress(
                     contract: contract, currentMatureWords: matureWords)
                 VStack(alignment: .leading, spacing: 6) {
-                    RetroProgressBar(value: progress.fraction)
+                    ChunkyProgressBar(value: progress.fraction)
                         .tint(progress.isReached ? .green : .accentColor)
                     Text(tr("До «\(contract.reward)» — \(progress.done) из ",
                             "Até «\(contract.reward)» — \(progress.done) de ",

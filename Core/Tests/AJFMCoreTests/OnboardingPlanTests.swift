@@ -14,14 +14,14 @@ final class OnboardingPlanTests: XCTestCase {
         let plan = OnboardingPlan.make(
             hasWords: true, needsBetterVoice: false, hasGoal: true, hasReminder: true,
             hasChosenLanguage: false)
-        XCTAssertEqual(plan.steps, [.language, .howItWorks])
+        XCTAssertEqual(plan.steps, [.welcome, .language, .howItWorks])
     }
 
     func testLevelStepComesRightAfterTheExplanation() {
         let plan = OnboardingPlan.make(
             hasWords: false, needsBetterVoice: false, hasGoal: true, hasReminder: true,
             hasLevel: false)
-        XCTAssertEqual(plan.steps, [.howItWorks, .level, .starterDeck])
+        XCTAssertEqual(plan.steps, [.welcome, .howItWorks, .level, .starterDeck])
     }
 
     func testLanguageAndLevelAreSkippedOnceSet() {
@@ -32,12 +32,12 @@ final class OnboardingPlanTests: XCTestCase {
         XCTAssertFalse(plan.steps.contains(.level))
     }
 
-    func testHowItWorksIsAlwaysThere() {
+    func testWelcomeAndHowItWorksAreAlwaysThere() {
         // Объяснение контура нужно и тому, кто вернулся из настроек:
-        // это единственный шаг, который ничего не настраивает, а рассказывает.
+        // эти шаги ничего не настраивают, а рассказывают.
         let plan = OnboardingPlan.make(
             hasWords: true, needsBetterVoice: false, hasGoal: true, hasReminder: true)
-        XCTAssertEqual(plan.steps, [.howItWorks])
+        XCTAssertEqual(plan.steps, [.welcome, .howItWorks])
         XCTAssertFalse(plan.isEmpty)
     }
 
@@ -61,7 +61,7 @@ final class OnboardingPlanTests: XCTestCase {
     func testGoalAndReminderAreSkippedWhenSet() {
         let plan = OnboardingPlan.make(
             hasWords: false, needsBetterVoice: false, hasGoal: true, hasReminder: true)
-        XCTAssertEqual(plan.steps, [.howItWorks, .starterDeck])
+        XCTAssertEqual(plan.steps, [.welcome, .howItWorks, .starterDeck])
     }
 
     func testStepOrderIsStable() {
@@ -70,7 +70,7 @@ final class OnboardingPlanTests: XCTestCase {
         let plan = OnboardingPlan.make(
             hasWords: false, needsBetterVoice: true, hasGoal: false, hasReminder: false)
         XCTAssertEqual(
-            plan.steps, [.howItWorks, .starterDeck, .voice, .goal, .reminder])
+            plan.steps, [.welcome, .howItWorks, .starterDeck, .voice, .goal, .reminder])
     }
 
     func testEveryStepHasATitle() {
@@ -92,11 +92,43 @@ final class OnboardingPlanTests: XCTestCase {
         let short = OnboardingPlan.make(
             hasWords: true, needsBetterVoice: false, hasGoal: true, hasReminder: true)
         XCTAssertNotEqual(full.id, short.id)
-        XCTAssertEqual(short.id, OnboardingStep.howItWorks.rawValue)
+        XCTAssertEqual(short.id, "welcome-howItWorks")
     }
 
     func testFirstLaunchConstantMatchesAllCases() {
         XCTAssertEqual(OnboardingPlan.firstLaunch.steps, OnboardingStep.allCases)
         XCTAssertEqual(OnboardingPlan.firstLaunch.count, OnboardingStep.allCases.count)
+    }
+
+    func testWelcomeIsAlwaysFirst() {
+        let plan = OnboardingPlan.make(
+            hasWords: false, needsBetterVoice: true, hasGoal: false, hasReminder: false,
+            hasChosenLanguage: false, hasLevel: false)
+        XCTAssertEqual(plan.steps.first, .welcome)
+    }
+
+    // MARK: - Когда показывать
+
+    func testFreshInstallSeesTheIntro() {
+        let seen = OnboardingPlan.seenVersion(stored: 0, legacyDone: false)
+        XCTAssertEqual(seen, 0)
+        XCTAssertTrue(OnboardingPlan.shouldShow(seenVersion: seen))
+    }
+
+    func testOldCompletedIntroCountsAsVersionOneAndIsShownAgain() {
+        // Прошедший старое знакомство увидит новое один раз.
+        let seen = OnboardingPlan.seenVersion(stored: 0, legacyDone: true)
+        XCTAssertEqual(seen, 1)
+        XCTAssertTrue(OnboardingPlan.shouldShow(seenVersion: seen))
+    }
+
+    func testCurrentVersionIsNotShownAgain() {
+        let seen = OnboardingPlan.seenVersion(
+            stored: OnboardingPlan.currentVersion, legacyDone: true)
+        XCTAssertFalse(OnboardingPlan.shouldShow(seenVersion: seen))
+    }
+
+    func testStoredVersionWinsOverLegacyFlag() {
+        XCTAssertEqual(OnboardingPlan.seenVersion(stored: 5, legacyDone: false), 5)
     }
 }

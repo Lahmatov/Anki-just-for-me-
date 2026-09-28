@@ -28,7 +28,7 @@ struct StatsView: View {
             growthSection
             activitySection
         }
-        .retroScreen()
+        .themedScreen()
         .navigationTitle(tr("Статистика", "Estatísticas", "Statistics"))
         .navigationBarTitleDisplayMode(.inline)
     }

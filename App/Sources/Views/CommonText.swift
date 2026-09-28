@@ -12,6 +12,7 @@ enum CommonText {
     static var close: String { tr("Закрыть", "Fechar", "Close") }
     static var next: String { tr("Дальше", "Seguinte", "Next") }
     static var skip: String { tr("Пропустить", "Saltar", "Skip") }
+    static var back: String { tr("Назад", "Voltar", "Back") }
     static var save: String { tr("Сохранить", "Guardar", "Save") }
     static var delete: String { tr("Удалить", "Apagar", "Delete") }
     static var listen: String { tr("Прослушать", "Ouvir", "Listen") }

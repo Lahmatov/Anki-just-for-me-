@@ -87,7 +87,7 @@ struct RetellView: View {
                 historySection
             }
         }
-        .retroScreen()
+        .themedScreen()
     }
 
     // MARK: - Шаги
@@ -149,7 +149,7 @@ struct RetellView: View {
                    systemImage: "mic.circle.fill") {
                 model.startRecording()
             }
-            .buttonStyle(.retro)
+            .buttonStyle(.chunky)
         } footer: {
             Text(tr("Говори по-английски две-пять минут: о чём была серия, что случилось, "
                         + "что ты понял. Ошибки — это нормально, они и станут карточками.",
@@ -181,7 +181,7 @@ struct RetellView: View {
             Button(tr("Закончить", "Terminar", "Finish"), systemImage: "stop.circle.fill") {
                 model.stopRecording()
             }
-                .buttonStyle(.retroDestructive)
+                .buttonStyle(.chunkyDestructive)
         } header: {
             Text(tr("Идёт запись", "A gravar", "Recording"))
         }
@@ -198,7 +198,7 @@ struct RetellView: View {
             Button(tr("Разобрать", "Analisar", "Review"), systemImage: "sparkles") {
                 Task { await model.analyze() }
             }
-            .buttonStyle(.retro)
+            .buttonStyle(.chunky)
             .disabled(!model.canAnalyze)
 
             LabeledContent(
@@ -232,7 +232,7 @@ struct RetellView: View {
                 Text("\(report.understanding.coveragePercent)%")
                     .font(.app(.title3, weight: .bold))
             }
-            RetroProgressBar(value: report.understanding.coverage)
+            ChunkyProgressBar(value: report.understanding.coverage)
         } header: {
             Text(tr("Итог", "Resultado", "Result"))
         } footer: {
@@ -281,7 +281,7 @@ struct RetellView: View {
                    systemImage: "rectangle.stack.badge.plus") {
                 importResult = model.makeDeck()
             }
-            .buttonStyle(.retro)
+            .buttonStyle(.chunky)
             .disabled(model.deckCandidateCount == 0)
 
             Button(tr("Новый пересказ", "Novo reconto", "New retelling")) { model.reset() }

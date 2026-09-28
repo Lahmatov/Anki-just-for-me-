@@ -16,7 +16,7 @@ struct SpeakButton: View {
             if compact {
                 button.buttonStyle(.borderless)
             } else {
-                button.buttonStyle(.retroSecondary)
+                button.buttonStyle(.chunkySecondary)
                     .font(.app(.callout, weight: .semibold))
             }
         }

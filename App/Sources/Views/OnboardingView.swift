@@ -14,7 +14,7 @@ struct OnboardingView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    @AppStorage(SettingsKey.onboardingDone) private var onboardingDone = false
+    @AppStorage(SettingsKey.onboardingVersion) private var onboardingVersion = 0
     @AppStorage(SettingsKey.reminderEnabled) private var reminderEnabled = false
     @AppStorage(SettingsKey.reminderHour) private var reminderHour = 20
     @AppStorage(SettingsKey.reminderMinute) private var reminderMinute = 0
@@ -42,7 +42,7 @@ struct OnboardingView: View {
             VStack(spacing: 0) {
                 if plan.count > 1 {
                     VStack(alignment: .trailing, spacing: 4) {
-                        RetroProgressBar(value: Double(index + 1), total: Double(plan.count))
+                        ChunkyProgressBar(value: Double(index + 1), total: Double(plan.count))
                         Text("\(index + 1) " + tr("из", "de", "of") + " \(plan.count)")
                             .font(.app(.caption))
                             .foregroundStyle(.secondary)
@@ -54,9 +54,19 @@ struct OnboardingView: View {
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: Design.stackSpacing) {
-                        if let step { content(for: step) }
+                        if let step {
+                            if step != .welcome {
+                                MascotSays(mood: mood(for: step), text: line(for: step))
+                            }
+                            content(for: step)
+                        }
                     }
                     .padding()
+                    // Новый шаг въезжает сбоку — видно, что это движение вперёд.
+                    .id(index)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .opacity))
                 }
                 .safeAreaInset(edge: .bottom) {
                     footer
@@ -64,10 +74,19 @@ struct OnboardingView: View {
                         .padding(.bottom, 8)
                 }
             }
-            .background(Retro.background)
+            .background(Theme.background)
             .navigationTitle(step?.title ?? "")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                if index > 0 {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            withAnimation { index -= 1 }
+                        } label: {
+                            Label(CommonText.back, systemImage: "chevron.left")
+                        }
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(CommonText.skip) { finish(keepingGoal: false) }
                         .font(.app(.callout))
@@ -82,6 +101,7 @@ struct OnboardingView: View {
     @ViewBuilder
     private func content(for step: OnboardingStep) -> some View {
         switch step {
+        case .welcome: welcome
         case .language: language
         case .howItWorks: howItWorks
         case .level: level
@@ -90,6 +110,74 @@ struct OnboardingView: View {
         case .goal: goal
         case .reminder: reminder
         }
+    }
+
+    /// Настроение лося на каждом шаге — подсказка, о чём шаг, раньше текста.
+    private func mood(for step: OnboardingStep) -> MascotMood {
+        switch step {
+        case .welcome, .language, .voice: return .hello
+        case .howItWorks, .starterDeck: return .cards
+        case .level: return .thinking
+        case .goal: return .cheer
+        case .reminder: return .sleepy
+        }
+    }
+
+    private func line(for step: OnboardingStep) -> String {
+        switch step {
+        case .welcome: return ""
+        case .language:
+            return tr("На каком языке болтаем?", "Em que língua falamos?",
+                      "Which language shall we talk in?")
+        case .howItWorks:
+            return tr("Всё крутится вокруг сериалов. Смотри:", "Tudo gira à volta das séries. Vê:",
+                      "It's all about TV shows. Look:")
+        case .level:
+            return tr("Сначала пойму, что ты уже знаешь.", "Primeiro vou perceber o que já sabes.",
+                      "First, let me see what you already know.")
+        case .starterDeck:
+            return tr("Держи слова на первое время!", "Toma palavras para começar!",
+                      "Here are some words to get going!")
+        case .voice:
+            return tr("Послушай, как я говорю.", "Ouve como eu falo.", "Listen to how I sound.")
+        case .goal:
+            return tr("Учиться веселее, когда впереди приз!", "Aprender é melhor com um prémio à vista!",
+                      "Learning is more fun with a prize ahead!")
+        case .reminder:
+            return tr("Разбужу, если задремлешь.", "Acordo-te se adormeceres.",
+                      "I'll wake you if you doze off.")
+        }
+    }
+
+    /// Первый экран: знакомство с лосем.
+    private var welcome: some View {
+        VStack(spacing: 16) {
+            MascotView(mood: .hello, size: 200)
+                .frame(maxWidth: .infinity)
+            Text(tr("Привет! Я \(Mascot.name)", "Olá! Sou o \(Mascot.name)",
+                    "Hi! I'm \(Mascot.name)"))
+                .font(.app(.largeTitle))
+                .foregroundStyle(Theme.ink)
+                .multilineTextAlignment(.center)
+            Text(tr("Лось из Мончегорска — это за Полярным кругом, между озером Имандра "
+                        + "и Мончетундрой. Зимы там длинные, так что я смотрю сериалы "
+                        + "и учу по ним американский английский. Давай вместе!",
+                    "Sou um alce de Monchegorsk, para lá do Círculo Polar, entre o lago "
+                        + "Imandra e a Monchetundra. Os invernos lá são longos, por isso "
+                        + "vejo séries e aprendo inglês americano com elas. Vamos juntos!",
+                    "I'm a moose from Monchegorsk, above the Arctic Circle, between Lake "
+                        + "Imandra and the Monchetundra hills. Winters there are long, so I "
+                        + "watch TV shows and learn American English from them. Let's do it together!"))
+                .font(.app(.body))
+                .foregroundStyle(Theme.muted)
+                .multilineTextAlignment(.center)
+            Text(tr("Пара минут настройки — и начнём.", "Uns minutos de configuração e começamos.",
+                    "A couple of minutes of setup and we're off."))
+                .font(.app(.callout, weight: .bold))
+                .foregroundStyle(Theme.primary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 12)
     }
 
     /// Выбранный язык, а пока не выбран — системный.
@@ -117,23 +205,23 @@ struct OnboardingView: View {
                         Haptics.tap()
                         withAnimation(.snappy) { AppSettings.setLanguage(option) }
                     } label: {
+                        let selected = option == currentLanguage
                         HStack {
                             Text(option.nativeName)
-                                .font(.app(.body, weight: .medium))
-                                .foregroundStyle(.primary)
+                                .font(.app(.body, weight: .bold))
+                                .foregroundStyle(selected ? Theme.primary : Theme.ink)
                             Spacer()
-                            if option == currentLanguage {
-                                Image(systemName: "checkmark")
-                                    .font(.system(size: 15, weight: .heavy))
-                                    .foregroundStyle(Retro.onPrimary)
+                            if selected {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundStyle(Theme.primary)
                                     .transition(.scale.combined(with: .opacity))
                             }
                         }
                         .padding(.horizontal, 16)
                         .padding(.vertical, 14)
-                        .pixelFrame(
-                            fill: option == currentLanguage ? Retro.primary : Retro.secondary,
-                            shadow: nil)
+                        .panel(fill: selected ? Theme.tint : Theme.surface,
+                               border: selected ? Theme.primary : Theme.border)
                     }
                     .buttonStyle(.plain)
                 }
@@ -179,7 +267,7 @@ struct OnboardingView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.retroSecondary)
+            .buttonStyle(.chunkySecondary)
             .controlSize(.large)
 
             Picker(tr("Или выбрать самому", "Ou escolher eu", "Or pick it myself"),
@@ -244,9 +332,9 @@ struct OnboardingView: View {
         HStack(alignment: .top, spacing: 12) {
             Text(number)
                 .font(.app(.footnote, weight: .bold))
-                .foregroundStyle(Retro.onPrimary)
+                .foregroundStyle(Theme.onPrimary)
                 .frame(width: 26, height: 26)
-                .pixelFrame(fill: Retro.primary, shadow: nil, pixel: 2)
+                .panel(fill: Theme.primary, lip: false)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).font(.app(.headline))
                 Text(detail).font(.app(.callout)).foregroundStyle(.secondary)
@@ -299,7 +387,7 @@ struct OnboardingView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 4)
                 }
-                .buttonStyle(.retro)
+                .buttonStyle(.chunky)
                 .controlSize(.large)
 
                 if starterFailed {
@@ -378,7 +466,7 @@ struct OnboardingView: View {
 
             TextField(tr("Награда: пицца, диск с игрой…", "Recompensa: pizza, um jogo…",
                          "Reward: pizza, a new game…"), text: $goalReward)
-                .textFieldStyle(.retro)
+                .textFieldStyle(.soft)
 
             Text(tr("Можно пропустить и завести позже на вкладке «Награды».",
                     "Podes saltar e criá-lo depois no separador «Recompensas».",
@@ -439,12 +527,13 @@ struct OnboardingView: View {
             Haptics.tap()
             advance()
         } label: {
-            Text(isLastStep ? tr("Начать", "Começar", "Start") : CommonText.next)
+            Text(step == .welcome ? tr("Поехали!", "Vamos!", "Let's go!")
+                 : isLastStep ? tr("Начать", "Começar", "Start") : CommonText.next)
                 .font(.app(.headline))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)
         }
-        .buttonStyle(.retro)
+        .buttonStyle(.chunky)
         .controlSize(.large)
     }
 
@@ -468,7 +557,7 @@ struct OnboardingView: View {
     private func finish(keepingGoal: Bool) {
         if keepingGoal { applyGoal() }
         applyReminder()
-        onboardingDone = true
+        onboardingVersion = OnboardingPlan.currentVersion
         Log.info(
             .app, "Знакомство пройдено",
             detail: "шагов показано: \(index + 1) из \(plan.count)"

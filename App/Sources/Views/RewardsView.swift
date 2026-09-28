@@ -32,7 +32,7 @@ struct RewardsView: View {
                     historySection
                 }
             }
-            .retroScreen()
+            .themedScreen()
             .navigationTitle(tr("Награды", "Recompensas", "Rewards"))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -72,7 +72,7 @@ struct RewardsView: View {
                     Text("\(week.daysStudied) " + tr("из", "de", "of") + " \(week.target)")
                         .foregroundStyle(week.isReached ? .green : .secondary)
                 }
-                RetroProgressBar(value: week.fraction)
+                ChunkyProgressBar(value: week.fraction)
             }
             Stepper(tr("Цель: ", "Objetivo: ", "Goal: ") + Counted.days(weeklyTarget)
                         + tr(" в неделю", " por semana", " a week"),
@@ -101,7 +101,7 @@ struct RewardsView: View {
             Section {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(active.reward).font(.app(.headline))
-                    RetroProgressBar(value: progress.fraction)
+                    ChunkyProgressBar(value: progress.fraction)
                     HStack {
                         Text("\(progress.done) " + tr("из", "de", "of") + " "
                              + Counted.words(progress.goal))
@@ -172,7 +172,7 @@ struct RewardsView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Label(next.title, systemImage: next.symbol)
                         .foregroundStyle(.secondary)
-                    RetroProgressBar(value: next.progress(in: current))
+                    ChunkyProgressBar(value: next.progress(in: current))
                     Text(next.detail).font(.app(.caption)).foregroundStyle(.secondary)
                 }
             }
@@ -263,12 +263,12 @@ struct RewardEarnedView: View {
                     .font(.app(.headline))
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.retro)
+            .buttonStyle(.chunky)
             .controlSize(.large)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Retro.background.ignoresSafeArea())
+        .background(Theme.background.ignoresSafeArea())
     }
 }
 
@@ -314,7 +314,7 @@ struct NewContractView: View {
                                 + "to make it."))
                 }
             }
-            .retroScreen()
+            .themedScreen()
             .navigationTitle(tr("Новая цель", "Novo objetivo", "New goal"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

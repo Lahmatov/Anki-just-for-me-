@@ -26,7 +26,7 @@ struct RootView: View {
     /// перестраивает экраны, но не выкидывает из настроек на «Сегодня».
     @State private var tab: AppTab = .today
     @State private var keyboard = KeyboardObserver()
-    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.rubik.rawValue
+    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
     /// Пустая строка — язык не выбран явно, действует системный.
     @AppStorage(SettingsKey.appLanguage) private var language = ""
 
@@ -56,7 +56,7 @@ struct RootView: View {
             // Пока открыта клавиатура, панель прячется: иначе она висела бы
             // над клавиатурой и отъедала место у поля ввода.
             if !keyboard.isVisible {
-                RetroTabBar(selection: $tab)
+                AppTabBar(selection: $tab)
             }
         }
         // Смена шрифта или языка перестраивает экраны целиком: тексты берут
@@ -170,7 +170,9 @@ struct RootView: View {
         .sheet(isPresented: $showDeckRequest) {
             DeckRequestView()
         }
-        .sheet(item: $onboarding) { plan in
+        // На весь экран, а не листом: знакомство — первое, что видно
+        // в приложении, и случайный свайп вниз не должен его сбрасывать.
+        .fullScreenCover(item: $onboarding) { plan in
             OnboardingView(plan: plan)
         }
         .sheet(isPresented: $showPasteImport) {
@@ -344,14 +346,22 @@ struct RootView: View {
 }
 
 extension RootView {
-    /// Знакомство показывается один раз, а потом — только по своей воле
-    /// из настроек.
+    /// Знакомство показывается при первом запуске и ещё раз, когда выходит
+    /// новая его версия; в остальное время — только по своей воле из настроек.
     @MainActor
     func showOnboardingIfNeeded() {
-        guard !UserDefaults.standard.bool(forKey: SettingsKey.onboardingDone) else {
-            return
+        let defaults = UserDefaults.standard
+        let seen = OnboardingPlan.seenVersion(
+            stored: defaults.integer(forKey: SettingsKey.onboardingVersion),
+            legacyDone: defaults.bool(forKey: SettingsKey.onboardingDone))
+        guard OnboardingPlan.shouldShow(seenVersion: seen) else { return }
+        let plan = OnboardingPlanBuilder.make(context: context)
+        // Следующим циклом: лист, поднятый в том же проходе, где уходит
+        // заставка, SwiftUI иногда теряет — и знакомство не появлялось.
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(150))
+            onboarding = plan
         }
-        onboarding = OnboardingPlanBuilder.make(context: context)
     }
 }
 

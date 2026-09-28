@@ -30,7 +30,7 @@ struct PasteImportView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Retro.background.ignoresSafeArea())
+            .background(Theme.background.ignoresSafeArea())
             .navigationTitle(tr("Вставить набор", "Colar baralho", "Paste deck"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

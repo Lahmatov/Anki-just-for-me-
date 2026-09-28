@@ -1,7 +1,7 @@
 import SwiftUI
 import AJFMCore
 
-/// Заставка при запуске: колода раскладывается и уходит, открывая приложение.
+/// Заставка при запуске: лось Мончик выпрыгивает, машет и уходит, открывая приложение.
 ///
 /// Устроена так, чтобы ничего не задерживать. Системный экран запуска статичен
 /// и совпадает по цвету с первым кадром, поэтому стыка не видно; приложение
@@ -35,62 +35,31 @@ struct LaunchIntroView: View {
         .task { await run() }
     }
 
-    // MARK: - Колода
+    // MARK: - Лось
 
-    /// Пиксельная колода: карточки не поворачиваются, а раскладываются
-    /// ступеньками — поворот размывал бы пиксельные рамки.
     private var deck: some View {
-        VStack(spacing: 28) {
+        VStack(spacing: 18) {
             ZStack {
-                backCard(Retro.secondary)
-                    .offset(x: fanned ? -24 : 0, y: fanned ? -24 : 0)
-                backCard(Retro.primary.opacity(0.55))
-                    .offset(x: fanned ? -12 : 0, y: fanned ? -12 : 0)
-                frontCard
+                // Сияние за лосем — зелёное, как над Мончетундрой.
+                Circle()
+                    .fill(Theme.primary.opacity(0.14))
+                    .frame(width: 230, height: 230)
+                    .scaleEffect(pulse ? 1 : 0.7)
+                    .animation(.spring(duration: 0.5, bounce: 0.4), value: pulse)
+                Image(MascotMood.hello.assetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 190, height: 190)
+                    .offset(y: fanned ? 0 : 60)
             }
             // Название одно на всех языках: recap — краткий пересказ серии,
             // ровно то, вокруг чего построено приложение.
             Text("Recap")
-                .font(.display(.title2))
-                .foregroundStyle(Retro.ink)
+                .font(.display(.largeTitle))
+                .foregroundStyle(Theme.ink)
                 .opacity(glow ? 1 : 0)
         }
         .opacity(fanned ? 1 : 0)
-    }
-
-    private func backCard(_ color: Color) -> some View {
-        Color.clear
-            .frame(width: 180, height: 124)
-            .pixelFrame(fill: color, shadow: nil)
-    }
-
-    private var frontCard: some View {
-        HStack(alignment: .center, spacing: 16) {
-            VStack(alignment: .leading, spacing: 10) {
-                Rectangle().fill(Retro.ink).frame(width: 72, height: 12)
-                Rectangle().fill(Retro.primary).frame(width: 48, height: 9)
-            }
-            wave
-        }
-        .frame(width: 180, height: 124)
-        .pixelFrame(fill: Retro.surface, shadow: Retro.shadow)
-    }
-
-    /// Звуковая волна на карточке — голос и произношение, ради которых
-    /// приложение и затевалось.
-    private var wave: some View {
-        HStack(spacing: 4) {
-            ForEach(Array([0.35, 0.65, 1.0, 0.55].enumerated()), id: \.offset) { item in
-                Rectangle()
-                    .fill(Retro.primary)
-                    .frame(width: 6, height: 40 * item.element)
-                    .scaleEffect(y: pulse ? 1 : 0.45, anchor: .center)
-                    .animation(
-                        .spring(duration: 0.35, bounce: 0.5)
-                            .delay(Double(item.offset) * 0.05),
-                        value: pulse)
-            }
-        }
     }
 
     // MARK: - Ход анимации

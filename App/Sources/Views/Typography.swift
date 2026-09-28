@@ -4,34 +4,34 @@ import AJFMCore
 
 /// Шрифт интерфейса — на выбор в настройках.
 ///
-/// По умолчанию — Rubik: гротеск с мягкими формами, который легко читается
-/// и не спорит с пиксельными рамками. Пиксельные заголовки (Pixelify Sans)
-/// оказались на телефоне плохо читаемыми — они остались вариантом «Ретро».
-/// У обоих есть кириллица и все португальские диакритики. Остальные
-/// варианты — Manrope и системные.
+/// По умолчанию — Nunito: скруглённый, с открытыми формами и крупным
+/// очком, его легко читать на ходу — поэтому такие шрифты и стоят в
+/// большинстве обучающих приложений. Пиксельные шрифты ретро-темы
+/// оказались на телефоне нечитаемыми и удалены. У Nunito и Rubik есть
+/// кириллица и все португальские диакритики.
 enum AppFont: String, CaseIterable, Identifiable {
+    case nunito
     case rubik
-    case pixel
-    case manrope
     case system
     case rounded
     case serif
 
     var id: String { rawValue }
 
+    /// Сохранённые значения удалённых шрифтов (pixel, manrope) не находятся
+    /// среди вариантов и тихо превращаются в шрифт по умолчанию.
     static var current: AppFont {
         UserDefaults.standard.string(forKey: SettingsKey.fontStyle)
-            .flatMap(AppFont.init(rawValue:)) ?? .rubik
+            .flatMap(AppFont.init(rawValue:)) ?? .nunito
     }
 
     var title: String {
         switch self {
+        case .nunito: return "Nunito"
         case .rubik: return "Rubik"
-        case .pixel: return tr("Ретро: пиксельные заголовки", "Retro: títulos em pixel",
-                               "Retro: pixel headings")
-        case .manrope: return "Manrope"
         case .system: return tr("Системный", "Do sistema", "System")
-        case .rounded: return tr("Скруглённый", "Arredondado", "Rounded")
+        case .rounded: return tr("Системный скруглённый", "Arredondado do sistema",
+                                 "System rounded")
         case .serif: return tr("С засечками", "Com serifa", "Serif")
         }
     }
@@ -54,56 +54,52 @@ enum AppFont: String, CaseIterable, Identifiable {
         }
     }
 
-    /// Жирность по умолчанию — как у системных стилей.
+    /// Жирность по умолчанию. Заголовки у Nunito жирнее системных:
+    /// тонкий скруглённый шрифт в крупном кегле выглядит блёкло.
     static func defaultWeight(_ style: Font.TextStyle) -> Font.Weight {
-        style == .headline ? .semibold : .regular
-    }
-
-    /// Стили, которые в ретро-теме набираются пиксельным шрифтом: крупные
-    /// и короткие. Всё мельче `headline` — читаемым Rubik.
-    static func isPixelStyle(_ style: Font.TextStyle) -> Bool {
         switch style {
-        case .largeTitle, .title, .title2, .title3, .headline: return true
-        default: return false
+        case .largeTitle, .title: return .heavy
+        case .title2, .title3, .headline: return .bold
+        default: return .regular
         }
     }
 
-    /// Имя начертания в бандле. У Pixelify Sans и Rubik в бандле нет
-    /// ExtraBold — тяжёлые веса сводятся к Bold.
-    func customName(_ weight: Font.Weight, style: Font.TextStyle = .headline) -> String? {
-        let family: String
+    /// Имя начертания в бандле. Недостающие веса сводятся к ближайшим:
+    /// у Nunito нет Medium, у Rubik — ExtraBold и Black.
+    func customName(_ weight: Font.Weight) -> String? {
         switch self {
-        case .rubik: family = "Rubik"
-        case .pixel: family = Self.isPixelStyle(style) ? "PixelifySans" : "Rubik"
-        case .manrope: family = "Manrope"
-        case .system, .rounded, .serif: return nil
+        case .nunito:
+            switch weight {
+            case .medium, .semibold: return "Nunito-SemiBold"
+            case .bold: return "Nunito-Bold"
+            case .heavy: return "Nunito-ExtraBold"
+            case .black: return "Nunito-Black"
+            default: return "Nunito-Regular"
+            }
+        case .rubik:
+            switch weight {
+            case .medium: return "Rubik-Medium"
+            case .semibold: return "Rubik-SemiBold"
+            case .bold, .heavy, .black: return "Rubik-Bold"
+            default: return "Rubik-Regular"
+            }
+        case .system, .rounded, .serif:
+            return nil
         }
-        switch weight {
-        case .medium: return "\(family)-Medium"
-        case .semibold: return "\(family)-SemiBold"
-        case .bold: return "\(family)-Bold"
-        case .heavy, .black: return self == .manrope ? "Manrope-ExtraBold" : "\(family)-Bold"
-        default: return "\(family)-Regular"
-        }
-    }
-
-    /// Пиксельный шрифт при той же высоте кажется мельче гротеска —
-    /// заголовки чуть крупнее.
-    private func scale(_ style: Font.TextStyle) -> CGFloat {
-        self == .pixel && Self.isPixelStyle(style) ? 1.08 : 1
     }
 
     private var design: Font.Design {
         switch self {
         case .rounded: return .rounded
         case .serif: return .serif
-        case .rubik, .pixel, .manrope, .system: return .default
+        case .nunito, .rubik, .system: return .default
         }
     }
 
     func font(_ style: Font.TextStyle, weight: Font.Weight?) -> Font {
-        if let name = customName(weight ?? Self.defaultWeight(style), style: style) {
-            return .custom(name, size: Self.baseSize(style) * scale(style), relativeTo: style)
+        let weight = weight ?? Self.defaultWeight(style)
+        if let name = customName(weight) {
+            return .custom(name, size: Self.baseSize(style), relativeTo: style)
         }
         return .system(style, design: design, weight: weight)
     }
@@ -117,20 +113,20 @@ enum AppFont: String, CaseIterable, Identifiable {
         let bar = UINavigationBar.appearance()
         bar.largeTitleTextAttributes = [
             .font: uiFont(size: 32, weight: .bold, style: .largeTitle),
-            .foregroundColor: UIColor(named: "RetroInk") ?? .label,
+            .foregroundColor: UIColor(named: "ThemeInk") ?? .label,
         ]
         bar.titleTextAttributes = [
             .font: uiFont(size: 17, weight: .semibold, style: .headline),
-            .foregroundColor: UIColor(named: "RetroInk") ?? .label,
+            .foregroundColor: UIColor(named: "ThemeInk") ?? .label,
         ]
     }
 
     private func uiFont(size: CGFloat, weight: UIFont.Weight, style: UIFont.TextStyle) -> UIFont {
         let base: UIFont
         switch self {
-        case .rubik, .pixel, .manrope:
-            let name = customName(weight == .bold ? .bold : .semibold) ?? ""
-            base = UIFont(name: name, size: size * scale(.headline))
+        case .nunito, .rubik:
+            let name = customName(weight == .bold ? .heavy : .bold) ?? ""
+            base = UIFont(name: name, size: size)
                 ?? .systemFont(ofSize: size, weight: weight)
         case .system, .rounded, .serif:
             let system = UIFont.systemFont(ofSize: size, weight: weight)
@@ -151,17 +147,13 @@ extension Font {
         AppFont.current.font(style, weight: weight)
     }
 
-    /// Крупные цифры — счётчики, уровень, точность. В пиксельной теме это
-    /// Press Start 2P: цифры как на табло старой приставки.
+    /// Крупные цифры — счётчики, уровень, точность: самый тяжёлый вес,
+    /// как на табло в играх.
     static func display(_ style: Font.TextStyle) -> Font {
-        guard AppFont.current == .pixel else { return .app(style, weight: .heavy) }
-        // Press Start 2P очень широкий: при системном кегле цифры вылезают
-        // за карточку, поэтому базовый размер вдвое меньше.
-        return .custom("PressStart2P-Regular", size: AppFont.baseSize(style) * 0.62,
-                       relativeTo: style)
+        .app(style, weight: .black)
     }
 
-    /// Транскрипция всегда системным шрифтом: ни в Manrope, ни в Pixelify
+    /// Транскрипция всегда системным шрифтом: ни в Nunito, ни в Rubik
     /// нет части знаков МФА (ʊ, ɪ, ʌ, ˈ), и транскрипция собиралась бы
     /// из двух шрифтов.
     static func ipa(_ style: Font.TextStyle) -> Font {

@@ -99,7 +99,7 @@ struct MinimalPairsView: View {
                                 + "the “th” sounds, long vs short vowels, /v/ vs /w/."))
                 }
         }
-        .retroScreen()
+        .themedScreen()
         .navigationTitle(tr("Произношение", "Pronúncia", "Pronunciation"))
     }
 }

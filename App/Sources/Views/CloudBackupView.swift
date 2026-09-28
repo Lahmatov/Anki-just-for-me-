@@ -50,7 +50,7 @@ struct CloudBackupView: View {
                         } label: {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(entry.createdAt.formatted(date: .abbreviated, time: .shortened))
-                                    .foregroundStyle(Retro.ink)
+                                    .foregroundStyle(Theme.ink)
                                 Text(Counted.words(entry.noteCount) + " · " + entry.device + " · "
                                      + ByteCountFormatter.string(
                                         fromByteCount: Int64(entry.bytes), countStyle: .file))
@@ -71,7 +71,7 @@ struct CloudBackupView: View {
                 }
             }
         }
-        .retroScreen()
+        .themedScreen()
         .navigationTitle(tr("Облако Neon", "Nuvem Neon", "Neon cloud"))
         .overlay { if busy { ProgressView() } }
         .disabled(busy)

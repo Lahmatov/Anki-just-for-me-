@@ -46,7 +46,7 @@ struct FolderContentsView: View {
                                systemImage: "sparkles") {
                             showDeckRequest = true
                         }
-                        .buttonStyle(.retro)
+                        .buttonStyle(.chunky)
                     }
                 }
                 .listRowBackground(Color.clear)
@@ -88,7 +88,7 @@ struct FolderContentsView: View {
                 }
             }
         }
-        .retroScreen()
+        .themedScreen()
         .sheet(isPresented: $showDeckRequest) {
             DeckRequestView()
         }

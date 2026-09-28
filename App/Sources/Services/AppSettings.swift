@@ -20,7 +20,11 @@ enum SettingsKey {
     static let lastCloudBackupDate = "lastCloudBackupDate"
     static let deviceID = "deviceID"
     static let leechThreshold = "leechThreshold"
+    /// Устаревший флаг «знакомство пройдено» — читается только для перехода
+    /// на версии (`OnboardingPlan.seenVersion`).
     static let onboardingDone = "onboardingDone"
+    /// Какую версию знакомства человек уже видел.
+    static let onboardingVersion = "onboardingVersion"
     static let lastLaunchAnimation = "lastLaunchAnimation"
     static let reminderEnabled = "reminderEnabled"
     static let reminderHour = "reminderHour"

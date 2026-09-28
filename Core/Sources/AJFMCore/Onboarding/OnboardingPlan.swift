@@ -2,6 +2,8 @@ import Foundation
 
 /// Шаг знакомства с приложением.
 public enum OnboardingStep: String, CaseIterable, Sendable, Identifiable {
+    /// Знакомство с лосем Мончиком: кто это и зачем приложение.
+    case welcome
     /// Язык интерфейса и переводов. Первым: всё остальное читается на нём.
     case language
     /// Как вообще устроен главный контур.
@@ -21,6 +23,7 @@ public enum OnboardingStep: String, CaseIterable, Sendable, Identifiable {
 
     public var title: String {
         switch self {
+        case .welcome: return tr("Привет", "Olá", "Hi")
         case .language: return tr("Язык", "Idioma", "Language")
         case .howItWorks: return tr("Как это работает", "Como funciona", "How it works")
         case .level: return tr("Уровень", "Nível", "Level")
@@ -60,7 +63,10 @@ public struct OnboardingPlan: Equatable, Sendable, Identifiable {
         hasChosenLanguage: Bool = true,
         hasLevel: Bool = true
     ) -> OnboardingPlan {
-        var steps: [OnboardingStep] = []
+        // Приветствие всегда первое: даже вернувшемуся из настроек короткое
+        // «кто я и что тут» не мешает, а в первый запуск без него шаги
+        // настройки выглядят анкетой ни о чём.
+        var steps: [OnboardingStep] = [.welcome]
 
         // Язык спрашиваем, пока его не выбрали явно: системный подставлен
         // заранее, так что шаг — одно подтверждение.
@@ -77,6 +83,22 @@ public struct OnboardingPlan: Equatable, Sendable, Identifiable {
         if !hasReminder { steps.append(.reminder) }
 
         return OnboardingPlan(steps: steps)
+    }
+
+    /// Версия знакомства. Растёт, когда знакомство меняется настолько, что
+    /// его стоит показать заново и тем, кто прошёл прежнее: так новый дизайн
+    /// с маскотом увидят и на уже установленном приложении.
+    public static let currentVersion = 2
+
+    /// Какую версию знакомства человек уже видел. До версий хранился только
+    /// флаг «пройдено» — он означает первую версию.
+    public static func seenVersion(stored: Int, legacyDone: Bool) -> Int {
+        max(stored, legacyDone ? 1 : 0)
+    }
+
+    /// Показывать ли знакомство при запуске.
+    public static func shouldShow(seenVersion: Int) -> Bool {
+        seenVersion < currentVersion
     }
 
     /// Первый запуск: база пуста, ничего не настроено.

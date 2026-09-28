@@ -1,81 +1,79 @@
-"""Иконка приложения в пиксельном стиле: колода карточек со звуковой волной.
+#!/usr/bin/env python3
+"""Иконка приложения: лось Мончик под северным сиянием над Мончетундрой.
 
-Рисуется на сетке 32×32 и увеличивается без сглаживания — каждая клетка
-становится квадратом 32×32 пикселя, как в пиксель-арте. Палитра — та же,
-что у интерфейса (RetroUI): кремовый фон, чёрные рамки, фиолетовый акцент.
-Три варианта — светлый, тёмный и тинтованный, как требует iOS 18+.
+Лось берётся из tools/make_mascot.py, чтобы на иконке и в приложении был
+один и тот же персонаж. Три варианта — светлый, тёмный и тинтованный,
+как требует iOS 18+. Растеризует headless Chromium (он есть в окружении
+разработки), результат — PNG 1024×1024 без прозрачности.
 
-    pip install pillow
     python3 tools/make_icon.py App/Resources/Assets.xcassets/AppIcon.appiconset
 """
-import os
+import pathlib
+import subprocess
 import sys
 
-from PIL import Image
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import make_mascot as m  # noqa: E402
 
-GRID = 32
-OUT = 1024
-
-
-def hexc(h):
-    h = h.lstrip('#')
-    return (int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16), 255)
-
-
-def pixel_card(px, x0, y0, x1, y1, fill, border):
-    """Карточка со ступенчатыми углами: угловая клетка рамки пропущена."""
-    for y in range(y0, y1 + 1):
-        for x in range(x0, x1 + 1):
-            corner = (x in (x0, x1)) and (y in (y0, y1))
-            if corner:
-                continue
-            edge = x in (x0, x1) or y in (y0, y1)
-            px[x, y] = border if edge else fill
-
-
-def draw(palette):
-    img = Image.new('RGBA', (GRID, GRID), palette['bg'])
-    px = img.load()
-    # Задняя карточка с жёсткой тенью.
-    pixel_card(px, 10, 7, 27, 20, palette['shadow'], palette['shadow'])
-    pixel_card(px, 9, 6, 26, 19, palette['back'], palette['border'])
-    # Передняя карточка и её тень.
-    pixel_card(px, 6, 12, 23, 26, palette['shadow'], palette['shadow'])
-    pixel_card(px, 5, 11, 22, 25, palette['front'], palette['border'])
-    # Две строки «текста».
-    for x in range(8, 14):
-        px[x, 15] = palette['border']
-        px[x, 16] = palette['border']
-    for x in range(8, 12):
-        px[x, 19] = palette['accent']
-    # Звуковая волна: столбики разной высоты вокруг строки 18.
-    for x, half in ((15, 1), (17, 3), (19, 4), (21, 2)):
-        for y in range(18 - half, 18 + half + 1):
-            px[x, y] = palette['accent']
-    return img.resize((OUT, OUT), Image.NEAREST)
-
+SHELL = "/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell"
 
 PALETTES = {
-    'icon-light.png': dict(bg=hexc('#FEFCD0'), back=hexc('#C381B5'), front=hexc('#FFFFFF'),
-                           border=hexc('#000000'), shadow=hexc('#000000'),
-                           accent=hexc('#A2559A')),
-    'icon-dark.png': dict(bg=hexc('#16120A'), back=hexc('#C381B5'), front=hexc('#1C1C1E'),
-                          border=hexc('#FEFCD0'), shadow=hexc('#6B5A3A'),
-                          accent=hexc('#C381B5')),
-    # Тинтованный: система красит яркость, поэтому — оттенки серого на чёрном.
-    'icon-tinted.png': dict(bg=hexc('#000000'), back=hexc('#7A7A7A'), front=hexc('#303030'),
-                            border=hexc('#FFFFFF'), shadow=hexc('#1A1A1A'),
-                            accent=hexc('#D0D0D0')),
+    "icon-light.png": {"sky": ("#0E6E5C", "#0B3F52"), "hills": "#0A3342",
+                       "aurora": m.AURORA, "gray": False},
+    "icon-dark.png": {"sky": ("#08201F", "#050D14"), "hills": "#030A0E",
+                      "aurora": m.AURORA, "gray": False},
+    "icon-tinted.png": {"sky": ("#000000", "#000000"), "hills": "#101010",
+                        "aurora": ["#6A6A6A", "#555555", "#444444"], "gray": True},
 }
 
 
-def main():
-    out_dir = sys.argv[1] if len(sys.argv) > 1 else '.'
+def moose_bust() -> str:
+    """Лось без рук и эмоций-добавок: голова, рога и плечи в шарфе."""
+    return (m.antler(False) + m.antler(True) + m.ear(False) + m.ear(True)
+            + m.body(scarf_tail=False) + m.head() + m.eyes("normal")
+            + m.brows("raised") + m.mouth("smile"))
+
+
+def icon_svg(palette: dict) -> str:
+    top, bottom = palette["sky"]
+    a = palette["aurora"]
+    ribbons = "".join(
+        f'<path d="M-40 {y} C220 {y - 120} 420 {y + 90} 640 {y - 40} S960 {y - 150} 1080 {y - 60}" '
+        f'stroke="{color}" stroke-width="{w}" fill="none" stroke-linecap="round" opacity="{o}"/>'
+        for y, color, w, o in ((250, a[0], 90, 0.55), (330, a[1], 60, 0.45), (190, a[2], 44, 0.4)))
+    hills = (f'<path d="M0 760 L180 600 L300 690 L470 540 L640 700 L780 590 L1024 760 '
+             f'L1024 1024 L0 1024 Z" fill="{palette["hills"]}"/>')
+    # Лось 400×400 → 1040×1040, низом к краю иконки: бюст «вырастает» снизу.
+    bust = f'<g transform="translate(-8 96) scale(2.6)">{moose_bust()}</g>'
+    gray = ('<filter id="g"><feColorMatrix type="saturate" values="0"/></filter>'
+            if palette["gray"] else "")
+    group = '<g filter="url(#g)">' if palette["gray"] else "<g>"
+    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" '
+            'width="1024" height="1024">'
+            f'<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">'
+            f'<stop offset="0" stop-color="{top}"/><stop offset="1" stop-color="{bottom}"/>'
+            f'</linearGradient>{gray}</defs>'
+            f'<rect width="1024" height="1024" fill="url(#sky)"/>'
+            f'{ribbons}{hills}{group}{bust}</g></svg>')
+
+
+def render(svg: str, out: pathlib.Path) -> None:
+    html = out.with_suffix(".html")
+    html.write_text(f"<body style='margin:0'>{svg}</body>")
+    subprocess.run([SHELL, "--no-sandbox", "--hide-scrollbars", "--window-size=1024,1024",
+                    f"--screenshot={out}", f"file://{html}"], check=True, capture_output=True)
+    html.unlink()
+    # Иконка App Store — без альфа-канала, иначе загрузка отклоняется.
+    from PIL import Image
+    Image.open(out).convert("RGB").save(out)
+
+
+def main() -> None:
+    out_dir = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
     for name, palette in PALETTES.items():
-        # Иконке iOS не нужен альфа-канал: прозрачность там запрещена.
-        draw(palette).convert('RGB').save(os.path.join(out_dir, name))
+        render(icon_svg(palette), out_dir / name)
         print(name)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

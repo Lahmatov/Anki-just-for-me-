@@ -83,7 +83,7 @@ struct QuickAddView: View {
                     Text(tr("Куда положить", "Onde guardar", "Where to put it"))
                 }
             }
-            .retroScreen()
+            .themedScreen()
             .navigationTitle(tr("Новое слово", "Nova palavra", "New word"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
