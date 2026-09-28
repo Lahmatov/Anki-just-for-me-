@@ -54,7 +54,7 @@ final class RetellFlowModel {
             + RetellPrompt.estimateTokens(transcript)
             + RetellPrompt.estimateTokens(RetellPrompt.system)
         return ClaudeModel.pricing(for: selectedModel)
-            .cost(inputTokens: input, outputTokens: 1_500)
+            .cost(inputTokens: input, outputTokens: RetellPrompt.estimatedOutputTokens)
     }
 
     var selectedModel: String { ClaudeBudget(context: context).model.id }
@@ -123,7 +123,8 @@ final class RetellFlowModel {
         let inputEstimate = RetellPrompt.estimateTokens(subtitleText(from: track))
             + RetellPrompt.estimateTokens(transcript)
         guard UsageTracker.canAfford(
-            estimatedInputTokens: inputEstimate, estimatedOutputTokens: 1_500,
+            estimatedInputTokens: inputEstimate,
+            estimatedOutputTokens: RetellPrompt.estimatedOutputTokens,
             pricing: pricing, summary: summary) else {
             step = .failed(ClaudeClientError
                 .budgetExceeded(spent: summary.monthCost, limit: summary.limit)
@@ -142,19 +143,14 @@ final class RetellFlowModel {
 
             // Расход записываем в любом случае: запрос оплачен независимо
             // от того, удалось ли разобрать ответ.
-            context.insert(UsageEntry(record: outcome.usage))
+            let budget = ClaudeBudget(context: context)
+            budget.record(outcome.usage, purpose: "Разбор пересказа")
             lastCost = outcome.usage.cost
-            Log.info(
-                .network, String(format: "Разбор пересказа: $%.4f", outcome.usage.cost),
-                detail: "модель: \(selectedModel), "
-                    + "вход: \(outcome.usage.inputTokens) токенов, "
-                    + "выход: \(outcome.usage.outputTokens)")
 
             guard let parsed = outcome.report else {
                 Log.error(
                     .network, "Ответ модели не разобрался",
                     detail: outcome.decodeError ?? "причина неизвестна")
-                try? context.save()
                 let reason = outcome.decodeError
                     ?? tr("неизвестная причина", "motivo desconhecido", "unknown reason")
                 step = .failed(tr(
@@ -208,9 +204,7 @@ final class RetellFlowModel {
         guard let file = report.makeDeck(name: name, folder: folder) else { return nil }
 
         let importer = ImportService(context: context)
-        let plan = ImportPlanner.plan(
-            file: file,
-            existingTerms: (try? existingTerms()) ?? [:])
+        guard let plan = try? importer.makePlan(from: file) else { return nil }
         return try? importer.apply(plan)
     }
 
@@ -219,14 +213,6 @@ final class RetellFlowModel {
         return report.language.suggestedWords.count + report.language.grammar.count
     }
 
-    private func existingTerms() throws -> [String: String] {
-        var map: [String: String] = [:]
-        for note in try context.fetch(FetchDescriptor<Note>()) where map[note.normalizedTerm] == nil {
-            map[note.normalizedTerm] = note.deck?.name
-                ?? tr("без набора", "sem baralho", "no deck")
-        }
-        return map
-    }
 
     func reset() {
         recorder.reset()

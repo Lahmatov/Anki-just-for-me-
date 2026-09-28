@@ -50,11 +50,11 @@ struct PlacementTestView: View {
             Text(tr("Знаешь это слово?", "Conheces esta palavra?", "Do you know this word?"))
                 .font(.app(.largeTitle, weight: .bold))
             VStack(alignment: .leading, spacing: 12) {
-                point("hand.tap", tr("Покажу \(items.count) слов по одному. Отвечай сразу, "
-                                        + "не раздумывая.",
-                                     "Vou mostrar \(items.count) palavras, uma de cada vez. "
+                let count = Counted.words(items.count)
+                point("hand.tap", tr("Покажу \(count) по одному. Отвечай сразу, не раздумывая.",
+                                     "Vou mostrar \(count), uma de cada vez. "
                                         + "Responde logo, sem pensar muito.",
-                                     "I'll show \(items.count) words one at a time. "
+                                     "I'll show \(count) one at a time. "
                                         + "Answer right away, without overthinking."))
                 point("questionmark.diamond",
                       tr("Часть слов выдумана. Если ответишь «знаю» на выдумку, результат "

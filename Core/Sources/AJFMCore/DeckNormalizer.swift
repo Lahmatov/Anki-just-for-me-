@@ -178,7 +178,10 @@ public enum DeckNormalizer {
 
     private static func canonicalNote(_ raw: Any) -> [String: Any] {
         if let line = raw as? String { return noteFromLine(line) }
-        guard let dict = raw as? [String: Any] else { return [:] }
+        // Не объект и не строка (число, вложенный список) — пустое слово:
+        // разбор скажет «в слове №N не заполнено поле», а не невнятное
+        // «нет ключа».
+        guard let dict = raw as? [String: Any] else { return ["term": "", "translation": ""] }
 
         let keys = normalizedKeys(dict)
         var note: [String: Any] = [:]

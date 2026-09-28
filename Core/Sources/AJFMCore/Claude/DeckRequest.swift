@@ -65,7 +65,7 @@ public struct DeckRequest: Equatable, Sendable {
     /// Проверка до отправки: ошибку лучше показать бесплатно.
     public func validate() throws {
         guard !topic.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                || !(subtitles ?? "").isEmpty else {
+                || hasSubtitles else {
             throw DeckRequestError.emptyTopic
         }
         if let subtitles, subtitles.count > Self.subtitlesLimit {

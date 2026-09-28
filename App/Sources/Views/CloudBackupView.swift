@@ -141,9 +141,10 @@ struct CloudBackupView: View {
     private func connect() {
         do {
             let connection = try NeonConnection(connectionString: connectionText)
-            Keychain.set(connection.connectionString, for: Keychain.neonConnection)
-            connectionText = ""
-            perform { try await service.verify() }
+            perform {
+                try await service.connect(connection)
+                connectionText = ""
+            }
         } catch {
             self.error = error.localizedDescription
         }

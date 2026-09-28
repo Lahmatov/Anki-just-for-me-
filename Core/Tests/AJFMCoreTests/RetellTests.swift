@@ -69,6 +69,13 @@ final class RetellPromptTests: XCTestCase {
         XCTAssertFalse(message.contains("watched up to"))
     }
 
+    func testOutputEstimateCoversThinkingButStaysUnderTheCap() {
+        // Оценка идёт в проверку месячного лимита: при 1500 токенах она
+        // занижала реальную цену разбора в разы.
+        XCTAssertGreaterThanOrEqual(RetellPrompt.estimatedOutputTokens, 4_000)
+        XCTAssertLessThan(RetellPrompt.estimatedOutputTokens, 16_000)
+    }
+
     func testTokenEstimateIsInTheRightBallpark() {
         // Субтитры серии на 45 минут — около 12 тысяч токенов.
         let episode = String(repeating: "a", count: 42_000)

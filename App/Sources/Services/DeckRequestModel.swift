@@ -86,6 +86,9 @@ final class DeckRequestModel {
     /// Возвращает план импорта для обычного превью или nil при ошибке
     /// (причина — в `step`).
     func generate() async -> ImportPlan? {
+        // Кнопка гаснет только после перерисовки, а два быстрых нажатия
+        // успевают запустить две задачи — и два платных запроса.
+        guard step != .working else { return nil }
         let request = self.request
         do {
             try request.validate()

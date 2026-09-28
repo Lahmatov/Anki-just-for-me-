@@ -43,11 +43,13 @@ struct CloudBackupService {
         return NeonClient(connection: connection)
     }
 
-    /// Проверка подключения: создаёт таблицу, если её ещё нет.
-    func verify() async throws {
-        _ = try await client().run(CloudBackupSQL.createTable)
-        Log.info(.backup, "Neon подключён",
-                 detail: Self.connection.map(\.redacted) ?? "")
+    /// Подключение: проверяет базу (заодно создаёт таблицу) и только после
+    /// этого сохраняет строку. Сохранить непроверенную — значит показать
+    /// «подключено», когда каждая отправка молча падает.
+    func connect(_ connection: NeonConnection) async throws {
+        _ = try await NeonClient(connection: connection).run(CloudBackupSQL.createTable)
+        Keychain.set(connection.connectionString, for: Keychain.neonConnection)
+        Log.info(.backup, "Neon подключён", detail: connection.redacted)
     }
 
     /// Отправляет снимок, если с прошлого прошли сутки.
@@ -66,11 +68,11 @@ struct CloudBackupService {
 
     /// Снимок базы в облако: таблица, запись и чистка старых — одной транзакцией.
     func upload(now: Date = Date()) async throws {
+        // Выборка из базы — на главном потоке (так требует SwiftData),
+        // а кодирование многомегабайтного снимка — нет: иначе интерфейс
+        // подвисал бы при первом запуске за день.
         let backup = try ExportService(context: context).makeBackup()
-        let data = try BackupCoder.encode(backup)
-        guard let payload = String(data: data, encoding: .utf8) else {
-            throw NeonError.badResponse
-        }
+        let (data, payload) = try await Self.encode(backup)
         let mature = backup.decks
             .flatMap { $0.notes }
             .filter { note in note.cards.contains { $0.review.isMature } }
@@ -86,6 +88,14 @@ struct CloudBackupService {
         UserDefaults.standard.set(now, forKey: SettingsKey.lastCloudBackupDate)
         Log.info(.backup, "Бэкап отправлен в Neon",
                  detail: "слов: \(backup.noteCount), \(data.count / 1024) КБ")
+    }
+
+    nonisolated private static func encode(_ backup: BackupFile) async throws -> (Data, String) {
+        let data = try BackupCoder.encode(backup)
+        guard let payload = String(data: data, encoding: .utf8) else {
+            throw NeonError.badResponse
+        }
+        return (data, payload)
     }
 
     func list() async throws -> [CloudBackupEntry] {

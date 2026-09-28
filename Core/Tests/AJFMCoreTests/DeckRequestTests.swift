@@ -24,6 +24,13 @@ final class DeckRequestTests: XCTestCase {
         XCTAssertNoThrow(try request(topic: "", subtitles: "Hi. How you doin'?").validate())
     }
 
+    func testBlankSubtitlesWithoutTopicAreRejected() {
+        // Иначе за деньги уходил бы запрос без темы и без субтитров.
+        XCTAssertThrowsError(try request(topic: "", subtitles: " \n\n ").validate()) {
+            XCTAssertEqual($0 as? DeckRequestError, .emptyTopic)
+        }
+    }
+
     func testHugeSubtitlesAreRejectedBeforePaying() {
         let season = String(repeating: "a", count: DeckRequest.subtitlesLimit + 1)
         XCTAssertThrowsError(try request(subtitles: season).validate()) {

@@ -15,6 +15,9 @@ enum PromptTemplates {
         let wordList = words.isEmpty
             ? "<paste the words you wrote down here>"
             : words.joined(separator: ", ")
+        // Папка — на языке интерфейса, как и остальные: у русского набора
+        // она остаётся «Сериалы», и библиотека не делится на две ветки.
+        let shows = tr("Сериалы", "Séries", "Shows")
         let translation = language.translatesIntoItself
             ? "translation: a short, plain-English definition"
             : "translation: 1–3 short equivalents in \(language.promptName)"
@@ -26,7 +29,7 @@ enum PromptTemplates {
         \(wordList)
 
         Requirements:
-        - deck.name: “\(source)”, deck.folder: “Shows/\(source)”
+        - deck.name: “\(source)”, deck.folder: “\(shows)/\(source)”
         - \(translation); ipa: General American transcription
         - example: a real line from this episode, not a dictionary example
         - cloze: the same example with ___ in place of the word

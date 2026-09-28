@@ -51,7 +51,7 @@ struct RootView: View {
                         }
                 }
             }
-            tabContent(.rewards) { RewardsView() }
+            tabContent(.rewards) { RewardsView(isVisible: tab == .rewards) }
             tabContent(.speech) { SpeakingHubView() }
             tabContent(.settings) { SettingsView() }
         }
