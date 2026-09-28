@@ -50,7 +50,7 @@ targets:
     info:
       path: App/Info.plist
       properties:
-        CFBundleDisplayName: Карточки
+        CFBundleDisplayName: Recap
         # Языки, которые iOS предложит в настройках приложения. Имя под иконкой
         # и тексты запросов разрешений переводятся через InfoPlist.strings.
         CFBundleLocalizations:

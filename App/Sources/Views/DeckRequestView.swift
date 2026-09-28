@@ -15,6 +15,7 @@ struct DeckRequestView: View {
     @State private var plan: PendingImport?
     @State private var result: ImportResult?
     @State private var showSubtitlePicker = false
+    @State private var showPlacementTest = false
     @State private var apiKey = ""
     @State private var applyError: String?
     @FocusState private var topicFocused: Bool
@@ -122,6 +123,32 @@ struct DeckRequestView: View {
                         Text(level.rawValue).tag(CEFRLevel?.some(level))
                     }
                 }
+                // Без уровня слова подбираются вслепую — на средний B1–B2.
+                // Тест занимает три минуты и делает каждый следующий набор точнее.
+                if model.level == nil {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Label(tr("Без уровня подберу слова как для среднего — B1–B2. "
+                                    + "Для новичка это будет трудно, для продвинутого — скучно.",
+                                 "Sem nível, escolho palavras como para o nível médio — B1–B2. "
+                                    + "Para um principiante será difícil, para um avançado, aborrecido.",
+                                 "Without a level I'll pick words for an average B1–B2. "
+                                    + "Hard for a beginner, boring for an advanced learner."),
+                              systemImage: "exclamationmark.triangle")
+                            .font(.app(.footnote))
+                            .foregroundStyle(.orange)
+                        Button {
+                            showPlacementTest = true
+                        } label: {
+                            Label(tr("Узнать уровень — 3 минуты", "Descobrir o nível — 3 minutos",
+                                     "Find my level — 3 minutes"),
+                                  systemImage: "text.magnifyingglass")
+                                .font(.app(.callout, weight: .semibold))
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.retroSecondary)
+                    }
+                    .padding(.vertical, 4)
+                }
             } footer: {
                 Text(tr("Слова подбираются на ступень выше твоего уровня — "
                             + "уже не очевидные, но ещё часто встречающиеся.",
@@ -129,6 +156,12 @@ struct DeckRequestView: View {
                             + "mas ainda frequentes.",
                         "Words are picked one step above your level — no longer obvious, "
                             + "but still common."))
+            }
+            .sheet(isPresented: $showPlacementTest) {
+                PlacementTestView { level in
+                    UserDefaults.standard.set(level.rawValue, forKey: SettingsKey.englishLevel)
+                    model.level = level
+                }
             }
 
             if !model.hasAPIKey {

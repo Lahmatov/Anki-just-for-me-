@@ -23,6 +23,10 @@ struct RetellView: View {
         .onAppear {
             if model == nil { model = RetellFlowModel(context: context) }
         }
+        // Запись без экрана — это включённый микрофон и распознавание в фоне.
+        .onDisappear {
+            if model?.step == .recording { model?.stopRecording() }
+        }
         .fileImporter(
             isPresented: $showSubtitleImporter,
             allowedContentTypes: [.plainText, .text, .data]

@@ -206,6 +206,11 @@ public struct DeckRequest: Equatable, Sendable {
     /// нормализатором, папка и источник проставляются здесь.
     public func deckFile(fromResponse text: String) throws -> DeckFile {
         var file = try DeckParser.parse(string: text)
+        // Модель иногда присылает больше, чем просили, — лишнее отрезаем:
+        // человек выбрал размер набора сознательно.
+        if file.notes.count > clampedCount {
+            file.notes = Array(file.notes.prefix(clampedCount))
+        }
         let topic = self.topic.trimmingCharacters(in: .whitespacesAndNewlines)
         if file.deck.name == DeckNormalizer.fallbackDeckName, !topic.isEmpty {
             file.deck.name = String(topic.prefix(60))

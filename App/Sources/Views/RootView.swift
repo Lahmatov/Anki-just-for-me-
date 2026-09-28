@@ -25,7 +25,8 @@ struct RootView: View {
     /// Вкладка хранится снаружи пересоздаваемого дерева: смена шрифта
     /// перестраивает экраны, но не выкидывает из настроек на «Сегодня».
     @State private var tab: AppTab = .today
-    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.pixel.rawValue
+    @State private var keyboard = KeyboardObserver()
+    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.rubik.rawValue
     /// Пустая строка — язык не выбран явно, действует системный.
     @AppStorage(SettingsKey.appLanguage) private var language = ""
 
@@ -33,33 +34,31 @@ struct RootView: View {
         // Свои вкладки вместо системного TabView: стеклянный таб-бар iOS 26
         // не перекрасить в пиксельный стиль. Все вкладки живут одновременно —
         // так каждая помнит, куда в ней перешли, как и в системном TabView.
-        ZStack {
-            tabContent(.today) { TodayView(isVisible: tab == .today) }
-            tabContent(.decks) {
-                NavigationStack {
-                    FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
-                        .navigationTitle(AppTab.decks.title)
-                        .toolbar { toolbar }
-                        .toolbar {
-                            ToolbarItem(placement: .topBarLeading) {
-                                NavigationLink {
-                                    SearchView()
-                                } label: {
-                                    Image(systemName: "magnifyingglass")
-                                }
-                            }
-                        }
+        // Панель вкладок — под содержимым, а не поверх него: иначе нижние
+        // кнопки экранов уезжали под панель.
+        //
+        // Живёт только открытая вкладка. Когда жили все пять сразу, каждое
+        // сохранение в базе перерисовывало и скрытые — с полными выборками
+        // карточек и повторов, — и телефон грелся. Цена — при переключении
+        // вкладка открывается с начала.
+        VStack(spacing: 0) {
+            Group {
+                switch tab {
+                case .today: TodayView()
+                case .decks: decksTab
+                case .rewards: RewardsView()
+                case .speech: SpeakingHubView()
+                case .settings: SettingsView()
                 }
             }
-            tabContent(.rewards) { RewardsView(isVisible: tab == .rewards) }
-            tabContent(.speech) { SpeakingHubView() }
-            tabContent(.settings) { SettingsView() }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            // Пока открыта клавиатура, панель прячется: иначе она висела бы
+            // над клавиатурой и отъедала место у поля ввода.
+            if !keyboard.isVisible {
+                RetroTabBar(selection: $tab)
+            }
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            RetroTabBar(selection: $tab)
-        }
-        // Клавиатура не должна тащить панель вкладок вверх за собой.
-        .ignoresSafeArea(.keyboard, edges: .bottom)
         // Смена шрифта или языка перестраивает экраны целиком: тексты берут
         // и то и другое в момент отрисовки.
         .id(fontStyle + language)
@@ -223,15 +222,21 @@ struct RootView: View {
         .environment(\.locale, Locale(identifier: Loc.language.localeIdentifier))
     }
 
-    /// Вкладка остаётся в дереве, но невидимой и недоступной — ни для
-    /// касаний, ни для VoiceOver.
-    private func tabContent<Content: View>(
-        _ item: AppTab, @ViewBuilder content: () -> Content
-    ) -> some View {
-        content()
-            .opacity(tab == item ? 1 : 0)
-            .allowsHitTesting(tab == item)
-            .accessibilityHidden(tab != item)
+    private var decksTab: some View {
+        NavigationStack {
+            FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
+                .navigationTitle(AppTab.decks.title)
+                .toolbar { toolbar }
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        NavigationLink {
+                            SearchView()
+                        } label: {
+                            Image(systemName: "magnifyingglass")
+                        }
+                    }
+                }
+        }
     }
 
     @ToolbarContentBuilder

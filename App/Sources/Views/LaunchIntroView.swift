@@ -48,7 +48,9 @@ struct LaunchIntroView: View {
                     .offset(x: fanned ? -12 : 0, y: fanned ? -12 : 0)
                 frontCard
             }
-            Text(tr("Карточки", "Cartões", "Flashcards"))
+            // Название одно на всех языках: recap — краткий пересказ серии,
+            // ровно то, вокруг чего построено приложение.
+            Text("Recap")
                 .font(.display(.title2))
                 .foregroundStyle(Retro.ink)
                 .opacity(glow ? 1 : 0)

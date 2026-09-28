@@ -14,10 +14,11 @@ struct SettingsView: View {
         AppSettings.default.desiredRetention
 
     @AppStorage(SettingsKey.autoSpeak) private var autoSpeak = true
-    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.pixel.rawValue
+    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.rubik.rawValue
     @AppStorage(SettingsKey.englishLevel) private var storedLevel: String?
     @State private var showPlacementTest = false
     @AppStorage(SettingsKey.claudeModel) private var claudeModel = ClaudeModel.opus5.id
+    @AppStorage(SettingsKey.deckModel) private var deckModel = ClaudeModel.haiku45.id
     @AppStorage(SettingsKey.monthlyBudget) private var monthlyBudget = 10.0
     @State private var apiKey = ""
     @AppStorage(SettingsKey.reminderEnabled) private var reminderEnabled = false
@@ -109,7 +110,7 @@ struct SettingsView: View {
     private var appearanceSection: some View {
         Section {
             Picker(tr("Шрифт", "Tipo de letra", "Font"), selection: Binding(
-                get: { AppFont(rawValue: fontStyle) ?? .pixel },
+                get: { AppFont(rawValue: fontStyle) ?? .rubik },
                 set: { choice in
                     // Заголовки навигации — UIKit: им шрифт нужно отдать до того,
                     // как экраны перестроятся с новым выбором.
@@ -252,7 +253,14 @@ struct SettingsView: View {
                     Keychain.set(value.trimmingCharacters(in: .whitespaces),
                                  for: Keychain.claudeAPIKey)
                 }
-            Picker(tr("Модель", "Modelo", "Model"), selection: $claudeModel) {
+            Picker(tr("Наборы слов", "Baralhos", "Word decks"), selection: $deckModel) {
+                ForEach(ClaudeModel.all, id: \.id) { pricing in
+                    Text(pricing.title + " — " + ClaudeModel.summary(for: pricing))
+                        .tag(pricing.id)
+                }
+            }
+            Picker(tr("Разбор пересказов", "Análise de recontos", "Retelling reviews"),
+                   selection: $claudeModel) {
                 ForEach(ClaudeModel.all, id: \.id) { pricing in
                     Text(pricing.title + " — " + ClaudeModel.summary(for: pricing))
                         .tag(pricing.id)
@@ -264,13 +272,16 @@ struct SettingsView: View {
         } header: {
             Text("Claude")
         } footer: {
-            Text(tr("Наборы по запросу и разборы пересказов. Ключ хранится в Keychain и "
+            Text(tr("Для наборов хватает Haiku: быстро и около цента за набор. Для разбора "
+                        + "пересказов лучше Opus — там важна точность. Ключ хранится в Keychain и "
                         + "никуда, кроме Anthropic, не уходит. Лимит нужен не ради экономии, "
                         + "а чтобы ошибка в коде не съела бюджет молча.",
-                    "Baralhos a pedido e análises de recontos. A chave fica no Keychain e "
+                    "Para baralhos chega o Haiku: rápido e cerca de um cêntimo por baralho. Para "
+                        + "analisar recontos é melhor o Opus — aí a precisão conta. A chave fica no Keychain e "
                         + "só vai para a Anthropic. O limite não é para poupar — é para que "
                         + "um erro no código não gaste o orçamento às escondidas.",
-                    "Decks on request and retelling reviews. The key lives in the Keychain "
+                    "Haiku is enough for decks: fast and about a cent per deck. For retelling "
+                        + "reviews Opus is better — accuracy matters there. The key lives in the Keychain "
                         + "and goes nowhere but Anthropic. The limit isn't about saving — "
                         + "it's so a bug can't quietly eat the budget."))
         }

@@ -18,6 +18,15 @@ struct ClaudeBudget {
                 ?? ClaudeModel.opus5.id)
     }
 
+    /// Модель для наборов слов. Подбор слов — несложная задача: Haiku
+    /// справляется за секунды и стоит в разы меньше Opus (цент-два за набор
+    /// против двадцати). Разбор пересказа — другое дело, там своя настройка.
+    var deckModel: ModelPricing {
+        ClaudeModel.pricing(
+            for: UserDefaults.standard.string(forKey: SettingsKey.deckModel)
+                ?? ClaudeModel.haiku45.id)
+    }
+
     var monthlyLimit: Double {
         let stored = UserDefaults.standard.double(forKey: SettingsKey.monthlyBudget)
         return stored > 0 ? stored : Self.defaultLimit

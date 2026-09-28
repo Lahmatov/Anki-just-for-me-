@@ -7,12 +7,7 @@ import AJFMCore
 /// Экран из карточек, а не из списка: список с цифрами справа выглядит как
 /// настройки, а здесь главное одно — сколько сегодня и кнопка «учить».
 struct TodayView: View {
-    /// Вкладки живут одновременно, и `onAppear` при переключении не
-    /// срабатывает, — поэтому свежие цифры подтягиваются по этому флагу.
-    var isVisible = true
-
     @Environment(\.modelContext) private var context
-    @Query private var cards: [Card]
     @Query private var notes: [Note]
 
     @State private var summary: QueueSummary?
@@ -71,9 +66,6 @@ struct TodayView: View {
                 DeckRequestView()
             }
             .onAppear(perform: refresh)
-            .onChange(of: isVisible) { _, visible in
-                if visible { refresh() }
-            }
             .onChange(of: isSessionActive) { _, active in
                 if !active { refresh() }
             }

@@ -4,13 +4,13 @@ import AJFMCore
 
 /// Шрифт интерфейса — на выбор в настройках.
 ///
-/// По умолчанию — «ретро»: пиксельный Pixelify Sans в заголовках, кнопках
-/// и словах на карточках, а весь остальной текст — Rubik. Пиксельный шрифт
-/// хорош крупно, но абзац пояснения им читать тяжело, поэтому мелкий текст
-/// набран обычным гротеском с мягкими формами, который не спорит с пикселями.
+/// По умолчанию — Rubik: гротеск с мягкими формами, который легко читается
+/// и не спорит с пиксельными рамками. Пиксельные заголовки (Pixelify Sans)
+/// оказались на телефоне плохо читаемыми — они остались вариантом «Ретро».
 /// У обоих есть кириллица и все португальские диакритики. Остальные
-/// варианты — для тех, кому пиксели надоедят: Manrope и системные.
+/// варианты — Manrope и системные.
 enum AppFont: String, CaseIterable, Identifiable {
+    case rubik
     case pixel
     case manrope
     case system
@@ -21,12 +21,14 @@ enum AppFont: String, CaseIterable, Identifiable {
 
     static var current: AppFont {
         UserDefaults.standard.string(forKey: SettingsKey.fontStyle)
-            .flatMap(AppFont.init(rawValue:)) ?? .pixel
+            .flatMap(AppFont.init(rawValue:)) ?? .rubik
     }
 
     var title: String {
         switch self {
-        case .pixel: return tr("Ретро", "Retro", "Retro")
+        case .rubik: return "Rubik"
+        case .pixel: return tr("Ретро: пиксельные заголовки", "Retro: títulos em pixel",
+                               "Retro: pixel headings")
         case .manrope: return "Manrope"
         case .system: return tr("Системный", "Do sistema", "System")
         case .rounded: return tr("Скруглённый", "Arredondado", "Rounded")
@@ -71,6 +73,7 @@ enum AppFont: String, CaseIterable, Identifiable {
     func customName(_ weight: Font.Weight, style: Font.TextStyle = .headline) -> String? {
         let family: String
         switch self {
+        case .rubik: family = "Rubik"
         case .pixel: family = Self.isPixelStyle(style) ? "PixelifySans" : "Rubik"
         case .manrope: family = "Manrope"
         case .system, .rounded, .serif: return nil
@@ -94,7 +97,7 @@ enum AppFont: String, CaseIterable, Identifiable {
         switch self {
         case .rounded: return .rounded
         case .serif: return .serif
-        case .pixel, .manrope, .system: return .default
+        case .rubik, .pixel, .manrope, .system: return .default
         }
     }
 
@@ -125,7 +128,7 @@ enum AppFont: String, CaseIterable, Identifiable {
     private func uiFont(size: CGFloat, weight: UIFont.Weight, style: UIFont.TextStyle) -> UIFont {
         let base: UIFont
         switch self {
-        case .pixel, .manrope:
+        case .rubik, .pixel, .manrope:
             let name = customName(weight == .bold ? .bold : .semibold) ?? ""
             base = UIFont(name: name, size: size * scale(.headline))
                 ?? .systemFont(ofSize: size, weight: weight)

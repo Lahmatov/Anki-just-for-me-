@@ -144,6 +144,14 @@ final class DeckRequestTests: XCTestCase {
         XCTAssertNil(file.notes[0].note)
     }
 
+    func testExtraWordsAreTrimmedToTheRequestedCount() throws {
+        let notes = (1...9).map { #"{ "term": "w\#($0)", "translation": "t" }"# }
+            .joined(separator: ",")
+        let file = try request(count: 5).deckFile(fromResponse: #"{ "name": "X", "notes": ["#
+            + notes + "] }")
+        XCTAssertEqual(file.notes.map(\.term), ["w1", "w2", "w3", "w4", "w5"])
+    }
+
     func testNamelessResponseTakesTheRequestTopic() throws {
         let file = try request(topic: "Job interview").deckFile(fromResponse: """
         { "name": "", "notes": [ { "term": "strength", "translation": "сильная сторона" } ] }

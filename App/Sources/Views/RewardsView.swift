@@ -4,11 +4,6 @@ import AJFMCore
 
 /// Награды: собственные контракты вида «150 слов — и покупаю себе пиццу».
 struct RewardsView: View {
-    /// Вкладки живут одновременно. Без этого флага окно «Заслужено»
-    /// всплывало бы поверх повторения на другой вкладке — в момент, когда
-    /// слово дозрело, — и при каждом запуске.
-    var isVisible = true
-
     @Environment(\.modelContext) private var context
     @Query private var cards: [Card]
     @Query private var contractEntities: [RewardContractEntity]
@@ -61,7 +56,6 @@ struct RewardsView: View {
             }
             .onAppear(perform: checkCompletion)
             .onChange(of: matureWords) { _, _ in checkCompletion() }
-            .onChange(of: isVisible) { _, _ in checkCompletion() }
         }
     }
 
@@ -221,7 +215,7 @@ struct RewardsView: View {
     }
 
     private func checkCompletion() {
-        guard isVisible, let active, celebrating == nil else { return }
+        guard let active, celebrating == nil else { return }
         let progress = RewardCalculator.progress(
             contract: active, currentMatureWords: matureWords)
         if progress.isReached { celebrating = active }

@@ -51,7 +51,7 @@ final class DeckRequestModel {
     /// Оценка до отправки, чтобы цена не была сюрпризом.
     var estimatedCost: Double {
         let request = self.request
-        return budget.model.cost(
+        return budget.deckModel.cost(
             inputTokens: request.estimatedInputTokens,
             outputTokens: request.estimatedOutputTokens)
     }
@@ -100,9 +100,11 @@ final class DeckRequestModel {
             step = .failed(ClaudeClientError.noAPIKey.localizedDescription)
             return nil
         }
-        guard budget.canAfford(
+        let model = budget.deckModel
+        let estimate = model.cost(
             inputTokens: request.estimatedInputTokens,
-            outputTokens: request.estimatedOutputTokens) else {
+            outputTokens: request.estimatedOutputTokens)
+        guard budget.usage.monthCost + estimate <= budget.monthlyLimit else {
             let summary = budget.usage
             step = .failed(ClaudeClientError
                 .budgetExceeded(spent: summary.monthCost, limit: summary.limit)
@@ -111,7 +113,6 @@ final class DeckRequestModel {
         }
 
         step = .working
-        let model = budget.model
         do {
             let completion = try await ClaudeClient(apiKey: apiKey, model: model.id)
                 .complete(ClaudeRequest(
@@ -119,9 +120,9 @@ final class DeckRequestModel {
                     system: request.system,
                     userMessage: request.userMessage,
                     maxTokens: DeckRequest.maxTokens,
-                    // Подбор слов — не головоломка: среднего усилия хватает,
-                    // а ответ приходит заметно быстрее.
-                    effort: .medium,
+                    // Подбор слов — не головоломка: низкого усилия хватает,
+                    // а ответ приходит заметно быстрее (у Haiku усилия нет вовсе).
+                    effort: .low,
                     outputSchemaJSON: DeckRequest.outputSchemaJSON))
 
             budget.record(completion.usage, purpose: "Набор по запросу")

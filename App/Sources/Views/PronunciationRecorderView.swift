@@ -54,6 +54,11 @@ struct PronunciationRecorderView: View {
             service.reset()
             permissionDenied = false
         }
+        // Ушёл с экрана посреди записи — микрофон и распознавание выключаются:
+        // иначе они работали бы в фоне, грели телефон и садили батарею.
+        .onDisappear {
+            if service.isRecording { service.stop() }
+        }
     }
 
     /// Для onChange нужен сравнимый ключ — само состояние содержит структуру.

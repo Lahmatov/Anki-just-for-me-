@@ -11,6 +11,7 @@ enum SettingsKey {
     static let desiredRetention = "desiredRetention"
     static let autoSpeak = "autoSpeak"
     static let claudeModel = "claudeModel"
+    static let deckModel = "deckModel"
     static let monthlyBudget = "monthlyBudget"
     static let bestPronunciationStreak = "bestPronunciationStreak"
     static let perfectSessions = "perfectSessions"
