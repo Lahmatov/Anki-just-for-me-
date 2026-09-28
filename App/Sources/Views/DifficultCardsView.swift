@@ -73,6 +73,7 @@ struct DifficultCardsView: View {
                 }
             }
         }
+        .retroScreen()
         .navigationTitle(tr("Трудные", "Difíceis", "Difficult"))
         .navigationBarTitleDisplayMode(.inline)
     }

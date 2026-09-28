@@ -50,6 +50,7 @@ struct LogView: View {
                 }
             }
         }
+        .retroScreen()
         .navigationTitle(tr("Журнал", "Registo", "Log"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

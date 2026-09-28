@@ -41,9 +41,7 @@ struct ReviewSessionView: View {
     private func sessionBody(_ model: ReviewSessionModel) -> some View {
         VStack(spacing: 0) {
             VStack(spacing: 6) {
-                ProgressView(value: model.progress)
-                    .progressViewStyle(.linear)
-                    .tint(.accentColor)
+                RetroProgressBar(value: model.progress)
                 sessionCaption(model)
             }
             .padding(.horizontal)
@@ -64,14 +62,14 @@ struct ReviewSessionView: View {
                     .padding(.bottom, 8)
             }
         }
-        .background(Color(.systemGroupedBackground))
+        .background(Retro.background)
     }
 
     /// Слой управления сессией. Стекло — только здесь, над карточкой:
     /// сама карточка — содержимое и остаётся плотной.
     @ViewBuilder
     private func footer(_ model: ReviewSessionModel) -> some View {
-        GlassEffectContainer(spacing: 12) {
+        Group {
             footerContent(model)
         }
     }
@@ -90,7 +88,7 @@ struct ReviewSessionView: View {
                         .font(.app(.headline))
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.glassProminent)
+                .buttonStyle(.retro)
                 .controlSize(.large)
             } else if model.current?.type == .pronunciation {
                 Button {
@@ -101,7 +99,7 @@ struct ReviewSessionView: View {
                         .font(.app(.headline))
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.glassProminent)
+                .buttonStyle(.retro)
                 .controlSize(.large)
             }
         }
@@ -160,7 +158,7 @@ struct CardPromptView: View {
                 TextField(tr("Ответ", "Resposta", "Answer"), text: Binding(
                     get: { model.typedAnswer },
                     set: { model.typedAnswer = $0 }))
-                    .textFieldStyle(.roundedBorder)
+                    .textFieldStyle(.retro)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
                     .font(.app(.title3))
@@ -262,7 +260,7 @@ struct CardPromptView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 10)
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(.retroSecondary)
                 .controlSize(.large)
             }
         }
@@ -358,9 +356,9 @@ struct GradeButtons: View {
         .controlSize(.large)
 
         if model.suggestedGrade == grade {
-            button.buttonStyle(.glassProminent)
+            button.buttonStyle(.retro)
         } else {
-            button.buttonStyle(.glass)
+            button.buttonStyle(.retroSecondary)
         }
     }
 
@@ -414,10 +412,12 @@ struct SessionSummaryView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.glassProminent)
+            .buttonStyle(.retro)
             .controlSize(.large)
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Retro.background.ignoresSafeArea())
         .onAppear {
             withAnimation(.easeOut(duration: 0.8).delay(0.15)) {
                 shownAccuracy = stats.accuracy
@@ -425,34 +425,29 @@ struct SessionSummaryView: View {
         }
     }
 
-    /// Точность кольцом: цифра, ради которой сессию и проходят,
-    /// должна читаться с первого взгляда.
+    /// Точность крупной пиксельной цифрой и полосой из блоков: цифра,
+    /// ради которой сессию и проходят, должна читаться с первого взгляда.
     private var accuracyRing: some View {
-        ZStack {
-            Circle()
-                .stroke(Color(.tertiarySystemFill), lineWidth: 14)
-            Circle()
-                .trim(from: 0, to: shownAccuracy)
-                .stroke(ringColor.gradient,
-                        style: StrokeStyle(lineWidth: 14, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-            VStack(spacing: 0) {
-                Text("\(Int((stats.accuracy * 100).rounded()))%")
-                    .font(.app(.largeTitle, weight: .heavy))
-                    .monospacedDigit()
-                Text(tr("точность", "precisão", "accuracy"))
-                    .font(.app(.caption, weight: .medium))
-                    .foregroundStyle(.secondary)
-            }
+        VStack(spacing: 14) {
+            Text("\(Int((stats.accuracy * 100).rounded()))%")
+                .font(.display(.largeTitle))
+                .scaleEffect(1.6)
+                .padding(.vertical, 12)
+                .monospacedDigit()
+            RetroProgressBar(value: shownAccuracy, tint: ringColor)
+            Text(tr("точность", "precisão", "accuracy"))
+                .font(.app(.caption, weight: .bold))
+                .textCase(.uppercase)
+                .foregroundStyle(Retro.muted)
         }
-        .frame(width: 168, height: 168)
+        .cardSurface()
         .accessibilityElement(children: .combine)
     }
 
     private var ringColor: Color {
         switch stats.accuracy {
         case 0.9...: return .green
-        case 0.7..<0.9: return .accentColor
+        case 0.7..<0.9: return Retro.primary
         default: return .orange
         }
     }
@@ -469,8 +464,8 @@ struct SessionSummaryView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(.secondarySystemGroupedBackground)))
+        .pixelFrame()
+        .padding(.trailing, Retro.shadowOffset)
+        .padding(.bottom, Retro.shadowOffset)
     }
 }

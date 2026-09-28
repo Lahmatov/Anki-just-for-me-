@@ -76,18 +76,17 @@ struct PronunciationRecorderView: View {
                 Button(tr("Стоп", "Parar", "Stop"), systemImage: "stop.circle.fill") {
                     service.stop()
                 }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.red)
+                    .buttonStyle(.retroDestructive)
             } else {
                 Button(tr("Записать", "Gravar", "Record"), systemImage: "mic.circle.fill") {
                     record()
                 }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.retro)
             }
 
             if service.hasRecording, !service.isRecording {
                 Button(tr("Я", "Eu", "Me"), systemImage: "play.circle") { service.playRecording() }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.retroSecondary)
             }
         }
     }
@@ -123,14 +122,14 @@ struct PronunciationRecorderView: View {
                 Button(tr("Ещё раз", "Outra vez", "Again"), systemImage: "arrow.clockwise") {
                     record()
                 }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.retroSecondary)
                 if service.hasRecording {
                     Button(tr("Сравнить с эталоном", "Comparar com a referência",
                               "Compare with the reference"),
                            systemImage: "waveform") {
                         service.playRecording()
                     }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.retroSecondary)
                 }
             }
             .font(.app(.caption))

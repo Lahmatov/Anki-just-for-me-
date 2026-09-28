@@ -16,7 +16,8 @@ struct SpeakButton: View {
             if compact {
                 button.buttonStyle(.borderless)
             } else {
-                button.buttonStyle(.bordered)
+                button.buttonStyle(.retroSecondary)
+                    .font(.app(.callout, weight: .semibold))
             }
         }
         .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)

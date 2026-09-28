@@ -25,22 +25,20 @@ struct RootView: View {
     /// Вкладка хранится снаружи пересоздаваемого дерева: смена шрифта
     /// перестраивает экраны, но не выкидывает из настроек на «Сегодня».
     @State private var tab: AppTab = .today
-    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.manrope.rawValue
+    @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.pixel.rawValue
     /// Пустая строка — язык не выбран явно, действует системный.
     @AppStorage(SettingsKey.appLanguage) private var language = ""
 
     var body: some View {
-        // Новый API вкладок: на iOS 26 таб-бар сам становится Liquid Glass
-        // и прячется при прокрутке, освобождая место под содержимое.
-        TabView(selection: $tab) {
-            Tab(tr("Сегодня", "Hoje", "Today"), systemImage: "calendar", value: AppTab.today) {
-                TodayView()
-            }
-
-            Tab(tr("Наборы", "Baralhos", "Decks"), systemImage: "folder", value: AppTab.decks) {
+        // Свои вкладки вместо системного TabView: стеклянный таб-бар iOS 26
+        // не перекрасить в пиксельный стиль. Все вкладки живут одновременно —
+        // так каждая помнит, куда в ней перешли, как и в системном TabView.
+        ZStack {
+            tabContent(.today) { TodayView(isVisible: tab == .today) }
+            tabContent(.decks) {
                 NavigationStack {
                     FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
-                        .navigationTitle(tr("Наборы", "Baralhos", "Decks"))
+                        .navigationTitle(AppTab.decks.title)
                         .toolbar { toolbar }
                         .toolbar {
                             ToolbarItem(placement: .topBarLeading) {
@@ -53,21 +51,15 @@ struct RootView: View {
                         }
                 }
             }
-
-            Tab(tr("Награды", "Recompensas", "Rewards"), systemImage: "trophy", value: AppTab.rewards) {
-                RewardsView()
-            }
-
-            Tab(tr("Речь", "Fala", "Speech"), systemImage: "waveform", value: AppTab.speech) {
-                SpeakingHubView()
-            }
-
-            Tab(tr("Настройки", "Definições", "Settings"), systemImage: "gearshape",
-                value: AppTab.settings) {
-                SettingsView()
-            }
+            tabContent(.rewards) { RewardsView() }
+            tabContent(.speech) { SpeakingHubView() }
+            tabContent(.settings) { SettingsView() }
         }
-        .tabBarMinimizeBehavior(.onScrollDown)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            RetroTabBar(selection: $tab)
+        }
+        // Клавиатура не должна тащить панель вкладок вверх за собой.
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         // Смена шрифта или языка перестраивает экраны целиком: тексты берут
         // и то и другое в момент отрисовки.
         .id(fontStyle + language)
@@ -229,6 +221,17 @@ struct RootView: View {
         .environment(\.locale, Locale(identifier: Loc.language.localeIdentifier))
     }
 
+    /// Вкладка остаётся в дереве, но невидимой и недоступной — ни для
+    /// касаний, ни для VoiceOver.
+    private func tabContent<Content: View>(
+        _ item: AppTab, @ViewBuilder content: () -> Content
+    ) -> some View {
+        content()
+            .opacity(tab == item ? 1 : 0)
+            .allowsHitTesting(tab == item)
+            .accessibilityHidden(tab != item)
+    }
+
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         // Главный способ получить слова — отдельной кнопкой, а не в меню.
@@ -345,8 +348,28 @@ extension RootView {
     }
 }
 
-enum AppTab: Hashable {
+enum AppTab: Hashable, CaseIterable {
     case today, decks, rewards, speech, settings
+
+    var title: String {
+        switch self {
+        case .today: return tr("Сегодня", "Hoje", "Today")
+        case .decks: return tr("Наборы", "Baralhos", "Decks")
+        case .rewards: return tr("Награды", "Recompensas", "Rewards")
+        case .speech: return tr("Речь", "Fala", "Speech")
+        case .settings: return tr("Настройки", "Definições", "Settings")
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .today: return "calendar"
+        case .decks: return "rectangle.stack.fill"
+        case .rewards: return "trophy.fill"
+        case .speech: return "waveform"
+        case .settings: return "gearshape.fill"
+        }
+    }
 }
 
 struct PendingRestore: Identifiable {

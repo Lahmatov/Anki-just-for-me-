@@ -55,6 +55,7 @@ struct SpeakingHubView: View {
                                 + "learn a language for."))
                 }
             }
+            .retroScreen()
             .navigationTitle(tr("Речь", "Fala", "Speech"))
         }
     }

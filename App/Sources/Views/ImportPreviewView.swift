@@ -86,6 +86,7 @@ struct ImportPreviewView: View {
                     }
                 }
             }
+            .retroScreen()
             .navigationTitle(tr("Импорт набора", "Importar baralho", "Import deck"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

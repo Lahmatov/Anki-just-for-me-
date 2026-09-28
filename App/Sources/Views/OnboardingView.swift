@@ -42,7 +42,7 @@ struct OnboardingView: View {
             VStack(spacing: 0) {
                 if plan.count > 1 {
                     VStack(alignment: .trailing, spacing: 4) {
-                        ProgressView(value: Double(index + 1), total: Double(plan.count))
+                        RetroProgressBar(value: Double(index + 1), total: Double(plan.count))
                         Text("\(index + 1) " + tr("из", "de", "of") + " \(plan.count)")
                             .font(.app(.caption))
                             .foregroundStyle(.secondary)
@@ -64,7 +64,7 @@ struct OnboardingView: View {
                         .padding(.bottom, 8)
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Retro.background)
             .navigationTitle(step?.title ?? "")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -123,18 +123,17 @@ struct OnboardingView: View {
                                 .foregroundStyle(.primary)
                             Spacer()
                             if option == currentLanguage {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(Color.accentColor)
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 15, weight: .heavy))
+                                    .foregroundStyle(Retro.onPrimary)
                                     .transition(.scale.combined(with: .opacity))
                             }
                         }
                         .padding(.horizontal, 16)
                         .padding(.vertical, 14)
-                        .background(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .fill(option == currentLanguage
-                                      ? Color.accentColor.opacity(0.12)
-                                      : Color(.tertiarySystemFill)))
+                        .pixelFrame(
+                            fill: option == currentLanguage ? Retro.primary : Retro.secondary,
+                            shadow: nil)
                     }
                     .buttonStyle(.plain)
                 }
@@ -180,7 +179,7 @@ struct OnboardingView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.retroSecondary)
             .controlSize(.large)
 
             Picker(tr("Или выбрать самому", "Ou escolher eu", "Or pick it myself"),
@@ -245,9 +244,9 @@ struct OnboardingView: View {
         HStack(alignment: .top, spacing: 12) {
             Text(number)
                 .font(.app(.footnote, weight: .bold))
-                .foregroundStyle(.white)
-                .frame(width: 24, height: 24)
-                .background(Circle().fill(Color.accentColor))
+                .foregroundStyle(Retro.onPrimary)
+                .frame(width: 26, height: 26)
+                .pixelFrame(fill: Retro.primary, shadow: nil, pixel: 2)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).font(.app(.headline))
                 Text(detail).font(.app(.callout)).foregroundStyle(.secondary)
@@ -300,7 +299,7 @@ struct OnboardingView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 4)
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.retro)
                 .controlSize(.large)
 
                 if starterFailed {
@@ -379,7 +378,7 @@ struct OnboardingView: View {
 
             TextField(tr("Награда: пицца, диск с игрой…", "Recompensa: pizza, um jogo…",
                          "Reward: pizza, a new game…"), text: $goalReward)
-                .textFieldStyle(.roundedBorder)
+                .textFieldStyle(.retro)
 
             Text(tr("Можно пропустить и завести позже на вкладке «Награды».",
                     "Podes saltar e criá-lo depois no separador «Recompensas».",
@@ -445,7 +444,7 @@ struct OnboardingView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)
         }
-        .buttonStyle(.glassProminent)
+        .buttonStyle(.retro)
         .controlSize(.large)
     }
 

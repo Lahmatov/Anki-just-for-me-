@@ -7,6 +7,10 @@ import AJFMCore
 /// Экран из карточек, а не из списка: список с цифрами справа выглядит как
 /// настройки, а здесь главное одно — сколько сегодня и кнопка «учить».
 struct TodayView: View {
+    /// Вкладки живут одновременно, и `onAppear` при переключении не
+    /// срабатывает, — поэтому свежие цифры подтягиваются по этому флагу.
+    var isVisible = true
+
     @Environment(\.modelContext) private var context
     @Query private var cards: [Card]
     @Query private var notes: [Note]
@@ -58,7 +62,7 @@ struct TodayView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 24)
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Retro.background)
             .navigationTitle(tr("Сегодня", "Hoje", "Today"))
             .navigationDestination(isPresented: $isSessionActive) {
                 ReviewSessionView(deck: nil)
@@ -67,6 +71,9 @@ struct TodayView: View {
                 DeckRequestView()
             }
             .onAppear(perform: refresh)
+            .onChange(of: isVisible) { _, visible in
+                if visible { refresh() }
+            }
             .onChange(of: isSessionActive) { _, active in
                 if !active { refresh() }
             }
@@ -85,7 +92,9 @@ struct TodayView: View {
                 // Цифра — главное на экране, её видно с вытянутой руки.
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text("\(summary.total)")
-                        .font(.app(.largeTitle, weight: .heavy))
+                        .font(.display(.largeTitle))
+                        .scaleEffect(1.4, anchor: .bottomLeading)
+                        .padding(.top, 8)
                         .monospacedDigit()
                         .contentTransition(.numericText())
                     Text(trForm(summary.total, ru: ("карточка", "карточки", "карточек"),
@@ -112,7 +121,7 @@ struct TodayView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.glassProminent)
+            .buttonStyle(.retro)
             .controlSize(.large)
 
             if summary.heldBack > 0 {
@@ -144,9 +153,7 @@ struct TodayView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(value == 0 ? Color(.tertiarySystemFill) : color.opacity(0.12)))
+        .pixelFrame(fill: value == 0 ? Retro.secondary : color.opacity(0.2), shadow: nil)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(title): \(value)")
     }
@@ -199,7 +206,7 @@ struct TodayView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.glassProminent)
+            .buttonStyle(.retro)
             .controlSize(.large)
 
             Button {
@@ -219,7 +226,7 @@ struct TodayView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.glass)
+            .buttonStyle(.retroSecondary)
             .controlSize(.large)
 
             if starterFailed {
@@ -270,7 +277,7 @@ struct TodayView: View {
                     .foregroundStyle(.cyan)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
-                    .background(Capsule().fill(Color.cyan.opacity(0.12)))
+                    .pixelFrame(fill: Color.cyan.opacity(0.15), border: .cyan, shadow: nil, pixel: 2)
                     .accessibilityLabel(
                         tr("Заморозок осталось: ", "Congelamentos restantes: ", "Freezes left: ")
                         + "\(streak.freezesLeft)")
@@ -321,7 +328,7 @@ struct TodayView: View {
                 let progress = RewardCalculator.progress(
                     contract: contract, currentMatureWords: matureWords)
                 VStack(alignment: .leading, spacing: 6) {
-                    ProgressView(value: progress.fraction)
+                    RetroProgressBar(value: progress.fraction)
                         .tint(progress.isReached ? .green : .accentColor)
                     Text(tr("До «\(contract.reward)» — \(progress.done) из ",
                             "Até «\(contract.reward)» — \(progress.done) de ",

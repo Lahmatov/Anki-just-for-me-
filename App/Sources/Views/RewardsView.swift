@@ -32,6 +32,7 @@ struct RewardsView: View {
                     historySection
                 }
             }
+            .retroScreen()
             .navigationTitle(tr("Награды", "Recompensas", "Rewards"))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -71,7 +72,7 @@ struct RewardsView: View {
                     Text("\(week.daysStudied) " + tr("из", "de", "of") + " \(week.target)")
                         .foregroundStyle(week.isReached ? .green : .secondary)
                 }
-                ProgressView(value: week.fraction)
+                RetroProgressBar(value: week.fraction)
             }
             Stepper(tr("Цель: ", "Objetivo: ", "Goal: ") + Counted.days(weeklyTarget)
                         + tr(" в неделю", " por semana", " a week"),
@@ -100,7 +101,7 @@ struct RewardsView: View {
             Section {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(active.reward).font(.app(.headline))
-                    ProgressView(value: progress.fraction)
+                    RetroProgressBar(value: progress.fraction)
                     HStack {
                         Text("\(progress.done) " + tr("из", "de", "of") + " "
                              + Counted.words(progress.goal))
@@ -171,7 +172,7 @@ struct RewardsView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Label(next.title, systemImage: next.symbol)
                         .foregroundStyle(.secondary)
-                    ProgressView(value: next.progress(in: current))
+                    RetroProgressBar(value: next.progress(in: current))
                     Text(next.detail).font(.app(.caption)).foregroundStyle(.secondary)
                 }
             }
@@ -262,10 +263,12 @@ struct RewardEarnedView: View {
                     .font(.app(.headline))
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.glassProminent)
+            .buttonStyle(.retro)
             .controlSize(.large)
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Retro.background.ignoresSafeArea())
     }
 }
 
@@ -311,6 +314,7 @@ struct NewContractView: View {
                                 + "to make it."))
                 }
             }
+            .retroScreen()
             .navigationTitle(tr("Новая цель", "Novo objetivo", "New goal"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

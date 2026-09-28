@@ -25,22 +25,6 @@ struct LaunchIntroView: View {
             Color("LaunchBackground")
                 .ignoresSafeArea()
 
-            // Мягкое свечение цвета приложения за колодой.
-            MeshGradient(
-                width: 3, height: 3,
-                points: [
-                    [0, 0], [0.5, 0], [1, 0],
-                    [0, 0.5], [0.5, 0.5], [1, 0.5],
-                    [0, 1], [0.5, 1], [1, 1],
-                ],
-                colors: [
-                    .accentColor.opacity(0), .accentColor.opacity(0), .accentColor.opacity(0),
-                    .accentColor.opacity(0), .accentColor.opacity(0.28), .accentColor.opacity(0),
-                    .accentColor.opacity(0), .accentColor.opacity(0), .accentColor.opacity(0),
-                ])
-                .ignoresSafeArea()
-                .opacity(glow ? 1 : 0)
-
             deck
                 .scaleEffect(leaving ? 1.12 : (fanned ? 1 : 0.86))
         }
@@ -53,49 +37,50 @@ struct LaunchIntroView: View {
 
     // MARK: - Колода
 
+    /// Пиксельная колода: карточки не поворачиваются, а раскладываются
+    /// ступеньками — поворот размывал бы пиксельные рамки.
     private var deck: some View {
-        ZStack {
-            backCard(opacity: 0.35)
-                .rotationEffect(.degrees(fanned ? -14 : -4))
-                .offset(x: fanned ? -18 : 0, y: fanned ? -34 : 0)
-            backCard(opacity: 0.6)
-                .rotationEffect(.degrees(fanned ? -8 : -4))
-                .offset(x: fanned ? -8 : 0, y: fanned ? -16 : 0)
-            frontCard
-                .rotationEffect(.degrees(-4))
+        VStack(spacing: 28) {
+            ZStack {
+                backCard(Retro.secondary)
+                    .offset(x: fanned ? -24 : 0, y: fanned ? -24 : 0)
+                backCard(Retro.primary.opacity(0.55))
+                    .offset(x: fanned ? -12 : 0, y: fanned ? -12 : 0)
+                frontCard
+            }
+            Text(tr("Карточки", "Cartões", "Flashcards"))
+                .font(.display(.title2))
+                .foregroundStyle(Retro.ink)
+                .opacity(glow ? 1 : 0)
         }
         .opacity(fanned ? 1 : 0)
     }
 
-    private func backCard(opacity: Double) -> some View {
-        RoundedRectangle(cornerRadius: 28, style: .continuous)
-            .fill(Color.accentColor.opacity(opacity))
-            .frame(width: 180, height: 128)
+    private func backCard(_ color: Color) -> some View {
+        Color.clear
+            .frame(width: 180, height: 124)
+            .pixelFrame(fill: color, shadow: nil)
     }
 
     private var frontCard: some View {
-        RoundedRectangle(cornerRadius: 28, style: .continuous)
-            .fill(Color(.secondarySystemGroupedBackground))
-            .frame(width: 180, height: 128)
-            .shadow(color: .accentColor.opacity(0.25), radius: 18, y: 10)
-            .overlay {
-                HStack(alignment: .center, spacing: 14) {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Capsule().fill(Color.accentColor).frame(width: 74, height: 14)
-                        Capsule().fill(Color.accentColor.opacity(0.4)).frame(width: 48, height: 9)
-                    }
-                    wave
-                }
+        HStack(alignment: .center, spacing: 16) {
+            VStack(alignment: .leading, spacing: 10) {
+                Rectangle().fill(Retro.ink).frame(width: 72, height: 12)
+                Rectangle().fill(Retro.primary).frame(width: 48, height: 9)
             }
+            wave
+        }
+        .frame(width: 180, height: 124)
+        .pixelFrame(fill: Retro.surface, shadow: Retro.shadow)
     }
 
     /// Звуковая волна на карточке — голос и произношение, ради которых
     /// приложение и затевалось.
     private var wave: some View {
-        HStack(spacing: 5) {
+        HStack(spacing: 4) {
             ForEach(Array([0.35, 0.65, 1.0, 0.55].enumerated()), id: \.offset) { item in
-                Capsule()
-                    .fill(Color.accentColor)
+                Rectangle()
+                    .fill(Retro.primary)
                     .frame(width: 6, height: 40 * item.element)
                     .scaleEffect(y: pulse ? 1 : 0.45, anchor: .center)
                     .animation(

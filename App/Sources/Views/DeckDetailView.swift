@@ -65,6 +65,7 @@ struct DeckDetailView: View {
                 }
             }
         }
+        .retroScreen()
         .navigationTitle(deck.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -84,7 +85,7 @@ struct DeckDetailView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.glassProminent)
+            .buttonStyle(.retro)
             .controlSize(.large)
             .padding(.horizontal)
             .padding(.bottom, 8)

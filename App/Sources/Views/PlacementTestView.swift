@@ -30,7 +30,7 @@ struct PlacementTestView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemGroupedBackground))
+            .background(Retro.background)
             .navigationTitle(tr("Тест словаря", "Teste de vocabulário", "Vocabulary test"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -90,7 +90,7 @@ struct PlacementTestView: View {
 
     private var questionView: some View {
         VStack(spacing: 24) {
-            ProgressView(value: Double(index), total: Double(items.count))
+            RetroProgressBar(value: Double(index), total: Double(items.count))
                 .tint(.accentColor)
 
             Spacer()
@@ -105,7 +105,7 @@ struct PlacementTestView: View {
 
             Spacer()
 
-            GlassEffectContainer(spacing: 12) {
+            Group {
                 HStack(spacing: 12) {
                     Button {
                         answer(false)
@@ -115,7 +115,7 @@ struct PlacementTestView: View {
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 8)
                     }
-                    .buttonStyle(.glass)
+                    .buttonStyle(.retroSecondary)
 
                     Button {
                         answer(true)
@@ -125,7 +125,7 @@ struct PlacementTestView: View {
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 8)
                     }
-                    .buttonStyle(.glassProminent)
+                    .buttonStyle(.retro)
                 }
                 .controlSize(.large)
             }
@@ -159,7 +159,7 @@ struct PlacementTestView: View {
         VStack(spacing: 20) {
             Spacer()
             Text(result.level.rawValue)
-                .font(.app(.largeTitle, weight: .heavy))
+                .font(.display(.largeTitle))
                 .scaleEffect(1.8)
                 .padding(.bottom, 16)
             Text("≈ \(result.estimatedWords) "
@@ -189,9 +189,7 @@ struct PlacementTestView: View {
                     .font(.app(.footnote))
                     .foregroundStyle(.orange)
                     .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .fill(Color.orange.opacity(0.1)))
+                    .pixelFrame(fill: Color.orange.opacity(0.15), border: .orange, shadow: nil)
             }
 
             Spacer()
@@ -222,7 +220,7 @@ struct PlacementTestView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)
         }
-        .buttonStyle(.glassProminent)
+        .buttonStyle(.retro)
         .controlSize(.large)
     }
 }

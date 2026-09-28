@@ -74,6 +74,11 @@ targets:
           - Manrope-SemiBold.ttf
           - Manrope-Bold.ttf
           - Manrope-ExtraBold.ttf
+          - PixelifySans-Regular.ttf
+          - PixelifySans-Medium.ttf
+          - PixelifySans-SemiBold.ttf
+          - PixelifySans-Bold.ttf
+          - PressStart2P-Regular.ttf
         # Благодаря этому приложение появляется в шторке «Поделиться» для .json —
         # так набор долетает из Файлов, iCloud Drive или мессенджера.
         LSSupportsOpeningDocumentsInPlace: true

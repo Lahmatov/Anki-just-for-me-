@@ -83,6 +83,7 @@ struct RetellView: View {
                 historySection
             }
         }
+        .retroScreen()
     }
 
     // MARK: - Шаги
@@ -144,7 +145,7 @@ struct RetellView: View {
                    systemImage: "mic.circle.fill") {
                 model.startRecording()
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.retro)
         } footer: {
             Text(tr("Говори по-английски две-пять минут: о чём была серия, что случилось, "
                         + "что ты понял. Ошибки — это нормально, они и станут карточками.",
@@ -176,8 +177,7 @@ struct RetellView: View {
             Button(tr("Закончить", "Terminar", "Finish"), systemImage: "stop.circle.fill") {
                 model.stopRecording()
             }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
+                .buttonStyle(.retroDestructive)
         } header: {
             Text(tr("Идёт запись", "A gravar", "Recording"))
         }
@@ -194,7 +194,7 @@ struct RetellView: View {
             Button(tr("Разобрать", "Analisar", "Review"), systemImage: "sparkles") {
                 Task { await model.analyze() }
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.retro)
             .disabled(!model.canAnalyze)
 
             LabeledContent(
@@ -228,7 +228,7 @@ struct RetellView: View {
                 Text("\(report.understanding.coveragePercent)%")
                     .font(.app(.title3, weight: .bold))
             }
-            ProgressView(value: report.understanding.coverage)
+            RetroProgressBar(value: report.understanding.coverage)
         } header: {
             Text(tr("Итог", "Resultado", "Result"))
         } footer: {
@@ -277,7 +277,7 @@ struct RetellView: View {
                    systemImage: "rectangle.stack.badge.plus") {
                 importResult = model.makeDeck()
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.retro)
             .disabled(model.deckCandidateCount == 0)
 
             Button(tr("Новый пересказ", "Novo reconto", "New retelling")) { model.reset() }

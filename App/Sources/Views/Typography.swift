@@ -4,11 +4,12 @@ import AJFMCore
 
 /// Шрифт интерфейса — на выбор в настройках.
 ///
-/// По умолчанию Manrope: геометричный, с широкими буквами и спокойным ритмом,
-/// с кириллицей и всеми португальскими диакритиками. Системный SF хорош, но
-/// делает приложение похожим на экран настроек. Остальные варианты —
-/// системные, им не нужны файлы.
+/// По умолчанию — пиксельный Pixelify Sans: он держит ретро-стиль
+/// оформления (см. docs/design.md) и при этом читается в мелком кегле,
+/// с кириллицей и всеми португальскими диакритиками. Остальные варианты —
+/// для тех, кому пиксели надоедят: Manrope и системные.
 enum AppFont: String, CaseIterable, Identifiable {
+    case pixel
     case manrope
     case system
     case rounded
@@ -18,11 +19,12 @@ enum AppFont: String, CaseIterable, Identifiable {
 
     static var current: AppFont {
         UserDefaults.standard.string(forKey: SettingsKey.fontStyle)
-            .flatMap(AppFont.init(rawValue:)) ?? .manrope
+            .flatMap(AppFont.init(rawValue:)) ?? .pixel
     }
 
     var title: String {
         switch self {
+        case .pixel: return tr("Пиксельный", "Pixel", "Pixel")
         case .manrope: return "Manrope"
         case .system: return tr("Системный", "Do sistema", "System")
         case .rounded: return tr("Скруглённый", "Arredondado", "Rounded")
@@ -53,33 +55,41 @@ enum AppFont: String, CaseIterable, Identifiable {
         style == .headline ? .semibold : .regular
     }
 
-    static func manropeName(_ weight: Font.Weight) -> String {
+    /// Имя начертания в бандле. У Pixelify Sans нет ExtraBold — тяжёлые
+    /// веса сводятся к Bold.
+    func customName(_ weight: Font.Weight) -> String? {
+        let family: String
+        switch self {
+        case .pixel: family = "PixelifySans"
+        case .manrope: family = "Manrope"
+        case .system, .rounded, .serif: return nil
+        }
         switch weight {
-        case .medium: return "Manrope-Medium"
-        case .semibold: return "Manrope-SemiBold"
-        case .bold: return "Manrope-Bold"
-        case .heavy, .black: return "Manrope-ExtraBold"
-        default: return "Manrope-Regular"
+        case .medium: return "\(family)-Medium"
+        case .semibold: return "\(family)-SemiBold"
+        case .bold: return "\(family)-Bold"
+        case .heavy, .black: return self == .manrope ? "Manrope-ExtraBold" : "\(family)-Bold"
+        default: return "\(family)-Regular"
         }
     }
+
+    /// Пиксельный шрифт при той же высоте кажется мельче гротеска —
+    /// чуть крупнее, чтобы мелкие подписи читались.
+    private var scale: CGFloat { self == .pixel ? 1.08 : 1 }
 
     private var design: Font.Design {
         switch self {
         case .rounded: return .rounded
         case .serif: return .serif
-        case .manrope, .system: return .default
+        case .pixel, .manrope, .system: return .default
         }
     }
 
     func font(_ style: Font.TextStyle, weight: Font.Weight?) -> Font {
-        switch self {
-        case .manrope:
-            return .custom(
-                Self.manropeName(weight ?? Self.defaultWeight(style)),
-                size: Self.baseSize(style), relativeTo: style)
-        case .system, .rounded, .serif:
-            return .system(style, design: design, weight: weight)
+        if let name = customName(weight ?? Self.defaultWeight(style)) {
+            return .custom(name, size: Self.baseSize(style) * scale, relativeTo: style)
         }
+        return .system(style, design: design, weight: weight)
     }
 
     // MARK: - UIKit
@@ -89,16 +99,23 @@ enum AppFont: String, CaseIterable, Identifiable {
     /// нет, и разнобой бросался бы в глаза сильнее любого шрифта.
     func applyToNavigationBars() {
         let bar = UINavigationBar.appearance()
-        bar.largeTitleTextAttributes = [.font: uiFont(size: 34, weight: .bold, style: .largeTitle)]
-        bar.titleTextAttributes = [.font: uiFont(size: 17, weight: .semibold, style: .headline)]
+        bar.largeTitleTextAttributes = [
+            .font: uiFont(size: 32, weight: .bold, style: .largeTitle),
+            .foregroundColor: UIColor(named: "RetroInk") ?? .label,
+        ]
+        bar.titleTextAttributes = [
+            .font: uiFont(size: 17, weight: .semibold, style: .headline),
+            .foregroundColor: UIColor(named: "RetroInk") ?? .label,
+        ]
     }
 
     private func uiFont(size: CGFloat, weight: UIFont.Weight, style: UIFont.TextStyle) -> UIFont {
         let base: UIFont
         switch self {
-        case .manrope:
-            let name = weight == .bold ? "Manrope-Bold" : "Manrope-SemiBold"
-            base = UIFont(name: name, size: size) ?? .systemFont(ofSize: size, weight: weight)
+        case .pixel, .manrope:
+            let name = customName(weight == .bold ? .bold : .semibold) ?? ""
+            base = UIFont(name: name, size: size * scale)
+                ?? .systemFont(ofSize: size, weight: weight)
         case .system, .rounded, .serif:
             let system = UIFont.systemFont(ofSize: size, weight: weight)
             let uiDesign: UIFontDescriptor.SystemDesign =
@@ -118,8 +135,19 @@ extension Font {
         AppFont.current.font(style, weight: weight)
     }
 
-    /// Транскрипция всегда системным шрифтом: в Manrope нет части знаков
-    /// МФА (ʊ, ɪ, ʌ, ˈ), и транскрипция собиралась бы из двух шрифтов.
+    /// Крупные цифры — счётчики, уровень, точность. В пиксельной теме это
+    /// Press Start 2P: цифры как на табло старой приставки.
+    static func display(_ style: Font.TextStyle) -> Font {
+        guard AppFont.current == .pixel else { return .app(style, weight: .heavy) }
+        // Press Start 2P очень широкий: при системном кегле цифры вылезают
+        // за карточку, поэтому базовый размер вдвое меньше.
+        return .custom("PressStart2P-Regular", size: AppFont.baseSize(style) * 0.62,
+                       relativeTo: style)
+    }
+
+    /// Транскрипция всегда системным шрифтом: ни в Manrope, ни в Pixelify
+    /// нет части знаков МФА (ʊ, ɪ, ʌ, ˈ), и транскрипция собиралась бы
+    /// из двух шрифтов.
     static func ipa(_ style: Font.TextStyle) -> Font {
         .system(style)
     }

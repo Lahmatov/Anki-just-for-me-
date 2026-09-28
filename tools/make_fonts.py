@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Собирает статические начертания Manrope из вариативного шрифта.
+"""Собирает шрифты приложения: статические начертания из вариативных файлов.
+
+Manrope — спокойный гротеск, Pixelify Sans — пиксельный шрифт ретро-темы,
+Press Start 2P — крупные цифры в пиксельном стиле.
 
 Вариативный файл iOS регистрирует одним начертанием, и достать из него
 нужную жирность по имени ненадёжно. Статические файлы с явными
@@ -16,32 +19,48 @@ import urllib.request
 from fontTools.ttLib import TTFont
 from fontTools.varLib import instancer
 
-SOURCE = "https://raw.githubusercontent.com/google/fonts/main/ofl/manrope/Manrope%5Bwght%5D.ttf"
-LICENSE = "https://raw.githubusercontent.com/google/fonts/main/ofl/manrope/OFL.txt"
+GOOGLE = "https://raw.githubusercontent.com/google/fonts/main/ofl"
 OUT = pathlib.Path(__file__).resolve().parent.parent / "App" / "Resources" / "Fonts"
-WEIGHTS = [(400, "Regular"), (500, "Medium"), (600, "SemiBold"), (700, "Bold"), (800, "ExtraBold")]
+
+# Семейство → (путь в google/fonts, начертания для вариативного файла).
+VARIABLE = {
+    "Manrope": ("manrope/Manrope%5Bwght%5D.ttf",
+                [(400, "Regular"), (500, "Medium"), (600, "SemiBold"),
+                 (700, "Bold"), (800, "ExtraBold")]),
+    "PixelifySans": ("pixelifysans/PixelifySans%5Bwght%5D.ttf",
+                     [(400, "Regular"), (500, "Medium"), (600, "SemiBold"), (700, "Bold")]),
+}
+STATIC = {"PressStart2P": "pressstart2p/PressStart2P-Regular.ttf"}
+LICENSES = {"Manrope": "manrope", "PixelifySans": "pixelifysans", "PressStart2P": "pressstart2p"}
 
 
-def main() -> None:
-    OUT.mkdir(parents=True, exist_ok=True)
-    variable = OUT / "Manrope-variable.ttf"
-    urllib.request.urlretrieve(SOURCE, variable)
-    urllib.request.urlretrieve(LICENSE, OUT / "Manrope-OFL.txt")
-
-    for weight, style in WEIGHTS:
+def instantiate(family: str, source: str, weights) -> None:
+    variable = OUT / f"{family}-variable.ttf"
+    urllib.request.urlretrieve(f"{GOOGLE}/{source}", variable)
+    for weight, style in weights:
         font = instancer.instantiateVariableFont(
             TTFont(variable), {"wght": weight}, updateFontNames=True)
         names = font["name"]
         for name_id, value in [
-            (1, "Manrope"), (2, style), (4, f"Manrope {style}"),
-            (6, f"Manrope-{style}"), (16, "Manrope"), (17, style),
+            (1, family), (2, style), (4, f"{family} {style}"),
+            (6, f"{family}-{style}"), (16, family), (17, style),
         ]:
             names.setName(value, name_id, 3, 1, 0x409)
         font["OS/2"].usWeightClass = weight
-        font.save(OUT / f"Manrope-{style}.ttf")
-        print(f"Manrope-{style}.ttf")
-
+        font.save(OUT / f"{family}-{style}.ttf")
+        print(f"{family}-{style}.ttf")
     variable.unlink()
+
+
+def main() -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
+    for family, (source, weights) in VARIABLE.items():
+        instantiate(family, source, weights)
+    for family, source in STATIC.items():
+        urllib.request.urlretrieve(f"{GOOGLE}/{source}", OUT / f"{family}-Regular.ttf")
+        print(f"{family}-Regular.ttf")
+    for family, folder in LICENSES.items():
+        urllib.request.urlretrieve(f"{GOOGLE}/{folder}/OFL.txt", OUT / f"{family}-OFL.txt")
 
 
 if __name__ == "__main__":

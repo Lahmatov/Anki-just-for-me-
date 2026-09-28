@@ -160,6 +160,7 @@ struct DeckRequestView: View {
                 }
             }
         }
+        .retroScreen()
         .safeAreaInset(edge: .bottom) {
             submitButton(model)
                 .padding(.horizontal)
@@ -227,7 +228,7 @@ struct DeckRequestView: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 4)
         }
-        .buttonStyle(.glassProminent)
+        .buttonStyle(.retro)
         .controlSize(.large)
         .disabled(!model.canSubmit || (!model.hasAPIKey && apiKey.isEmpty))
     }
@@ -260,10 +261,12 @@ struct DeckRequestView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
             }
-            .buttonStyle(.glassProminent)
+            .buttonStyle(.retro)
             .controlSize(.large)
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Retro.background.ignoresSafeArea())
     }
 
     private func apply(_ plan: ImportPlan, includeDuplicates: Bool) {

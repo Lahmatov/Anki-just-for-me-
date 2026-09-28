@@ -63,6 +63,7 @@ struct SearchView: View {
                 }
             }
         }
+        .retroScreen()
         .searchable(text: $query, prompt: tr("Слово или перевод", "Palavra ou tradução",
                                              "Word or translation"))
         .navigationTitle(tr("Поиск", "Pesquisa", "Search"))
@@ -141,6 +142,7 @@ struct NoteDetailView: View {
                             + "with American pronunciation."))
             }
         }
+        .retroScreen()
         .navigationTitle(note.term)
         .navigationBarTitleDisplayMode(.inline)
     }
