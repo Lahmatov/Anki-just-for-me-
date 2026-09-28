@@ -57,7 +57,7 @@ struct ImportPreviewView: View {
                                 Text(item.element.note.term)
                                 Text(item.element.reason)
                                     .font(.app(.caption))
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Theme.muted)
                             }
                         }
                         if !duplicatesFromOtherDecks.isEmpty {
@@ -80,7 +80,7 @@ struct ImportPreviewView: View {
                                 Text(item.element.term).fontWeight(.medium)
                                 Text(item.element.translation)
                                     .font(.app(.caption))
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Theme.muted)
                             }
                         }
                     }

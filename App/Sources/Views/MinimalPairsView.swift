@@ -22,9 +22,9 @@ struct MinimalPairsView: View {
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
                         Text(tr("Произнеси", "Diz", "Say"))
-                            .font(.app(.caption)).foregroundStyle(.secondary)
+                            .font(.app(.caption)).foregroundStyle(Theme.muted)
                         Text(target).font(.app(.largeTitle, weight: .bold))
-                        Text(pair.contrast).font(.app(.callout)).foregroundStyle(.secondary)
+                        Text(pair.contrast).font(.app(.callout)).foregroundStyle(Theme.muted)
 
                         PronunciationRecorderView(word: target, pair: pair) { assessment in
                             lastVerdict = assessment.verdict
@@ -77,7 +77,7 @@ struct MinimalPairsView: View {
                             Spacer()
                             Text(item.contrast)
                                 .font(.app(.caption))
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Theme.muted)
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {

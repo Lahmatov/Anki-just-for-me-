@@ -153,6 +153,12 @@ final class CloudBackupSQLTests: XCTestCase {
         XCTAssertEqual(CloudBackupSQL.prune(keep: 5).params, [.text("5")])
     }
 
+    func testEraseDropsOnlyTheAppTableAndToleratesItsAbsence() {
+        let sql = CloudBackupSQL.dropAll.sql
+        XCTAssertEqual(sql, "DROP TABLE IF EXISTS \(CloudBackupSQL.table)")
+        XCTAssertTrue(CloudBackupSQL.dropAll.params.isEmpty)
+    }
+
     func testFetchUsesAParameter() {
         let query = CloudBackupSQL.fetch(id: 12)
         XCTAssertTrue(query.sql.contains("$1"))

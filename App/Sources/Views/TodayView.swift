@@ -8,8 +8,12 @@ import AJFMCore
 /// настройки, а здесь главное одно — сколько сегодня и кнопка «учить».
 struct TodayView: View {
     @Environment(\.modelContext) private var context
-    @Query private var notes: [Note]
+    @AppStorage(SettingsKey.dailyMinutesGoal) private var goalMinutes = DailyGoal.defaultMinutes
 
+    /// Число слов, а не сами слова: @Query со всей базой перечитывался
+    /// при каждом сохранении и грел телефон, а экрану нужна одна цифра.
+    @State private var noteCount = 0
+    @State private var studiedSeconds: TimeInterval = 0
     @State private var summary: QueueSummary?
     @State private var streak: StreakStatus?
     @State private var contract: RewardContract?
@@ -22,19 +26,24 @@ struct TodayView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
-                    if notes.isEmpty {
+                    MascotSays(mood: mood, text: greeting)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    if noteCount == 0 {
                         emptyCard
                     } else if let summary, !summary.isEmpty {
                         dueCard(summary)
-                    } else {
-                        doneCard
+                    }
+
+                    if noteCount > 0 {
+                        goalCard
                     }
 
                     if let streak, streak.days > 0 {
                         streakCard(streak)
                     }
 
-                    if !notes.isEmpty {
+                    if noteCount > 0 {
                         progressCard
                         CardSectionHeader(title: tr("Разбор", "Análise", "Insights"))
                         CardLink(
@@ -57,7 +66,7 @@ struct TodayView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 24)
             }
-            .background(Theme.background)
+            .background(Theme.background.ignoresSafeArea())
             .navigationTitle(tr("Сегодня", "Hoje", "Today"))
             .navigationDestination(isPresented: $isSessionActive) {
                 ReviewSessionView(deck: nil)
@@ -69,7 +78,6 @@ struct TodayView: View {
             .onChange(of: isSessionActive) { _, active in
                 if !active { refresh() }
             }
-            .onChange(of: notes.count) { _, _ in refresh() }
         }
     }
 
@@ -80,7 +88,7 @@ struct TodayView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(tr("На сегодня", "Para hoje", "Due today"))
                     .font(.app(.subheadline, weight: .medium))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
                 // Цифра — главное на экране, её видно с вытянутой руки.
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text("\(summary.total)")
@@ -92,7 +100,7 @@ struct TodayView: View {
                     Text(trForm(summary.total, ru: ("карточка", "карточки", "карточек"),
                                 pt: ("cartão", "cartões"), en: ("card", "cards")))
                         .font(.app(.title3, weight: .semibold))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.muted)
                 }
             }
 
@@ -126,7 +134,7 @@ struct TodayView: View {
                         + "other cards of the same words"),
                     systemImage: "clock.arrow.circlepath")
                     .font(.app(.caption))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             }
         }
         .cardSurface()
@@ -141,7 +149,7 @@ struct TodayView: View {
                 .foregroundStyle(value == 0 ? Color.secondary : color)
             Text(title)
                 .font(.app(.caption, weight: .medium))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
@@ -150,21 +158,74 @@ struct TodayView: View {
         .accessibilityLabel("\(title): \(value)")
     }
 
-    private var doneCard: some View {
-        HStack(spacing: 16) {
-            IconBadge(systemName: "checkmark", color: .green, size: 44)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(tr("На сегодня всё", "Por hoje é tudo", "All done for today"))
-                    .font(.app(.headline))
-                Text(tr("Карточек по сроку нет. Интервальное повторение и должно "
-                            + "оставлять свободные дни.",
-                        "Não há cartões para hoje. A repetição espaçada deve mesmo "
-                            + "deixar dias livres.",
-                        "No cards are due. Spaced repetition is supposed to leave "
-                            + "free days."))
-                    .font(.app(.subheadline))
-                    .foregroundStyle(.secondary)
+    // MARK: - Лось
+
+    private var mood: MascotMood {
+        if noteCount == 0 { return .cards }
+        if let summary, !summary.isEmpty { return .hello }
+        return DailyGoal.progress(studiedSeconds: studiedSeconds, goalMinutes: goalMinutes) >= 1
+            ? .cheer : .sleepy
+    }
+
+    private var greeting: String {
+        if noteCount == 0 {
+            return tr("Привет! Давай наберём первых слов.", "Olá! Vamos juntar as primeiras palavras.",
+                      "Hi! Let's collect your first words.")
+        }
+        if let summary, !summary.isEmpty {
+            return tr("Карточки ждут. Пара минут — и готово!", "Os cartões esperam. Uns minutos e pronto!",
+                      "Cards are waiting. A few minutes and you're done!")
+        }
+        if DailyGoal.progress(studiedSeconds: studiedSeconds, goalMinutes: goalMinutes) >= 1 {
+            return tr("Цель дня выполнена. Горжусь тобой!", "Objetivo do dia cumprido. Que orgulho!",
+                      "Daily goal done. So proud of you!")
+        }
+        return tr("На сегодня карточек нет — и это нормально: интервалам нужны свободные дни.",
+                  "Hoje não há cartões — e está tudo bem: os intervalos precisam de dias livres.",
+                  "No cards today — and that's fine: spaced repetition needs free days.")
+    }
+
+    // MARK: - Цель дня
+
+    /// Минуты за день против цели. Цель меняется тут же, меню на карточке:
+    /// идти за этим в настройки — лишний шаг.
+    private var goalCard: some View {
+        let fraction = DailyGoal.progress(studiedSeconds: studiedSeconds, goalMinutes: goalMinutes)
+        let done = DailyGoal.wholeMinutes(studiedSeconds)
+        return VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(tr("Цель дня", "Objetivo do dia", "Daily goal"))
+                        .font(.app(.subheadline, weight: .bold))
+                        .foregroundStyle(Theme.muted)
+                    Text("\(done) / " + DailyGoal.format(minutes: goalMinutes))
+                        .font(.app(.title3))
+                        .foregroundStyle(Theme.ink)
+                        .contentTransition(.numericText())
+                }
+                Spacer()
+                Menu {
+                    Picker(tr("Цель дня", "Objetivo do dia", "Daily goal"),
+                           selection: $goalMinutes) {
+                        ForEach(DailyGoal.options, id: \.self) { minutes in
+                            Text(DailyGoal.format(minutes: minutes)).tag(minutes)
+                        }
+                    }
+                } label: {
+                    Label(tr("Изменить", "Mudar", "Change"), systemImage: "slider.horizontal.3")
+                        .font(.app(.callout, weight: .bold))
+                        .foregroundStyle(Theme.primary)
+                }
             }
+            ChunkyProgressBar(value: fraction, tint: fraction >= 1 ? Theme.gold : Theme.primary)
+            Text(fraction >= 1
+                 ? tr("Выполнено! Дальше — сверх плана.", "Cumprido! O resto é bónus.",
+                      "Done! Anything more is a bonus.")
+                 : tr("Считается время на карточках; больше минуты на одну не засчитывается.",
+                      "Conta o tempo nos cartões; mais de um minuto por cartão não conta.",
+                      "Counts time on cards; over a minute per card doesn't count."))
+                .font(.app(.caption))
+                .foregroundStyle(Theme.muted)
         }
         .cardSurface()
     }
@@ -173,7 +234,6 @@ struct TodayView: View {
     /// Два действия, после которых здесь появятся слова.
     private var emptyCard: some View {
         VStack(alignment: .leading, spacing: 16) {
-            IconBadge(systemName: "rectangle.stack.badge.plus", size: 48)
             VStack(alignment: .leading, spacing: 6) {
                 Text(tr("Начнём с первых слов", "Vamos às primeiras palavras",
                         "Let's start with your first words"))
@@ -185,7 +245,7 @@ struct TodayView: View {
                         "Write which episode you're watching and Claude will pick the words. "
                             + "Or take the starter deck for retelling."))
                     .font(.app(.subheadline))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             }
 
             Button {
@@ -259,17 +319,17 @@ struct TodayView: View {
                               "Not studied today yet")
                          : tr("Сегодня засчитано", "Hoje já conta", "Today counts"))
                         .font(.app(.caption, weight: .medium))
-                        .foregroundStyle(streak.isAtRisk ? Color.orange : Color.secondary)
+                        .foregroundStyle(streak.isAtRisk ? Theme.orange : Theme.muted)
                 }
 
                 Spacer()
 
                 Label("\(streak.freezesLeft)", systemImage: "snowflake")
                     .font(.app(.callout, weight: .semibold))
-                    .foregroundStyle(.cyan)
+                    .foregroundStyle(Theme.blue)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
-                    .panel(fill: Color.cyan.opacity(0.15), border: .cyan, lip: false)
+                    .panel(fill: Theme.blue.opacity(0.12), border: Theme.blue, lip: false)
                     .accessibilityLabel(
                         tr("Заморозок осталось: ", "Congelamentos restantes: ", "Freezes left: ")
                         + "\(streak.freezesLeft)")
@@ -286,7 +346,7 @@ struct TodayView: View {
                       "A freeze already covered a gap. Frozen days don't break the streak, "
                         + "but they don't count either."))
                 .font(.app(.caption))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
         }
         .cardSurface()
     }
@@ -299,7 +359,7 @@ struct TodayView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(tr("Выучено", "Aprendidas", "Learned"))
                         .font(.app(.subheadline, weight: .medium))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.muted)
                     Text(Counted.words(matureWords))
                         .font(.app(.title2, weight: .bold))
                         .contentTransition(.numericText())
@@ -308,10 +368,10 @@ struct TodayView: View {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(tr("Всего", "Total", "Total"))
                         .font(.app(.subheadline, weight: .medium))
-                        .foregroundStyle(.secondary)
-                    Text("\(notes.count)")
+                        .foregroundStyle(Theme.muted)
+                    Text("\(noteCount)")
                         .font(.app(.title2, weight: .bold))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.muted)
                         .monospacedDigit()
                 }
             }
@@ -320,14 +380,14 @@ struct TodayView: View {
                 let progress = RewardCalculator.progress(
                     contract: contract, currentMatureWords: matureWords)
                 VStack(alignment: .leading, spacing: 6) {
-                    ChunkyProgressBar(value: progress.fraction)
-                        .tint(progress.isReached ? .green : .accentColor)
+                    ChunkyProgressBar(value: progress.fraction,
+                                      tint: progress.isReached ? Theme.gold : Theme.primary)
                     Text(tr("До «\(contract.reward)» — \(progress.done) из ",
                             "Até «\(contract.reward)» — \(progress.done) de ",
                             "To “\(contract.reward)” — \(progress.done) of ")
                          + Counted.words(progress.goal))
                         .font(.app(.caption, weight: .medium))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.muted)
                 }
             }
 
@@ -338,15 +398,17 @@ struct TodayView: View {
                  + tr(". Просмотры не в счёт.", ". Visualizações não contam.",
                       ". Views don't count."))
                 .font(.app(.caption))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(Theme.muted)
         }
         .cardSurface()
     }
 
     private func refresh() {
         withAnimation(.snappy) {
+            noteCount = (try? context.fetchCount(FetchDescriptor<Note>())) ?? 0
             summary = (try? ReviewService(context: context).todayQueue())?.summary
             let progress = ProgressService(context: context)
+            studiedSeconds = progress.studiedSecondsToday()
             streak = progress.streakStatus()
             contract = progress.activeContract
             matureWords = progress.matureWordCount()

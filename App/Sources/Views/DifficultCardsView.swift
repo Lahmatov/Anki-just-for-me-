@@ -55,7 +55,7 @@ struct DifficultCardsView: View {
                                 Text(card.note?.term ?? "—").fontWeight(.medium)
                                 Text(card.note?.translation ?? "")
                                     .font(.app(.caption))
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Theme.muted)
                                 HStack {
                                     Text(LeechPolicy.summary(lapses: card.lapses))
                                     Text("·")
@@ -68,7 +68,7 @@ struct DifficultCardsView: View {
 
                         Text(advice(for: card))
                             .font(.app(.caption))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Theme.muted)
                     }
                 }
             }

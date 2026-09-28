@@ -40,7 +40,7 @@ struct DeckDetailView: View {
                     Text(tr("Без живого примера: ", "Sem exemplo real: ", "Without a real example: ")
                          + Counted.words(missing.count))
                         .font(.app(.caption))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.muted)
                 }
             } footer: {
                 Text(tr("Подставит фразы из серии вместо словарных примеров. "
@@ -150,21 +150,21 @@ struct NoteRow: View {
             HStack {
                 Text(note.term).fontWeight(.medium)
                 if let ipa = note.ipa, !ipa.isEmpty {
-                    Text(ipa).font(.ipa(.caption)).foregroundStyle(.secondary)
+                    Text(ipa).font(.ipa(.caption)).foregroundStyle(Theme.muted)
                 }
                 Spacer()
                 SpeakButton(text: note.term, compact: true)
                 Text("\(note.cards.count)")
                     .font(.app(.caption2))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             }
             Text(note.translation)
                 .font(.app(.subheadline))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
             if !note.tags.isEmpty {
                 Text(note.tags.map { "#\($0)" }.joined(separator: " "))
                     .font(.app(.caption2))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Theme.muted)
             }
         }
     }

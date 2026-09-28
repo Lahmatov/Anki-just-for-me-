@@ -50,6 +50,17 @@ struct ProgressService {
             cutoffHour: cutoffHour, freezesPerMonth: freezesPerMonth)
     }
 
+    /// Сколько секунд сегодня ушло на карточки (с обрезкой забытых экранов).
+    /// Выборка — только за сегодняшний учебный день, а не вся история:
+    /// экран «Сегодня» открывается часто, и тянуть тысячи повторов незачем.
+    func studiedSecondsToday(now: Date = Date()) -> TimeInterval {
+        let start = ReviewQueueBuilder.studyDayStart(for: now, cutoffHour: cutoffHour)
+        let descriptor = FetchDescriptor<Review>(
+            predicate: #Predicate { $0.timestamp >= start && $0.isHonest == true })
+        let reviews = (try? context.fetch(descriptor)) ?? []
+        return DailyGoal.studiedSeconds(reviews.map(\.timeSpent))
+    }
+
     func weekProgress(target: Int = 5, now: Date = Date()) -> WeekProgress {
         StreakCalculator.weekProgress(
             studyDays: studyDays(of: honestReviews()), target: target, now: now,

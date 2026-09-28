@@ -45,7 +45,7 @@ struct OnboardingView: View {
                         ChunkyProgressBar(value: Double(index + 1), total: Double(plan.count))
                         Text("\(index + 1) " + tr("из", "de", "of") + " \(plan.count)")
                             .font(.app(.caption))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Theme.muted)
                             .monospacedDigit()
                     }
                     .padding(.horizontal)
@@ -197,7 +197,7 @@ struct OnboardingView: View {
                     "Card translations and retelling reviews will be in it too. "
                         + "You can change it any time in Settings."))
                 .font(.app(.callout))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
 
             VStack(spacing: 8) {
                 ForEach(AppLanguage.allCases, id: \.self) { option in
@@ -246,7 +246,7 @@ struct OnboardingView: View {
                         + "useless. The test takes three minutes, word by word: "
                         + "do you know it or not."))
                 .font(.app(.callout))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
 
             if let chosen = storedLevel.flatMap(CEFRLevel.init(rawValue:)) {
                 Label(tr("Уровень", "Nível", "Level") + " \(chosen.rawValue)",
@@ -323,7 +323,7 @@ struct OnboardingView: View {
                     "You can also just ask Claude for words — with the “Deck with Claude” "
                         + "button. But the loop above is what this is all about."))
                 .font(.app(.callout))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
         }
         .cardSurface()
     }
@@ -337,7 +337,7 @@ struct OnboardingView: View {
                 .panel(fill: Theme.primary, lip: false)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).font(.app(.headline))
-                Text(detail).font(.app(.callout)).foregroundStyle(.secondary)
+                Text(detail).font(.app(.callout)).foregroundStyle(Theme.muted)
             }
         }
     }
@@ -358,7 +358,7 @@ struct OnboardingView: View {
                         + "eventually, cliffhanger. It's hard to retell an episode "
                         + "without it, so it helps from the very first time."))
                 .font(.app(.callout))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
 
             if starterInstalled {
                 Label(tr("Добавлено — стартовый набор уже в «Наборах»",
@@ -423,21 +423,21 @@ struct OnboardingView: View {
                     "By default the system uses a compressed voice — not great for "
                         + "learning pronunciation. A good one is a free, one-time download."))
                 .font(.app(.callout))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
 
             SpeakButton(text: "This is how it sounds right now.",
                         label: tr("Послушать сейчас", "Ouvir agora", "Listen now"))
 
             Text(VoiceSelector.downloadHint)
                 .font(.app(.footnote))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
                 .padding(.top, 4)
 
             Text(tr("Приложение подхватит новый голос само.",
                     "A aplicação passa a usar a nova voz sozinha.",
                     "The app will pick up the new voice by itself."))
                 .font(.app(.footnote))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(Theme.muted)
         }
         .cardSurface()
     }
@@ -459,7 +459,7 @@ struct OnboardingView: View {
                         + "You can't click through that in an evening — so the reward "
                         + "is honest."))
                 .font(.app(.callout))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
 
             Stepper(tr("Цель: ", "Objetivo: ", "Goal: ") + Counted.words(goalWords),
                     value: $goalWords, in: 20...500, step: 10)
@@ -472,7 +472,7 @@ struct OnboardingView: View {
                     "Podes saltar e criá-lo depois no separador «Recompensas».",
                     "You can skip this and set it up later on the Rewards tab."))
                 .font(.app(.footnote))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(Theme.muted)
         }
         .cardSurface()
     }
@@ -490,7 +490,7 @@ struct OnboardingView: View {
                     "Spaced repetition only works if you come back every day. "
                         + "Fifteen minutes is enough."))
                 .font(.app(.callout))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
 
             Toggle(tr("Напоминать", "Lembrar", "Remind me"), isOn: $reminderEnabled)
 
@@ -515,7 +515,7 @@ struct OnboardingView: View {
                     "É uma notificação local — funciona sem conta paga.",
                     "It's a local notification — no paid account needed."))
                 .font(.app(.footnote))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(Theme.muted)
         }
         .cardSurface()
     }

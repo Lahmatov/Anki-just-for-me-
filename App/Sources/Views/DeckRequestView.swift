@@ -18,6 +18,7 @@ struct DeckRequestView: View {
     @State private var showPlacementTest = false
     @State private var apiKey = ""
     @State private var applyError: String?
+    @State private var pendingAI: (() -> Void)?
     @FocusState private var topicFocused: Bool
 
     var body: some View {
@@ -44,6 +45,7 @@ struct DeckRequestView: View {
             topicFocused = true
         }
         .interactiveDismissDisabled(model?.step == .working)
+        .aiConsentAlert(pending: $pendingAI)
         .alert(
             tr("Не записалось", "Não foi guardado", "Couldn't save"),
             isPresented: Binding(
@@ -239,14 +241,16 @@ struct DeckRequestView: View {
         Button {
             Haptics.tap()
             topicFocused = false
-            Task {
-                if let generated = await model.generate() {
-                    Haptics.success()
-                    plan = PendingImport(plan: generated)
-                } else {
-                    Haptics.failure()
+            AIConsent.run({
+                Task {
+                    if let generated = await model.generate() {
+                        Haptics.success()
+                        plan = PendingImport(plan: generated)
+                    } else {
+                        Haptics.failure()
+                    }
                 }
-            }
+            }, pending: $pendingAI)
         } label: {
             HStack(spacing: 10) {
                 if model.step == .working {
@@ -279,11 +283,11 @@ struct DeckRequestView: View {
                 .font(.app(.title2, weight: .semibold))
                 .multilineTextAlignment(.center)
             Text(Counted.words(result.addedNotes) + " · " + Counted.cards(result.addedCards))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
             if let model, model.lastCost > 0 {
                 Text(tr("Стоило ", "Custou ", "Cost ") + String(format: "$%.3f", model.lastCost))
                     .font(.app(.footnote))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Theme.muted)
             }
             Spacer()
             Button {

@@ -66,6 +66,9 @@ targets:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         UIUserInterfaceStyle: Automatic
+        # Только HTTPS системными средствами — освобождено от экспортного
+        # контроля. Без ключа App Store Connect спрашивает об этом при каждой сборке.
+        ITSAppUsesNonExemptEncryption: false
         # Шрифт интерфейса по умолчанию. Статические начертания, а не
         # вариативный файл: так каждое находится по имени (tools/make_fonts.py).
         UIAppFonts:

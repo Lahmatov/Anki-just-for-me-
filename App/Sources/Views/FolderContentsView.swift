@@ -66,7 +66,7 @@ struct FolderContentsView: View {
                                         .font(.app(.body, weight: .medium))
                                     Text(Counted.words(child.totalNoteCount))
                                         .font(.app(.caption))
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(Theme.muted)
                                 }
                             }
                         }
@@ -113,7 +113,7 @@ struct DeckRow: View {
                     .font(.app(.body, weight: .medium))
                 Text(subtitle)
                     .font(.app(.caption))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             }
         }
     }

@@ -22,7 +22,7 @@ struct SpeakingHubView: View {
                                         "Say what the episode was about — we'll review "
                                             + "understanding and language"))
                                     .font(.app(.caption))
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Theme.muted)
                             }
                         }
                     }
@@ -42,7 +42,7 @@ struct SpeakingHubView: View {
                                         "ship or sheep — the only honest pronunciation "
                                             + "check without the cloud"))
                                     .font(.app(.caption))
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Theme.muted)
                             }
                         }
                     }

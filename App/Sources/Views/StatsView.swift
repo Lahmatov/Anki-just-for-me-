@@ -46,7 +46,7 @@ struct StatsView: View {
                         "Nada pela frente — os cartões são todos novos ou estão muito longe.",
                         "Nothing ahead — all cards are either new or far beyond the horizon."))
                     .font(.app(.callout))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             } else {
                 Chart(days) { day in
                     BarMark(
@@ -61,7 +61,7 @@ struct StatsView: View {
                             if day.date == peak?.date, day.dueCount > 0 {
                                 Text("\(day.dueCount)")
                                     .font(.app(.caption2))
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Theme.muted)
                             }
                         }
                 }
@@ -116,7 +116,7 @@ struct StatsView: View {
                         "The curve will appear in a couple of days: it's built from daily "
                             + "snapshots, and history before the app was installed isn't stored."))
                     .font(.app(.callout))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             } else {
                 Chart(snapshots) { snapshot in
                     LineMark(
@@ -167,7 +167,7 @@ struct StatsView: View {
             if weeks.allSatisfy({ $0.dueCount == 0 }) {
                 Text(tr("Повторов пока не было.", "Ainda não houve revisões.", "No reviews yet."))
                     .font(.app(.callout))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             } else {
                 Chart(weeks) { week in
                     BarMark(

@@ -21,7 +21,7 @@ struct PasteImportView: View {
                         if text.isEmpty {
                             Text(tr("Вставь сюда JSON набора", "Cola aqui o JSON do baralho",
                                     "Paste the deck JSON here"))
-                                .foregroundStyle(.tertiary)
+                                .foregroundStyle(Theme.muted)
                                 .padding(.top, 8)
                                 .padding(.leading, 5)
                                 .allowsHitTesting(false)

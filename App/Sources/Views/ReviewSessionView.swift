@@ -122,7 +122,7 @@ struct ReviewSessionView: View {
             Spacer()
         }
         .font(.app(.caption))
-        .foregroundStyle(.secondary)
+        .foregroundStyle(Theme.muted)
         .monospacedDigit()
         .animation(.snappy, value: model.index)
     }
@@ -146,7 +146,7 @@ struct CardPromptView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text(card.type.instruction)
                 .font(.app(.caption))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
 
             prompt
 
@@ -214,7 +214,7 @@ struct CardPromptView: View {
                 Text(tr("Можно слушать сколько угодно раз.", "Podes ouvir quantas vezes quiseres.",
                         "Listen as many times as you like."))
                     .font(.app(.caption))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             }
         case .spelling:
             VStack(alignment: .leading, spacing: 12) {
@@ -228,7 +228,7 @@ struct CardPromptView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text(note?.term ?? "").font(.app(.largeTitle, weight: .bold))
                 if let ipa = note?.ipa, !ipa.isEmpty {
-                    Text(ipa).font(.ipa(.body)).foregroundStyle(.secondary)
+                    Text(ipa).font(.ipa(.body)).foregroundStyle(Theme.muted)
                 }
                 SpeakButton(text: note?.term ?? "", rate: .slow, label: SpeechRate.slow.title)
                 PronunciationRecorderView(word: note?.term ?? "")
@@ -240,7 +240,7 @@ struct CardPromptView: View {
                             "This word is part of the minimal pair “\(pair.first) — \(pair.second)”. "
                                 + "The Speech tab checks it more strictly."))
                         .font(.app(.caption))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.muted)
                 }
             }
         }
@@ -275,7 +275,7 @@ struct CardPromptView: View {
                     .font(.app(.headline))
                     .symbolEffect(.bounce, value: check.verdict)
                 if let hint = check.hint {
-                    Text(hint).font(.app(.subheadline)).foregroundStyle(.secondary)
+                    Text(hint).font(.app(.subheadline)).foregroundStyle(Theme.muted)
                 }
             }
 
@@ -286,7 +286,7 @@ struct CardPromptView: View {
                 SpeakButton(text: note?.term ?? "", compact: true)
             }
             if let ipa = note?.ipa, !ipa.isEmpty {
-                Text(ipa).font(.ipa(.body)).foregroundStyle(.secondary)
+                Text(ipa).font(.ipa(.body)).foregroundStyle(Theme.muted)
             }
             Text(note?.translation ?? "").font(.app(.body))
 
@@ -298,7 +298,7 @@ struct CardPromptView: View {
                 .padding(.top, 4)
             }
             if let translation = note?.exampleTranslation, !translation.isEmpty {
-                Text(translation).font(.app(.caption)).foregroundStyle(.secondary)
+                Text(translation).font(.app(.caption)).foregroundStyle(Theme.muted)
             }
             if let userNote = note?.userNote, !userNote.isEmpty {
                 Text(userNote).font(.app(.caption)).foregroundStyle(.orange)
@@ -400,7 +400,7 @@ struct SessionSummaryView: View {
                             "No cards are due. Come back later — or add a new deck."))
                         .font(.app(.subheadline))
                         .multilineTextAlignment(.center)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.muted)
                 }
             }
 
@@ -460,7 +460,7 @@ struct SessionSummaryView: View {
                 .foregroundStyle(value == 0 ? Color.secondary : color)
             Text(title)
                 .font(.app(.caption, weight: .medium))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)

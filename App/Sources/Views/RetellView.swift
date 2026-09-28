@@ -9,6 +9,7 @@ struct RetellView: View {
     @State private var model: RetellFlowModel?
     @State private var showSubtitleImporter = false
     @State private var importResult: ImportResult?
+    @State private var pendingAI: (() -> Void)?
     @Query(sort: \RetellSession.createdAt, order: .reverse) private var history: [RetellSession]
 
     var body: some View {
@@ -20,6 +21,7 @@ struct RetellView: View {
             }
         }
         .navigationTitle(tr("Пересказ", "Reconto", "Retelling"))
+        .aiConsentAlert(pending: $pendingAI)
         .onAppear {
             if model == nil { model = RetellFlowModel(context: context) }
         }
@@ -171,12 +173,12 @@ struct RetellView: View {
                 Spacer()
                 Text(Counted.words(model.recorder.wordCount))
                     .font(.app(.caption))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             }
             if !model.recorder.fullText.isEmpty {
                 Text(model.recorder.fullText)
                     .font(.app(.callout))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             }
             Button(tr("Закончить", "Terminar", "Finish"), systemImage: "stop.circle.fill") {
                 model.stopRecording()
@@ -196,7 +198,7 @@ struct RetellView: View {
                 .font(.app(.callout))
 
             Button(tr("Разобрать", "Analisar", "Review"), systemImage: "sparkles") {
-                Task { await model.analyze() }
+                AIConsent.run({ Task { await model.analyze() } }, pending: $pendingAI)
             }
             .buttonStyle(.chunky)
             .disabled(!model.canAnalyze)
@@ -315,7 +317,7 @@ struct RetellView: View {
                             Text("«\(quote)»")
                                 .font(.app(.caption))
                                 .italic()
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Theme.muted)
                         }
                         if let comment = item.element.comment, !comment.isEmpty {
                             Text(comment).font(.app(.caption))
@@ -326,7 +328,7 @@ struct RetellView: View {
                                      "possibly a recognition error"),
                                   systemImage: "waveform.badge.exclamationmark")
                                 .font(.app(.caption2))
-                                .foregroundStyle(.tertiary)
+                                .foregroundStyle(Theme.muted)
                         }
                     }
                 }
@@ -338,12 +340,12 @@ struct RetellView: View {
     private func correctionRow(_ correction: RetellReport.Correction) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack {
-                Text(correction.said).strikethrough().foregroundStyle(.secondary)
+                Text(correction.said).strikethrough().foregroundStyle(Theme.muted)
                 Image(systemName: "arrow.right").font(.app(.caption2))
                 Text(correction.better).bold()
             }
             if let why = correction.why, !why.isEmpty {
-                Text(why).font(.app(.caption)).foregroundStyle(.secondary)
+                Text(why).font(.app(.caption)).foregroundStyle(Theme.muted)
             }
         }
     }
@@ -358,7 +360,7 @@ struct RetellView: View {
                          + " \(Int(session.coverage * 100))% · "
                          + session.createdAt.formatted(date: .abbreviated, time: .omitted))
                         .font(.app(.caption))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.muted)
                 }
             }
             .onDelete { offsets in

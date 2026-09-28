@@ -109,7 +109,7 @@ struct RewardsView: View {
                         if let days = progress.daysLeft, days > 0 {
                             Text(Counted.days(days) + tr(" до срока", " até ao prazo", " left"))
                                 .font(.app(.caption))
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Theme.muted)
                         }
                     }
                     .font(.app(.subheadline))
@@ -123,7 +123,7 @@ struct RewardsView: View {
                                                "São precisas %.1f palavras por dia para chegar a tempo",
                                                "You need %.1f words a day to make it"), pace))
                             .font(.app(.caption))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Theme.muted)
                     }
                 }
                 Button(tr("Отменить цель", "Cancelar objetivo", "Cancel goal"), role: .destructive) {
@@ -171,9 +171,9 @@ struct RewardsView: View {
             if let next = AchievementCatalog.next(for: current) {
                 VStack(alignment: .leading, spacing: 4) {
                     Label(next.title, systemImage: next.symbol)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.muted)
                     ChunkyProgressBar(value: next.progress(in: current))
-                    Text(next.detail).font(.app(.caption)).foregroundStyle(.secondary)
+                    Text(next.detail).font(.app(.caption)).foregroundStyle(Theme.muted)
                 }
             }
             ForEach(unlocked) { achievement in
@@ -184,7 +184,7 @@ struct RewardsView: View {
                         Text(achievement.title)
                         Text(achievement.detail)
                             .font(.app(.caption))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Theme.muted)
                     }
                 }
             }
@@ -201,7 +201,7 @@ struct RewardsView: View {
                          + (contract.completedAt ?? contract.startedAt)
                             .formatted(date: .abbreviated, time: .omitted))
                         .font(.app(.caption))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.muted)
                     if contract.hadManualAdjustments {
                         Label(tr("прогресс правился руками", "progresso corrigido à mão",
                                  "progress edited by hand"),
@@ -249,7 +249,7 @@ struct RewardEarnedView: View {
                       "Não são visualizações — são palavras realmente aprendidas.",
                       "Not views — words you've really learned."))
                 .font(.app(.callout))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 

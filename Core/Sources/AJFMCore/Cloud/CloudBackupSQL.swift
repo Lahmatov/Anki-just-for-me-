@@ -66,6 +66,12 @@ public enum CloudBackupSQL {
             [.int(max(1, keep))])
     }
 
+    /// Удалить все снимки — часть «Удалить все данные». Таблица удаляется
+    /// целиком, а не очищается: после удаления в базе не должно остаться
+    /// и следа приложения. `IF EXISTS` — чтобы удаление без единого
+    /// снимка не было ошибкой.
+    public static let dropAll = NeonQuery("DROP TABLE IF EXISTS \(table)")
+
     /// Список без самих снимков: они тяжёлые, а для выбора нужен только размер.
     public static func list(limit: Int = keep) -> NeonQuery {
         NeonQuery(

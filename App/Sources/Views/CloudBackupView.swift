@@ -42,7 +42,7 @@ struct CloudBackupView: View {
                 Section(tr("Снимки в облаке", "Cópias na nuvem", "Cloud snapshots")) {
                     if entries.isEmpty {
                         Text(tr("Пока ни одного.", "Ainda nenhuma.", "None yet."))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Theme.muted)
                     }
                     ForEach(entries) { entry in
                         Button {
@@ -55,7 +55,7 @@ struct CloudBackupView: View {
                                      + ByteCountFormatter.string(
                                         fromByteCount: Int64(entry.bytes), countStyle: .file))
                                     .font(.app(.caption))
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Theme.muted)
                             }
                         }
                     }

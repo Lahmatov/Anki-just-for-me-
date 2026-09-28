@@ -23,6 +23,10 @@ enum SettingsKey {
     /// Устаревший флаг «знакомство пройдено» — читается только для перехода
     /// на версии (`OnboardingPlan.seenVersion`).
     static let onboardingDone = "onboardingDone"
+    /// Согласие на отправку текста в Anthropic (`AIConsent`).
+    static let aiConsent = "aiConsent"
+    /// Дневная цель в минутах (`DailyGoal`).
+    static let dailyMinutesGoal = "dailyMinutesGoal"
     /// Какую версию знакомства человек уже видел.
     static let onboardingVersion = "onboardingVersion"
     static let lastLaunchAnimation = "lastLaunchAnimation"

@@ -52,6 +52,12 @@ struct CloudBackupService {
         Log.info(.backup, "Neon подключён", detail: connection.redacted)
     }
 
+    /// Удаляет все снимки из облака — часть «Удалить все данные».
+    func eraseAll() async throws {
+        _ = try await client().run(CloudBackupSQL.dropAll)
+        Log.info(.backup, "Снимки в Neon удалены")
+    }
+
     /// Отправляет снимок, если с прошлого прошли сутки.
     func uploadIfNeeded(now: Date = Date()) async {
         guard Self.isConfigured, CloudBackupSQL.isDue(lastUpload: Self.lastUpload, now: now) else {

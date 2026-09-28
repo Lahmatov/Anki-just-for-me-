@@ -54,9 +54,9 @@ struct SearchView: View {
                             Text(note.term).fontWeight(.medium)
                             Text(note.translation)
                                 .font(.app(.caption))
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Theme.muted)
                             if let deck = note.deck?.name {
-                                Text(deck).font(.app(.caption2)).foregroundStyle(.tertiary)
+                                Text(deck).font(.app(.caption2)).foregroundStyle(Theme.muted)
                             }
                         }
                     }
@@ -82,7 +82,7 @@ struct NoteDetailView: View {
                     SpeakButton(text: note.term, compact: true)
                 }
                 if let ipa = note.ipa, !ipa.isEmpty {
-                    Text(ipa).font(.ipa(.subheadline)).foregroundStyle(.secondary)
+                    Text(ipa).font(.ipa(.subheadline)).foregroundStyle(Theme.muted)
                 }
                 Text(note.translation)
                 if !note.synonyms.isEmpty {
@@ -98,7 +98,7 @@ struct NoteDetailView: View {
                         SpeakButton(text: example, compact: true)
                     }
                     if let translation = note.exampleTranslation, !translation.isEmpty {
-                        Text(translation).font(.app(.caption)).foregroundStyle(.secondary)
+                        Text(translation).font(.app(.caption)).foregroundStyle(Theme.muted)
                     }
                 }
             }

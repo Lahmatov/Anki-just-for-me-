@@ -198,4 +198,37 @@ final class ProgressServiceTests: XCTestCase {
         XCTAssertEqual(streak.freezesLeft, 1)
         XCTAssertTrue(streak.studiedToday)
     }
+
+    // MARK: - Цель дня в минутах
+
+    func testTodayTimeSumsHonestReviewsWithACap() throws {
+        let (context, importer, service) = try makeEnvironment()
+        try importWords(importer, count: 3, types: [.recognition])
+        let cards = try context.fetch(FetchDescriptor<Card>())
+        let reviews = ReviewService(context: context)
+        try reviews.apply(grade: .good, to: cards[0], timeSpent: 30)
+        // Экран забыли открытым на десять минут — засчитана минута.
+        try reviews.apply(grade: .good, to: cards[1], timeSpent: 600)
+        // Правка руками — не учёба.
+        try reviews.apply(grade: .good, to: cards[2], timeSpent: 40, isHonest: false)
+
+        XCTAssertEqual(service.studiedSecondsToday(), 90, accuracy: 0.001)
+    }
+
+    func testYesterdaysReviewsDoNotCountToday() throws {
+        let (context, importer, service) = try makeEnvironment()
+        try importWords(importer, count: 1, types: [.recognition])
+        let card = try XCTUnwrap(try context.fetch(FetchDescriptor<Card>()).first)
+        try ReviewService(context: context).apply(grade: .good, to: card, timeSpent: 45)
+        let log = try XCTUnwrap(try context.fetch(FetchDescriptor<Review>()).first)
+        log.timestamp = Date().addingTimeInterval(-2 * 86_400)
+        try context.save()
+
+        XCTAssertEqual(service.studiedSecondsToday(), 0)
+    }
+
+    func testNoReviewsMeansNoTime() throws {
+        let (_, _, service) = try makeEnvironment()
+        XCTAssertEqual(service.studiedSecondsToday(), 0)
+    }
 }

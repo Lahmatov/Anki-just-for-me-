@@ -14,6 +14,7 @@ struct SettingsView: View {
         AppSettings.default.desiredRetention
 
     @AppStorage(SettingsKey.autoSpeak) private var autoSpeak = true
+    @AppStorage(SettingsKey.dailyMinutesGoal) private var goalMinutes = DailyGoal.defaultMinutes
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
     @AppStorage(SettingsKey.englishLevel) private var storedLevel: String?
     @State private var showPlacementTest = false
@@ -131,7 +132,7 @@ struct SettingsView: View {
                     .font(.app(.title3, weight: .semibold))
                 Text("It turned out he was right all along.")
                     .font(.app(.subheadline))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             }
             .padding(.vertical, 4)
         } header: {
@@ -144,6 +145,11 @@ struct SettingsView: View {
     @ViewBuilder
     private var loadSection: some View {
         Section {
+            Picker(tr("Цель дня", "Objetivo do dia", "Daily goal"), selection: $goalMinutes) {
+                ForEach(DailyGoal.options, id: \.self) { minutes in
+                    Text(DailyGoal.format(minutes: minutes)).tag(minutes)
+                }
+            }
             Stepper(tr("Новых в день: ", "Novos por dia: ", "New per day: ") + "\(newPerDay)",
                     value: $newPerDay, in: 0...200, step: 5)
             Stepper(tr("Повторов в день: ", "Revisões por dia: ", "Reviews per day: ")
@@ -345,6 +351,14 @@ struct SettingsView: View {
                 Label(tr("Журнал событий", "Registo de eventos", "Event log"),
                       systemImage: "text.alignleft")
             }
+            NavigationLink {
+                PrivacyView()
+            } label: {
+                Label(tr("Конфиденциальность и удаление данных", "Privacidade e apagar dados",
+                         "Privacy and data deletion"),
+                      systemImage: "hand.raised")
+            }
+            LabeledContent(tr("Версия", "Versão", "Version"), value: Self.version)
         } footer: {
             Text(tr("Что происходило внутри приложения. Если что-то повело себя "
                         + "странно — журнал можно переслать одним нажатием, это "
@@ -355,6 +369,13 @@ struct SettingsView: View {
                     "What happened inside the app. If something behaved oddly, the log "
                         + "can be shared with one tap — faster than any description."))
         }
+    }
+
+    private static var version: String {
+        let info = Bundle.main.infoDictionary
+        let short = info?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = info?["CFBundleVersion"] as? String ?? "?"
+        return "Recap \(short) (\(build))"
     }
 
     private var reminderDate: Date {

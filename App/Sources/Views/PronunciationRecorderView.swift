@@ -17,7 +17,7 @@ struct PronunciationRecorderView: View {
             if service.isRecording, !service.partialText.isEmpty {
                 Text(service.partialText)
                     .font(.app(.callout))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.muted)
             }
 
             switch service.status {
@@ -105,14 +105,14 @@ struct PronunciationRecorderView: View {
 
             Text(assessment.message)
                 .font(.app(.callout))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.muted)
 
             if assessment.confidence > 0 {
                 Text(tr("Уверенность распознавателя: ", "Confiança do reconhecedor: ",
                         "Recognizer confidence: ")
                      + "\(Int(assessment.confidence * 100))%")
                     .font(.app(.caption2))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Theme.muted)
             }
 
             if pair == nil {
@@ -120,7 +120,7 @@ struct PronunciationRecorderView: View {
                 // не означает правильного произношения.
                 Text(PronunciationEvaluator.onDeviceDisclaimer)
                     .font(.app(.caption2))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Theme.muted)
             }
 
             HStack {
