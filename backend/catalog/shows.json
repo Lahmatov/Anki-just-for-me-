@@ -1,0 +1,305 @@
+{
+  "_comment": "Топ-50 сериалов для изучающих английский: много живого диалога, в основном американский английский (accent US). Порядок — примерный порог популярности у изучающих язык; британские и канадские помечены — приложение учит американскому варианту.",
+  "shows": [
+    {
+      "rank": 1,
+      "name": "Friends",
+      "year": 1994,
+      "accent": "US"
+    },
+    {
+      "rank": 2,
+      "name": "The Office",
+      "year": 2005,
+      "accent": "US"
+    },
+    {
+      "rank": 3,
+      "name": "How I Met Your Mother",
+      "year": 2005,
+      "accent": "US"
+    },
+    {
+      "rank": 4,
+      "name": "The Big Bang Theory",
+      "year": 2007,
+      "accent": "US"
+    },
+    {
+      "rank": 5,
+      "name": "Modern Family",
+      "year": 2009,
+      "accent": "US"
+    },
+    {
+      "rank": 6,
+      "name": "Brooklyn Nine-Nine",
+      "year": 2013,
+      "accent": "US"
+    },
+    {
+      "rank": 7,
+      "name": "Parks and Recreation",
+      "year": 2009,
+      "accent": "US"
+    },
+    {
+      "rank": 8,
+      "name": "Breaking Bad",
+      "year": 2008,
+      "accent": "US"
+    },
+    {
+      "rank": 9,
+      "name": "Stranger Things",
+      "year": 2016,
+      "accent": "US"
+    },
+    {
+      "rank": 10,
+      "name": "Seinfeld",
+      "year": 1989,
+      "accent": "US"
+    },
+    {
+      "rank": 11,
+      "name": "The Simpsons",
+      "year": 1989,
+      "accent": "US"
+    },
+    {
+      "rank": 12,
+      "name": "Grey's Anatomy",
+      "year": 2005,
+      "accent": "US"
+    },
+    {
+      "rank": 13,
+      "name": "House",
+      "year": 2004,
+      "accent": "US"
+    },
+    {
+      "rank": 14,
+      "name": "Suits",
+      "year": 2011,
+      "accent": "US"
+    },
+    {
+      "rank": 15,
+      "name": "The Good Place",
+      "year": 2016,
+      "accent": "US"
+    },
+    {
+      "rank": 16,
+      "name": "Gilmore Girls",
+      "year": 2000,
+      "accent": "US"
+    },
+    {
+      "rank": 17,
+      "name": "New Girl",
+      "year": 2011,
+      "accent": "US"
+    },
+    {
+      "rank": 18,
+      "name": "Community",
+      "year": 2009,
+      "accent": "US"
+    },
+    {
+      "rank": 19,
+      "name": "Young Sheldon",
+      "year": 2017,
+      "accent": "US"
+    },
+    {
+      "rank": 20,
+      "name": "Ted Lasso",
+      "year": 2020,
+      "accent": "US"
+    },
+    {
+      "rank": 21,
+      "name": "Abbott Elementary",
+      "year": 2021,
+      "accent": "US"
+    },
+    {
+      "rank": 22,
+      "name": "Only Murders in the Building",
+      "year": 2021,
+      "accent": "US"
+    },
+    {
+      "rank": 23,
+      "name": "The Bear",
+      "year": 2022,
+      "accent": "US"
+    },
+    {
+      "rank": 24,
+      "name": "Wednesday",
+      "year": 2022,
+      "accent": "US"
+    },
+    {
+      "rank": 25,
+      "name": "Scrubs",
+      "year": 2001,
+      "accent": "US"
+    },
+    {
+      "rank": 26,
+      "name": "That '70s Show",
+      "year": 1998,
+      "accent": "US"
+    },
+    {
+      "rank": 27,
+      "name": "Two and a Half Men",
+      "year": 2003,
+      "accent": "US"
+    },
+    {
+      "rank": 28,
+      "name": "Desperate Housewives",
+      "year": 2004,
+      "accent": "US"
+    },
+    {
+      "rank": 29,
+      "name": "Lost",
+      "year": 2004,
+      "accent": "US"
+    },
+    {
+      "rank": 30,
+      "name": "Prison Break",
+      "year": 2005,
+      "accent": "US"
+    },
+    {
+      "rank": 31,
+      "name": "The Walking Dead",
+      "year": 2010,
+      "accent": "US"
+    },
+    {
+      "rank": 32,
+      "name": "Better Call Saul",
+      "year": 2015,
+      "accent": "US"
+    },
+    {
+      "rank": 33,
+      "name": "Dexter",
+      "year": 2006,
+      "accent": "US"
+    },
+    {
+      "rank": 34,
+      "name": "The Sopranos",
+      "year": 1999,
+      "accent": "US"
+    },
+    {
+      "rank": 35,
+      "name": "Mad Men",
+      "year": 2007,
+      "accent": "US"
+    },
+    {
+      "rank": 36,
+      "name": "Succession",
+      "year": 2018,
+      "accent": "US"
+    },
+    {
+      "rank": 37,
+      "name": "Euphoria",
+      "year": 2019,
+      "accent": "US"
+    },
+    {
+      "rank": 38,
+      "name": "The Mandalorian",
+      "year": 2019,
+      "accent": "US"
+    },
+    {
+      "rank": 39,
+      "name": "The Last of Us",
+      "year": 2023,
+      "accent": "US"
+    },
+    {
+      "rank": 40,
+      "name": "Silicon Valley",
+      "year": 2014,
+      "accent": "US"
+    },
+    {
+      "rank": 41,
+      "name": "Veep",
+      "year": 2012,
+      "accent": "US"
+    },
+    {
+      "rank": 42,
+      "name": "Arrested Development",
+      "year": 2003,
+      "accent": "US"
+    },
+    {
+      "rank": 43,
+      "name": "Gossip Girl",
+      "year": 2007,
+      "accent": "US"
+    },
+    {
+      "rank": 44,
+      "name": "Sex and the City",
+      "year": 1998,
+      "accent": "US"
+    },
+    {
+      "rank": 45,
+      "name": "Emily in Paris",
+      "year": 2020,
+      "accent": "US"
+    },
+    {
+      "rank": 46,
+      "name": "Schitt's Creek",
+      "year": 2015,
+      "accent": "CA"
+    },
+    {
+      "rank": 47,
+      "name": "Game of Thrones",
+      "year": 2011,
+      "accent": "UK"
+    },
+    {
+      "rank": 48,
+      "name": "Sherlock",
+      "year": 2010,
+      "accent": "UK"
+    },
+    {
+      "rank": 49,
+      "name": "The Crown",
+      "year": 2016,
+      "accent": "UK"
+    },
+    {
+      "rank": 50,
+      "name": "Downton Abbey",
+      "year": 2010,
+      "accent": "UK"
+    }
+  ]
+}

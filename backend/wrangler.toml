@@ -1,0 +1,25 @@
+# Cloudflare Worker сервера Recap. Секреты сюда не пишутся никогда —
+# только `wrangler secret put ИМЯ` (список — docs/backend.md).
+name = "recap-backend"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "recap"
+# Заменить на id из `wrangler d1 create recap`.
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+migrations_dir = "migrations"
+
+[vars]
+BUNDLE_ID = "com.lahmatov.ajfm"
+# Модель для слов и разговоров: быстрая и дешёвая.
+MODEL = "claude-haiku-4-5"
+# Сколько единиц на месяц подписки и на один промокод.
+SUBSCRIPTION_UNITS = "2000000"
+PROMO_UNITS = "2000000"
+# Сколько устройств может делить одну подписку.
+MAX_DEVICES_PER_SUBSCRIPTION = "3"
+# Идентификаторы товаров подписки в App Store Connect, через запятую.
+SUBSCRIPTION_PRODUCTS = "com.lahmatov.ajfm.plus.monthly,com.lahmatov.ajfm.plus.yearly"
