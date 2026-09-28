@@ -109,6 +109,91 @@ Christmas themes, Santa hats, text, letters, logos, watermark, busy background,
 extra limbs, inconsistent colors between images.
 ```
 
+## 6. Артефакты: один лось на все приложения
+
+Мончик — общий персонаж семейства приложений. В каждом приложении или для каждого языка
+у него появляется **один предмет-артефакт**, который сразу говорит, чему он учит.
+
+**Что не меняется никогда:** лось, его пропорции, лицо, цвет шерсти и **шарф цветов
+сияния**. Шарф — фирменный знак всей линейки: по нему Мончика узнают в любом приложении.
+
+**Что меняется:** только артефакт и, если нужно, один акцентный цвет приложения.
+
+Правила для артефакта:
+
+- **Один предмет**, а не набор. Два предмета на маленькой иконке сливаются в кашу.
+- **Всегда в одном месте** внутри одного приложения: либо в копытах, либо на голове
+  (шапка, очки, наушники). Предмет на голове удобнее — копыта остаются свободными
+  для поз (машет, радуется, думает).
+- **Узнаётся без надписи.** Генераторы коверкают буквы; максимум — 2–3 буквы крупно
+  (`EN`, `PT`), и лучше без них.
+- **Язык — не страна.** Флаг подходит, только если приложение учит конкретному варианту:
+  американскому английскому — звёзды и полосы, британскому — Union Jack, европейскому
+  португальскому — Португалия. Иначе — символ культуры, а не флаг.
+- **Без стереотипов**, над которыми смеются носители: не сомбреро и не матрёшка, а еда,
+  транспорт, архитектура, привычные вещи.
+- **Не повторять** артефакт дважды на одной картинке (например, книга в копытах и она же
+  висит над головой).
+
+### Шаблон промпта
+
+Приложить картинку с обычным Мончиком как референс и написать:
+
+```
+Same character as the reference image: Monchik, the cartoon moose with the knitted
+northern-lights scarf. Keep his face, body, proportions, fur color and scarf exactly
+the same, same illustration style.
+
+Add exactly ONE subject artifact: [ARTIFACT].
+Placement: [PLACEMENT].
+The artifact is simple and flat, in the same style, clearly readable at small sizes,
+using at most 2–3 colors that harmonize with the aurora palette
+(#2BC39A, #1C9FEF, #A873F2).
+
+Pose: [POSE].
+Transparent background. No text [or: only the letters "XX", large and simple],
+no logos, no watermark, the artifact appears only once.
+```
+
+`[PLACEMENT]` — одно из:
+- `holding it in both front hooves in front of his chest`
+- `wearing it on his head, between the antlers`
+- `hanging on the scarf as a small round badge`
+
+`[POSE]` — строки поз из раздела 2.
+
+### Языки
+
+| Приложение | `[ARTIFACT]` |
+|---|---|
+| **Американский английский** (Recap — это приложение) | `a navy-blue book with a white star and red-white stripes on the cover` или, раз учим по сериалам, `a striped popcorn bucket and a TV remote` |
+| Британский английский | `a book with a Union Jack cover` или `a small red double-decker bus toy` |
+| Европейский португальский | `a pastel de nata on a small plate` или `a small yellow Lisbon tram (eléctrico 28)` или `a book with a blue-and-white azulejo tile pattern` |
+| Испанский | `a book with a red-and-yellow cover and a small paella pan` |
+| Французский | `a navy beret` или `a croissant` |
+| Немецкий | `a big soft pretzel` |
+| Итальянский | `a small espresso cup` или `a Vespa-style scooter keychain` |
+| Японский | `an onigiri rice ball` или `a calligraphy brush` |
+| Китайский | `a red paper lantern` |
+| Корейский | `a bowl of bibimbap` |
+
+### Другие предметы
+
+| Приложение | `[ARTIFACT]` |
+|---|---|
+| Математика | `a wooden ruler and a pencil` или `a calculator` |
+| Программирование | `a small laptop with "</>" on the lid` |
+| Музыка | `a small acoustic guitar` |
+| География | `a small globe` |
+| История | `a rolled parchment scroll and a quill` |
+| Химия / наука | `a round flask with bubbling aurora-colored liquid` |
+| Теория вождения | `a small steering wheel` |
+| Финансы | `a piggy bank` |
+| Спорт / здоровье | `a small dumbbell and a sweatband` |
+| Кулинария | `a white chef's hat` |
+| Чтение / литература | `a stack of three books` |
+| Шахматы | `a large white knight chess piece` |
+
 ## Палитра
 
 | Цвет | HEX | Где |
