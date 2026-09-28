@@ -20,7 +20,8 @@
           "items": { "enum": ["recognition", "recall", "listening", "spelling", "pronunciation", "cloze"] },
           "default": ["recognition", "recall"]
         },
-        "source": { "type": "string" }
+        "source": { "type": "string" },
+        "cover": { "type": "string", "description": "URL of a cover image, e.g. the show poster" }
       },
       "additionalProperties": false
     },

@@ -54,6 +54,9 @@ final class Deck {
     var schedulerRaw: String = SchedulerID.fsrs6.rawValue
     var cardTypesRaw: [String] = []
     var source: String?
+    /// Постер сериала (TVMaze). Необязательное поле — старые базы
+    /// переезжают на новую схему сами, без ручной миграции.
+    var coverURL: String?
     var createdAt: Date = Date()
 
     var folder: Folder?

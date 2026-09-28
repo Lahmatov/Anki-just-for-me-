@@ -3,46 +3,44 @@ import SwiftData
 import AJFMCore
 
 /// Награды: собственные контракты вида «150 слов — и покупаю себе пиццу».
+///
+/// Экран из карточек, как «Сегодня». Всё считается один раз в `refresh()`,
+/// а не в `body`: статистика перебирает все повторы, и пересчёт на каждую
+/// перерисовку заметно грел телефон.
 struct RewardsView: View {
     @Environment(\.modelContext) private var context
-    @Query private var cards: [Card]
-    @Query private var contractEntities: [RewardContractEntity]
 
     @AppStorage(SettingsKey.weeklyTarget) private var weeklyTarget = 5
 
     @State private var showNewContract = false
     @State private var celebrating: RewardContract?
+    @State private var confirmCancel = false
+
+    @State private var week: WeekProgress?
+    @State private var stats: LearningStats?
+    @State private var matureWords = 0
+    @State private var contracts: [RewardContract] = []
 
     private var service: ProgressService { ProgressService(context: context) }
-    private var stats: LearningStats { service.stats() }
-    private var matureWords: Int { service.matureWordCount() }
-
-    private var contracts: [RewardContract] {
-        contractEntities.map(\.asContract).sorted { $0.startedAt > $1.startedAt }
-    }
     private var active: RewardContract? { contracts.first { !$0.isCompleted } }
 
     var body: some View {
         NavigationStack {
-            List {
-                weekSection
-                contractSection
-                achievementSection
-                if contracts.contains(where: \.isCompleted) {
-                    historySection
-                }
-            }
-            .themedScreen()
-            .navigationTitle(tr("Награды", "Recompensas", "Rewards"))
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(tr("Новая цель", "Novo objetivo", "New goal"), systemImage: "plus") {
-                        showNewContract = true
+            ScrollView {
+                VStack(spacing: Design.stackSpacing) {
+                    contractCard
+                    if let week { weekCard(week) }
+                    if let stats { achievementsCard(stats) }
+                    if contracts.contains(where: \.isCompleted) {
+                        historyCard
                     }
-                        .disabled(active != nil)
                 }
+                .padding(.horizontal)
+                .padding(.bottom, 24)
             }
-            .sheet(isPresented: $showNewContract) {
+            .background(Theme.background.ignoresSafeArea())
+            .navigationTitle(tr("Награды", "Recompensas", "Rewards"))
+            .sheet(isPresented: $showNewContract, onDismiss: refresh) {
                 NewContractView(currentMature: matureWords) { goal, reward, deadline in
                     service.createContract(goal: goal, reward: reward, deadline: deadline)
                 }
@@ -51,167 +49,235 @@ struct RewardsView: View {
                 RewardEarnedView(contract: contract) {
                     service.complete(contract)
                     celebrating = nil
+                    refresh()
                     showNewContract = true
                 }
             }
-            .onAppear(perform: checkCompletion)
-            .onChange(of: matureWords) { _, _ in checkCompletion() }
-        }
-    }
-
-    // MARK: - Секции
-
-    @ViewBuilder
-    private var weekSection: some View {
-        let week = service.weekProgress(target: weeklyTarget)
-        Section {
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Text(tr("Эта неделя", "Esta semana", "This week"))
-                    Spacer()
-                    Text("\(week.daysStudied) " + tr("из", "de", "of") + " \(week.target)")
-                        .foregroundStyle(week.isReached ? .green : .secondary)
+            .confirmationDialog(
+                tr("Отменить цель?", "Cancelar o objetivo?", "Cancel the goal?"),
+                isPresented: $confirmCancel, titleVisibility: .visible
+            ) {
+                Button(tr("Отменить цель", "Cancelar objetivo", "Cancel goal"), role: .destructive) {
+                    if let active { service.delete(active) }
+                    refresh()
                 }
-                ChunkyProgressBar(value: week.fraction)
+                Button(tr("Оставить", "Manter", "Keep it"), role: .cancel) {}
+            } message: {
+                Text(tr("Прогресс слов останется, пропадёт только сама цель с наградой.",
+                        "O progresso das palavras fica; só o objetivo e a recompensa desaparecem.",
+                        "Your word progress stays; only the goal and its reward go away."))
             }
-            Stepper(tr("Цель: ", "Objetivo: ", "Goal: ") + Counted.days(weeklyTarget)
-                        + tr(" в неделю", " por semana", " a week"),
-                    value: $weeklyTarget, in: 1...7)
-        } footer: {
-            Text(tr("Недельная цель — в дополнение к серии дней на главном экране. "
-                        + "Серия тянет вернуться завтра, а неделя прощает пропущенный "
-                        + "вторник; самый опасный момент — первый пропуск — прикрывает "
-                        + "заморозка.",
-                    "O objetivo semanal complementa a sequência de dias no ecrã principal. "
-                        + "A sequência puxa-te a voltar amanhã, a semana perdoa a terça "
-                        + "falhada; o momento mais perigoso — a primeira falha — fica "
-                        + "coberto por um congelamento.",
-                    "The weekly goal complements the day streak on the main screen. "
-                        + "The streak pulls you back tomorrow, the week forgives a missed "
-                        + "Tuesday; the riskiest moment — the first gap — is covered by "
-                        + "a freeze."))
+            .onAppear(perform: refresh)
+            .onChange(of: weeklyTarget) { _, _ in refresh() }
         }
     }
 
+    private func refresh() {
+        let service = self.service
+        withAnimation(.snappy) {
+            matureWords = service.matureWordCount()
+            stats = service.stats()
+            week = service.weekProgress(target: weeklyTarget)
+            contracts = service.contracts()
+        }
+        checkCompletion()
+    }
+
+    // MARK: - Цель с наградой
+
     @ViewBuilder
-    private var contractSection: some View {
+    private var contractCard: some View {
         if let active {
             let progress = RewardCalculator.progress(
                 contract: active, currentMatureWords: matureWords)
-            Section {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(active.reward).font(.app(.headline))
-                    ChunkyProgressBar(value: progress.fraction)
-                    HStack {
+            VStack(alignment: .leading, spacing: 12) {
+                CardSectionHeader(title: tr("Текущая цель", "Objetivo atual", "Current goal"))
+                    .padding(.top, -8)
+                HStack(alignment: .center, spacing: 14) {
+                    IconBadge(systemName: "gift.fill", color: Theme.gold, size: 48)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(active.reward)
+                            .font(.app(.title3))
+                            .foregroundStyle(Theme.ink)
                         Text("\(progress.done) " + tr("из", "de", "of") + " "
                              + Counted.words(progress.goal))
-                        Spacer()
-                        if let days = progress.daysLeft, days > 0 {
-                            Text(Counted.days(days) + tr(" до срока", " até ao prazo", " left"))
-                                .font(.app(.caption))
-                                .foregroundStyle(Theme.muted)
-                        }
-                    }
-                    .font(.app(.subheadline))
-
-                    Text(RewardCalculator.statusLine(contract: active, progress: progress))
-                        .font(.app(.callout))
-                        .foregroundStyle(progress.isReached ? .green : .secondary)
-
-                    if let pace = progress.requiredPerDay {
-                        Text(String(format: tr("Нужно %.1f слова в день, чтобы успеть",
-                                               "São precisas %.1f palavras por dia para chegar a tempo",
-                                               "You need %.1f words a day to make it"), pace))
-                            .font(.app(.caption))
+                            .font(.app(.subheadline, weight: .bold))
                             .foregroundStyle(Theme.muted)
+                            .contentTransition(.numericText())
                     }
                 }
-                Button(tr("Отменить цель", "Cancelar objetivo", "Cancel goal"), role: .destructive) {
-                    service.delete(active)
+                ChunkyProgressBar(value: progress.fraction,
+                                  tint: progress.isReached ? Theme.gold : Theme.primary)
+                Text(RewardCalculator.statusLine(contract: active, progress: progress))
+                    .font(.app(.callout))
+                    .foregroundStyle(progress.isReached ? Theme.green : Theme.ink)
+                HStack {
+                    if let days = progress.daysLeft, days > 0 {
+                        Label(Counted.days(days) + tr(" до срока", " até ao prazo", " left"),
+                              systemImage: "calendar")
+                    }
+                    if let pace = progress.requiredPerDay {
+                        Text(String(format: tr("%.1f слова в день", "%.1f palavras por dia",
+                                               "%.1f words a day"), pace))
+                    }
                 }
-                    .font(.app(.caption))
-            } header: {
-                Text(tr("Текущая цель", "Objetivo atual", "Current goal"))
-            } footer: {
+                .font(.app(.caption, weight: .bold))
+                .foregroundStyle(Theme.muted)
+
+                Button {
+                    confirmCancel = true
+                } label: {
+                    Text(tr("Отменить цель", "Cancelar objetivo", "Cancel goal"))
+                        .font(.app(.callout))
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.chunkySecondary)
+
                 let matureDays = Counted.days(Int(ReviewState.matureIntervalDays))
                 Text(tr("Считаются слова, дожившие до интервала в \(matureDays), и только те, "
-                            + "что появились после начала цели. Просмотры не в счёт — иначе "
-                            + "награду можно накликать за вечер.",
+                            + "что появились после начала цели. Просмотры не в счёт.",
                         "Contam as palavras que chegaram a um intervalo de \(matureDays), e só "
-                            + "as que surgiram depois de o objetivo começar. Visualizações não "
-                            + "contam — senão a recompensa ganhava-se numa noite de cliques.",
+                            + "as que surgiram depois de o objetivo começar. Visualizações não contam.",
                         "Only words that reached a \(matureDays) interval count, and only those "
-                            + "added after the goal started. Views don't count — otherwise you "
-                            + "could click your way to the reward in one evening."))
+                            + "added after the goal started. Views don't count."))
+                    .font(.app(.caption))
+                    .foregroundStyle(Theme.muted)
             }
+            .cardSurface()
         } else {
-            Section {
-                Button(tr("Завести цель", "Criar objetivo", "Set a goal"), systemImage: "target") {
+            VStack(spacing: 14) {
+                MascotSays(mood: .cheer,
+                           text: tr("Придумай себе приз: пицца, игра, что угодно. Я честно "
+                                        + "посчитаю, когда он заслужен!",
+                                    "Inventa um prémio: pizza, um jogo, o que quiseres. Eu conto "
+                                        + "honestamente quando o mereceres!",
+                                    "Pick yourself a prize: pizza, a game, anything. I'll honestly "
+                                        + "count when you've earned it!"))
+                Button {
+                    Haptics.tap()
                     showNewContract = true
+                } label: {
+                    Label(tr("Завести цель", "Criar objetivo", "Set a goal"), systemImage: "target")
+                        .font(.app(.headline))
+                        .frame(maxWidth: .infinity)
                 }
-            } footer: {
-                Text(tr("Придумай награду себе самому: диск с игрой, пицца, что угодно. "
-                            + "Приложение честно посчитает, когда она заслужена.",
-                        "Inventa uma recompensa para ti: um jogo, uma pizza, o que quiseres. "
-                            + "A aplicação conta honestamente quando a mereceste.",
-                        "Pick a reward for yourself: a new game, pizza, anything. "
-                            + "The app will honestly count when you've earned it."))
+                .buttonStyle(.chunky)
+                .controlSize(.large)
             }
+            .cardSurface()
         }
     }
 
-    @ViewBuilder
-    private var achievementSection: some View {
-        let current = stats
-        let unlocked = AchievementCatalog.unlocked(for: current)
+    // MARK: - Неделя
 
-        Section(tr("Достижения", "Conquistas", "Achievements")
-                + " — \(unlocked.count) " + tr("из", "de", "of")
-                + " \(AchievementCatalog.all.count)") {
-            if let next = AchievementCatalog.next(for: current) {
-                VStack(alignment: .leading, spacing: 4) {
+    private func weekCard(_ week: WeekProgress) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(tr("Эта неделя", "Esta semana", "This week"))
+                    .font(.app(.headline))
+                    .foregroundStyle(Theme.ink)
+                Spacer()
+                Text("\(week.daysStudied) " + tr("из", "de", "of") + " \(week.target)")
+                    .font(.app(.headline))
+                    .foregroundStyle(week.isReached ? Theme.green : Theme.muted)
+                    .monospacedDigit()
+            }
+            ChunkyProgressBar(value: week.fraction,
+                              tint: week.isReached ? Theme.green : Theme.blue)
+            Stepper(tr("Цель: ", "Objetivo: ", "Goal: ") + Counted.days(weeklyTarget)
+                        + tr(" в неделю", " por semana", " a week"),
+                    value: $weeklyTarget, in: 1...7)
+                .font(.app(.callout))
+            Text(tr("Серия тянет вернуться завтра, а неделя прощает пропущенный вторник.",
+                    "A sequência puxa-te a voltar amanhã; a semana perdoa a terça falhada.",
+                    "The streak pulls you back tomorrow; the week forgives a missed Tuesday."))
+                .font(.app(.caption))
+                .foregroundStyle(Theme.muted)
+        }
+        .cardSurface()
+    }
+
+    // MARK: - Достижения
+
+    private func achievementsCard(_ stats: LearningStats) -> some View {
+        let unlocked = AchievementCatalog.unlocked(for: stats)
+        let unlockedIDs = Set(unlocked.map(\.id))
+        return VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Text(tr("Достижения", "Conquistas", "Achievements"))
+                    .font(.app(.headline))
+                    .foregroundStyle(Theme.ink)
+                Spacer()
+                Text("\(unlocked.count)/\(AchievementCatalog.all.count)")
+                    .font(.app(.headline))
+                    .foregroundStyle(Theme.muted)
+            }
+
+            if let next = AchievementCatalog.next(for: stats) {
+                VStack(alignment: .leading, spacing: 6) {
                     Label(next.title, systemImage: next.symbol)
-                        .foregroundStyle(Theme.muted)
-                    ChunkyProgressBar(value: next.progress(in: current))
+                        .font(.app(.callout, weight: .bold))
+                        .foregroundStyle(Theme.ink)
+                    ChunkyProgressBar(value: next.progress(in: stats), tint: Theme.purple, height: 12)
                     Text(next.detail).font(.app(.caption)).foregroundStyle(Theme.muted)
                 }
+                .padding(12)
+                .panel(fill: Theme.tint, lip: false)
             }
-            ForEach(unlocked) { achievement in
-                HStack {
-                    Image(systemName: achievement.symbol)
-                        .foregroundStyle(.yellow)
-                    VStack(alignment: .leading) {
+
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 88), spacing: 12)], spacing: 12) {
+                ForEach(AchievementCatalog.all) { achievement in
+                    let done = unlockedIDs.contains(achievement.id)
+                    VStack(spacing: 6) {
+                        IconBadge(systemName: achievement.symbol,
+                                  color: done ? Theme.gold : Theme.border, size: 44)
                         Text(achievement.title)
-                        Text(achievement.detail)
-                            .font(.app(.caption))
-                            .foregroundStyle(Theme.muted)
+                            .font(.app(.caption2, weight: .bold))
+                            .foregroundStyle(done ? Theme.ink : Theme.muted)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(2)
                     }
+                    .frame(maxWidth: .infinity)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityValue(done ? tr("получено", "obtida", "unlocked")
+                                             : tr("впереди", "por obter", "locked"))
                 }
             }
         }
+        .cardSurface()
     }
 
-    @ViewBuilder
-    private var historySection: some View {
-        Section(tr("Полученные награды", "Recompensas recebidas", "Rewards earned")) {
+    // MARK: - История
+
+    private var historyCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(tr("Полученные награды", "Recompensas recebidas", "Rewards earned"))
+                .font(.app(.headline))
+                .foregroundStyle(Theme.ink)
             ForEach(contracts.filter(\.isCompleted)) { contract in
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(contract.reward)
-                    Text(Counted.words(contract.goal) + " · "
-                         + (contract.completedAt ?? contract.startedAt)
-                            .formatted(date: .abbreviated, time: .omitted))
-                        .font(.app(.caption))
-                        .foregroundStyle(Theme.muted)
-                    if contract.hadManualAdjustments {
-                        Label(tr("прогресс правился руками", "progresso corrigido à mão",
-                                 "progress edited by hand"),
-                              systemImage: "hand.raised")
-                            .font(.app(.caption2))
-                            .foregroundStyle(.orange)
+                HStack(alignment: .top, spacing: 12) {
+                    IconBadge(systemName: "gift.fill", color: Theme.gold, size: 32)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(contract.reward)
+                            .font(.app(.body, weight: .bold))
+                            .foregroundStyle(Theme.ink)
+                        Text(Counted.words(contract.goal) + " · "
+                             + (contract.completedAt ?? contract.startedAt)
+                                .formatted(date: .abbreviated, time: .omitted))
+                            .font(.app(.caption))
+                            .foregroundStyle(Theme.muted)
+                        if contract.hadManualAdjustments {
+                            Label(tr("прогресс правился руками", "progresso corrigido à mão",
+                                     "progress edited by hand"),
+                                  systemImage: "hand.raised")
+                                .font(.app(.caption2))
+                                .foregroundStyle(Theme.orange)
+                        }
                     }
                 }
             }
         }
+        .cardSurface()
     }
 
     private func checkCompletion() {
@@ -230,10 +296,7 @@ struct RewardEarnedView: View {
     var body: some View {
         VStack(spacing: 24) {
             Spacer()
-            Image(systemName: "checkmark.seal.fill")
-                .font(.system(size: 72))
-                .foregroundStyle(.green)
-                .symbolEffect(.bounce, options: .repeat(2))
+            MascotView(mood: .cheer, size: 180)
 
             Text(tr("Заслужено", "Merecido", "Earned"))
                 .font(.app(.largeTitle, weight: .bold))

@@ -142,6 +142,7 @@ public enum DeckNormalizer {
         if let folder = string(field("folder", "path", "category")) { deck["folder"] = folder }
         if let language = string(field("language", "lang")) { deck["language"] = language }
         if let source = string(field("source", "episode", "show")) { deck["source"] = source }
+        if let cover = string(field("cover", "poster", "image")) { deck["cover"] = cover }
         if let scheduler = string(field("scheduler", "algorithm")) {
             deck["scheduler"] = scheduler.lowercased()
         }

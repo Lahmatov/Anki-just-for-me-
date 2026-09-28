@@ -9,6 +9,8 @@ public struct ImportPlan: Equatable, Sendable {
     public var scheduler: SchedulerID
     public var cardTypes: [CardType]
     public var source: String?
+    /// Обложка набора — постер сериала, если он нашёлся.
+    public var coverURL: String?
 
     /// Слова, которых ещё нет.
     public var newNotes: [NoteData]
@@ -75,10 +77,7 @@ public enum ImportPlanner {
         }
 
         let scheduler = file.deck.scheduler ?? defaultScheduler
-        let folderPath = (file.deck.folder ?? "")
-            .split(separator: "/")
-            .map { String($0).trimmed }
-            .filter { !$0.isEmpty }
+        let folderPath = ImportPlan.folderPath(from: file.deck.folder ?? "")
 
         var newNotes: [NoteData] = []
         var duplicates: [ImportPlan.Duplicate] = []
@@ -122,9 +121,111 @@ public enum ImportPlanner {
             scheduler: scheduler,
             cardTypes: cardTypes,
             source: file.deck.source,
+            coverURL: file.deck.cover,
             newNotes: newNotes,
             duplicates: duplicates,
             warnings: warnings
         )
+    }
+}
+
+// MARK: - Правки в превью
+
+extension ImportPlan {
+    /// Путь папки из строки «Сериалы / Friends / Сезон 1»: пробелы вокруг
+    /// частей и пустые части отбрасываются.
+    public static func folderPath(from text: String) -> [String] {
+        text.split(separator: "/")
+            .map { String($0).trimmed }
+            .filter { !$0.isEmpty }
+    }
+
+    /// Путь папки строкой — для поля ввода в превью.
+    public var folderText: String { folderPath.joined(separator: " / ") }
+
+    /// План с правками из превью.
+    ///
+    /// Пустое название не принимается — остаётся прежнее: набор без имени
+    /// в списке не найти. Без единого вида карточек набор был бы пустым,
+    /// поэтому пустой выбор тоже не принимается. Порядок видов — как
+    /// в `CardType.allCases`, а не в порядке нажатий.
+    public func edited(
+        name: String, folder: String, scheduler: SchedulerID, cardTypes: Set<CardType>
+    ) -> ImportPlan {
+        var plan = self
+        let name = name.trimmed
+        if !name.isEmpty { plan.deckName = name }
+        plan.folderPath = Self.folderPath(from: folder)
+        plan.scheduler = scheduler
+        if !cardTypes.isEmpty {
+            plan.cardTypes = CardType.allCases.filter(cardTypes.contains)
+        }
+        return plan
+    }
+
+    /// «43 слова × 2 вида = 86 карточек» — ответ на вопрос, откуда
+    /// карточек вдвое больше, чем слов.
+    public static func cardsExplanation(words: Int, types: Int) -> String {
+        let words = max(0, words)
+        let types = max(0, types)
+        let kinds = trCount(types, ru: ("вид", "вида", "видов"),
+                            pt: ("tipo", "tipos"), en: ("type", "types"))
+        return Counted.words(words) + " × " + kinds + " = " + Counted.cards(words * types)
+    }
+}
+
+extension CardType {
+    /// Что происходит на карточке этого вида — для подсказки при выборе.
+    public var explanation: String {
+        switch self {
+        case .recognition:
+            return tr("Видишь английское слово — вспоминаешь перевод.",
+                      "Vês a palavra em inglês e lembras-te da tradução.",
+                      "You see the English word and recall its meaning.")
+        case .recall:
+            return tr("Видишь перевод — вспоминаешь английское слово. Труднее, но так слово "
+                        + "появляется в речи.",
+                      "Vês a tradução e lembras-te da palavra em inglês. Mais difícil, mas é "
+                        + "assim que ela aparece na fala.",
+                      "You see the meaning and recall the English word. Harder, but that's how "
+                        + "it gets into your speech.")
+        case .listening:
+            return tr("Слышишь слово — понимаешь, что это.", "Ouves a palavra e percebes o que é.",
+                      "You hear the word and recognize it.")
+        case .spelling:
+            return tr("Слышишь слово — пишешь его по буквам.", "Ouves a palavra e escreves-a.",
+                      "You hear the word and type it.")
+        case .pronunciation:
+            return tr("Произносишь слово вслух — приложение проверяет.",
+                      "Dizes a palavra em voz alta e a aplicação verifica.",
+                      "You say the word out loud and the app checks it.")
+        case .cloze:
+            return tr("Вставляешь слово в пропуск в примере.", "Completas a lacuna no exemplo.",
+                      "You fill the word into the gap in an example.")
+        }
+    }
+}
+
+extension SchedulerID {
+    /// Коротко — чем алгоритм отличается от остальных.
+    public var explanation: String {
+        switch self {
+        case .fsrs6:
+            return tr("Лучший выбор: сам подбирает интервалы под твою память.",
+                      "A melhor escolha: ajusta os intervalos à tua memória.",
+                      "Best choice: adapts the intervals to your memory.")
+        case .sm2:
+            return tr("Классика Anki: проверенная, но менее точная.",
+                      "O clássico do Anki: provado, mas menos preciso.",
+                      "The Anki classic: proven but less precise.")
+        case .leitner:
+            return tr("Пять коробок с фиксированными интервалами — просто и прозрачно.",
+                      "Cinco caixas com intervalos fixos — simples e transparente.",
+                      "Five boxes with fixed intervals — simple and transparent.")
+        case .cram:
+            return tr("Зубрёжка перед событием: всё сразу, без длинных интервалов.",
+                      "Para marrar antes de um evento: tudo já, sem intervalos longos.",
+                      "Cramming before an event: everything now, no long intervals.")
+        }
     }
 }

@@ -12,6 +12,7 @@ final class BackupFileTests: XCTestCase {
                     scheduler: .fsrs6,
                     cardTypes: [.recognition, .recall],
                     source: "сериал",
+                    coverURL: "https://static.tvmaze.com/p.jpg",
                     createdAt: Date(timeIntervalSince1970: 1_600_000_000),
                     notes: [
                         BackupNote(
@@ -43,6 +44,23 @@ final class BackupFileTests: XCTestCase {
         let original = sampleBackup()
         let restored = try BackupCoder.decode(try BackupCoder.encode(original))
         XCTAssertEqual(restored, original)
+    }
+
+    func testCoverSurvivesTheRoundTrip() throws {
+        let restored = try BackupCoder.decode(try BackupCoder.encode(sampleBackup()))
+        XCTAssertEqual(restored.decks.first?.coverURL, "https://static.tvmaze.com/p.jpg")
+    }
+
+    func testOldBackupWithoutCoverStillDecodes() throws {
+        // Бэкапы, снятые до появления обложек, должны восстанавливаться.
+        var json = try XCTUnwrap(try JSONSerialization.jsonObject(
+            with: BackupCoder.encode(sampleBackup())) as? [String: Any])
+        var decks = try XCTUnwrap(json["decks"] as? [[String: Any]])
+        decks[0].removeValue(forKey: "coverURL")
+        json["decks"] = decks
+        let restored = try BackupCoder.decode(try JSONSerialization.data(withJSONObject: json))
+        XCTAssertNil(restored.decks.first?.coverURL)
+        XCTAssertEqual(restored.decks.first?.name, "Breaking Bad S03E05")
     }
 
     func testRoundTripPreservesCardProgress() throws {

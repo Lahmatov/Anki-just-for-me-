@@ -26,6 +26,8 @@ public struct DeckMeta: Codable, Equatable, Sendable {
     public var scheduler: SchedulerID?
     public var cardTypes: [CardType]?
     public var source: String?
+    /// Адрес картинки-обложки (постер сериала).
+    public var cover: String?
 
     public init(
         name: String,
@@ -33,7 +35,8 @@ public struct DeckMeta: Codable, Equatable, Sendable {
         language: String? = nil,
         scheduler: SchedulerID? = nil,
         cardTypes: [CardType]? = nil,
-        source: String? = nil
+        source: String? = nil,
+        cover: String? = nil
     ) {
         self.name = name
         self.folder = folder
@@ -41,6 +44,7 @@ public struct DeckMeta: Codable, Equatable, Sendable {
         self.scheduler = scheduler
         self.cardTypes = cardTypes
         self.source = source
+        self.cover = cover
     }
 
     // Мягкое декодирование: неизвестный алгоритм или тип карточки не должен
@@ -55,6 +59,7 @@ public struct DeckMeta: Codable, Equatable, Sendable {
         let rawTypes = try? c.decodeIfPresent([String].self, forKey: .cardTypes)
         cardTypes = (rawTypes ?? nil).map { $0.compactMap(CardType.init(rawValue:)) }
         source = try c.decodeIfPresent(String.self, forKey: .source)
+        cover = try? c.decodeIfPresent(String.self, forKey: .cover)
     }
 }
 

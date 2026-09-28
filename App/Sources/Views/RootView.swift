@@ -181,8 +181,8 @@ struct RootView: View {
             }
         }
         .sheet(item: $pendingImport) { pending in
-            ImportPreviewView(plan: pending.plan) { includeDuplicates in
-                applyPlan(pending.plan, includeDuplicates: includeDuplicates)
+            ImportPreviewView(plan: pending.plan) { edited, includeDuplicates in
+                applyPlan(edited, includeDuplicates: includeDuplicates)
             }
         }
         .sheet(item: $exportedFile) { file in

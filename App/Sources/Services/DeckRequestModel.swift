@@ -132,7 +132,15 @@ final class DeckRequestModel {
                 step = .failed(problem)
                 return nil
             }
-            let file = try request.deckFile(fromResponse: completion.text ?? "")
+            let text = completion.text ?? ""
+            var file = try request.deckFile(fromResponse: text)
+            // Серия — ищем постер и настоящее название серии. Не нашлось —
+            // набор всё равно уже разложен по папкам сериала.
+            if let episode = request.episode(fromResponse: text) {
+                let info = await TVMazeClient().lookup(episode)
+                file = DeckRequest.decorate(
+                    file, episode: episode, title: info.title, poster: info.poster)
+            }
             let plan = try ImportService(context: context).makePlan(from: file)
             Log.info(
                 .importing, "Набор от Claude получен",

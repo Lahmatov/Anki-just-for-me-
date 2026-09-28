@@ -129,6 +129,9 @@ public struct DeckRequest: Equatable, Sendable {
 
         name: a short deck title, e.g. "Friends S01E03" or "Job interview"; \
         write it in the learner's words, not a description.
+        show, season, episode: if the request is about one episode of a TV show, \
+        the show's official English title and the season and episode numbers; \
+        otherwise "", 0 and 0. Never guess numbers that are not in the request.
         """
     }
 
@@ -157,9 +160,12 @@ public struct DeckRequest: Equatable, Sendable {
     {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "notes"],
+      "required": ["name", "show", "season", "episode", "notes"],
       "properties": {
         "name": { "type": "string" },
+        "show": { "type": "string" },
+        "season": { "type": "integer" },
+        "episode": { "type": "integer" },
         "notes": {
           "type": "array",
           "items": {
@@ -202,6 +208,37 @@ public struct DeckRequest: Equatable, Sendable {
 
     // MARK: - Ответ
 
+    /// Серия, о которой запрос. Номера — из того, что напечатал человек
+    /// (разбор на телефоне надёжнее модели), а название сериала — у модели,
+    /// если она его дала: «friends» превращается в официальное «Friends».
+    public func episode(fromResponse text: String) -> EpisodeRef? {
+        let local = EpisodeRef.parse(topic)
+        let object = (try? DeckNormalizer.jsonObject(from: Data(text.utf8))) as? [String: Any]
+        let remote = object.flatMap { object in
+            EpisodeRef(validatingShow: object["show"] as? String ?? "",
+                       season: object["season"] as? Int ?? 0,
+                       episode: object["episode"] as? Int ?? 0)
+        }
+        if let local, let remote {
+            return EpisodeRef(show: remote.show, season: local.season, episode: local.episode)
+        }
+        return local ?? remote
+    }
+
+    /// Набор по серии: папка «Сериалы / Шоу / Сезон N», имя «S01E03 · Название»,
+    /// обложка — постер. Название серии и постер приходят из TVMaze и могут
+    /// отсутствовать: тогда имя — просто «S01E03».
+    public static func decorate(
+        _ file: DeckFile, episode: EpisodeRef, title: String?, poster: String?
+    ) -> DeckFile {
+        var file = file
+        file.deck.folder = episode.folder
+        file.deck.name = episode.deckName(title: title)
+        file.deck.source = "\(episode.show) \(episode.code)"
+        if let poster, !poster.isEmpty { file.deck.cover = poster }
+        return file
+    }
+
     /// Набор из ответа модели. Пустые необязательные поля превращаются в nil
     /// нормализатором, папка и источник проставляются здесь.
     public func deckFile(fromResponse text: String) throws -> DeckFile {
@@ -217,6 +254,11 @@ public struct DeckRequest: Equatable, Sendable {
         }
         file.deck.folder = file.deck.folder ?? Self.folder
         file.deck.source = file.deck.source ?? (topic.isEmpty ? nil : topic)
+        // Серию раскладываем по папкам сразу — даже если TVMaze потом
+        // не ответит, набор уже лежит в «Сериалы / Шоу / Сезон N».
+        if let episode = episode(fromResponse: text) {
+            file = Self.decorate(file, episode: episode, title: nil, poster: nil)
+        }
         return file
     }
 }

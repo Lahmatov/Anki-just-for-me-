@@ -5,10 +5,16 @@ import AJFMCore
 /// Импорт без превью — прямой путь к мусору в базе, поэтому шаг обязательный.
 struct ImportPreviewView: View {
     let plan: ImportPlan
-    var onConfirm: (_ includeDuplicates: Bool) -> Void
+    /// Отдаёт план уже с правками из превью: название, папка, алгоритм, виды карточек.
+    var onConfirm: (_ plan: ImportPlan, _ includeDuplicates: Bool) -> Void
 
     @Environment(\.dismiss) private var dismiss
     @State private var includeDuplicates = false
+    @State private var name = ""
+    @State private var folder = ""
+    @State private var scheduler: SchedulerID = .fsrs6
+    @State private var cardTypes: Set<CardType> = []
+    @State private var loaded = false
 
     private var duplicatesFromOtherDecks: [ImportPlan.Duplicate] {
         plan.duplicates.filter { $0.existingDeckName != nil }
@@ -18,19 +24,76 @@ struct ImportPreviewView: View {
         plan.newNotes.count + (includeDuplicates ? duplicatesFromOtherDecks.count : 0)
     }
 
+    private var editedPlan: ImportPlan {
+        plan.edited(name: name, folder: folder, scheduler: scheduler, cardTypes: cardTypes)
+    }
+
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    LabeledContent(tr("Набор", "Baralho", "Deck"), value: plan.deckName)
-                    if !plan.folderPath.isEmpty {
-                        LabeledContent(tr("Папка", "Pasta", "Folder"),
-                                       value: plan.folderPath.joined(separator: " / "))
+                if let cover = plan.coverURL.flatMap(URL.init(string:)) {
+                    Section {
+                        HStack(spacing: 14) {
+                            CoverImage(url: cover, width: 64)
+                            Text(editedPlan.deckName)
+                                .font(.app(.title3))
+                                .foregroundStyle(Theme.ink)
+                        }
                     }
-                    LabeledContent(tr("Алгоритм", "Algoritmo", "Algorithm"), value: plan.scheduler.title)
-                    LabeledContent(
-                        tr("Карточки", "Cartões", "Cards"),
-                        value: plan.cardTypes.map(\.title).joined(separator: ", "))
+                    .listRowBackground(Color.clear)
+                }
+
+                Section {
+                    TextField(tr("Название набора", "Nome do baralho", "Deck name"), text: $name)
+                        .font(.app(.body, weight: .bold))
+                    TextField(tr("Папка: Сериалы / Friends", "Pasta: Séries / Friends",
+                                 "Folder: TV shows / Friends"), text: $folder)
+                        .autocorrectionDisabled()
+                } header: {
+                    Text(tr("Набор", "Baralho", "Deck"))
+                } footer: {
+                    Text(tr("Вложенные папки — через «/». Пусто — набор ляжет в корень.",
+                            "Subpastas com «/». Vazio — o baralho fica na raiz.",
+                            "Nested folders with “/”. Empty puts the deck at the top level."))
+                }
+
+                Section {
+                    Picker(tr("Алгоритм", "Algoritmo", "Algorithm"), selection: $scheduler) {
+                        ForEach(SchedulerID.allCases, id: \.self) { id in
+                            Text(id.title).tag(id)
+                        }
+                    }
+                } footer: {
+                    Text(scheduler.explanation)
+                }
+
+                Section {
+                    ForEach(CardType.allCases, id: \.self) { type in
+                        Toggle(isOn: Binding(
+                            get: { cardTypes.contains(type) },
+                            set: { on in
+                                // Последний вид не снимается: набор без карточек пуст.
+                                if on { cardTypes.insert(type) }
+                                else if cardTypes.count > 1 { cardTypes.remove(type) }
+                            })
+                        ) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(type.title).font(.app(.body, weight: .bold))
+                                Text(type.explanation)
+                                    .font(.app(.caption))
+                                    .foregroundStyle(Theme.muted)
+                            }
+                        }
+                        .tint(Theme.primary)
+                    }
+                } header: {
+                    Text(tr("Какие карточки сделать", "Que cartões criar", "Which cards to make"))
+                } footer: {
+                    Text(tr("Каждое слово даёт по карточке каждого вида: ",
+                            "Cada palavra dá um cartão de cada tipo: ",
+                            "Each word gets one card of each type: ")
+                         + ImportPlan.cardsExplanation(words: addedCount, types: cardTypes.count)
+                         + ".")
                 }
 
                 Section {
@@ -38,7 +101,7 @@ struct ImportPreviewView: View {
                                    value: "\(addedCount)")
                     LabeledContent(
                         tr("Карточек", "Cartões", "Cards"),
-                        value: "\(addedCount * max(plan.cardTypes.count, 1))")
+                        value: "\(addedCount * max(cardTypes.count, 1))")
                 }
 
                 if !plan.warnings.isEmpty {
@@ -94,10 +157,49 @@ struct ImportPreviewView: View {
                     Button(CommonText.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(tr("Добавить", "Adicionar", "Add")) { onConfirm(includeDuplicates) }
+                    Button(tr("Добавить", "Adicionar", "Add")) {
+                        onConfirm(editedPlan, includeDuplicates)
+                    }
                         .disabled(addedCount == 0)
                 }
             }
+            .onAppear {
+                // Поля заполняются один раз: иначе каждое появление экрана
+                // стирало бы уже внесённые правки.
+                guard !loaded else { return }
+                loaded = true
+                name = plan.deckName
+                folder = plan.folderText
+                scheduler = plan.scheduler
+                cardTypes = Set(plan.cardTypes)
+            }
         }
+    }
+}
+
+/// Постер сериала: грузится из сети, пока грузится — серая плашка с лосем
+/// не нужна, хватит значка телевизора.
+struct CoverImage: View {
+    let url: URL
+    var width: CGFloat = 44
+
+    var body: some View {
+        AsyncImage(url: url) { phase in
+            if let image = phase.image {
+                image.resizable().scaledToFill()
+            } else {
+                Image(systemName: "tv")
+                    .font(.system(size: width * 0.35, weight: .bold))
+                    .foregroundStyle(Theme.muted)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Theme.tint)
+            }
+        }
+        // Пропорции постера TVMaze — 210×295.
+        .frame(width: width, height: width * 295 / 210)
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous)
+            .strokeBorder(Theme.border, lineWidth: 1))
+        .accessibilityHidden(true)
     }
 }

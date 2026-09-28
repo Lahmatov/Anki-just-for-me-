@@ -65,6 +65,7 @@ struct RestoreService {
                     source: backupDeck.source)
                 context.insert(deck)
                 deck.createdAt = backupDeck.createdAt
+                deck.coverURL = backupDeck.coverURL
                 deck.folder = folder(for: backupDeck.folder, cache: &folderCache)
 
                 for backupNote in backupDeck.notes {

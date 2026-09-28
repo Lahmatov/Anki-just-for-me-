@@ -57,8 +57,8 @@ struct DeckRequestView: View {
             Text(message)
         }
         .sheet(item: $plan) { pending in
-            ImportPreviewView(plan: pending.plan) { includeDuplicates in
-                apply(pending.plan, includeDuplicates: includeDuplicates)
+            ImportPreviewView(plan: pending.plan) { edited, includeDuplicates in
+                apply(edited, includeDuplicates: includeDuplicates)
             }
         }
     }
@@ -137,7 +137,7 @@ struct DeckRequestView: View {
                                     + "Hard for a beginner, boring for an advanced learner."),
                               systemImage: "exclamationmark.triangle")
                             .font(.app(.footnote))
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Theme.ink)
                         Button {
                             showPlacementTest = true
                         } label: {
@@ -187,12 +187,25 @@ struct DeckRequestView: View {
                             + "shows duplicates separately."))
             }
 
+            if model.step == .working {
+                Section {
+                    MascotSays(mood: .thinking,
+                               text: tr("Подбираю слова… Обычно это 10–20 секунд, "
+                                            + "с субтитрами — до минуты.",
+                                        "A escolher palavras… Costuma levar 10–20 segundos, "
+                                            + "com legendas até um minuto.",
+                                        "Picking words… Usually 10–20 seconds, "
+                                            + "up to a minute with subtitles."),
+                               size: 72)
+                }
+                .listRowBackground(Color.clear)
+            }
+
             if case .failed(let message) = model.step {
                 Section {
-                    Label(message, systemImage: "exclamationmark.triangle")
-                        .foregroundStyle(.orange)
-                        .font(.app(.callout))
+                    MascotSays(mood: .oops, text: message, size: 72)
                 }
+                .listRowBackground(Color.clear)
             }
         }
         .themedScreen()
@@ -275,10 +288,7 @@ struct DeckRequestView: View {
     private func doneView(_ result: ImportResult) -> some View {
         VStack(spacing: 20) {
             Spacer()
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 64))
-                .foregroundStyle(.green)
-                .symbolEffect(.bounce, value: result.addedNotes)
+            MascotView(mood: .cheer, size: 160)
             Text(result.deckName)
                 .font(.app(.title2, weight: .semibold))
                 .multilineTextAlignment(.center)

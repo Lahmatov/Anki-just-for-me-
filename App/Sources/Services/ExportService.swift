@@ -20,6 +20,7 @@ struct ExportService {
                 scheduler: deck.scheduler,
                 cardTypes: deck.cardTypes,
                 source: deck.source,
+                coverURL: deck.coverURL,
                 createdAt: deck.createdAt,
                 notes: deck.notes
                     .sorted { $0.createdAt < $1.createdAt }

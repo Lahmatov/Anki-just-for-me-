@@ -147,6 +147,7 @@ def check_duplicate_types():
 CYRILLIC = re.compile('[А-Яа-яЁё]')
 # Файлы, где русский текст — сама суть: правила склонения и название языка.
 UNTRANSLATED_OK = ('RussianPlural.swift', 'AppLanguage.swift')
+NOT_UI_MARK = 'lint: не интерфейс'
 # Журнал и подписи расходов в нём — диагностика, её не переводим.
 LOG_CALLS = ('Log.info', 'Log.warning', 'Log.error', 'Log.failure', 'Log.debug',
              'budget.record')
@@ -234,6 +235,10 @@ def check_untranslated():
                 if 'ru' in (label, label_before):
                     continue
             line = src.count('\n', 0, start) + 1
+            # Кириллица, которую не показывают, а сопоставляют (шаблоны
+            # разбора «2 сезон 5 серия»), помечается в строке явно.
+            if NOT_UI_MARK in src.splitlines()[line - 1]:
+                continue
             problems.append(
                 f"{os.path.basename(path)}:{line}: русский текст вне tr(): "
                 f"{text[:50]}")

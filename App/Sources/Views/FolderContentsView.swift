@@ -107,10 +107,14 @@ struct DeckRow: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            IconBadge(systemName: "rectangle.stack.fill")
+            if let cover = deck.coverURL.flatMap(URL.init(string:)) {
+                CoverImage(url: cover, width: 34)
+            } else {
+                IconBadge(systemName: "rectangle.stack.fill")
+            }
             VStack(alignment: .leading, spacing: 2) {
                 Text(deck.name)
-                    .font(.app(.body, weight: .medium))
+                    .font(.app(.body, weight: .bold))
                 Text(subtitle)
                     .font(.app(.caption))
                     .foregroundStyle(Theme.muted)

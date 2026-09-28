@@ -29,18 +29,21 @@ public struct BackupDeck: Codable, Equatable, Sendable {
     public var scheduler: SchedulerID
     public var cardTypes: [CardType]
     public var source: String?
+    /// Постер сериала. В бэкапах до его появления поля нет — читается как nil.
+    public var coverURL: String?
     public var createdAt: Date
     public var notes: [BackupNote]
 
     public init(
         name: String, folder: String?, scheduler: SchedulerID, cardTypes: [CardType],
-        source: String?, createdAt: Date, notes: [BackupNote]
+        source: String?, coverURL: String? = nil, createdAt: Date, notes: [BackupNote]
     ) {
         self.name = name
         self.folder = folder
         self.scheduler = scheduler
         self.cardTypes = cardTypes
         self.source = source
+        self.coverURL = coverURL
         self.createdAt = createdAt
         self.notes = notes
     }

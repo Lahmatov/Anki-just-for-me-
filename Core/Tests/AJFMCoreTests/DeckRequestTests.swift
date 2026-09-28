@@ -130,12 +130,63 @@ final class DeckRequestTests: XCTestCase {
     ] }
     """
 
-    func testResponseBecomesDeckInClaudeFolder() throws {
-        let file = try request().deckFile(fromResponse: response)
+    func testTopicDeckGoesToTheClaudeFolder() throws {
+        let file = try request(topic: "Job interview").deckFile(fromResponse: response)
         XCTAssertEqual(file.deck.name, "Friends S01E03")
         XCTAssertEqual(file.deck.folder, DeckRequest.folder)
-        XCTAssertEqual(file.deck.source, "Friends S01E03")
+        XCTAssertEqual(file.deck.source, "Job interview")
         XCTAssertEqual(file.notes[0].partOfSpeech, .phrasalVerb)
+    }
+
+    // MARK: - Серии
+
+    func testEpisodeDeckIsFiledByShowAndSeason() throws {
+        Loc.language = .russian
+        let file = try request(topic: "Friends 1x03").deckFile(fromResponse: response)
+        XCTAssertEqual(file.deck.folder, "Сериалы/Friends/Сезон 1")
+        XCTAssertEqual(file.deck.name, "S01E03")
+        XCTAssertEqual(file.deck.source, "Friends S01E03")
+    }
+
+    func testModelGivesTheOfficialShowNameButNotTheNumbers() {
+        // Номера берутся из запроса: модель могла ошибиться в них.
+        let answer = #"{ "name": "x", "show": "Friends", "season": 9, "episode": 9, "notes": [] }"#
+        let episode = request(topic: "friends s1e3").episode(fromResponse: answer)
+        XCTAssertEqual(episode, EpisodeRef(show: "Friends", season: 1, episode: 3))
+    }
+
+    func testModelEpisodeIsUsedWhenTheTopicHasNoNumbers() {
+        let answer = #"{ "name": "x", "show": "Lost", "season": 1, "episode": 2, "notes": [] }"#
+        XCTAssertEqual(request(topic: "Лост, вторая серия").episode(fromResponse: answer),
+                       EpisodeRef(show: "Lost", season: 1, episode: 2))
+    }
+
+    func testNoEpisodeForTopics() {
+        let answer = #"{ "name": "x", "show": "", "season": 0, "episode": 0, "notes": [] }"#
+        XCTAssertNil(request(topic: "Job interview").episode(fromResponse: answer))
+        XCTAssertNil(request(topic: "Job interview").episode(fromResponse: "garbage"))
+    }
+
+    func testDecorateAddsTitleAndPoster() {
+        let file = DeckFile(deck: DeckMeta(name: "x"), notes: [])
+        let episode = EpisodeRef(show: "Friends", season: 1, episode: 3)
+        let decorated = DeckRequest.decorate(
+            file, episode: episode, title: "The One with the Thumb",
+            poster: "https://static.tvmaze.com/p.jpg")
+        XCTAssertEqual(decorated.deck.name, "S01E03 · The One with the Thumb")
+        XCTAssertEqual(decorated.deck.cover, "https://static.tvmaze.com/p.jpg")
+        let bare = DeckRequest.decorate(file, episode: episode, title: nil, poster: "")
+        XCTAssertEqual(bare.deck.name, "S01E03")
+        XCTAssertNil(bare.deck.cover)
+    }
+
+    func testSchemaTopLevelRequiresEveryProperty() throws {
+        let object = try JSONSerialization.jsonObject(
+            with: Data(DeckRequest.outputSchemaJSON.utf8)) as? [String: Any]
+        let schema = try XCTUnwrap(object)
+        let required = Set(try XCTUnwrap(schema["required"] as? [String]))
+        let properties = Set(try XCTUnwrap(schema["properties"] as? [String: Any]).keys)
+        XCTAssertEqual(required, properties)
     }
 
     func testEmptyOptionalFieldsBecomeNil() throws {

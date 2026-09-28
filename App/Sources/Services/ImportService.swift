@@ -62,6 +62,7 @@ struct ImportService {
         )
         context.insert(deck)
         deck.folder = folder
+        deck.coverURL = plan.coverURL
 
         var notesToAdd = plan.newNotes
         if includeDuplicates {
