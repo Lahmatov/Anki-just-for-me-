@@ -8,6 +8,9 @@ import AJFMCore
 /// Результат идёт через то же превью, что и импорт файла: модель может
 /// ошибиться, и увидеть слова до записи в базу обязательно.
 struct DeckRequestView: View {
+    /// Запрос, подставленный заранее, — например, с экрана серии.
+    var initialTopic: String = ""
+
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
@@ -41,7 +44,11 @@ struct DeckRequestView: View {
             }
         }
         .onAppear {
-            if model == nil { model = DeckRequestModel(context: context) }
+            if model == nil {
+                let created = DeckRequestModel(context: context)
+                if !initialTopic.isEmpty { created.topic = initialTopic }
+                model = created
+            }
             topicFocused = true
         }
         .interactiveDismissDisabled(model?.step == .working)

@@ -10,6 +10,18 @@ public struct ClaudeRequest: Sendable {
         case low, medium, high
     }
 
+    /// Реплика разговора: для бесед из нескольких ходов.
+    public struct Turn: Equatable, Sendable {
+        public enum Role: String, Sendable { case user, assistant }
+        public var role: Role
+        public var text: String
+
+        public init(_ role: Role, _ text: String) {
+            self.role = role
+            self.text = text
+        }
+    }
+
     public var model: ModelPricing
     public var system: String
     public var userMessage: String
@@ -17,6 +29,8 @@ public struct ClaudeRequest: Sendable {
     public var effort: Effort
     /// JSON Schema ответа. С ней ответ гарантированно разбирается.
     public var outputSchemaJSON: String?
+    /// История разговора. Пустая — запрос из одного сообщения `userMessage`.
+    public var conversation: [Turn] = []
 
     /// Бета-заголовок серверных повторов при отказе классификатора.
     public static let fallbackBeta = "server-side-fallback-2026-07-01"
@@ -33,6 +47,21 @@ public struct ClaudeRequest: Sendable {
         self.outputSchemaJSON = outputSchemaJSON
     }
 
+    /// Запрос-разговор: система и история реплик.
+    public init(
+        model: ModelPricing, system: String, conversation: [Turn], maxTokens: Int,
+        effort: Effort = .low, outputSchemaJSON: String? = nil
+    ) {
+        self.init(model: model, system: system, userMessage: "", maxTokens: maxTokens,
+                  effort: effort, outputSchemaJSON: outputSchemaJSON)
+        self.conversation = conversation
+    }
+
+    /// Что уходит в `messages`.
+    public var messages: [Turn] {
+        conversation.isEmpty ? [Turn(.user, userMessage)] : conversation
+    }
+
     /// Значение заголовка `anthropic-beta`, если он нужен.
     public var betaHeader: String? {
         model.supportsServerFallback ? Self.fallbackBeta : nil
@@ -43,7 +72,7 @@ public struct ClaudeRequest: Sendable {
             "model": model.id,
             "max_tokens": maxTokens,
             "system": system,
-            "messages": [["role": "user", "content": userMessage]],
+            "messages": messages.map { ["role": $0.role.rawValue, "content": $0.text] },
         ]
 
         var outputConfig: [String: Any] = [:]

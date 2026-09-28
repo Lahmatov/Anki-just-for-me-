@@ -12,12 +12,16 @@ public struct BackupFile: Codable, Equatable, Sendable {
     public var version: Int
     public var exportedAt: Date
     public var decks: [BackupDeck]
+    /// Сериалы с отметками просмотра. nil — бэкап старше этой функции:
+    /// при восстановлении из него сериалы на телефоне не трогаются.
+    public var shows: [BackupShow]?
 
-    public init(exportedAt: Date, decks: [BackupDeck]) {
+    public init(exportedAt: Date, decks: [BackupDeck], shows: [BackupShow]? = nil) {
         self.format = Self.formatID
         self.version = Self.supportedVersion
         self.exportedAt = exportedAt
         self.decks = decks
+        self.shows = shows
     }
 
     public var noteCount: Int { decks.reduce(0) { $0 + $1.notes.count } }
@@ -46,6 +50,30 @@ public struct BackupDeck: Codable, Equatable, Sendable {
         self.coverURL = coverURL
         self.createdAt = createdAt
         self.notes = notes
+    }
+}
+
+public struct BackupShow: Codable, Equatable, Sendable {
+    public var tvmazeID: Int
+    public var name: String
+    public var posterURL: String?
+    public var premieredYear: Int?
+    public var addedAt: Date
+    public var episodes: [EpisodeInfo]
+    /// Просмотренные серии строками «1x3».
+    public var watched: [String]
+
+    public init(
+        tvmazeID: Int, name: String, posterURL: String?, premieredYear: Int?,
+        addedAt: Date, episodes: [EpisodeInfo], watched: [String]
+    ) {
+        self.tvmazeID = tvmazeID
+        self.name = name
+        self.posterURL = posterURL
+        self.premieredYear = premieredYear
+        self.addedAt = addedAt
+        self.episodes = episodes
+        self.watched = watched
     }
 }
 

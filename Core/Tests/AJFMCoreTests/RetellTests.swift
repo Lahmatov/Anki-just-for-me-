@@ -11,6 +11,31 @@ final class RetellPromptTests: XCTestCase {
         XCTAssertTrue(system.contains("Do not rely on your own knowledge"))
     }
 
+    func testSynopsisPromptDoesNotPunishDetailsTheSynopsisLacks() {
+        let system = RetellPrompt.system(for: .russian, reference: .synopsis("x"))
+        XCTAssertTrue(system.contains("ONLY by the attached official synopsis"))
+        XCTAssertTrue(system.contains("never call it a mistake"))
+        XCTAssertFalse(system.contains("attached subtitles"))
+        XCTAssertFalse(system.contains("quote from the subtitles"))
+    }
+
+    func testSynopsisMessageUsesItsOwnTagAndIgnoresTheWatchedMinute() {
+        let message = RetellPrompt.userMessage(
+            reference: .synopsis("Ross finds out."), retell: "He knows.",
+            episodeTitle: "Friends S01E02", watchedUpTo: 600)
+        XCTAssertTrue(message.contains("<synopsis>\nRoss finds out.\n</synopsis>"))
+        XCTAssertFalse(message.contains("<subtitles>"))
+        XCTAssertFalse(message.contains("up to minute"), "описание не режется по минутам")
+    }
+
+    func testOldSubtitlesEntryPointIsUnchanged() {
+        let old = RetellPrompt.userMessage(subtitles: "s", retell: "r", episodeTitle: nil,
+                                           watchedUpTo: nil)
+        let new = RetellPrompt.userMessage(reference: .subtitles("s"), retell: "r",
+                                           episodeTitle: nil, watchedUpTo: nil)
+        XCTAssertEqual(old, new)
+    }
+
     func testSystemPromptRequiresQuotes() {
         XCTAssertTrue(RetellPrompt.system(for: .russian).contains("short quote from the subtitles"))
     }

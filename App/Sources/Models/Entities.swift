@@ -260,11 +260,61 @@ final class Review {
     }
 }
 
+/// Сериал, который человек смотрит, и какие серии уже просмотрены.
+///
+/// Список серий хранится снимком из TVMaze: экран сериала открывается
+/// без сети, а обновляется по кнопке. Отметки — строками «1x3», а не
+/// отдельными записями: их сотни, и ни искать, ни связывать их не нужно.
+@Model
+final class TrackedShow {
+    var tvmazeID: Int = 0
+    var name: String = ""
+    var posterURL: String?
+    var premieredYear: Int?
+    var addedAt: Date = Date()
+    var episodesJSON: String = "[]"
+    var episodesUpdatedAt: Date = Date()
+    var watchedRaw: [String] = []
+
+    init(show: TVMaze.Show, episodes: [EpisodeInfo]) {
+        self.tvmazeID = show.id
+        self.name = show.name
+        self.posterURL = show.posterURL
+        self.premieredYear = show.premieredYear
+        self.addedAt = Date()
+        self.episodes = episodes
+    }
+
+    var episodes: [EpisodeInfo] {
+        get {
+            (try? JSONDecoder().decode([EpisodeInfo].self, from: Data(episodesJSON.utf8))) ?? []
+        }
+        set {
+            episodesJSON = (try? JSONEncoder().encode(newValue))
+                .flatMap { String(data: $0, encoding: .utf8) } ?? "[]"
+            episodesUpdatedAt = Date()
+        }
+    }
+
+    var watched: Set<EpisodeKey> {
+        get { Set(watchedRaw.compactMap(EpisodeKey.init(raw:))) }
+        set { watchedRaw = newValue.sorted().map(\.raw) }
+    }
+
+    func progress(today: String = ShowProgress.today()) -> ShowProgress {
+        ShowProgress(episodes: episodes, watched: watched, today: today)
+    }
+}
+
 /// Сохранённый разбор пересказа серии.
 @Model
 final class RetellSession {
     var createdAt: Date = Date()
     var episodeTitle: String = ""
+    /// Сериал и серия, если пересказ начат с экрана серии, — по ним
+    /// в списке серий видно, какие уже пересказаны.
+    var showID: Int?
+    var episodeKeyRaw: String?
     var transcript: String = ""
     /// Разбор целиком, сериализованный в JSON.
     var reportJSON: String = ""

@@ -105,7 +105,7 @@ struct ClaudeClient {
     }
 
     func analyze(
-        subtitles: String,
+        reference: RetellReference,
         retell: String,
         episodeTitle: String?,
         watchedUpTo: TimeInterval?
@@ -114,9 +114,9 @@ struct ClaudeClient {
         // с субтитрами и подбирает цитаты, поэтому усилие высокое.
         let completion = try await complete(ClaudeRequest(
             model: ClaudeModel.pricing(for: model),
-            system: RetellPrompt.system,
+            system: RetellPrompt.system(for: Loc.language, reference: reference),
             userMessage: RetellPrompt.userMessage(
-                subtitles: subtitles, retell: retell,
+                reference: reference, retell: retell,
                 episodeTitle: episodeTitle, watchedUpTo: watchedUpTo),
             // Рассуждение тратит тот же лимит, что и ответ: при 8 тысячах
             // длинный разбор обрезался посреди JSON. Платится только

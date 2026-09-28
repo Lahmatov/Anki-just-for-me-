@@ -24,6 +24,16 @@ final class ClaudeRequestTests: XCTestCase {
         XCTAssertEqual(messages?.first?["content"] as? String, "hi")
     }
 
+    func testConversationReplacesTheSingleMessage() throws {
+        let request = ClaudeRequest(
+            model: ClaudeModel.haiku45, system: "sys",
+            conversation: [.init(.user, "start"), .init(.assistant, "Hi!"), .init(.user, "Hello")],
+            maxTokens: 500)
+        let messages = try XCTUnwrap(try request.body()["messages"] as? [[String: Any]])
+        XCTAssertEqual(messages.map { $0["role"] as? String }, ["user", "assistant", "user"])
+        XCTAssertEqual(messages.last?["content"] as? String, "Hello")
+    }
+
     func testThinkingAndEffortOnlyWhereSupported() throws {
         let sonnet = try body(ClaudeModel.sonnet5, effort: .low)
         XCTAssertEqual((sonnet["thinking"] as? [String: Any])?["type"] as? String, "adaptive")

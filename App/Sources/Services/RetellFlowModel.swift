@@ -3,6 +3,20 @@ import SwiftData
 import Observation
 import AJFMCore
 
+/// Серия, с экрана которой начат пересказ или разговор.
+struct EpisodeContext: Equatable, Hashable {
+    var showID: Int
+    var showName: String
+    var episode: EpisodeInfo
+
+    /// «Friends S01E03 · The One with the Thumb».
+    var title: String { "\(showName) \(episode.title)" }
+
+    var synopsis: String? {
+        episode.summary.isEmpty ? nil : episode.summary
+    }
+}
+
 /// Состояние процесса «пересказал серию — получил разбор».
 @Observable
 @MainActor
@@ -30,9 +44,24 @@ final class RetellFlowModel {
 
     let recorder = RetellRecorder()
     private let context: ModelContext
+    /// Серия, если пересказ начат с её экрана: даёт название и описание-эталон.
+    let episode: EpisodeContext?
 
-    init(context: ModelContext) {
+    init(context: ModelContext, episode: EpisodeContext? = nil) {
         self.context = context
+        self.episode = episode
+        if let episode {
+            episodeTitle = episode.title
+            // Есть описание серии — можно начинать сразу, без поиска субтитров.
+            if episode.synopsis != nil { step = .ready }
+        }
+    }
+
+    /// С чем сверять пересказ: субтитры точнее, описание — если субтитров нет.
+    var reference: RetellReference? {
+        if let track { return .subtitles(subtitleText(from: track)) }
+        if let synopsis = episode?.synopsis { return .synopsis(synopsis) }
+        return nil
     }
 
     var subtitleSummary: String? {
@@ -44,13 +73,13 @@ final class RetellFlowModel {
     }
 
     var canAnalyze: Bool {
-        track != nil && transcript.split(whereSeparator: { $0.isWhitespace }).count >= 10
+        reference != nil && transcript.split(whereSeparator: { $0.isWhitespace }).count >= 10
     }
 
     /// Оценка стоимости разбора до отправки — чтобы не было сюрпризов.
     var estimatedCost: Double {
-        guard let track else { return 0 }
-        let input = RetellPrompt.estimateTokens(subtitleText(from: track))
+        guard let reference else { return 0 }
+        let input = RetellPrompt.estimateTokens(reference.text)
             + RetellPrompt.estimateTokens(transcript)
             + RetellPrompt.estimateTokens(RetellPrompt.system)
         return ClaudeModel.pricing(for: selectedModel)
@@ -112,7 +141,7 @@ final class RetellFlowModel {
     // MARK: - Разбор
 
     func analyze() async {
-        guard let track else { return }
+        guard let reference else { return }
         guard let apiKey = Keychain.get(Keychain.claudeAPIKey), !apiKey.isEmpty else {
             step = .failed(ClaudeClientError.noAPIKey.localizedDescription)
             return
@@ -120,7 +149,7 @@ final class RetellFlowModel {
 
         let summary = usage
         let pricing = ClaudeModel.pricing(for: selectedModel)
-        let inputEstimate = RetellPrompt.estimateTokens(subtitleText(from: track))
+        let inputEstimate = RetellPrompt.estimateTokens(reference.text)
             + RetellPrompt.estimateTokens(transcript)
         guard UsageTracker.canAfford(
             estimatedInputTokens: inputEstimate,
@@ -136,7 +165,7 @@ final class RetellFlowModel {
         do {
             let client = ClaudeClient(apiKey: apiKey, model: selectedModel)
             let outcome = try await client.analyze(
-                subtitles: subtitleText(from: track),
+                reference: reference,
                 retell: transcript,
                 episodeTitle: episodeTitle.isEmpty ? nil : episodeTitle,
                 watchedUpTo: watchedSeconds)
@@ -163,14 +192,17 @@ final class RetellFlowModel {
                 return
             }
 
-            context.insert(RetellSession(
+            let session = RetellSession(
                 episodeTitle: episodeTitle.isEmpty
                     ? tr("Без названия", "Sem título", "Untitled")
                     : episodeTitle,
                 transcript: transcript,
                 report: parsed,
                 cost: outcome.usage.cost,
-                model: selectedModel))
+                model: selectedModel)
+            session.showID = episode?.showID
+            session.episodeKeyRaw = episode?.episode.key.raw
+            context.insert(session)
             try? context.save()
 
             report = parsed
@@ -218,6 +250,6 @@ final class RetellFlowModel {
         recorder.reset()
         transcript = ""
         report = nil
-        step = track == nil ? .needsSubtitles : .ready
+        step = reference == nil ? .needsSubtitles : .ready
     }
 }

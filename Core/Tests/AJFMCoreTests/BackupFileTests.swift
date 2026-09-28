@@ -63,6 +63,24 @@ final class BackupFileTests: XCTestCase {
         XCTAssertEqual(restored.decks.first?.name, "Breaking Bad S03E05")
     }
 
+    func testShowsSurviveTheRoundTrip() throws {
+        var backup = sampleBackup()
+        backup.shows = [BackupShow(
+            tvmazeID: 431, name: "Friends", posterURL: nil, premieredYear: 1994,
+            addedAt: Date(timeIntervalSince1970: 1_700_000_000),
+            episodes: [EpisodeInfo(id: 1, season: 1, number: 1, name: "Pilot",
+                                   airdate: "1994-09-22", summary: "Monica.")],
+            watched: ["1x1"])]
+        XCTAssertEqual(try BackupCoder.decode(try BackupCoder.encode(backup)), backup)
+    }
+
+    func testBackupWithoutShowsDecodesAsNil() throws {
+        // nil, а не пустой список: восстановление из старого бэкапа
+        // не должно стирать сериалы, которых в нём не было.
+        let restored = try BackupCoder.decode(try BackupCoder.encode(sampleBackup()))
+        XCTAssertNil(restored.shows)
+    }
+
     func testRoundTripPreservesCardProgress() throws {
         let restored = try BackupCoder.decode(try BackupCoder.encode(sampleBackup()))
         let card = try XCTUnwrap(restored.decks.first?.notes.first?.cards.first)

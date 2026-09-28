@@ -47,7 +47,7 @@ struct RootView: View {
                 case .today: TodayView()
                 case .decks: decksTab
                 case .rewards: RewardsView()
-                case .speech: SpeakingHubView()
+                case .shows: ShowsView()
                 case .settings: SettingsView()
                 }
             }
@@ -366,14 +366,14 @@ extension RootView {
 }
 
 enum AppTab: Hashable, CaseIterable {
-    case today, decks, rewards, speech, settings
+    case today, decks, shows, rewards, settings
 
     var title: String {
         switch self {
         case .today: return tr("Сегодня", "Hoje", "Today")
         case .decks: return tr("Наборы", "Baralhos", "Decks")
         case .rewards: return tr("Награды", "Recompensas", "Rewards")
-        case .speech: return tr("Речь", "Fala", "Speech")
+        case .shows: return tr("Сериалы", "Séries", "Shows")
         case .settings: return tr("Настройки", "Definições", "Settings")
         }
     }
@@ -383,7 +383,7 @@ enum AppTab: Hashable, CaseIterable {
         case .today: return "calendar"
         case .decks: return "rectangle.stack.fill"
         case .rewards: return "trophy.fill"
-        case .speech: return "waveform"
+        case .shows: return "tv.fill"
         case .settings: return "gearshape.fill"
         }
     }

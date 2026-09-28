@@ -5,6 +5,9 @@ import AJFMCore
 
 /// Пересказ серии: наговариваешь, что понял, — получаешь разбор.
 struct RetellView: View {
+    /// Серия, если пересказ начат с её экрана.
+    var episode: EpisodeContext?
+
     @Environment(\.modelContext) private var context
     @State private var model: RetellFlowModel?
     @State private var showSubtitleImporter = false
@@ -23,7 +26,7 @@ struct RetellView: View {
         .navigationTitle(tr("Пересказ", "Reconto", "Retelling"))
         .aiConsentAlert(pending: $pendingAI)
         .onAppear {
-            if model == nil { model = RetellFlowModel(context: context) }
+            if model == nil { model = RetellFlowModel(context: context, episode: episode) }
         }
         // Запись без экрана — это включённый микрофон и распознавание в фоне.
         .onDisappear {
@@ -115,6 +118,17 @@ struct RetellView: View {
                             step: 1)
                     }
                 }
+            } else if let episode = model.episode, episode.synopsis != nil {
+                LabeledContent(tr("Серия", "Episódio", "Episode"), value: episode.title)
+                LabeledContent(tr("Сверка", "Comparação", "Checked against"),
+                               value: tr("описание серии", "resumo do episódio",
+                                         "episode synopsis"))
+                Button(tr("Приложить субтитры — точнее", "Anexar legendas — mais preciso",
+                          "Attach subtitles — more precise"),
+                       systemImage: "doc.text") {
+                    showSubtitleImporter = true
+                }
+                .font(.app(.callout))
             } else {
                 Button(tr("Загрузить субтитры серии", "Carregar as legendas do episódio",
                           "Load the episode's subtitles"),
@@ -125,6 +139,17 @@ struct RetellView: View {
         } header: {
             Text(tr("Серия", "Episódio", "Episode"))
         } footer: {
+            if model.track == nil, model.episode?.synopsis != nil {
+                Text(tr("Сверю с официальным описанием серии из TVMaze: оно короткое, "
+                            + "поэтому проверю главное — понят ли сюжет. Детали, которых "
+                            + "в описании нет, ошибкой не считаются. С субтитрами разбор точнее.",
+                        "Comparo com o resumo oficial do episódio no TVMaze: é curto, por isso "
+                            + "verifico o essencial — se percebeste o enredo. Detalhes que não "
+                            + "estão no resumo não contam como erro. Com legendas é mais preciso.",
+                        "I'll compare with the official TVMaze synopsis: it's short, so I'll check "
+                            + "the main thing — whether you got the plot. Details it doesn't "
+                            + "mention don't count as mistakes. Subtitles make the review more precise."))
+            } else {
             Text(model.track == nil
                  ? tr("Субтитры обязательны. Без них модель судит о содержании по своим "
                         + "воспоминаниям о сериале и начинает сообщать об ошибках, которых "
@@ -141,6 +166,7 @@ struct RetellView: View {
                         + "revelar o que ainda não viste.",
                       "The review only sees subtitles up to the marked minute — so it "
                         + "won't spoil what you haven't watched yet."))
+            }
         }
     }
 
@@ -285,6 +311,16 @@ struct RetellView: View {
             }
             .buttonStyle(.chunky)
             .disabled(model.deckCandidateCount == 0)
+
+            if let episode = model.episode {
+                NavigationLink {
+                    EpisodeDiscussionView(episode: episode, retelling: model.transcript)
+                } label: {
+                    Label(tr("Поговорить о серии с Мончиком", "Conversar sobre o episódio com o Monchik",
+                             "Chat about the episode with Monchik"),
+                          systemImage: "bubble.left.and.bubble.right.fill")
+                }
+            }
 
             Button(tr("Новый пересказ", "Novo reconto", "New retelling")) { model.reset() }
         } footer: {

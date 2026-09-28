@@ -26,6 +26,7 @@ struct DataEraseService {
         try deleteAll(UsageEntry.self)
         try deleteAll(RewardContractEntity.self)
         try deleteAll(ProgressSnapshot.self)
+        try deleteAll(TrackedShow.self)
         try context.save()
     }
 

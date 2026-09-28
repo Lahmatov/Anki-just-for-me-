@@ -84,6 +84,23 @@ struct RestoreService {
                 }
             }
 
+            if let shows = backup.shows {
+                for show in try context.fetch(FetchDescriptor<TrackedShow>()) {
+                    context.delete(show)
+                }
+                for backupShow in shows {
+                    let show = TrackedShow(
+                        show: TVMaze.Show(
+                            id: backupShow.tvmazeID, name: backupShow.name,
+                            posterURL: backupShow.posterURL,
+                            premieredYear: backupShow.premieredYear),
+                        episodes: backupShow.episodes)
+                    show.addedAt = backupShow.addedAt
+                    show.watchedRaw = backupShow.watched
+                    context.insert(show)
+                }
+            }
+
             try context.save()
         } catch {
             context.rollback()

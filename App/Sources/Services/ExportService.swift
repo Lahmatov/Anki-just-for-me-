@@ -36,7 +36,16 @@ struct ExportService {
             )
         }
 
-        return BackupFile(exportedAt: Date(), decks: backupDecks)
+        let shows = try context.fetch(FetchDescriptor<TrackedShow>(
+            sortBy: [SortDescriptor(\TrackedShow.addedAt)]))
+        return BackupFile(
+            exportedAt: Date(), decks: backupDecks,
+            shows: shows.map { show in
+                BackupShow(
+                    tvmazeID: show.tvmazeID, name: show.name, posterURL: show.posterURL,
+                    premieredYear: show.premieredYear, addedAt: show.addedAt,
+                    episodes: show.episodes, watched: show.watchedRaw)
+            })
     }
 
     /// Пишет бэкап во временный файл и возвращает путь — для кнопки «Поделиться».
