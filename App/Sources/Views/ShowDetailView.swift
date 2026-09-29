@@ -48,6 +48,9 @@ struct ShowDetailView: View {
                     }
                 }
             }
+
+            Section { TVMazeCredit() }
+                .listRowBackground(Color.clear)
         }
         .themedScreen()
         .navigationTitle(show.name)

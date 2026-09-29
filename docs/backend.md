@@ -66,6 +66,7 @@ iPhone ──HTTPS──► Worker (backend/src) ──► Anthropic API   (кл
 | Двойное гашение промокода | Один атомарный `UPDATE … WHERE redeemed_at IS NULL`. |
 | Разорить счёт Anthropic | Лимит на устройство и покупку, бронь, 6 запросов в минуту и 150 в день на устройство, регистрации ограничены по IP. Бесплатные устройства к модели не допускаются вовсе. **И обязательно — месячный лимит расходов на сам ключ в Anthropic Console.** |
 | Огромные запросы | Тело ≤ 300 КБ, строго `application/json`, проверка каждого поля. |
+| Лишние данные «на всякий случай» | Ночная чистка по cron (`src/retention.ts`): устройство без связи 12 месяцев, журнал расхода старше 90 дней, закончившиеся подписки без устройств, отжившие счётчики и брони. Сроки совпадают с политикой конфиденциальности. |
 | Утечка подробностей | Клиент получает код ошибки. Стеки, SQL и ответы Anthropic и Apple наружу не выходят. |
 
 Что остаётся и как усилить позже:
@@ -86,7 +87,7 @@ iPhone ──HTTPS──► Worker (backend/src) ──► Anthropic API   (кл
 ```sh
 cd backend
 npm ci
-npm test                       # 59 тестов на настоящем SQLite
+npm test                       # 69 тестов на настоящем SQLite
 npx wrangler login             # откроется браузер
 npx wrangler d1 create recap   # скопировать database_id в wrangler.toml
 npx wrangler d1 migrations apply recap --remote
@@ -104,6 +105,9 @@ npx wrangler secret put PROMO_PEPPER          # содержимое secrets/pro
 ```sh
 npm run deploy     # напечатает адрес: https://recap-backend.<имя>.workers.dev
 ```
+
+Ночная чистка включается сама: расписание — `[triggers]` в `wrangler.toml`,
+итог каждого запуска виден в `npx wrangler tail`.
 
 Адрес вписать в `project.yml` → `RecapBackendURL`, затем `xcodegen` и
 собрать приложение. Пока там заглушка `CHANGE-ME`, приложение работает

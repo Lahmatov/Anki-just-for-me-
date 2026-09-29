@@ -9,11 +9,12 @@ export async function hit(
 ): Promise<void> {
   const window = Math.floor(now / windowSeconds);
   const row = await db.prepare(
-    `INSERT INTO rate_limits (key, win, count) VALUES (?, ?, 1)
+    `INSERT INTO rate_limits (key, win, count, expires_at) VALUES (?, ?, 1, ?)
      ON CONFLICT(key) DO UPDATE SET
        count = CASE WHEN win = excluded.win THEN count + 1 ELSE 1 END,
-       win = excluded.win
+       win = excluded.win,
+       expires_at = excluded.expires_at
      RETURNING count`,
-  ).bind(key, window).first<{ count: number }>();
+  ).bind(key, window, (window + 1) * windowSeconds).first<{ count: number }>();
   if ((row?.count ?? 0) > limit) throw new ApiError(429, "rate_limited");
 }

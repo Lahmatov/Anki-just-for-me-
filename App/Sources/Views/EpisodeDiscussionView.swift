@@ -61,6 +61,17 @@ struct EpisodeDiscussionView: View {
                             .frame(maxWidth: .infinity)
                             .multilineTextAlignment(.center)
 
+                        // AI Act, ст. 50: собеседник должен знать, что говорит
+                        // с ИИ, — с 2 августа 2026 это обязанность, а не вежливость.
+                        Label(tr("Мончик — ИИ (Claude). Он может ошибаться в деталях серии.",
+                                 "O Monchik é uma IA (Claude). Pode enganar-se nos detalhes.",
+                                 "Monchik is an AI (Claude). He may get episode details wrong."),
+                              systemImage: "sparkles")
+                            .font(.app(.caption))
+                            .foregroundStyle(Theme.muted)
+                            .frame(maxWidth: .infinity)
+                            .multilineTextAlignment(.center)
+
                         ForEach(model.turns) { turn in
                             bubble(turn).id(turn.id)
                         }

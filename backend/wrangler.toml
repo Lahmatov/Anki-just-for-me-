@@ -12,6 +12,10 @@ database_name = "recap"
 database_id = "REPLACE_WITH_D1_DATABASE_ID"
 migrations_dir = "migrations"
 
+# Ночная чистка старых данных по срокам хранения (src/retention.ts).
+[triggers]
+crons = ["17 3 * * *"]
+
 [vars]
 BUNDLE_ID = "com.lahmatov.ajfm"
 # Модель для слов и разговоров: быстрая и дешёвая.

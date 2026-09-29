@@ -55,6 +55,10 @@ struct ShowSearchView: View {
                     }
                     .disabled(adding != nil)
                 }
+                if !results.isEmpty {
+                    Section { TVMazeCredit() }
+                        .listRowBackground(Color.clear)
+                }
             }
             .themedScreen()
             .overlay {

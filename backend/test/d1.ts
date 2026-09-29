@@ -1,5 +1,5 @@
 import { DatabaseSync } from "node:sqlite";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 
 /**
  * D1 поверх настоящего SQLite из Node: D1 — это SQLite, так что запросы
@@ -37,14 +37,22 @@ class Statement {
 
 export function makeDB(): D1Database & { raw: DatabaseSync } {
   const db = new DatabaseSync(":memory:");
-  db.exec(readFileSync(new URL("../migrations/0001_init.sql", import.meta.url), "utf8"));
+  // Все миграции по порядку — как `wrangler d1 migrations apply`.
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const file of readdirSync(dir).filter((name) => name.endsWith(".sql")).sort()) {
+    db.exec(readFileSync(new URL(file, dir), "utf8"));
+  }
   const d1 = {
     raw: db,
     prepare: (sql: string) => new Statement(db, sql),
     async batch(statements: Statement[]) {
       db.exec("BEGIN");
       try {
-        const results = statements.map((statement) => statement.runSync());
+        // Форма результата — как у D1: число изменённых строк в meta.changes.
+        const results = statements.map((statement) => {
+          const info = statement.runSync();
+          return { success: true, meta: { changes: Number(info.changes), last_row_id: Number(info.lastInsertRowid) } };
+        });
         db.exec("COMMIT");
         return results;
       } catch (error) {
