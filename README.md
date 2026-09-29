@@ -84,6 +84,7 @@
 | [docs/backend.md](docs/backend.md) | **Сервер: развернуть, промокоды, подписка, каталог, защита** |
 | [docs/app-store.md](docs/app-store.md) | Чек-лист публикации в App Store |
 | [docs/gdpr-business.md](docs/gdpr-business.md) | **GDPR, AI Act, налоги в Португалии, экономика подписки** |
+| [docs/legal/](docs/legal/) | Условия, политика конфиденциальности, лицензии — ru/pt/en, те же файлы в приложении |
 | [schema/deck.schema.json](schema/deck.schema.json) | JSON Schema формата |
 | [examples/](examples/) | Готовые наборы: лексика для пересказа и пример из сериала |
 

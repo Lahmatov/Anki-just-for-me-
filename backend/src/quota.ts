@@ -186,6 +186,17 @@ export async function applySubscription(
     }
   }
 
+  await linkDevice(db, deviceId, entitlementId, maxDevices);
+}
+
+/**
+ * Привязать устройство к доступу и уложиться в лимит устройств: лишним
+ * становится то, что дольше всех молчит. Так смена телефона работает
+ * сама, а раздать доступ друзьям не выйдет.
+ */
+export async function linkDevice(
+  db: D1Database, deviceId: string, entitlementId: string, maxDevices: number,
+): Promise<void> {
   await db.prepare("UPDATE devices SET entitlement_id = ? WHERE id = ?")
     .bind(entitlementId, deviceId).run();
 
@@ -196,4 +207,35 @@ export async function applySubscription(
   for (const row of extra) {
     await db.prepare("UPDATE devices SET entitlement_id = NULL WHERE id = ?").bind(row.id).run();
   }
+}
+
+/**
+ * Привязать, только если есть свободное место, — никого не вытесняя.
+ * Для тихой подстройки под аккаунт: иначе устройства одного аккаунта
+ * сверх лимита вытесняли бы друг друга по очереди на каждом запросе.
+ */
+export async function linkDeviceIfRoom(
+  db: D1Database, deviceId: string, entitlementId: string, maxDevices: number,
+): Promise<boolean> {
+  const result = await db.prepare(
+    `UPDATE devices SET entitlement_id = ?1 WHERE id = ?2
+       AND (SELECT COUNT(*) FROM devices WHERE entitlement_id = ?1 AND id != ?2) < ?3`,
+  ).bind(entitlementId, deviceId, maxDevices).run();
+  return (result.meta.changes ?? 0) > 0;
+}
+
+/**
+ * Какой из двух доступов лучше: действующий лучше истёкшего, подписка
+ * лучше промокода, дальний срок лучше ближнего. При равенстве — первый.
+ */
+export function better(
+  a: Entitlement | null, b: Entitlement | null, now: number,
+): Entitlement | null {
+  const rank = (e: Entitlement | null) =>
+    e ? [e.period_end > now ? 1 : 0, e.kind === "subscription" ? 1 : 0, e.period_end] : [-1, 0, 0];
+  const [ra, rb] = [rank(a), rank(b)];
+  for (let i = 0; i < ra.length; i++) {
+    if (ra[i]! !== rb[i]!) return ra[i]! > rb[i]! ? a : b;
+  }
+  return a;
 }

@@ -34,6 +34,59 @@ export function defaultRandomBytes(count: number): Uint8Array {
   return crypto.getRandomValues(new Uint8Array(count));
 }
 
+// MARK: - Подписи и шифрование
+
+/** JWT с подписью ES256 — так подписываются запросы к Apple (App Store и вход). */
+export async function es256JWT(
+  pem: string, header: Record<string, unknown>, payload: Record<string, unknown>,
+): Promise<string> {
+  const signingInput = base64url(encoder.encode(JSON.stringify({ alg: "ES256", ...header }))) + "."
+    + base64url(encoder.encode(JSON.stringify(payload)));
+  const key = await crypto.subtle.importKey(
+    "pkcs8", pemToDer(pem), { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]);
+  // Web Crypto отдаёт подпись ECDSA сразу в виде r‖s — ровно как требует JWS.
+  const signature = await crypto.subtle.sign(
+    { name: "ECDSA", hash: "SHA-256" }, key, encoder.encode(signingInput));
+  return signingInput + "." + base64url(new Uint8Array(signature));
+}
+
+export function pemToDer(pem: string): ArrayBuffer {
+  const body = pem.replace(/-----(BEGIN|END) PRIVATE KEY-----/g, "").replace(/\s+/g, "");
+  const bytes = Uint8Array.from(atob(body), (char) => char.charCodeAt(0));
+  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+}
+
+/**
+ * Ключ AES-GCM, выведенный из секрета и назначения. Отдельного секрета не
+ * заводим: чем меньше секретов, тем меньше шансов потерять один из них.
+ * Назначение входит в вывод, чтобы один секрет не служил двум целям.
+ */
+async function aesKey(secret: string, purpose: string): Promise<CryptoKey> {
+  const raw = await crypto.subtle.digest("SHA-256", encoder.encode(`${purpose}|${secret}`));
+  return crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["encrypt", "decrypt"]);
+}
+
+/** Шифрование с аутентификацией: nonce (12 байт) ‖ шифротекст, в base64url. */
+export async function seal(
+  secret: string, purpose: string, plaintext: string, randomBytes: (count: number) => Uint8Array,
+): Promise<string> {
+  const iv = randomBytes(12);
+  const ciphertext = new Uint8Array(await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv }, await aesKey(secret, purpose), encoder.encode(plaintext)));
+  const out = new Uint8Array(iv.length + ciphertext.length);
+  out.set(iv);
+  out.set(ciphertext, iv.length);
+  return base64url(out);
+}
+
+/** Обратное к `seal`. Подменённый или чужой шифротекст — исключение. */
+export async function open(secret: string, purpose: string, sealed: string): Promise<string> {
+  const bytes = base64urlDecode(sealed);
+  const plaintext = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: bytes.slice(0, 12) }, await aesKey(secret, purpose), bytes.slice(12));
+  return new TextDecoder().decode(plaintext);
+}
+
 /** Алфавит Crockford: без I, L, O и U — их путают с 1, 0 и V. */
 export const CROCKFORD = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
 

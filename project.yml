@@ -34,6 +34,10 @@ targets:
       - path: App/Sources
       - path: App/Resources
         buildPhase: resources
+      # Условия, политика и лицензии — те же файлы, что публикуются на сайте:
+      # в приложении они читаются без сети и не расходятся с опубликованными.
+      - path: docs/legal
+        buildPhase: resources
     dependencies:
       - package: AJFMCore
         product: AJFMCore
@@ -72,6 +76,14 @@ targets:
         # Адрес сервера Recap (backend/) после `wrangler deploy`. Пока стоит
         # заглушка, подписка и промокоды в приложении не показываются.
         RecapBackendURL: https://recap-backend.CHANGE-ME.workers.dev
+        # Продавец — те же имя, адрес и почта, что в App Store Connect для DSA.
+        # Подставляются в условия и политику в приложении и в письмо в поддержку.
+        RecapSellerName: CHANGE-ME
+        RecapSellerAddress: CHANGE-ME
+        RecapContactEmail: CHANGE-ME
+        # Вход через Apple включается в Config/Signing.xcconfig вместе со
+        # способностью: на бесплатном аккаунте её нет, и кнопка была бы мёртвой.
+        RecapSignInWithApple: $(RECAP_SIGN_IN_WITH_APPLE)
         # Шрифт интерфейса по умолчанию. Статические начертания, а не
         # вариативный файл: так каждое находится по имени (tools/make_fonts.py).
         UIAppFonts:

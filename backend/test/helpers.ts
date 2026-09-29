@@ -26,12 +26,14 @@ export class FakeClaude implements ClaudeLike {
   }
 }
 
-/** Сеть: TVMaze и App Store отвечают тем, что задано в тесте. */
-export function fakeFetch(routes: Record<string, () => Response>): typeof fetch {
-  return (async (input: RequestInfo | URL) => {
+export type Route = (init?: RequestInit) => Response | Promise<Response>;
+
+/** Сеть: TVMaze и Apple отвечают тем, что задано в тесте. */
+export function fakeFetch(routes: Record<string, Route>): typeof fetch {
+  return (async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = String(input);
     for (const [prefix, respond] of Object.entries(routes)) {
-      if (url.startsWith(prefix)) return respond();
+      if (url.startsWith(prefix)) return respond(init);
     }
     return new Response("not found", { status: 404 });
   }) as typeof fetch;
@@ -43,7 +45,7 @@ export const TVMAZE = {
   "https://api.tvmaze.com/shows/431": () => Response.json({ name: "Friends" }),
 };
 
-export function makeWorld(options: { routes?: Record<string, () => Response> } = {}) {
+export function makeWorld(options: { routes?: Record<string, Route> } = {}) {
   const db = makeDB();
   const claude = new FakeClaude();
   let clock = 1_800_000_000;

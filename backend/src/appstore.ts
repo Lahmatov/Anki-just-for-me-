@@ -1,5 +1,5 @@
 import { ApiError } from "./http";
-import { base64url, base64urlDecode } from "./crypto";
+import { base64urlDecode, es256JWT } from "./crypto";
 import type { Deps, Env } from "./env";
 import type { VerifiedSubscription } from "./quota";
 
@@ -66,27 +66,10 @@ async function request(deps: Deps, host: string, transactionId: string, token: s
 
 /** JWT для App Store Server API: ES256, живёт 20 минут. */
 export async function appStoreJWT(env: Env, now: number): Promise<string> {
-  const header = { alg: "ES256", kid: env.APPSTORE_KEY_ID, typ: "JWT" };
-  const payload = {
+  return es256JWT(env.APPSTORE_PRIVATE_KEY ?? "", { kid: env.APPSTORE_KEY_ID, typ: "JWT" }, {
     iss: env.APPSTORE_ISSUER_ID, iat: now, exp: now + 1200,
     aud: "appstoreconnect-v1", bid: env.BUNDLE_ID,
-  };
-  const encoder = new TextEncoder();
-  const signingInput = base64url(encoder.encode(JSON.stringify(header))) + "."
-    + base64url(encoder.encode(JSON.stringify(payload)));
-  const key = await crypto.subtle.importKey(
-    "pkcs8", pemToDer(env.APPSTORE_PRIVATE_KEY ?? ""),
-    { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]);
-  // Web Crypto отдаёт подпись ECDSA сразу в виде r‖s — ровно как требует JWS.
-  const signature = await crypto.subtle.sign(
-    { name: "ECDSA", hash: "SHA-256" }, key, encoder.encode(signingInput));
-  return signingInput + "." + base64url(new Uint8Array(signature));
-}
-
-function pemToDer(pem: string): ArrayBuffer {
-  const body = pem.replace(/-----(BEGIN|END) PRIVATE KEY-----/g, "").replace(/\s+/g, "");
-  const bytes = Uint8Array.from(atob(body), (char) => char.charCodeAt(0));
-  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+  });
 }
 
 /**

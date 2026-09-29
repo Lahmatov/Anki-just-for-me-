@@ -22,6 +22,7 @@ const DAY = 86_400;
 
 export interface PurgeReport {
   devices: number;
+  accounts: number;
   usageLog: number;
   entitlements: number;
   rateLimits: number;
@@ -44,13 +45,20 @@ export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
     db.prepare(`UPDATE promo_codes SET redeemed_by = NULL WHERE redeemed_by IN (${stale})`)
       .bind(deviceCutoff),
     db.prepare("DELETE FROM devices WHERE last_seen_at < ?").bind(deviceCutoff),
-    // Доступ без единого устройства: промо — сразу (код одноразовый, вернуть
-    // его на другой телефон нельзя), подписка — через месяц после конца
-    // срока. Свежие записи не трогаем: гашение кода создаёт доступ раньше,
-    // чем привязывает к нему устройство.
+    // Аккаунт без единого телефона, год не входивший. Отозвать вход у Apple
+    // здесь не нужно: это требуется, когда удалить просит сам человек.
+    db.prepare(
+      `DELETE FROM accounts WHERE last_seen_at < ?
+         AND NOT EXISTS (SELECT 1 FROM devices WHERE devices.account_id = accounts.id)`,
+    ).bind(deviceCutoff),
+    // Доступ без единого устройства и аккаунта: промо — сразу (код
+    // одноразовый, вернуть его на другой телефон нельзя), подписка — через
+    // месяц после конца срока. Свежие записи не трогаем: гашение кода
+    // создаёт доступ раньше, чем привязывает к нему устройство.
     db.prepare(
       `DELETE FROM entitlements
        WHERE NOT EXISTS (SELECT 1 FROM devices WHERE devices.entitlement_id = entitlements.id)
+         AND NOT EXISTS (SELECT 1 FROM accounts WHERE accounts.entitlement_id = entitlements.id)
          AND updated_at < ?
          AND (kind = 'promo' OR period_end < ?)`,
     ).bind(now - DAY, now - RETENTION.lapsedSubscriptionDays * DAY),
@@ -62,10 +70,11 @@ export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
   const changes = (index: number) => results[index]?.meta?.changes ?? 0;
   return {
     devices: changes(3),
+    accounts: changes(4),
     usageLog: changes(1),
-    entitlements: changes(4),
-    rateLimits: changes(5),
-    reservations: changes(6),
-    episodeCache: changes(7),
+    entitlements: changes(5),
+    rateLimits: changes(6),
+    reservations: changes(7),
+    episodeCache: changes(8),
   };
 }

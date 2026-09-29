@@ -16,13 +16,22 @@ public enum BackendAPI {
         public var unitsTotal: Int
         public var unitsLeft: Int
         public var periodEnd: String?
+        /// Выполнен ли вход через Apple. Есть только в ответах о профиле
+        /// (`/v1/me`, вход, выход); в ответах на запросы к ИИ его нет — nil.
+        public var signedIn: Bool?
+        /// Код поддержки: по нему находится запись на сервере, когда человек
+        /// пишет в поддержку. Тоже только в ответах о профиле.
+        public var supportCode: String?
 
-        public init(plan: String, active: Bool, unitsTotal: Int, unitsLeft: Int, periodEnd: String?) {
+        public init(plan: String, active: Bool, unitsTotal: Int, unitsLeft: Int, periodEnd: String?,
+                    signedIn: Bool? = nil, supportCode: String? = nil) {
             self.plan = plan
             self.active = active
             self.unitsTotal = unitsTotal
             self.unitsLeft = unitsLeft
             self.periodEnd = periodEnd
+            self.signedIn = signedIn
+            self.supportCode = supportCode
         }
 
         public enum Kind: Equatable, Sendable { case none, promo, subscription }
@@ -164,6 +173,64 @@ public enum BackendAPI {
         public var shows: [CatalogShow]
     }
 
+    // MARK: - Аккаунт
+
+    /// Вход через Apple: сервер сам проверит токен у Apple и обменяет код.
+    /// `nonce` — исходная строка; в запрос ко входу ушёл её SHA-256.
+    public struct SignInBody: Encodable, Equatable, Sendable {
+        public var identityToken: String
+        public var authorizationCode: String
+        public var nonce: String
+
+        public init(identityToken: String, authorizationCode: String, nonce: String) {
+            self.identityToken = identityToken
+            self.authorizationCode = authorizationCode
+            self.nonce = nonce
+        }
+    }
+
+    /// Всё, что сервер знает о телефоне (GDPR, ст. 15 и 20).
+    public struct ServerExport: Decodable, Equatable, Sendable {
+        public struct Device: Decodable, Equatable, Sendable {
+            public var registeredAt: String
+            public var lastSeenAt: String
+        }
+        public struct Account: Decodable, Equatable, Sendable {
+            public var signedInWith: String
+            public var createdAt: String
+        }
+        public struct Episode: Decodable, Equatable, Sendable {
+            public var showId: Int
+            public var season: Int
+            public var episode: Int
+            public var at: String
+        }
+        public struct Usage: Decodable, Equatable, Sendable {
+            public var kind: String
+            public var inputTokens: Int
+            public var outputTokens: Int
+            public var at: String
+        }
+        public struct Retention: Decodable, Equatable, Sendable {
+            public var inactiveDevice: Int
+            public var usageLog: Int
+        }
+
+        public var supportCode: String
+        public var exportedAt: String
+        public var device: Device
+        public var account: Account?
+        public var plan: PlanStatus
+        public var episodes: [Episode]
+        public var usage: [Usage]
+        public var retentionDays: Retention
+
+        /// Токенов за всё время в журнале — одной строкой для экрана.
+        public var totalTokens: Int {
+            usage.reduce(0) { $0 + $1.inputTokens + $1.outputTokens }
+        }
+    }
+
     // MARK: - Ошибки
 
     public struct ErrorBody: Decodable, Sendable {
@@ -256,6 +323,20 @@ public enum BackendAPI {
                 return tr("Модель не справилась с этим запросом. Попробуй ещё раз.",
                           "O modelo não conseguiu responder. Tenta de novo.",
                           "The model couldn't handle this request. Try again.")
+            case "invalid_identity_token", "invalid_authorization_code":
+                return tr("Apple не подтвердил вход. Попробуй войти ещё раз.",
+                          "A Apple não confirmou o início de sessão. Tenta outra vez.",
+                          "Apple didn't confirm the sign-in. Try again.")
+            case "signin_not_configured":
+                return tr("Вход через Apple на сервере ещё не настроен.",
+                          "O início de sessão com a Apple ainda não está configurado no servidor.",
+                          "Sign in with Apple isn't set up on the server yet.")
+            case "apple_unavailable":
+                return tr("Apple сейчас не отвечает. Попробуй через минуту — ничего не удалено.",
+                          "A Apple não está a responder. Tenta daqui a um minuto — nada foi apagado.",
+                          "Apple isn't responding. Try again in a minute — nothing was deleted.")
+            case "not_signed_in":
+                return tr("Вход не выполнен.", "Sessão não iniciada.", "You're not signed in.")
             case "unauthorized":
                 return tr("Сервер не узнал устройство. Попробуй ещё раз.",
                           "O servidor não reconheceu o dispositivo. Tenta de novo.",

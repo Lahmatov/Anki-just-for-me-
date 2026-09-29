@@ -18,9 +18,10 @@ struct PrivacyView: View {
     @State private var eraseError: String?
     @State private var aiConsent = AIConsent.isGiven
 
-    /// Публичный адрес политики — для App Store Connect и кнопки ниже.
+    /// Публичный адрес политики — для App Store Connect. В приложении
+    /// политика открывается текстом из ресурсов (`LegalDocumentView`).
     static let policyURL = URL(
-        string: "https://github.com/lahmatov/Anki-just-for-me-/blob/main/docs/privacy-policy.md")!
+        string: "https://github.com/lahmatov/Anki-just-for-me-/blob/main/docs/legal/privacy.en.md")!
 
     var body: some View {
         List {
@@ -107,7 +108,9 @@ struct PrivacyView: View {
             }
 
             Section {
-                Link(destination: Self.policyURL) {
+                NavigationLink {
+                    LegalDocumentView(kind: .privacy)
+                } label: {
                     Label(tr("Полный текст политики", "Texto completo da política",
                              "Full privacy policy"),
                           systemImage: "doc.text")
@@ -195,8 +198,10 @@ struct PrivacyView: View {
             }
         }
         // Сервер Recap — тоже до ключей: без токена устройство там не найти.
+        // Сначала аккаунт (с отзывом входа у Apple), потом само устройство.
         if RecapBackend.isConfigured {
             do {
+                try await RecapAccount.shared.deleteAccountIfSignedIn()
                 try await RecapBackend.shared.forgetDevice()
             } catch {
                 Log.failure(.network, "Устройство на сервере Recap не удалилось", error)

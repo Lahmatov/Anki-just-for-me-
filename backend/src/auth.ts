@@ -5,14 +5,16 @@ import type { Deps } from "./env";
 export interface Device {
   id: string;
   entitlement_id: string | null;
+  /** Аккаунт, если на телефоне выполнен вход через Apple. */
+  account_id: string | null;
   last_seen_at: number;
 }
 
 /**
  * Регистрация устройства: сервер выдаёт случайный токен в 256 бит и хранит
- * только его SHA-256. Токен живёт в Keychain телефона. Аккаунтов нет —
- * и не нужно: доступ к ИИ даёт не регистрация, а подписка или промокод,
- * так что тысяча фальшивых устройств ничего не получает.
+ * только его SHA-256. Токен живёт в Keychain телефона. Аккаунт (вход через
+ * Apple) — необязательная надстройка: доступ к ИИ даёт не регистрация,
+ * а подписка или промокод, так что тысяча фальшивых устройств ничего не получает.
  */
 export async function registerDevice(db: D1Database, deps: Deps): Promise<string> {
   const token = base64url(deps.randomBytes(32));
@@ -30,7 +32,7 @@ export async function authenticate(request: Request, db: D1Database, deps: Deps)
   const match = /^Bearer ([A-Za-z0-9_-]{43})$/.exec(header);
   if (!match?.[1]) throw new ApiError(401, "unauthorized");
   const device = await db.prepare(
-    "SELECT id, entitlement_id, last_seen_at FROM devices WHERE token_hash = ?",
+    "SELECT id, entitlement_id, account_id, last_seen_at FROM devices WHERE token_hash = ?",
   ).bind(await sha256Hex(match[1])).first<Device>();
   if (!device) throw new ApiError(401, "unauthorized");
 

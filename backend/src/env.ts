@@ -11,6 +11,14 @@ export interface Env {
   APPSTORE_KEY_ID?: string;
   APPSTORE_ISSUER_ID?: string;
   APPSTORE_PRIVATE_KEY?: string;
+  /**
+   * Секреты входа через Apple: Team ID и ключ Sign in with Apple (.p8).
+   * Нужны, чтобы обменять код входа на токен и отозвать его при удалении
+   * аккаунта. Не заданы — вход выключен (503), остальное работает.
+   */
+  APPLE_TEAM_ID?: string;
+  SIWA_KEY_ID?: string;
+  SIWA_PRIVATE_KEY?: string;
 
   BUNDLE_ID: string;
   MODEL: string;

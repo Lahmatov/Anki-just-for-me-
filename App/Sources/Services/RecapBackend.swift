@@ -69,6 +69,37 @@ final class RecapBackend {
         return response.shows
     }
 
+    // MARK: - Аккаунт
+
+    func signIn(_ body: BackendAPI.SignInBody) async throws -> BackendAPI.PlanStatus {
+        try await send("POST", "/v1/account/apple", body: encode(body), timeout: 30)
+    }
+
+    func signOut() async throws -> BackendAPI.PlanStatus {
+        try await send("POST", "/v1/account/logout", body: encode([String: String]()))
+    }
+
+    /// Удалить аккаунт: сервер отзывает вход у Apple и стирает аккаунт.
+    /// Повтор при 401 не нужен: у нового устройства аккаунта нет.
+    func deleteAccount() async throws -> BackendAPI.PlanStatus {
+        try await send("DELETE", "/v1/account", retrying: false)
+    }
+
+    /// Что сервер знает об этом телефоне: разобранное и исходный JSON —
+    /// его можно сохранить файлом (право на перенос данных).
+    func exportData() async throws -> (export: BackendAPI.ServerExport, json: Data) {
+        let data = try await request("GET", "/v1/me/export")
+        do {
+            let export = try JSONDecoder().decode(BackendAPI.ServerExport.self, from: data)
+            let object = try JSONSerialization.jsonObject(with: data)
+            let pretty = try JSONSerialization.data(withJSONObject: object,
+                                                    options: [.prettyPrinted, .sortedKeys])
+            return (export, pretty)
+        } catch {
+            throw BackendAPI.Failure.server(code: "bad_response", status: 200)
+        }
+    }
+
     // MARK: - Транспорт
 
     private func encode(_ value: some Encodable) throws -> Data {
@@ -79,21 +110,33 @@ final class RecapBackend {
         _ method: String, _ path: String, body: Data? = nil,
         timeout: TimeInterval = 20, retrying: Bool = true
     ) async throws -> Response {
+        let data = try await request(method, path, body: body, timeout: timeout, retrying: retrying)
+        do {
+            return try JSONDecoder().decode(Response.self, from: data)
+        } catch {
+            throw BackendAPI.Failure.server(code: "bad_response", status: 200)
+        }
+    }
+
+    private func request(
+        _ method: String, _ path: String, body: Data? = nil,
+        timeout: TimeInterval = 20, retrying: Bool = true
+    ) async throws -> Data {
         guard let base = Self.baseURL else { throw BackendAPI.Failure.notConfigured }
         let token = try await deviceToken()
 
-        var request = URLRequest(url: base.appending(path: path))
-        request.httpMethod = method
-        request.timeoutInterval = timeout
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "authorization")
+        var urlRequest = URLRequest(url: base.appending(path: path))
+        urlRequest.httpMethod = method
+        urlRequest.timeoutInterval = timeout
+        urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "authorization")
         if let body {
-            request.setValue("application/json", forHTTPHeaderField: "content-type")
-            request.httpBody = body
+            urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
+            urlRequest.httpBody = body
         }
 
         let (data, response): (Data, URLResponse)
         do {
-            (data, response) = try await session.data(for: request)
+            (data, response) = try await session.data(for: urlRequest)
         } catch {
             throw BackendAPI.Failure.network
         }
@@ -104,18 +147,14 @@ final class RecapBackend {
         // а подписку приложение восстановит само при следующей проверке.
         if status == 401, retrying {
             Keychain.remove(Keychain.recapDeviceToken)
-            return try await send(method, path, body: body, timeout: timeout, retrying: false)
+            return try await request(method, path, body: body, timeout: timeout, retrying: false)
         }
         guard (200..<300).contains(status) else {
             let failure = BackendAPI.Failure.from(status: status, body: data)
             Log.warning(.network, "Сервер Recap: \(failure.code ?? "?")", detail: "\(method) \(path)")
             throw failure
         }
-        do {
-            return try JSONDecoder().decode(Response.self, from: data)
-        } catch {
-            throw BackendAPI.Failure.server(code: "bad_response", status: status)
-        }
+        return data
     }
 
     /// Токен устройства: из Keychain, а при первом обращении — регистрация.

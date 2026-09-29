@@ -36,6 +36,9 @@ enum SettingsKey {
     static let appLanguage = "appLanguage"
     static let englishLevel = "englishLevel"
     static let fontStyle = "fontStyle"
+    /// Имя и выбор аватарки в профиле (`ProfileStore`). Только на телефоне.
+    static let profileName = "profileName"
+    static let profileAvatar = "profileAvatar"
 }
 
 extension AppSettings {

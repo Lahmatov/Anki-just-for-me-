@@ -69,10 +69,17 @@ struct PlusView: View {
                     Task { await account.restore() }
                 }
                 .disabled(account.busy)
-                Link(tr("Условия использования", "Termos de utilização", "Terms of use"),
+                // Документы — прямо в приложении: правило 3.1.2 требует рабочих
+                // ссылок на экране подписки, и без сети они тоже должны открываться.
+                NavigationLink(LegalDocument.Kind.terms.title) {
+                    LegalDocumentView(kind: .terms)
+                }
+                NavigationLink(LegalDocument.Kind.privacy.title) {
+                    LegalDocumentView(kind: .privacy)
+                }
+                Link(tr("Стандартное лицензионное соглашение Apple", "Contrato de licença padrão da Apple",
+                        "Apple's Standard License Agreement"),
                      destination: Self.termsURL)
-                Link(tr("Политика конфиденциальности", "Política de privacidade", "Privacy policy"),
-                     destination: PrivacyView.policyURL)
             } footer: {
                 Text(tr("Подписка продлевается автоматически, если не отменить её хотя бы за сутки "
                             + "до конца периода. Управлять — в настройках Apple ID.",

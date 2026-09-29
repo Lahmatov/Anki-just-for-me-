@@ -17,6 +17,10 @@ final class RecapAccount {
     static let productIDs = ["com.lahmatov.ajfm.plus.monthly", "com.lahmatov.ajfm.plus.yearly"]
 
     private(set) var plan: BackendAPI.PlanStatus?
+    /// Вход через Apple на сервере. Правда — у сервера: приходит с /v1/me.
+    private(set) var signedIn = false
+    /// Код поддержки этого телефона на сервере — для письма в поддержку.
+    private(set) var supportCode: String?
     /// Свои промокоды RECAP-… — только вне App Store (TestFlight, Xcode).
     /// Правило App Store 3.1.1 запрещает открывать функции своими кодами;
     /// в магазинной версии для этого есть Offer Codes от Apple.
@@ -55,15 +59,84 @@ final class RecapAccount {
     func refresh() async {
         guard RecapBackend.isConfigured else { return }
         do {
-            plan = try await RecapBackend.shared.plan()
+            update(try await RecapBackend.shared.plan())
         } catch {
             Log.warning(.network, "Статус Recap Plus не обновился", detail: error.localizedDescription)
         }
     }
 
     /// Ответ сервера после запроса к ИИ несёт свежий остаток — без лишнего запроса.
+    /// Признака входа в таких ответах нет, и прежний не затирается.
     func update(_ plan: BackendAPI.PlanStatus) {
         self.plan = plan
+        if let signedIn = plan.signedIn { self.signedIn = signedIn }
+        if let supportCode = plan.supportCode { self.supportCode = supportCode }
+    }
+
+    // MARK: - Вход через Apple
+
+    /// Вход: сервер проверяет токен у Apple, и доступ аккаунта (подписка
+    /// или промокод с другого телефона) появляется здесь.
+    func signIn(_ result: AppleSignIn.Result) async -> Bool {
+        busy = true
+        defer { busy = false }
+        do {
+            update(try await RecapBackend.shared.signIn(result.body))
+            ProfileStore.shared.adoptName(givenName: result.givenName, familyName: result.familyName)
+            Log.info(.app, "Вход через Apple выполнен")
+            return true
+        } catch {
+            message = error.localizedDescription
+            return false
+        }
+    }
+
+    /// Выход забирает с телефона доступ аккаунта. Подписка, купленная
+    /// с Apple ID этого телефона, возвращается сразу — сверкой с App Store.
+    func signOut() async {
+        busy = true
+        defer { busy = false }
+        do {
+            update(try await RecapBackend.shared.signOut())
+            Log.info(.app, "Выход из аккаунта")
+        } catch {
+            message = error.localizedDescription
+            return
+        }
+        await syncEntitlements()
+    }
+
+    /// Удалить аккаунт (правило App Store 5.1.1(v)). Слова и прогресс на
+    /// телефоне не трогаются — для них есть «Удалить все данные».
+    func deleteAccount() async -> Bool {
+        busy = true
+        defer { busy = false }
+        do {
+            update(try await RecapBackend.shared.deleteAccount())
+            Log.info(.app, "Аккаунт удалён")
+        } catch {
+            message = error.localizedDescription
+            return false
+        }
+        await syncEntitlements()
+        return true
+    }
+
+    /// Часть «Удалить все данные»: если вход выполнен — сначала аккаунт.
+    func deleteAccountIfSignedIn() async throws {
+        guard RecapBackend.isConfigured, signedIn else { return }
+        do {
+            update(try await RecapBackend.shared.deleteAccount())
+        } catch let failure as BackendAPI.Failure where failure.code == "not_signed_in" {
+            signedIn = false
+        }
+    }
+
+    /// После «Удалить все данные» телефон — как новый.
+    func forgetLocalState() {
+        plan = nil
+        signedIn = false
+        supportCode = nil
     }
 
     // MARK: - Покупка

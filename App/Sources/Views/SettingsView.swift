@@ -34,7 +34,7 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                plusSection
+                profileSection
                 languageSection
                 levelSection
                 appearanceSection
@@ -59,32 +59,42 @@ struct SettingsView: View {
 
     // MARK: - Язык, уровень, оформление
 
-    @ViewBuilder
-    private var plusSection: some View {
-        if RecapAccount.shared.isAvailable {
-            Section {
-                NavigationLink {
-                    PlusView()
-                } label: {
-                    HStack(spacing: 14) {
-                        IconBadge(systemName: "star.fill", color: Theme.gold)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Recap Plus").font(.app(.body, weight: .bold))
-                            Text(plusSubtitle).font(.app(.caption)).foregroundStyle(Theme.muted)
-                        }
+    /// Вход в личный кабинет — первой строкой, как принято в iOS.
+    private var profileSection: some View {
+        Section {
+            NavigationLink {
+                AccountView()
+            } label: {
+                HStack(spacing: 14) {
+                    AvatarView(size: 56)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(ProfileStore.shared.name.isEmpty
+                             ? tr("Профиль", "Perfil", "Profile") : ProfileStore.shared.name)
+                            .font(.app(.title3, weight: .heavy))
+                        Text(profileSubtitle).font(.app(.caption)).foregroundStyle(Theme.muted)
                     }
                 }
+                .padding(.vertical, 4)
             }
         }
     }
 
-    private var plusSubtitle: String {
-        guard let plan = RecapAccount.shared.plan, plan.active else {
-            return tr("Подписка и промокоды", "Subscrição e códigos", "Subscription and promo codes")
+    private var profileSubtitle: String {
+        let account = RecapAccount.shared
+        var parts: [String] = []
+        if account.signedIn {
+            parts.append(tr("Вход через Apple", "Sessão com a Apple", "Signed in with Apple"))
         }
-        return tr("Активен · осталось ≈ ", "Ativo · resta ≈ ", "Active · ≈ ")
-            + Counted.decks(plan.approximateDecksLeft)
-            + tr("", "", " left")
+        if let plan = account.plan, plan.active {
+            parts.append(plan.kind == .subscription ? "Recap Plus"
+                            : tr("Промокод", "Código promocional", "Promo code"))
+        }
+        if parts.isEmpty {
+            return tr("Аккаунт, подписка, мои данные, документы",
+                      "Conta, subscrição, dados, documentos",
+                      "Account, subscription, my data, documents")
+        }
+        return parts.joined(separator: " · ")
     }
 
     private var languageSection: some View {
@@ -379,13 +389,6 @@ struct SettingsView: View {
             } label: {
                 Label(tr("Журнал событий", "Registo de eventos", "Event log"),
                       systemImage: "text.alignleft")
-            }
-            NavigationLink {
-                PrivacyView()
-            } label: {
-                Label(tr("Конфиденциальность и удаление данных", "Privacidade e apagar dados",
-                         "Privacy and data deletion"),
-                      systemImage: "hand.raised")
             }
             LabeledContent(tr("Версия", "Versão", "Version"), value: Self.version)
         } footer: {

@@ -5,3 +5,10 @@
 // но тогда после каждого `xcodegen generate` выбор придётся повторять.
 
 DEVELOPMENT_TEAM =
+
+// Вход через Apple. Способность Sign in with Apple есть только у платного
+// аккаунта разработчика: на бесплатном сборка с ней не подпишется. Когда
+// аккаунт платный — раскомментируй обе строки (и включи Sign in with Apple
+// у App ID com.lahmatov.ajfm в developer.apple.com → Identifiers).
+// CODE_SIGN_ENTITLEMENTS = Config/SignInWithApple.entitlements
+// RECAP_SIGN_IN_WITH_APPLE = YES
