@@ -69,7 +69,9 @@ public enum ToneSynth {
     public static func render(_ tones: [Tone], sampleRate: Double = sampleRate) -> [Float] {
         let valid = tones.filter { $0.duration > 0 && $0.frequency > 0 && $0.start >= 0 }
         guard let end = valid.map(\.end).max(), sampleRate > 0 else { return [] }
-        let count = Int((end * sampleRate).rounded(.up))
+        // До ближайшего, а не вверх: 0,1 + 0,2 секунды в двоичной дроби —
+        // 0,30000000000000004, и «вверх» добавляло бы лишний отсчёт.
+        let count = Int((end * sampleRate).rounded())
         var samples = [Float](repeating: 0, count: count)
         for tone in valid {
             let first = Int(tone.start * sampleRate)
