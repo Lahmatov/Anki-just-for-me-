@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 // @ts-expect-error — скрипт на чистом JS, типов у него нет.
 import * as lib from "../scripts/catalog-lib.mjs";
 import { makeDB } from "./d1";
+import { localizeNotes } from "../src/catalog";
 
 describe("сборщик каталога", () => {
   it("custom_id туда и обратно, мусор — null", () => {
@@ -48,5 +49,27 @@ describe("сборщик каталога", () => {
     const { shows } = JSON.parse(readFileSync(new URL("../catalog/shows.json", import.meta.url), "utf8"));
     expect(shows).toHaveLength(50);
     expect(new Set(shows.map((show: { name: string }) => show.name)).size).toBe(50);
+  });
+});
+
+describe("каталог на языке человека", () => {
+  const notes = [
+    { term: "pitch", translation: { ru: "подача идеи", pt: "apresentação", en: "to try to sell an idea" } },
+    { term: "startup", translation: { ru: "", pt: "startup", en: "a new small company" } },
+  ];
+
+  it("слово без перевода на нужный язык пропускается, а не подменяется английским", () => {
+    const ru = localizeNotes(notes as never, "ru", []);
+    expect(ru.map((note) => note.term)).toEqual(["pitch"]);
+    expect(ru[0]!.translation).toBe("подача идеи");
+  });
+
+  it("английский интерфейс получает английские толкования", () => {
+    expect(localizeNotes(notes as never, "en", []).map((note) => note.translation))
+      .toEqual(["to try to sell an idea", "a new small company"]);
+  });
+
+  it("уже известные слова не повторяются", () => {
+    expect(localizeNotes(notes as never, "pt", ["PITCH"]).map((note) => note.term)).toEqual(["startup"]);
   });
 });

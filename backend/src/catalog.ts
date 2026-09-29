@@ -56,9 +56,13 @@ export function localizeNotes(notes: CatalogNote[], language: Language, knownTer
   const known = new Set(knownTerms.map((term) => term.toLowerCase()));
   return notes
     .filter((note) => !known.has(note.term.toLowerCase()))
+    // Слово без перевода на язык человека пропускаем, а не подставляем
+    // английское толкование: иначе в русском наборе оказывались английские
+    // фразы, и на карточке «Выбери перевод» ответ угадывался по языку.
+    .filter((note) => Boolean(note.translation[language]?.trim()))
     .map((note) => ({
       term: note.term,
-      translation: note.translation[language] || note.translation.en,
+      translation: note.translation[language]!,
       ...(note.ipa ? { ipa: note.ipa } : {}),
       ...(note.partOfSpeech ? { partOfSpeech: note.partOfSpeech } : {}),
       ...(note.example ? { example: note.example } : {}),
