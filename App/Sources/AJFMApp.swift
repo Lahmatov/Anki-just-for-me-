@@ -8,6 +8,10 @@ struct AJFMApp: App {
 
     init() {
         UITesting.prepare()
+        // Постеры сериалов (AsyncImage) кешируются на диске: без этого
+        // каждый показ списка заново качал и декодировал картинки — лишняя
+        // работа сети и процессора, а значит, и тепло.
+        URLCache.shared = URLCache(memoryCapacity: 16 * 1024 * 1024, diskCapacity: 128 * 1024 * 1024)
         // Язык — до первой строки на экране: выбранный в настройках,
         // а пока не выбран — системный.
         Loc.language = AppSettings.language
@@ -29,6 +33,9 @@ struct AJFMApp: App {
             // Без базы приложению делать нечего; так же вёл себя и
             // `.modelContainer(for:)`, только молча.
             fatalError("Model container failed to open: \(error)")
+        }
+        if UITesting.wantsDemoData {
+            _ = StarterDeck.install(into: container.mainContext)
         }
     }
 

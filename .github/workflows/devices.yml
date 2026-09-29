@@ -1,0 +1,110 @@
+# Приложение на разных iPhone: UI-тесты и скриншоты на трёх языках.
+#
+# Приложение требует iOS 26, поэтому «разные iOS» — это все версии 26.x,
+# что есть на машине GitHub (самая новая и самая старая), а «разные
+# телефоны» — от маленького SE до Pro Max и Air, плюс крупный шрифт
+# универсального доступа: на нём и вылезают переносы вроде «Хорош/о».
+# Скриншоты — в артефактах прогона (Actions → прогон → Artifacts).
+name: Devices
+
+on:
+  push:
+    paths:
+      - "App/**"
+      - "Core/Sources/**"
+      - "project.yml"
+      - ".github/workflows/devices.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: devices-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  device:
+    name: ${{ matrix.device }} · iOS ${{ matrix.runtime }}${{ matrix.text && format(' · {0}', matrix.text) || '' }}
+    runs-on: macos-26
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        include:
+          - { device: "iPhone SE (3rd generation)", runtime: latest }
+          - { device: "iPhone SE (3rd generation)", runtime: oldest }
+          - { device: "iPhone 11", runtime: latest }
+          - { device: "iPhone 13 mini", runtime: latest }
+          - { device: "iPhone 14 Plus", runtime: latest }
+          - { device: "iPhone 15", runtime: latest }
+          - { device: "iPhone 15 Pro Max", runtime: latest }
+          - { device: "iPhone 16e", runtime: latest }
+          - { device: "iPhone 16 Pro", runtime: oldest }
+          - { device: "iPhone 17", runtime: latest }
+          - { device: "iPhone 17 Pro Max", runtime: latest }
+          - { device: "iPhone Air", runtime: latest }
+          - { device: "iPhone 17", runtime: latest, text: accessibility-extra-large }
+    steps:
+      - uses: actions/checkout@v5
+      - name: XcodeGen
+        run: |
+          brew install xcodegen || true
+          xcodegen generate
+      - name: Симулятор
+        id: sim
+        run: |
+          python3 - "${{ matrix.device }}" "${{ matrix.runtime }}" > sim.env <<'PY'
+          import json, subprocess, sys
+          device, which = sys.argv[1], sys.argv[2]
+          types = json.loads(subprocess.check_output(["xcrun", "simctl", "list", "devicetypes", "-j"]))["devicetypes"]
+          runtimes = [r for r in json.loads(subprocess.check_output(["xcrun", "simctl", "list", "runtimes", "-j"]))["runtimes"]
+                      if r["platform"] == "iOS" and r["isAvailable"] and r["version"].startswith("26")]
+          runtimes.sort(key=lambda r: [int(x) for x in r["version"].split(".")])
+          kind = next((t["identifier"] for t in types if t["name"] == device), "")
+          runtime = (runtimes[-1] if which == "latest" else runtimes[0]) if runtimes else None
+          print(f"TYPE={kind}")
+          print(f"RUNTIME={runtime['identifier'] if runtime else ''}")
+          print(f"VERSION={runtime['version'] if runtime else ''}")
+          PY
+          cat sim.env
+          source sim.env
+          if [ -z "$TYPE" ] || [ -z "$RUNTIME" ]; then
+            echo "::warning::Нет симулятора «${{ matrix.device }}» с iOS 26 на этой машине — пропускаю"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          UDID=$(xcrun simctl create "Recap test" "$TYPE" "$RUNTIME")
+          xcrun simctl boot "$UDID"
+          if [ -n "${{ matrix.text }}" ]; then
+            xcrun simctl ui "$UDID" content_size "${{ matrix.text }}"
+          fi
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      - name: UI-тесты и скриншоты
+        if: steps.sim.outputs.skip != 'true'
+        run: |
+          set +e
+          xcodebuild test \
+            -project AJFM.xcodeproj \
+            -scheme AJFM \
+            -destination "id=${{ steps.sim.outputs.udid }}" \
+            -only-testing:AJFMUITests \
+            -resultBundlePath result.xcresult \
+            CODE_SIGNING_ALLOWED=NO \
+            > ui.log 2>&1
+          STATUS=$?
+          grep -E "error:|Test Case .* failed|Executed [0-9]+ test|\*\* (BUILD|TEST)" ui.log \
+            | grep -v "CoreData:" | tail -150
+          exit $STATUS
+      - name: Достать скриншоты
+        if: always() && steps.sim.outputs.skip != 'true'
+        run: |
+          mkdir -p shots
+          xcrun xcresulttool export attachments --path result.xcresult --output-path shots || true
+          ls shots | head -50
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.sim.outputs.skip != 'true'
+        with:
+          name: screens-${{ matrix.device }}-${{ steps.sim.outputs.version }}${{ matrix.text && format('-{0}', matrix.text) || '' }}
+          path: shots
+          if-no-files-found: ignore
+          retention-days: 14

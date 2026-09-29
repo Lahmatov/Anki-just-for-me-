@@ -296,6 +296,7 @@ struct CardPromptView: View {
                 }
                 .buttonStyle(.chunkySecondary)
                 .controlSize(.large)
+                .accessibilityIdentifier("choice")
             }
         }
     }
@@ -397,6 +398,7 @@ struct GradeButtons: View {
         .controlSize(.large)
         .buttonStyle(ChunkyButtonStyle(kind: model.suggestedGrade == grade ? .primary : .secondary,
                                        horizontalPadding: 4))
+        .accessibilityIdentifier("grade.\(grade)")
 
         button
     }

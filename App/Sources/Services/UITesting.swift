@@ -10,6 +10,12 @@ enum UITesting {
 
     static var isActive: Bool { ProcessInfo.processInfo.arguments.contains(flag) }
 
+    /// `-ui-demo`: сразу со стартовым набором — для скриншотов экранов,
+    /// где пустая база показала бы только заглушки.
+    static var wantsDemoData: Bool {
+        isActive && ProcessInfo.processInfo.arguments.contains("-ui-demo")
+    }
+
     /// До первого экрана: прошлый прогон не должен оставить ни настроек, ни языка.
     static func prepare() {
         guard isActive, let domain = Bundle.main.bundleIdentifier else { return }

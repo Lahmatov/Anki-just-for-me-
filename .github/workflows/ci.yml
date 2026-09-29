@@ -89,6 +89,7 @@ jobs:
             -scheme AJFM \
             -destination "id=${{ steps.sim.outputs.udid }}" \
             -configuration Debug \
+            -skip-testing:AJFMUITests/ScreenshotUITests \
             CODE_SIGNING_ALLOWED=NO \
             > app.log 2>&1
           STATUS=$?
