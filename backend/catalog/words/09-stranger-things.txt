@@ -1,0 +1,139 @@
+# show: Stranger Things
+# year: 2016
+# accent: US
+
+## 1 · The Vanishing of Will Byers
+vanish | /ˈvænɪʃ/ | verb | исчезнуть | desaparecer | to disappear suddenly | Will [vanished] on his way home. | Уилл исчез по дороге домой. | O Will desapareceu a caminho de casa.
+missing | /ˈmɪsɪŋ/ | adjective | пропавший | desaparecido | lost and not found | Will has been [missing] since last night. | Уилл пропал со вчерашнего вечера. | O Will está desaparecido desde ontem à noite.
+search party | /ˈsɜːrtʃ ˈpɑːrti/ | noun | поисковый отряд | equipa de buscas | a group of people looking for someone | The town organized a [search party]. | Город собрал поисковый отряд. | A vila organizou uma equipa de buscas.
+sheriff | /ˈʃerɪf/ | noun | шериф | xerife | the chief police officer in a small town | The [sheriff] didn't take it seriously at first. | Сначала шериф не отнёсся к этому серьёзно. | Ao início, o xerife não levou isto a sério.
+flashlight | /ˈflæʃlaɪt/ | noun | фонарик | lanterna | a small electric light you hold | The boys searched with [flashlights]. | Мальчишки искали с фонариками. | Os rapazes procuraram com lanternas.
+woods | /wʊdz/ | noun | лес | bosque | an area with many trees | Will's bike was found in the [woods]. | Велосипед Уилла нашли в лесу. | Encontraram a bicicleta do Will no bosque.
+lab | /læb/ | noun | лаборатория | laboratório | a place for scientific experiments | Something escaped from the [lab]. | Из лаборатории что-то сбежало. | Algo fugiu do laboratório.
+shed | /ʃed/ | noun | сарай | barracão | a small wooden building in a garden | Will hid in the [shed]. | Уилл спрятался в сарае. | O Will escondeu-se no barracão.
+creature | /ˈkriːtʃər/ | noun | существо | criatura | a strange or frightening animal | A [creature] was chasing him. | За ним гналось какое-то существо. | Uma criatura andava atrás dele.
+campaign | /kæmˈpeɪn/ | noun | кампания (в настольной игре) | campanha | a long adventure in a role-playing game | Their [campaign] lasted ten hours. | Их игровая кампания длилась десять часов. | A campanha deles durou dez horas.
+Dungeons & Dragons | /ˈdʌndʒənz ənd ˈdræɡənz/ | noun | «Подземелья и драконы» | Dungeons & Dragons | a fantasy role-playing board game | The boys love [Dungeons & Dragons]. | Мальчишки обожают «Подземелья и драконы». | Os rapazes adoram Dungeons & Dragons.
+walkie-talkie | /ˌwɔːki ˈtɔːki/ | noun | рация | walkie-talkie | a small radio to talk over distance | They talk by [walkie-talkie]. | Они переговариваются по рации. | Falam por walkie-talkie.
+curfew | /ˈkɜːrfjuː/ | noun | комендантский час | recolher obrigatório | a time you must be home | Mom set a strict [curfew]. | Мама установила строгое время возвращения. | A mãe impôs um recolher obrigatório rigoroso.
+runaway | /ˈrʌnəweɪ/ | noun | беглец | fugitivo | a person who escaped from somewhere | They found a strange [runaway] girl. | Они нашли странную девочку-беглянку. | Encontraram uma rapariga fugitiva estranha.
+flicker | /ˈflɪkər/ | verb | мерцать | piscar | to shine unsteadily | The lights started to [flicker]. | Свет начал мерцать. | As luzes começaram a piscar.
+
+## 2 · The Weirdo on Maple Street
+weirdo | /ˈwɪrdoʊ/ | noun | чудик, странный человек | esquisito | a strange person | Kids at school call her a [weirdo]. | В школе её называют чудачкой. | Na escola chamam-lhe esquisita.
+basement | /ˈbeɪsmənt/ | noun | подвал | cave | a room under a house | They hid Eleven in the [basement]. | Они спрятали Одиннадцать в подвале. | Esconderam a Eleven na cave.
+trust | /trʌst/ | verb | доверять | confiar | to believe someone won't hurt you | She didn't [trust] anyone. | Она никому не доверяла. | Ela não confiava em ninguém.
+shaved head | /ʃeɪvd hed/ | noun | бритая голова | cabeça rapada | a head with the hair cut off | The girl had a [shaved head]. | У девочки была бритая голова. | A rapariga tinha a cabeça rapada.
+hospital gown | /ˈhɑːspɪtl ɡaʊn/ | noun | больничная рубашка | bata de hospital | a thin dress patients wear | She was wearing a [hospital gown]. | Она была в больничной рубашке. | Ela tinha uma bata de hospital.
+promise | /ˈprɑːmɪs/ | noun | обещание | promessa | saying you will certainly do something | Friends don't break a [promise]. | Друзья не нарушают обещаний. | Os amigos não quebram promessas.
+friends don't lie | /frendz doʊnt laɪ/ | idiom | друзья не врут | os amigos não mentem | honesty is a rule between friends | Remember, [friends don't lie]. | Помни: друзья не врут. | Lembra-te: os amigos não mentem.
+party | /ˈpɑːrti/ | noun | вечеринка | festa | a social event | Nancy went to a [party] at Steve's house. | Нэнси пошла на вечеринку к Стиву. | A Nancy foi a uma festa em casa do Steve.
+peer pressure | /ˈpɪr ˌpreʃər/ | noun | давление сверстников | pressão dos amigos | influence from people your age | She drank because of [peer pressure]. | Она выпила под давлением компании. | Bebeu por causa da pressão dos amigos.
+lights | /laɪts/ | noun | лампочки | luzes | electric lamps | Joyce stares at the [lights]. | Джойс не сводит глаз с лампочек. | A Joyce fica a olhar para as luzes.
+telephone | /ˈtelɪfoʊn/ | noun | телефон | telefone | a device to talk with people far away | The [telephone] rang, but no one spoke. | Зазвонил телефон, но на том конце молчали. | O telefone tocou, mas ninguém falou.
+static | /ˈstætɪk/ | noun | помехи, треск | estática | a crackling noise on a radio or phone | She heard only [static]. | Она слышала только треск помех. | Ela só ouvia estática.
+waffles | /ˈwɑːflz/ | noun | вафли | waffles | sweet cakes with square patterns | Eleven loves [waffles]. | Одиннадцать обожает вафли. | A Eleven adora waffles.
+stranger | /ˈstreɪndʒər/ | noun | незнакомец | estranho | a person you don't know | Don't talk to [strangers]. | Не разговаривай с незнакомцами. | Não fales com estranhos.
+fit in | /fɪt ɪn/ | phrasal verb | вписаться | encaixar-se | to be accepted | Barb didn't really [fit in] there. | Барб там особо не вписывалась. | A Barb não se encaixava bem ali.
+
+## 3 · Holly, Jolly
+Christmas lights | /ˈkrɪsməs laɪts/ | noun | ёлочная гирлянда | luzes de Natal | small colored lights used at Christmas | Joyce hung [Christmas lights] everywhere. | Джойс развесила гирлянды повсюду. | A Joyce pendurou luzes de Natal por todo o lado.
+alphabet | /ˈælfəbet/ | noun | алфавит | alfabeto | all the letters of a language | She painted the [alphabet] on the wall. | Она нарисовала алфавит на стене. | Pintou o alfabeto na parede.
+communicate | /kəˈmjuːnɪkeɪt/ | verb | общаться, передавать сообщение | comunicar | to share information | Will tries to [communicate] through lights. | Уилл пытается общаться через лампочки. | O Will tenta comunicar através das luzes.
+blink | /blɪŋk/ | verb | мигать | piscar | to go on and off quickly | The bulb [blinked] once for yes. | Лампочка мигнула один раз — значит «да». | A lâmpada piscou uma vez para sim.
+crazy | /ˈkreɪzi/ | adjective | сумасшедший | louca | mentally ill; not sensible | Everyone thinks Joyce is [crazy]. | Все думают, что Джойс сошла с ума. | Toda a gente acha que a Joyce está louca.
+grief | /ɡriːf/ | noun | горе | luto, dor | deep sadness after a loss | People say it's just [grief]. | Люди говорят, что это просто горе. | Dizem que é só a dor da perda.
+run | /rʌn/ | verb | бежать | fugir | to move fast; here, to escape | The lights spelled "[run]". | Лампочки сложились в слово «беги». | As luzes soletraram "foge".
+pool | /puːl/ | noun | бассейн | piscina | a place filled with water to swim in | Barb sat by the [pool] alone. | Барб сидела у бассейна одна. | A Barb ficou sozinha junto à piscina.
+bully | /ˈbʊli/ | noun | хулиган | rufia | someone who hurts weaker kids | The school [bullies] targeted the boys. | Школьные хулиганы доставали мальчишек. | Os rufias da escola atormentavam os rapazes.
+powers | /ˈpaʊərz/ | noun | сверхспособности | poderes | special abilities | Eleven has strange [powers]. | У Одиннадцать странные способности. | A Eleven tem poderes estranhos.
+nosebleed | /ˈnoʊzbliːd/ | noun | кровотечение из носа | hemorragia nasal | blood coming from the nose | Using her powers causes a [nosebleed]. | Когда она использует силу, у неё идёт кровь из носа. | Usar os poderes provoca-lhe uma hemorragia nasal.
+wall | /wɔːl/ | noun | стена | parede | the side of a room | Something moved inside the [wall]. | Внутри стены что-то шевелилось. | Algo se mexeu dentro da parede.
+desperate | /ˈdespərət/ | adjective | отчаянный | desesperada | ready to try anything | Joyce is [desperate] to find her son. | Джойс в отчаянии ищет сына. | A Joyce está desesperada por encontrar o filho.
+ignore | /ɪɡˈnɔːr/ | verb | игнорировать | ignorar | to pay no attention | The police [ignored] her. | Полиция её проигнорировала. | A polícia ignorou-a.
+believe | /bɪˈliːv/ | verb | верить | acreditar | to think something is true | Nobody [believes] her. | Ей никто не верит. | Ninguém acredita nela.
+
+## 4 · The Body
+body | /ˈbɑːdi/ | noun | тело | corpo | a dead person | They found a [body] in the quarry. | В карьере нашли тело. | Encontraram um corpo na pedreira.
+quarry | /ˈkwɔːri/ | noun | карьер | pedreira | a big hole where stone is dug out | The body was in the [quarry]. | Тело было в карьере. | O corpo estava na pedreira.
+funeral | /ˈfjuːnərəl/ | noun | похороны | funeral | a ceremony for a dead person | The town held a [funeral]. | Город устроил похороны. | A vila fez um funeral.
+fake | /feɪk/ | adjective | поддельный | falso | not real | Hopper suspects the body is [fake]. | Хоппер подозревает, что тело поддельное. | O Hopper suspeita que o corpo é falso.
+morgue | /mɔːrɡ/ | noun | морг | morgue | a place for dead bodies | Hopper broke into the [morgue]. | Хоппер проник в морг. | O Hopper entrou às escondidas na morgue.
+cover-up | /ˈkʌvər ʌp/ | noun | сокрытие | encobrimento | hiding the truth about something bad | It's a government [cover-up]. | Это государство заметает следы. | É um encobrimento do governo.
+conspiracy | /kənˈspɪrəsi/ | noun | заговор | conspiração | a secret plan by a group | Hopper uncovers a [conspiracy]. | Хоппер раскрывает заговор. | O Hopper descobre uma conspiração.
+disguise | /dɪsˈɡaɪz/ | noun | маскировка | disfarce | clothes to hide who you are | They gave Eleven a [disguise]. | Одиннадцать переодели для маскировки. | Deram um disfarce à Eleven.
+wig | /wɪɡ/ | noun | парик | peruca | false hair | She wore a blond [wig]. | Она надела светлый парик. | Usou uma peruca loira.
+pretty | /ˈprɪti/ | adjective | красивая, симпатичная | bonita | nice to look at | Mike told her she looked [pretty]. | Майк сказал ей, что она красивая. | O Mike disse-lhe que estava bonita.
+mourn | /mɔːrn/ | verb | оплакивать | chorar | to feel sad for someone who died | The boys refused to [mourn]. | Мальчики отказывались горевать. | Os rapazes recusaram-se a chorar a morte.
+alive | /əˈlaɪv/ | adjective | живой | vivo | not dead | Joyce knows Will is [alive]. | Джойс знает, что Уилл жив. | A Joyce sabe que o Will está vivo.
+investigate | /ɪnˈvestɪɡeɪt/ | verb | расследовать | investigar | to find out the truth | Hopper keeps [investigating]. | Хоппер продолжает расследование. | O Hopper continua a investigar.
+suspicious | /səˈspɪʃəs/ | adjective | подозрительный | suspeito | making you think something is wrong | Everything about it is [suspicious]. | Всё в этом подозрительно. | Tudo nisto é suspeito.
+break in | /breɪk ɪn/ | phrasal verb | вломиться | invadir | to enter illegally | They [broke in] at night. | Они вломились ночью. | Invadiram de noite.
+
+## 5 · The Flea and the Acrobat
+flea | /fliː/ | noun | блоха | pulga | a tiny jumping insect | The science teacher explained the [flea] and the acrobat. | Учитель физики объяснил про блоху и акробата. | O professor explicou a pulga e o acrobata.
+acrobat | /ˈækrəbæt/ | noun | акробат | acrobata | a performer who does jumps and balances | An [acrobat] walks on a tightrope. | Акробат ходит по канату. | Um acrobata anda na corda bamba.
+dimension | /daɪˈmenʃn/ | noun | измерение | dimensão | a different world or space | Will is trapped in another [dimension]. | Уилл застрял в другом измерении. | O Will está preso noutra dimensão.
+compass | /ˈkʌmpəs/ | noun | компас | bússola | a tool that shows north | The [compass] stopped working. | Компас перестал работать. | A bússola deixou de funcionar.
+magnetic field | /mæɡˌnetɪk ˈfiːld/ | noun | магнитное поле | campo magnético | an area of magnetic force | A strong [magnetic field] confuses it. | Сильное магнитное поле сбивает его. | Um campo magnético forte confunde-a.
+gate | /ɡeɪt/ | noun | врата, проход | portal | an opening to another place | They're looking for the [gate]. | Они ищут проход. | Andam à procura do portal.
+theory | /ˈθɪri/ | noun | теория | teoria | an idea that explains something | The teacher explained the [theory]. | Учитель объяснил теорию. | O professor explicou a teoria.
+fight | /faɪt/ | noun | ссора, драка | discussão | an angry argument | Mike and Lucas had a big [fight]. | Майк и Лукас сильно поругались. | O Mike e o Lucas tiveram uma grande discussão.
+lie | /laɪ/ | verb | врать | mentir | to say something untrue | Eleven [lied] to them. | Одиннадцать им соврала. | A Eleven mentiu-lhes.
+security | /sɪˈkjʊrəti/ | noun | охрана | segurança | guards who protect a place | The lab has heavy [security]. | Лабораторию сильно охраняют. | O laboratório tem muita segurança.
+sneak into | /sniːk ˈɪntuː/ | phrasal verb | пробраться в | entrar às escondidas | to enter secretly | Hopper [sneaked into] the lab. | Хоппер пробрался в лабораторию. | O Hopper entrou às escondidas no laboratório.
+tightrope | /ˈtaɪtroʊp/ | noun | канат | corda bamba | a rope high above the ground for walking | The acrobat walks on a [tightrope]. | Акробат идёт по канату. | O acrobata anda na corda bamba.
+topsy-turvy | /ˌtɑːpsi ˈtɜːrvi/ | adjective | вверх дном | de pernas para o ar | confused and in disorder | Their whole world turned [topsy-turvy]. | Весь их мир перевернулся вверх дном. | O mundo deles ficou de pernas para o ar.
+leave behind | /liːv bɪˈhaɪnd/ | phrasal verb | оставить | deixar para trás | to not take someone with you | Don't [leave me behind]! | Не бросай меня! | Não me deixes para trás!
+map | /mæp/ | noun | карта | mapa | a drawing of an area | They followed the [map]. | Они шли по карте. | Seguiram o mapa.
+
+## 6 · The Monster
+monster | /ˈmɑːnstər/ | noun | чудовище | monstro | a big, scary creature | The [monster] took Barb. | Чудовище забрало Барб. | O monstro levou a Barb.
+hunt | /hʌnt/ | verb | охотиться | caçar | to chase and catch something | Jonathan and Nancy want to [hunt] it. | Джонатан и Нэнси хотят на него охотиться. | O Jonathan e a Nancy querem caçá-lo.
+bear trap | /ˈber træp/ | noun | медвежий капкан | armadilha para ursos | a strong metal trap | They set a [bear trap]. | Они поставили медвежий капкан. | Montaram uma armadilha para ursos.
+gun | /ɡʌn/ | noun | ружьё | arma | a weapon that shoots | Jonathan bought a [gun]. | Джонатан купил ружьё. | O Jonathan comprou uma arma.
+blood | /blʌd/ | noun | кровь | sangue | red liquid in the body | The monster is attracted to [blood]. | Чудовище приманивает кровь. | O monstro é atraído pelo sangue.
+cliff | /klɪf/ | noun | обрыв, скала | falésia | a steep rock edge | The bullies made Mike jump off a [cliff]. | Хулиганы заставили Майка прыгнуть с обрыва. | Os rufias obrigaram o Mike a saltar da falésia.
+threaten | /ˈθretn/ | verb | угрожать | ameaçar | to say you will hurt someone | The bully [threatened] Dustin. | Хулиган угрожал Дастину. | O rufia ameaçou o Dustin.
+save | /seɪv/ | verb | спасти | salvar | to rescue from danger | Eleven [saved] Mike. | Одиннадцать спасла Майка. | A Eleven salvou o Mike.
+jealous | /ˈdʒeləs/ | adjective | ревнивый | ciumento | upset about someone liking another | Steve got [jealous] of Jonathan. | Стив приревновал к Джонатану. | O Steve ficou com ciúmes do Jonathan.
+photos | /ˈfoʊtoʊz/ | noun | фотографии | fotografias | pictures taken with a camera | Jonathan took secret [photos]. | Джонатан тайком фотографировал. | O Jonathan tirou fotografias às escondidas.
+creep | /kriːp/ | noun | извращенец, неприятный тип | tarado | an unpleasant person who makes you uncomfortable | Steve called Jonathan a [creep]. | Стив назвал Джонатана извращенцем. | O Steve chamou tarado ao Jonathan.
+mark | /mɑːrk/ | noun | след, отметина | marca | a small sign on a surface | There's a strange [mark] on the tree. | На дереве странная отметина. | Há uma marca estranha na árvore.
+return | /rɪˈtɜːrn/ | verb | вернуться | voltar | to come back | Eleven [returned] to help. | Одиннадцать вернулась, чтобы помочь. | A Eleven voltou para ajudar.
+apology | /əˈpɑːlədʒi/ | noun | извинение | pedido de desculpas | saying sorry | Lucas made an [apology]. | Лукас извинился. | O Lucas pediu desculpa.
+team up | /tiːm ʌp/ | phrasal verb | объединиться | juntar-se | to work together | Nancy and Jonathan [teamed up]. | Нэнси и Джонатан объединились. | A Nancy e o Jonathan juntaram-se.
+
+## 7 · The Bathtub
+bathtub | /ˈbæθtʌb/ | noun | ванна | banheira | a large container for bathing | They built a sensory [bathtub]. | Они сделали сенсорную ванну. | Construíram uma banheira sensorial.
+salt | /sɔːlt/ | noun | соль | sal | white crystals used in food | They filled it with [salt]. | Они засыпали туда соль. | Encheram-na de sal.
+float | /floʊt/ | verb | держаться на воде | flutuar | to stay on top of water | Salt water helps you [float]. | Солёная вода помогает держаться на плаву. | A água salgada ajuda a flutuar.
+sensory deprivation | /ˈsensəri ˌdeprɪˈveɪʃn/ | noun | сенсорная депривация | privação sensorial | removing all sight and sound | [Sensory deprivation] helps her focus. | Сенсорная депривация помогает ей сосредоточиться. | A privação sensorial ajuda-a a concentrar-se.
+swimming pool | /ˈswɪmɪŋ puːl/ | noun | бассейн | piscina | a pool for swimming | The school has an indoor [swimming pool]. | В школе есть крытый бассейн. | A escola tem uma piscina coberta.
+chase | /tʃeɪs/ | noun | погоня | perseguição | running after someone | There was a car [chase]. | Была погоня на машинах. | Houve uma perseguição de carro.
+van | /væn/ | noun | фургон | carrinha | a small truck | Government [vans] chased them. | За ними гнались правительственные фургоны. | Carrinhas do governo perseguiram-nos.
+flip | /flɪp/ | verb | перевернуть | virar | to turn something over | Eleven [flipped] the van. | Одиннадцать перевернула фургон. | A Eleven virou a carrinha.
+bikes | /baɪks/ | noun | велосипеды | bicicletas | bicycles | They escaped on their [bikes]. | Они сбежали на велосипедах. | Fugiram nas bicicletas.
+hide-out | /ˈhaɪd aʊt/ | noun | укрытие | esconderijo | a secret place to hide | They needed a new [hide-out]. | Им нужно было новое укрытие. | Precisavam de um esconderijo novo.
+focus | /ˈfoʊkəs/ | verb | сосредоточиться | concentrar-se | to put all your attention on one thing | Eleven tries to [focus]. | Одиннадцать пытается сосредоточиться. | A Eleven tenta concentrar-se.
+contact | /ˈkɑːntækt/ | verb | связаться | contactar | to communicate with | She [contacted] Will in the other world. | Она связалась с Уиллом в другом мире. | Contactou o Will no outro mundo.
+weak | /wiːk/ | adjective | слабый | fraco | not strong | Eleven is getting [weak]. | Одиннадцать слабеет. | A Eleven está a ficar fraca.
+dangerous | /ˈdeɪndʒərəs/ | adjective | опасный | perigoso | could hurt you | The other side is [dangerous]. | Та сторона опасна. | O outro lado é perigoso.
+reunite | /ˌriːjuˈnaɪt/ | verb | воссоединиться | reunir-se | to come together again | Everyone finally [reunited]. | Наконец все собрались вместе. | Finalmente juntaram-se todos.
+
+## 8 · The Upside Down
+Upside Down | /ˌʌpsaɪd ˈdaʊn/ | noun | Изнанка | Mundo Invertido | the dark parallel world in the show | Joyce and Hopper enter the [Upside Down]. | Джойс и Хоппер отправляются в Изнанку. | A Joyce e o Hopper entram no Mundo Invertido.
+hazmat suit | /ˈhæzmæt suːt/ | noun | защитный костюм | fato de proteção | clothes that protect from danger | They wore [hazmat suits]. | На них были защитные костюмы. | Usaram fatos de proteção.
+rescue | /ˈreskjuː/ | verb | спасти | resgatar | to save from danger | They went to [rescue] Will. | Они отправились спасать Уилла. | Foram resgatar o Will.
+breathe | /briːð/ | verb | дышать | respirar | to take air in and out | Will wasn't [breathing]. | Уилл не дышал. | O Will não respirava.
+CPR | /ˌsiː piː ˈɑːr/ | noun | сердечно-лёгочная реанимация | reanimação | pushing on the chest to restart the heart | Hopper gave him [CPR]. | Хоппер сделал ему искусственное дыхание. | O Hopper fez-lhe reanimação.
+sacrifice | /ˈsækrɪfaɪs/ | verb | пожертвовать | sacrificar | to give up something important for others | Eleven [sacrificed] herself. | Одиннадцать пожертвовала собой. | A Eleven sacrificou-se.
+disappear | /ˌdɪsəˈpɪr/ | verb | исчезнуть | desaparecer | to go out of sight | She [disappeared] after the fight. | После схватки она исчезла. | Ela desapareceu depois da luta.
+nail bat | /neɪl bæt/ | noun | бита с гвоздями | taco com pregos | a baseball bat with nails in it | Steve fought with a [nail bat]. | Стив дрался битой с гвоздями. | O Steve lutou com um taco com pregos.
+trap | /træp/ | noun | ловушка | armadilha | a device to catch something | They set a [trap] in the house. | Они устроили в доме ловушку. | Montaram uma armadilha em casa.
+hug | /hʌɡ/ | noun | объятие | abraço | holding someone in your arms | Joyce gave Will a long [hug]. | Джойс долго обнимала Уилла. | A Joyce deu um longo abraço ao Will.
+Christmas dinner | /ˈkrɪsməs ˈdɪnər/ | noun | рождественский ужин | jantar de Natal | a special meal on Christmas | The family sat down to [Christmas dinner]. | Семья села за рождественский ужин. | A família sentou-se para o jantar de Natal.
+cough up | /kɔːf ʌp/ | phrasal verb | откашлять, выплюнуть | tossir, expelir | to force something out of your throat | Will [coughed up] something strange. | Уилл откашлял что-то странное. | O Will tossiu uma coisa estranha.
+ending | /ˈendɪŋ/ | noun | концовка | final | the last part of a story | The [ending] leaves many questions. | Концовка оставляет много вопросов. | O final deixa muitas perguntas.
+mystery | /ˈmɪstəri/ | noun | загадка | mistério | something not explained | Eleven's fate is a [mystery]. | Судьба Одиннадцать остаётся загадкой. | O destino da Eleven é um mistério.
+brave | /breɪv/ | adjective | смелый | corajoso | not afraid of danger | The kids were incredibly [brave]. | Дети были невероятно смелыми. | Os miúdos foram incrivelmente corajosos.

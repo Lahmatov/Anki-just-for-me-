@@ -1,0 +1,88 @@
+# show: Seinfeld
+# year: 1989
+# accent: US
+
+## 1 · The Seinfeld Chronicles
+stand-up comedian | /ˈstænd ʌp kəˈmiːdiən/ | noun | стендап-комик | humorista de stand-up | a comedian who tells jokes alone on stage | Jerry is a [stand-up comedian]. | Джерри — стендап-комик. | O Jerry é humorista de stand-up.
+signals | /ˈsɪɡnəlz/ | noun | сигналы, намёки | sinais | signs that show what someone means | Jerry can't read her [signals]. | Джерри не может понять её намёков. | O Jerry não consegue ler os sinais dela.
+mixed messages | /mɪkst ˈmesɪdʒɪz/ | noun | противоречивые сигналы | sinais contraditórios | signs that mean different things | She's sending [mixed messages]. | Она подаёт противоречивые сигналы. | Ela está a mandar sinais contraditórios.
+overanalyze | /ˌoʊvərˈænəlaɪz/ | verb | слишком много анализировать | analisar demais | to think about something too much | George [overanalyzes] everything. | Джордж всё слишком много анализирует. | O George analisa tudo demais.
+diner | /ˈdaɪnər/ | noun | закусочная | snack-bar | a cheap, simple restaurant | They always meet at the [diner]. | Они всегда встречаются в закусочной. | Encontram-se sempre no snack-bar.
+button | /ˈbʌtn/ | noun | пуговица | botão | a small round thing that closes clothes | The second [button] is the key. | Всё дело во второй пуговице. | O segundo botão é que é importante.
+make a move | /meɪk ə muːv/ | idiom | сделать первый шаг | avançar | to start something romantic | Should he [make a move]? | Стоит ли ему сделать первый шаг? | Devia avançar?
+neighbor | /ˈneɪbər/ | noun | сосед | vizinho | a person living next to you | His [neighbor] Kramer walks in without knocking. | Его сосед Крамер заходит без стука. | O vizinho Kramer entra sem bater.
+laundromat | /ˈlɔːndrəmæt/ | noun | прачечная | lavandaria | a place with public washing machines | They discussed it at the [laundromat]. | Они обсуждали это в прачечной. | Discutiram isso na lavandaria.
+stay over | /steɪ ˈoʊvər/ | phrasal verb | переночевать | ficar a dormir | to sleep at someone's place | She's going to [stay over] at his place. | Она переночует у него. | Ela vai ficar a dormir em casa dele.
+engaged | /ɪnˈɡeɪdʒd/ | adjective | помолвленный | noiva | promised to marry | It turns out she's [engaged]. | Оказывается, она помолвлена. | Afinal ela está noiva.
+routine | /ruːˈtiːn/ | noun | номер, выступление | número | a comedy act a comedian performs | Jerry is working on a new [routine]. | Джерри готовит новый номер. | O Jerry está a trabalhar num número novo.
+observation | /ˌɑːbzərˈveɪʃn/ | noun | наблюдение | observação | a remark about something noticed | His jokes are about small [observations]. | Его шутки — это мелкие наблюдения. | As piadas dele são sobre pequenas observações.
+disappointed | /ˌdɪsəˈpɔɪntɪd/ | adjective | разочарованный | desiludido | sad because hopes failed | Jerry was really [disappointed]. | Джерри был сильно разочарован. | O Jerry ficou mesmo desiludido.
+what's the deal with | /wʌts ðə diːl wɪð/ | idiom | что за история с..., в чём прикол | qual é a cena com | a phrase to ask what something is about | [What's the deal with] airline food? | Что не так с едой в самолётах? | Qual é a cena com a comida dos aviões?
+
+## 2 · The Stake Out
+stake out | /steɪk aʊt/ | phrasal verb | следить, дежурить в засаде | vigiar | to watch a place secretly | Jerry decided to [stake out] her office. | Джерри решил устроить засаду у её работы. | O Jerry decidiu vigiar o escritório dela.
+birthday party | /ˈbɜːrθdeɪ ˈpɑːrti/ | noun | день рождения | festa de anos | a party for someone's birthday | They met at a [birthday party]. | Они познакомились на дне рождения. | Conheceram-se numa festa de anos.
+forget someone's name | /fərˈɡet ˈsʌmwʌnz neɪm/ | phrase | забыть чьё-то имя | esquecer o nome de alguém | to not remember what someone is called | He [forgot her name] immediately. | Он тут же забыл её имя. | Esqueceu logo o nome dela.
+lobby | /ˈlɑːbi/ | noun | вестибюль | átrio | the entrance hall of a building | They waited in the [lobby]. | Они ждали в вестибюле. | Esperaram no átrio.
+pretend | /prɪˈtend/ | verb | притворяться | fingir | to act as if something is true | George [pretended] to be an architect. | Джордж притворился архитектором. | O George fingiu ser arquiteto.
+architect | /ˈɑːrkɪtekt/ | noun | архитектор | arquiteto | a person who designs buildings | George always wanted to be an [architect]. | Джордж всегда мечтал стать архитектором. | O George sempre quis ser arquiteto.
+parents | /ˈperənts/ | noun | родители | pais | mother and father | Jerry's [parents] are visiting. | К Джерри приехали родители. | Os pais do Jerry estão de visita.
+coincidence | /koʊˈɪnsɪdəns/ | noun | совпадение | coincidência | when things happen together by chance | What a [coincidence]! | Какое совпадение! | Que coincidência!
+cover story | /ˈkʌvər ˈstɔːri/ | noun | легенда | história inventada | an invented explanation | They made up a [cover story]. | Они придумали легенду. | Inventaram uma história.
+import-export | /ˈɪmpɔːrt ˈekspɔːrt/ | noun | импорт-экспорт | importação-exportação | the business of trading with other countries | George says he's in [import-export]. | Джордж говорит, что занимается импортом-экспортом. | O George diz que trabalha em importação-exportação.
+awkward | /ˈɔːkwərd/ | adjective | неловкий | constrangedor | uncomfortable | The meeting was very [awkward]. | Встреча вышла очень неловкой. | O encontro foi muito constrangedor.
+casual | /ˈkæʒuəl/ | adjective | непринуждённый | descontraído | relaxed | Just act [casual]. | Просто веди себя непринуждённо. | Age de forma descontraída.
+bump into | /bʌmp ˈɪntuː/ | phrasal verb | случайно встретить | dar de caras com | to meet someone by chance | He wanted to [bump into] her. | Он хотел случайно на неё наткнуться. | Ele queria dar de caras com ela.
+elevator | /ˈelɪveɪtər/ | noun | лифт | elevador | a machine that carries people up and down | They met in the [elevator]. | Они встретились в лифте. | Encontraram-se no elevador.
+nosy | /ˈnoʊzi/ | adjective | любопытный, сующий нос | bisbilhoteiro | too interested in others' business | His mother is very [nosy]. | Его мать очень любопытна. | A mãe dele é muito bisbilhoteira.
+
+## 3 · The Robbery
+robbery | /ˈrɑːbəri/ | noun | ограбление | assalto | stealing from a person or place | There was a [robbery] at Jerry's apartment. | Квартиру Джерри ограбили. | Houve um assalto ao apartamento do Jerry.
+break in | /breɪk ɪn/ | phrasal verb | вломиться | assaltar | to enter illegally to steal | Someone [broke in] while he was away. | Кто-то вломился, пока его не было. | Alguém assaltou a casa enquanto ele estava fora.
+lock | /lɑːk/ | verb | запереть | trancar | to close with a key | Kramer forgot to [lock] the door. | Крамер забыл запереть дверь. | O Kramer esqueceu-se de trancar a porta.
+insurance | /ɪnˈʃʊrəns/ | noun | страховка | seguro | money that covers losses | Jerry didn't have [insurance]. | У Джерри не было страховки. | O Jerry não tinha seguro.
+apartment hunting | /əˈpɑːrtmənt ˈhʌntɪŋ/ | noun | поиск квартиры | procura de casa | looking for a new place to live | George went [apartment hunting]. | Джордж отправился искать квартиру. | O George foi à procura de casa.
+real estate | /ˈriːəl ɪsteɪt/ | noun | недвижимость | imobiliário | buildings and land for sale | George is into [real estate] now. | Теперь Джордж интересуется недвижимостью. | O George agora anda nos imóveis.
+rent-controlled | /ˈrent kənˌtroʊld/ | adjective | с фиксированной арендной платой | com renda controlada | with rent the landlord can't raise much | It's a [rent-controlled] apartment. | Это квартира с фиксированной арендой. | É um apartamento com renda controlada.
+deal | /diːl/ | noun | выгодное предложение | pechincha | a good price | That apartment is a great [deal]. | Эта квартира — отличная сделка. | Aquele apartamento é uma pechincha.
+blame | /bleɪm/ | verb | винить | culpar | to say someone is responsible | Jerry [blamed] Kramer. | Джерри обвинил Крамера. | O Jerry culpou o Kramer.
+belongings | /bɪˈlɔːŋɪŋz/ | noun | вещи, имущество | pertences | things you own | They took all his [belongings]. | Они забрали все его вещи. | Levaram-lhe todos os pertences.
+police report | /pəˈliːs rɪˈpɔːrt/ | noun | заявление в полицию | queixa à polícia | an official record of a crime | He filed a [police report]. | Он написал заявление в полицию. | Apresentou queixa à polícia.
+neighborhood | /ˈneɪbərhʊd/ | noun | район | bairro | an area of a city | It's a nice [neighborhood]. | Это хороший район. | É um bom bairro.
+fight over | /faɪt ˈoʊvər/ | phrasal verb | ссориться из-за | discutir por causa de | to argue about something | They [fought over] the apartment. | Они поругались из-за квартиры. | Discutiram por causa do apartamento.
+move out | /muːv aʊt/ | phrasal verb | съехать | mudar-se | to leave your home | Jerry thought about [moving out]. | Джерри подумывал переехать. | O Jerry pensou em mudar-se.
+view | /vjuː/ | noun | вид | vista | what you can see from a place | The apartment has a great [view]. | Из квартиры отличный вид. | O apartamento tem uma ótima vista.
+
+## 4 · Male Unbonding
+childhood friend | /ˈtʃaɪldhʊd frend/ | noun | друг детства | amigo de infância | a friend since you were a kid | Jerry's [childhood friend] is annoying. | Друг детства Джерри ужасно надоедлив. | O amigo de infância do Jerry é irritante.
+break up with | /breɪk ʌp wɪð/ | phrasal verb | порвать с | acabar com | to end a relationship | Can you [break up with] a friend? | Можно ли порвать с другом? | Podes acabar com um amigo?
+excuse | /ɪkˈskjuːs/ | noun | отговорка | desculpa | a reason to avoid something | Jerry needs an [excuse] not to see him. | Джерри нужен повод с ним не видеться. | O Jerry precisa de uma desculpa para não o ver.
+list of excuses | /lɪst ʌv ɪkˈskjuːsɪz/ | noun | список отговорок | lista de desculpas | reasons written down to avoid things | He made a [list of excuses]. | Он составил список отговорок. | Fez uma lista de desculpas.
+annoying | /əˈnɔɪɪŋ/ | adjective | надоедливый | chato | making you irritated | Joel is so [annoying]. | Джоэл такой надоедливый. | O Joel é tão chato.
+ping-pong | /ˈpɪŋ pɑːŋ/ | noun | настольный теннис | pingue-pongue | table tennis | Joel always wants to play [ping-pong]. | Джоэл всё время хочет играть в пинг-понг. | O Joel quer sempre jogar pingue-pongue.
+bonding | /ˈbɑːndɪŋ/ | noun | сближение | criação de laços | becoming closer | Men don't do much [bonding]. | Мужчины не особо сближаются. | Os homens não criam muitos laços.
+hang up | /hæŋ ʌp/ | phrasal verb | повесить трубку | desligar | to end a phone call | He [hung up] on Joel. | Он бросил трубку, когда звонил Джоэл. | Desligou o telefone ao Joel.
+answering machine | /ˈænsərɪŋ məˈʃiːn/ | noun | автоответчик | atendedor | a machine that records calls | Let the [answering machine] get it. | Пусть ответит автоответчик. | Deixa o atendedor atender.
+guilty | /ˈɡɪlti/ | adjective | виноватый | culpado | feeling bad | Jerry felt [guilty] about avoiding him. | Джерри было стыдно, что он избегает друга. | O Jerry sentiu-se culpado por o evitar.
+pizza | /ˈpiːtsə/ | noun | пицца | piza | flat bread with cheese and toppings | Kramer has a [pizza] idea. | У Крамера идея насчёт пиццы. | O Kramer tem uma ideia de piza.
+business idea | /ˈbɪznəs aɪˈdiːə/ | noun | бизнес-идея | ideia de negócio | a plan for a new business | Kramer always has a crazy [business idea]. | У Крамера вечно безумные бизнес-идеи. | O Kramer tem sempre uma ideia de negócio maluca.
+awkward pause | /ˈɔːkwərd pɔːz/ | noun | неловкая пауза | pausa constrangedora | an uncomfortable silence | There was an [awkward pause]. | Возникла неловкая пауза. | Houve uma pausa constrangedora.
+friendship | /ˈfrendʃɪp/ | noun | дружба | amizade | the relationship between friends | Some [friendships] just end. | Некоторые дружбы просто заканчиваются. | Algumas amizades simplesmente acabam.
+make plans | /meɪk plænz/ | phrase | строить планы, договориться | combinar | to agree to meet | Let's [make plans] for next week. | Давай договоримся на следующую неделю. | Vamos combinar para a próxima semana.
+
+## 5 · The Stock Tip
+stock | /stɑːk/ | noun | акции | ações | shares in a company | George bought some [stock]. | Джордж купил акции. | O George comprou ações.
+tip | /tɪp/ | noun | наводка | dica | secret useful advice | He got a [stock tip] from a friend. | Он получил от друга наводку на акции. | Recebeu uma dica sobre ações de um amigo.
+invest | /ɪnˈvest/ | verb | вкладывать | investir | to put money into something to earn more | Should Jerry [invest] too? | Стоит ли Джерри тоже вложиться? | O Jerry também devia investir?
+share | /ʃer/ | noun | акция | ação | one part of a company's stock | He bought five thousand [shares]. | Он купил пять тысяч акций. | Comprou cinco mil ações.
+go up | /ɡoʊ ʌp/ | phrasal verb | расти, подорожать | subir | to increase in price | The stock [went up] fast. | Акции быстро выросли. | As ações subiram depressa.
+go down | /ɡoʊ daʊn/ | phrasal verb | падать, дешеветь | descer | to decrease in price | Then the stock [went down]. | Потом акции пошли вниз. | Depois as ações desceram.
+sell | /sel/ | verb | продать | vender | to give something for money | Jerry decided to [sell]. | Джерри решил продать. | O Jerry decidiu vender.
+nervous | /ˈnɜːrvəs/ | adjective | нервный | nervoso | worried | Money makes Jerry [nervous]. | Деньги заставляют Джерри нервничать. | O dinheiro deixa o Jerry nervoso.
+weekend trip | /ˈwiːkend trɪp/ | noun | поездка на выходные | escapadinha de fim de semana | a short vacation | Jerry went on a [weekend trip] with Vanessa. | Джерри поехал с Ванессой на выходные. | O Jerry foi numa escapadinha com a Vanessa.
+risk | /rɪsk/ | noun | риск | risco | a chance of losing | Stocks are always a [risk]. | Акции — это всегда риск. | As ações são sempre um risco.
+profit | /ˈprɑːfɪt/ | noun | прибыль | lucro | money you earn | George made a big [profit]. | Джордж получил большую прибыль. | O George teve um grande lucro.
+panic | /ˈpænɪk/ | verb | паниковать | entrar em pânico | to suddenly feel afraid | Jerry [panicked] and sold. | Джерри запаниковал и продал. | O Jerry entrou em pânico e vendeu.
+check | /tʃek/ | verb | проверять | verificar | to look at something to be sure | He [checks] the stock price every hour. | Он проверяет цену акций каждый час. | Verifica o preço das ações a cada hora.
+lose money | /luːz ˈmʌni/ | phrase | потерять деньги | perder dinheiro | to end up with less money | Jerry hates to [lose money]. | Джерри ненавидит терять деньги. | O Jerry odeia perder dinheiro.
+rich | /rɪtʃ/ | adjective | богатый | rico | having a lot of money | George got [rich]... for a while. | Джордж разбогател... ненадолго. | O George ficou rico... por uns tempos.
