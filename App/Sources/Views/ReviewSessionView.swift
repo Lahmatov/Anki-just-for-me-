@@ -33,6 +33,10 @@ struct ReviewSessionView: View {
         }
         .navigationTitle(deck?.name ?? tr("Повторение", "Revisão", "Review"))
         .navigationBarTitleDisplayMode(.inline)
+        // В сессии панель вкладок не нужна, а на маленьком экране отъедает
+        // место у карточки и кнопок оценок.
+        .onAppear { TabBarVisibility.shared.hiddenBySession = true }
+        .onDisappear { TabBarVisibility.shared.hiddenBySession = false }
         .onAppear {
             if model == nil {
                 let created = ReviewSessionModel(context: context)
@@ -76,11 +80,12 @@ struct ReviewSessionView: View {
                     withAnimation(.linear(duration: 0.45)) { shakes += 1 }
                 }
             }
-            .safeAreaInset(edge: .bottom) {
-                footer(model)
-                    .padding(.horizontal)
-                    .padding(.bottom, 8)
-            }
+
+            // Под прокруткой, а не поверх неё: поверх (safeAreaInset) на
+            // iPhone SE пример из сериала оказывался под кнопками оценок.
+            footer(model)
+                .padding(.horizontal)
+                .padding(.bottom, 8)
         }
         .background(Theme.background)
     }

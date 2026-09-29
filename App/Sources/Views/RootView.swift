@@ -26,6 +26,7 @@ struct RootView: View {
     /// перестраивает экраны, но не выкидывает из настроек на «Сегодня».
     @State private var tab: AppTab = .today
     @State private var keyboard = KeyboardObserver()
+    private var tabBarVisibility: TabBarVisibility { .shared }
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
     /// Пустая строка — язык не выбран явно, действует системный.
     @AppStorage(SettingsKey.appLanguage) private var language = ""
@@ -56,7 +57,7 @@ struct RootView: View {
 
             // Пока открыта клавиатура, панель прячется: иначе она висела бы
             // над клавиатурой и отъедала место у поля ввода.
-            if !keyboard.isVisible {
+            if !keyboard.isVisible, !tabBarVisibility.hiddenBySession {
                 AppTabBar(selection: $tab)
                     .background(Theme.background.ignoresSafeArea(edges: .bottom))
             }

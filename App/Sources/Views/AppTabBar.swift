@@ -1,4 +1,5 @@
 import SwiftUI
+import Observation
 import AJFMCore
 
 /// Панель вкладок в стиле iOS 26: капсула из «жидкого стекла», выбранная
@@ -73,4 +74,14 @@ struct AppTabBar: View {
         .accessibilityIdentifier("tab.\(item)")
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
+}
+
+/// Прячет панель вкладок, пока идёт сессия повторения. Общий объект, а не
+/// preference: из экрана, открытого внутри NavigationStack, preference до
+/// корня доходит не всегда.
+@Observable
+@MainActor
+final class TabBarVisibility {
+    static let shared = TabBarVisibility()
+    var hiddenBySession = false
 }

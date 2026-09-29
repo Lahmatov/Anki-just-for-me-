@@ -82,6 +82,12 @@ final class SmokeUITests: XCTestCase {
 
         XCTAssertTrue(element(app, "session.progress").waitForExistence(timeout: 15),
                       "сессия не открылась")
+        XCTAssertFalse(app.buttons["tab.today"].exists,
+                       "в сессии панель вкладок отъедает место у карточки")
+
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        XCTAssertTrue(app.buttons["tab.today"].waitForExistence(timeout: 10),
+                      "после сессии панель вкладок не вернулась")
     }
 
     func testTermsOpenFromProfile() {
