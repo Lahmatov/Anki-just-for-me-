@@ -65,6 +65,18 @@ struct PrivacyView: View {
                                      "Anthropic (Claude) — only when you ask for a deck or a review: "
                                         + "your request, subtitles, the retelling text and the list "
                                         + "of known words. Using your own key."))
+                point("server.rack", tr("Сервер Recap — только с подпиской или промокодом: номер серии, "
+                                           + "язык, уровень, известные слова и реплики разговора. Сервер "
+                                           + "передаёт их в Anthropic и не хранит; в базе — только "
+                                           + "случайный номер устройства и расход.",
+                                        "Servidor Recap — só com subscrição ou código: número do "
+                                           + "episódio, idioma, nível, palavras conhecidas e falas da "
+                                           + "conversa. O servidor envia-os à Anthropic e não os guarda; "
+                                           + "na base só fica um número aleatório do dispositivo e o consumo.",
+                                        "Recap server — only with a subscription or promo code: the "
+                                           + "episode number, language, level, known words and chat "
+                                           + "lines. The server passes them to Anthropic and doesn't "
+                                           + "keep them; it stores only a random device ID and usage."))
                 point("icloud.and.arrow.up", tr("Neon — копия базы раз в сутки, если ты сам "
                                                    + "подключил свою базу данных.",
                                                 "Neon — uma cópia da base por dia, se ligaste a "
@@ -178,6 +190,21 @@ struct PrivacyView: View {
                                 "As cópias na nuvem não foram apagadas: \(error.localizedDescription). "
                                     + "Os dados locais estão intactos — tenta de novo.",
                                 "Cloud copies weren't deleted: \(error.localizedDescription). "
+                                    + "Local data is untouched — try again.")
+                return
+            }
+        }
+        // Сервер Recap — тоже до ключей: без токена устройство там не найти.
+        if RecapBackend.isConfigured {
+            do {
+                try await RecapBackend.shared.forgetDevice()
+            } catch {
+                Log.failure(.network, "Устройство на сервере Recap не удалилось", error)
+                eraseError = tr("Данные на сервере Recap не удалились: \(error.localizedDescription). "
+                                    + "Локальные данные не тронуты — попробуй ещё раз.",
+                                "Os dados no servidor Recap não foram apagados: \(error.localizedDescription). "
+                                    + "Os dados locais estão intactos — tenta de novo.",
+                                "Recap server data wasn't deleted: \(error.localizedDescription). "
                                     + "Local data is untouched — try again.")
                 return
             }

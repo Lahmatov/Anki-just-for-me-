@@ -32,7 +32,7 @@ struct EpisodeView: View {
         .navigationTitle(info.code)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showDeckRequest) {
-            DeckRequestView(initialTopic: "\(episode.showName) \(info.code)")
+            DeckRequestView(initialTopic: "\(episode.showName) \(info.code)", episode: episode)
         }
     }
 

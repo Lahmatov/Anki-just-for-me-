@@ -26,7 +26,17 @@ enum AIService {
         context: ModelContext, episode: EpisodeContext,
         turns: [EpisodeDiscussion.Turn], retelling: String?
     ) async throws -> DiscussionResult {
-        try await discussDirectly(
+        // С подпиской — через сервер Recap: ключа в приложении нет, а сервер
+        // пускает разговор только о сериях, к которым взяты слова.
+        if RecapAccount.shared.usesBackend {
+            let response = try await RecapBackend.shared.discuss(BackendAPI.DiscussBody(
+                showId: episode.showID, season: episode.episode.season,
+                episode: episode.episode.number, language: Loc.language,
+                level: AppSettings.englishLevel, turns: turns, retelling: retelling))
+            RecapAccount.shared.update(response.plan)
+            return DiscussionResult(reply: response.asReply, cost: 0)
+        }
+        return try await discussDirectly(
             context: context, episode: episode, turns: turns, retelling: retelling)
     }
 

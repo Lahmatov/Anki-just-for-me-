@@ -69,6 +69,9 @@ targets:
         # Только HTTPS системными средствами — освобождено от экспортного
         # контроля. Без ключа App Store Connect спрашивает об этом при каждой сборке.
         ITSAppUsesNonExemptEncryption: false
+        # Адрес сервера Recap (backend/) после `wrangler deploy`. Пока стоит
+        # заглушка, подписка и промокоды в приложении не показываются.
+        RecapBackendURL: https://recap-backend.CHANGE-ME.workers.dev
         # Шрифт интерфейса по умолчанию. Статические начертания, а не
         # вариативный файл: так каждое находится по имени (tools/make_fonts.py).
         UIAppFonts:

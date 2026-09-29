@@ -40,6 +40,7 @@ struct DataEraseService {
     static func eraseSecrets() {
         Keychain.remove(Keychain.claudeAPIKey)
         Keychain.remove(Keychain.neonConnection)
+        Keychain.remove(Keychain.recapDeviceToken)
     }
 
     /// Все настройки приложения — как после установки.

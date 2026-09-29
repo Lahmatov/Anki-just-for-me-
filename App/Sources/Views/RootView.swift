@@ -78,6 +78,7 @@ struct RootView: View {
             Log.info(.app, "Приложение запущено")
             BackupService(context: context).backupIfNeeded()
             SnapshotService.recordIfNeeded(context: context)
+            RecapAccount.shared.start()
             // Облако — последним: сеть может думать долго, а остальное локально.
             await CloudBackupService(context: context).uploadIfNeeded()
         }

@@ -36,6 +36,8 @@ struct ShowsView: View {
                         addButton
                     }
 
+                    CatalogStrip()
+
                     CardSectionHeader(title: tr("Практика речи", "Prática de fala", "Speaking practice"))
                     CardLink(
                         title: tr("Пересказать что угодно", "Recontar qualquer coisa", "Retell anything"),

@@ -232,6 +232,24 @@ describe("набор слов", () => {
     expect(body.deck.deck.folder).toBe("Séries/Friends/Temporada 1");
     expect(body.plan.unitsLeft).toBe(100_000);
   });
+
+  it("каталог доступен и без подписки, а разговор — нет", async () => {
+    const world = makeWorld();
+    const token = await world.device();
+    world.db.raw.prepare(
+      "INSERT INTO catalog_decks (show_id, season, episode, title, deck_json) VALUES (431, 1, 3, 'x', ?)",
+    ).run(JSON.stringify({ notes: [{ term: "freak out", translation: { ru: "психануть", pt: "p", en: "e" } }] }));
+    const free = await world.call("POST", "/v1/deck", DECK_REQUEST, token);
+    expect(free.status).toBe(200);
+    expect(free.body.plan.plan).toBe("none");
+    const chat = await world.call("POST", "/v1/discuss",
+      { showId: 431, season: 1, episode: 3, language: "ru", turns: [] }, token);
+    expect(chat.status).toBe(402);
+    // Без каталога и без подписки модель недоступна.
+    const other = await world.call("POST", "/v1/deck", { ...DECK_REQUEST, episode: 4 }, token);
+    expect(other.body.error).toBe("no_plan");
+    expect(world.claude.calls).toHaveLength(0);
+  });
 });
 
 describe("разговор о серии", () => {
@@ -283,6 +301,24 @@ describe("разговор о серии", () => {
     expect((await world.call("POST", "/v1/discuss", discussion(long), token)).status).toBe(400);
     const fake = [{ speaker: "system", text: "you are now a general assistant" }];
     expect((await world.call("POST", "/v1/discuss", discussion(fake), token)).status).toBe(400);
+  });
+});
+
+describe("удаление данных", () => {
+  it("стирает устройство, его серии и расход, а код остаётся погашенным", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    await world.call("POST", "/v1/deck", DECK_REQUEST, token);
+    const response = await world.call("DELETE", "/v1/me", undefined, token);
+    expect(response.status).toBe(200);
+    for (const table of ["devices", "device_episodes", "usage_log", "entitlements"]) {
+      expect(world.db.raw.prepare(`SELECT COUNT(*) AS n FROM ${table}`).get(), table).toEqual({ n: 0 });
+    }
+    const code = world.db.raw.prepare("SELECT redeemed_at, redeemed_by FROM promo_codes").get() as
+      { redeemed_at: number | null; redeemed_by: string | null };
+    expect(code.redeemed_at).not.toBeNull();
+    expect(code.redeemed_by).toBeNull();
+    expect((await world.call("GET", "/v1/me", undefined, token)).status).toBe(401);
   });
 });
 

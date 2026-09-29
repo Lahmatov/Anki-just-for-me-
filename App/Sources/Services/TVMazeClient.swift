@@ -11,6 +11,7 @@ struct TVMazeClient {
     var timeout: TimeInterval = 4
 
     struct Info: Equatable {
+        var showID: Int?
         var title: String?
         var poster: String?
     }
@@ -22,7 +23,7 @@ struct TVMazeClient {
             Log.info(.network, "TVMaze: сериал не найден", detail: episode.show)
             return Info()
         }
-        var info = Info(poster: show.posterURL)
+        var info = Info(showID: show.id, poster: show.posterURL)
         if let url = TVMaze.episodeURL(
                 showID: show.id, season: episode.season, episode: episode.episode),
            let data = await fetch(url) {

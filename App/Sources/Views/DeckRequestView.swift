@@ -10,6 +10,8 @@ import AJFMCore
 struct DeckRequestView: View {
     /// Запрос, подставленный заранее, — например, с экрана серии.
     var initialTopic: String = ""
+    /// Серия с экрана «Сериалы»: сервер получит её номер напрямую.
+    var episode: EpisodeContext?
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -47,6 +49,7 @@ struct DeckRequestView: View {
             if model == nil {
                 let created = DeckRequestModel(context: context)
                 if !initialTopic.isEmpty { created.topic = initialTopic }
+                created.episode = episode
                 model = created
             }
             topicFocused = true
@@ -173,25 +176,50 @@ struct DeckRequestView: View {
                 }
             }
 
-            if !model.hasAPIKey {
-                apiKeySection
-            }
+            if model.usesBackend {
+                Section {
+                    if let plan = RecapAccount.shared.plan, plan.active {
+                        LabeledContent("Recap Plus",
+                                       value: "≈ " + Counted.decks(plan.approximateDecksLeft))
+                    } else {
+                        Label(tr("Для популярных сериалов есть готовые наборы — бесплатно.",
+                                 "Há baralhos prontos e grátis para séries populares.",
+                                 "Popular shows have ready decks — for free."),
+                              systemImage: "books.vertical.fill")
+                            .font(.app(.callout))
+                    }
+                    if model.needsPlan {
+                        NavigationLink {
+                            PlusView()
+                        } label: {
+                            Label(tr("Оформить Recap Plus или ввести промокод",
+                                     "Obter o Recap Plus ou usar um código",
+                                     "Get Recap Plus or use a promo code"),
+                                  systemImage: "star.fill")
+                        }
+                    }
+                }
+            } else {
+                if !model.hasAPIKey {
+                    apiKeySection
+                }
 
-            Section {
-                LabeledContent(
-                    tr("Примерно", "Cerca de", "About"),
-                    value: String(format: "$%.2f", model.estimatedCost))
-                LabeledContent(
-                    tr("В этом месяце", "Este mês", "This month"),
-                    value: String(format: "$%.2f / $%.0f",
-                                  model.usage.monthCost, model.usage.limit))
-            } footer: {
-                Text(tr("Слова, которые уже есть в базе, модель пропустит сама, "
-                            + "а повторы превью покажет отдельно.",
-                        "O modelo salta as palavras que já tens, e a pré-visualização "
-                            + "mostra os duplicados à parte.",
-                        "The model skips words you already have, and the preview "
-                            + "shows duplicates separately."))
+                Section {
+                    LabeledContent(
+                        tr("Примерно", "Cerca de", "About"),
+                        value: String(format: "$%.2f", model.estimatedCost))
+                    LabeledContent(
+                        tr("В этом месяце", "Este mês", "This month"),
+                        value: String(format: "$%.2f / $%.0f",
+                                      model.usage.monthCost, model.usage.limit))
+                } footer: {
+                    Text(tr("Слова, которые уже есть в базе, модель пропустит сама, "
+                                + "а повторы превью покажет отдельно.",
+                            "O modelo salta as palavras que já tens, e a pré-visualização "
+                                + "mostra os duplicados à parte.",
+                            "The model skips words you already have, and the preview "
+                                + "shows duplicates separately."))
+                }
             }
 
             if model.step == .working {
@@ -287,7 +315,7 @@ struct DeckRequestView: View {
         }
         .buttonStyle(.chunky)
         .controlSize(.large)
-        .disabled(!model.canSubmit || (!model.hasAPIKey && apiKey.isEmpty))
+        .disabled(!model.canSubmit || (!model.usesBackend && !model.hasAPIKey && apiKey.isEmpty))
     }
 
     // MARK: - Итог

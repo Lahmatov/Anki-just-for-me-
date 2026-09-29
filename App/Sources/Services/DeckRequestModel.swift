@@ -22,6 +22,8 @@ final class DeckRequestModel {
     private(set) var step: Step = .editing
     private(set) var lastCost: Double = 0
 
+    /// Серия, если набор просят с её экрана: номер уже известен, искать не нужно.
+    var episode: EpisodeContext?
     private let context: ModelContext
     /// Читается один раз: оценка цены пересчитывается на каждую букву в поле,
     /// и ходить за сотнями слов в базу при каждом нажатии незачем.
@@ -37,6 +39,12 @@ final class DeckRequestModel {
 
     var hasAPIKey: Bool { budget.apiKey != nil }
 
+    /// Через сервер Recap: подписка активна или своего ключа нет, а к серии
+    /// может найтись бесплатный готовый набор из каталога.
+    var usesBackend: Bool {
+        RecapAccount.shared.usesBackend || (!hasAPIKey && RecapBackend.isConfigured)
+    }
+
     var request: DeckRequest {
         DeckRequest(
             topic: topic, subtitles: subtitles, wordCount: wordCount, level: level,
@@ -44,7 +52,8 @@ final class DeckRequestModel {
     }
 
     var canSubmit: Bool {
-        step != .working && (!topic.trimmingCharacters(in: .whitespaces).isEmpty
+        step != .working && (episode != nil
+                             || !topic.trimmingCharacters(in: .whitespaces).isEmpty
                              || subtitles != nil)
     }
 
@@ -81,6 +90,63 @@ final class DeckRequestModel {
         subtitlesName = nil
     }
 
+    // MARK: - Через сервер
+
+    /// Набор через сервер Recap. Сервер принимает только номер серии —
+    /// поэтому свободная тема («слова для собеседования») здесь не пройдёт:
+    /// так подписка тратится только на сериалы.
+    private func generateOnServer() async -> ImportPlan? {
+        step = .working
+        do {
+            let target: (showID: Int, season: Int, episode: Int, show: String)
+            if let episode {
+                target = (episode.showID, episode.episode.season, episode.episode.number,
+                          episode.showName)
+            } else if let ref = EpisodeRef.parse(topic),
+                      let showID = await TVMazeClient().lookup(ref).showID {
+                target = (showID, ref.season, ref.episode, ref.show)
+            } else {
+                step = .failed(tr("С Recap Plus наборы — к сериям. Напиши, например, «Friends 1x03», "
+                                    + "или открой серию во вкладке «Сериалы».",
+                                  "Com o Recap Plus, os baralhos são de episódios. Escreve, por exemplo, "
+                                    + "«Friends 1x03», ou abre o episódio no separador «Séries».",
+                                  "With Recap Plus decks are for episodes. Type e.g. “Friends 1x03”, "
+                                    + "or open the episode on the Shows tab."))
+                return nil
+            }
+            let response = try await RecapBackend.shared.deck(BackendAPI.DeckBody(
+                showId: target.showID, season: target.season, episode: target.episode,
+                language: AppSettings.language, level: level, wordCount: wordCount,
+                knownTerms: knownTerms, subtitles: subtitles))
+            RecapAccount.shared.update(response.plan)
+            var file = response.deck
+            if file.deck.cover == nil, let episode {
+                // Постер уже есть у сериала на телефоне — не нужно спрашивать снова.
+                file.deck.cover = ShowService(context: context).tracked(id: episode.showID)?.posterURL
+            }
+            let plan = try ImportService(context: context).makePlan(from: file)
+            Log.info(.importing, "Набор с сервера получен",
+                     detail: "«\(file.deck.name)», слов: \(file.notes.count), \(response.source)")
+            step = .editing
+            return plan
+        } catch let failure as BackendAPI.Failure {
+            // Нет подписки, но есть свой ключ — делаем по-старому, напрямую.
+            if failure.needsPlan, hasAPIKey, !RecapAccount.shared.usesBackend {
+                step = .editing
+                return await generateDirectly()
+            }
+            needsPlan = failure.needsPlan
+            step = .failed(failure.localizedDescription)
+            return nil
+        } catch {
+            step = .failed(error.localizedDescription)
+            return nil
+        }
+    }
+
+    /// Сервер ответил «нужна подписка» — экран покажет кнопку Recap Plus.
+    private(set) var needsPlan = false
+
     // MARK: - Запрос
 
     /// Возвращает план импорта для обычного превью или nil при ошибке
@@ -89,6 +155,14 @@ final class DeckRequestModel {
         // Кнопка гаснет только после перерисовки, а два быстрых нажатия
         // успевают запустить две задачи — и два платных запроса.
         guard step != .working else { return nil }
+        if usesBackend {
+            return await generateOnServer()
+        }
+        return await generateDirectly()
+    }
+
+    /// Напрямую в Anthropic по своему ключу.
+    private func generateDirectly() async -> ImportPlan? {
         let request = self.request
         do {
             try request.validate()

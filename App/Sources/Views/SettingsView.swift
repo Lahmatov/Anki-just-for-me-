@@ -34,6 +34,7 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                plusSection
                 languageSection
                 levelSection
                 appearanceSection
@@ -57,6 +58,34 @@ struct SettingsView: View {
     }
 
     // MARK: - Язык, уровень, оформление
+
+    @ViewBuilder
+    private var plusSection: some View {
+        if RecapAccount.shared.isAvailable {
+            Section {
+                NavigationLink {
+                    PlusView()
+                } label: {
+                    HStack(spacing: 14) {
+                        IconBadge(systemName: "star.fill", color: Theme.gold)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Recap Plus").font(.app(.body, weight: .bold))
+                            Text(plusSubtitle).font(.app(.caption)).foregroundStyle(Theme.muted)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private var plusSubtitle: String {
+        guard let plan = RecapAccount.shared.plan, plan.active else {
+            return tr("Подписка и промокоды", "Subscrição e códigos", "Subscription and promo codes")
+        }
+        return tr("Активен · осталось ≈ ", "Ativo · resta ≈ ", "Active · ≈ ")
+            + Counted.decks(plan.approximateDecksLeft)
+            + tr("", "", " left")
+    }
 
     private var languageSection: some View {
         Section {

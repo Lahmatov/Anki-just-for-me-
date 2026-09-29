@@ -143,7 +143,16 @@ final class RetellFlowModel {
     func analyze() async {
         guard let reference else { return }
         guard let apiKey = Keychain.get(Keychain.claudeAPIKey), !apiKey.isEmpty else {
-            step = .failed(ClaudeClientError.noAPIKey.localizedDescription)
+            // Разбор пересказа в Recap Plus не входит: подписка — только на слова
+            // к сериям и разговор о них. Там и проверяется понимание серии.
+            step = .failed(RecapAccount.shared.usesBackend
+                ? tr("Разбор пересказа работает со своим ключом Claude. С Recap Plus расскажи "
+                        + "о серии Мончику — кнопка «Поговорить с Мончиком» на экране серии.",
+                     "A análise do reconto funciona com a tua chave do Claude. Com o Recap Plus, "
+                        + "conta o episódio ao Monchik — botão «Conversar com o Monchik».",
+                     "Retelling reviews need your own Claude key. With Recap Plus, tell Monchik "
+                        + "about the episode — the “Chat with Monchik” button on the episode.")
+                : ClaudeClientError.noAPIKey.localizedDescription)
             return
         }
 

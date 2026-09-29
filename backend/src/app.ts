@@ -34,6 +34,7 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
     switch (route) {
       case "POST /v1/devices": return await register(request, env, deps);
       case "GET /v1/me": return await me(request, env, deps);
+      case "DELETE /v1/me": return await forget(request, env, deps);
       case "POST /v1/promo/redeem": return await redeemPromo(request, env, deps);
       case "POST /v1/subscription/verify": return await verify(request, env, deps);
       case "POST /v1/deck": return await deck(request, env, deps);
@@ -71,6 +72,31 @@ async function context(request: Request, env: Env, deps: Deps) {
 async function me(request: Request, env: Env, deps: Deps): Promise<Response> {
   const { entitlement } = await context(request, env, deps);
   return json(status(entitlement, deps.now()));
+}
+
+/**
+ * «Удалить все данные» в приложении: стираются устройство, его серии и
+ * расход. Промо-доступ, которым больше никто не пользуется, — тоже.
+ * Подписка остаётся: она принадлежит покупке в App Store, а не телефону,
+ * и вернётся на новом устройстве через «Восстановить покупки».
+ */
+async function forget(request: Request, env: Env, deps: Deps): Promise<Response> {
+  const { device, entitlement } = await context(request, env, deps);
+  const statements = [
+    env.DB.prepare("DELETE FROM device_episodes WHERE device_id = ?").bind(device.id),
+    env.DB.prepare("DELETE FROM usage_log WHERE device_id = ?").bind(device.id),
+    env.DB.prepare("DELETE FROM devices WHERE id = ?").bind(device.id),
+  ];
+  if (entitlement?.kind === "promo") {
+    statements.push(env.DB.prepare(
+      `DELETE FROM entitlements WHERE id = ?
+       AND NOT EXISTS (SELECT 1 FROM devices WHERE entitlement_id = ? AND id != ?)`,
+    ).bind(entitlement.id, entitlement.id, device.id));
+    statements.push(env.DB.prepare(
+      "UPDATE promo_codes SET redeemed_by = NULL WHERE redeemed_by = ?").bind(device.id));
+  }
+  await env.DB.batch(statements);
+  return json({ deleted: true });
 }
 
 async function redeemPromo(request: Request, env: Env, deps: Deps): Promise<Response> {
@@ -161,7 +187,6 @@ async function rememberEpisode(env: Env, deps: Deps, device: Device,
 async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
   const { device, entitlement } = await context(request, env, deps);
   const now = deps.now();
-  const active = requireActive(entitlement, now);
   const body = await readJson(request, BODY_LIMIT);
   const showId = int(body, "showId", 1, 99_999_999);
   const season = int(body, "season", 1, 99);
@@ -172,19 +197,24 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
   const knownTerms = stringList(body, "knownTerms", KNOWN_TERMS_LIMIT, 80);
   const subtitles = optionalStr(body, "subtitles", SUBTITLES_LIMIT);
 
+  // Каталог открыт и без подписки — но каждый запрос ходит в TVMaze,
+  // поэтому и бесплатные запросы ограничены.
+  await hit(env.DB, "deck:" + device.id, 30, 60, now);
   const facts = await episodeFacts(env.DB, deps, showId, season, episode);
 
-  // Готовый набор из каталога — бесплатно для лимита.
+  // Готовый набор из каталога — бесплатно и без подписки: модель уже
+  // отработала один раз за всех, а сервер только читает базу.
   if (!subtitles) {
     const catalog = await catalogNotes(env.DB, showId, season, episode);
     if (catalog) {
       await rememberEpisode(env, deps, device, showId, season, episode);
       const notes = localizeNotes(catalog, language, knownTerms).slice(0, wordCount);
       return json({ deck: deckFile(facts, language, notes), source: "catalog",
-                    plan: status(await entitlementOf(env.DB, active.id), now) });
+                    plan: status(entitlement, now) });
     }
   }
 
+  const active = requireActive(entitlement, now);
   await limitAI(env, device, now);
   const input = { facts, language, level, wordCount, knownTerms, subtitles };
   const result = await callWithQuota(env, deps, device, active, "deck", {

@@ -6,7 +6,9 @@
   ключом в Anthropic уходит текст запроса или пересказа. Anthropic какое-то
   время хранит его у себя — дольше, чем «обработка на лету», поэтому он честно
   объявлен как «прочий пользовательский контент» для работы приложения,
-  не связанный с личностью. Пояснения — docs/app-store.md.
+  не связанный с личностью. С подпиской сервер Recap хранит случайный номер
+  устройства и номер транзакции покупки — они связаны с устройством.
+  Пояснения — docs/app-store.md и docs/backend.md.
 -->
 <plist version="1.0">
 <dict>
@@ -16,6 +18,30 @@
 	<array/>
 	<key>NSPrivacyCollectedDataTypes</key>
 	<array>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypeDeviceID</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array>
+				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypePurchaseHistory</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array>
+				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+			</array>
+		</dict>
 		<dict>
 			<key>NSPrivacyCollectedDataType</key>
 			<string>NSPrivacyCollectedDataTypeOtherUserContent</string>
