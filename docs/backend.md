@@ -214,6 +214,22 @@ npx wrangler d1 execute recap --remote --command \
 
 ## Каталог: топ-50 сериалов
 
+**Основной путь — слова, собранные заранее, без модели и без ключа.**
+Исходник — `backend/catalog/words/NN-slug.txt`, по строке на слово (формат
+описан в `scripts/catalog-lib.mjs`). Из него собираются и каталог внутри
+приложения (работает без сервера), и `seed.sql` для базы:
+
+```sh
+cd backend
+npm run catalog -- plan     # один раз, нужна сеть: номера сериалов и названия серий из TVMaze
+npm run catalog -- local    # → App/Resources/Catalog/*.json и catalog/out/seed.sql
+npx wrangler d1 execute recap --remote --file catalog/out/seed.sql
+```
+
+CI проверяет (`local --check`), что JSON в приложении собран из текущих слов.
+
+Запасной путь — собрать слова моделью через Batch API:
+
 Список — `backend/catalog/shows.json`: 50 сериалов, у каждого пометка
 акцента (US/UK/CA). Слова к каждой серии первого сезона собирает модель
 **один раз** через Message Batches API (вдвое дешевле обычных запросов),

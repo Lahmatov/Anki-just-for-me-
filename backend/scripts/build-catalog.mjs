@@ -7,15 +7,20 @@
  *   npm run catalog -- status    # как идёт обработка
  *   npm run catalog -- collect   # забрать ответы → catalog/out/seed.sql
  *
+ * Наборы, собранные заранее (catalog/words/*.txt, без модели и без ключа):
+ *
+ *   npm run catalog -- local           # → каталог в приложении + seed.sql, если есть plan.json
+ *   npm run catalog -- local --check   # CI: каталог в приложении совпадает с исходником
+ *
  * Ключ Anthropic — из ANTHROPIC_API_KEY (или профиля `ant auth login`);
  * в репозиторий и в файлы он не пишется. Модель — --model (по умолчанию
  * та же быстрая модель, что делает наборы в приложении).
  */
 import Anthropic from "@anthropic-ai/sdk";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import {
-  CATALOG_MAX_TOKENS, CATALOG_SCHEMA, CATALOG_SYSTEM, cleanNotes, customId, episodeCode,
-  estimateCost, parseCustomId, seedSQL, userMessage,
+  CATALOG_MAX_TOKENS, CATALOG_SCHEMA, CATALOG_SYSTEM, buildBundle, cleanNotes, customId,
+  decksFromBundle, episodeCode, estimateCost, parseCustomId, parseWordsFile, seedSQL, userMessage,
 } from "./catalog-lib.mjs";
 
 const OUT = "catalog/out";
@@ -130,9 +135,58 @@ async function collect() {
   console.log(`Загрузить: npx wrangler d1 execute recap --remote --file ${OUT}/seed.sql`);
 }
 
-const commands = { plan, submit, status, collect };
+const WORDS = "catalog/words";
+const APP_CATALOG = "../App/Resources/Catalog";
+
+async function local() {
+  const check = process.argv.includes("--check");
+  const files = existsSync(WORDS) ? readdirSync(WORDS).filter((name) => name.endsWith(".txt")).sort() : [];
+  const parsed = files.map((name) => parseWordsFile(readFileSync(`${WORDS}/${name}`, "utf8"), name));
+  const { shows } = JSON.parse(readFileSync("catalog/shows.json", "utf8"));
+  const bundle = buildBundle(parsed, shows);
+  const errors = [...parsed.flatMap((item) => item.errors), ...bundle.errors];
+  if (errors.length) {
+    console.error(errors.join("\n"));
+    process.exit(1);
+  }
+  // Компактный JSON: в приложении его читает машина, а сверяют глазами исходник.
+  const outputs = { "catalog-index.json": JSON.stringify(bundle.index) + "\n" };
+  for (const [resource, file] of Object.entries(bundle.files)) {
+    outputs[`${resource}.json`] = JSON.stringify(file) + "\n";
+  }
+  if (check) {
+    const stale = Object.entries(outputs).filter(([name, content]) =>
+      !existsSync(`${APP_CATALOG}/${name}`) || readFileSync(`${APP_CATALOG}/${name}`, "utf8") !== content);
+    const extra = existsSync(APP_CATALOG)
+      ? readdirSync(APP_CATALOG).filter((name) => name.endsWith(".json") && !(name in outputs)) : [];
+    if (stale.length || extra.length) {
+      console.error("Каталог в приложении устарел — запусти `npm run catalog -- local`:",
+                    [...stale.map(([name]) => name), ...extra].join(", "));
+      process.exit(1);
+    }
+    console.log(`Каталог в приложении совпадает с исходником: сериалов ${bundle.index.shows.length}.`);
+    return;
+  }
+  mkdirSync(APP_CATALOG, { recursive: true });
+  for (const [name, content] of Object.entries(outputs)) writeFileSync(`${APP_CATALOG}/${name}`, content);
+  const words = bundle.index.shows.reduce((sum, show) => sum + show.words, 0);
+  const episodes = bundle.index.shows.reduce((sum, show) => sum + show.episodes, 0);
+  console.log(`Приложение: сериалов ${bundle.index.shows.length}, серий ${episodes}, слов ${words}.`);
+
+  if (!existsSync(PLAN)) {
+    console.log("Для базы сервера нужны номера TVMaze: npm run catalog -- plan (нужна сеть), потом снова local.");
+    return;
+  }
+  const { shows: seedShows, decks, skipped } = decksFromBundle(bundle, JSON.parse(readFileSync(PLAN, "utf8")));
+  mkdirSync(OUT, { recursive: true });
+  writeFileSync(`${OUT}/seed.sql`, seedSQL(seedShows, decks));
+  console.log(`База: наборов ${decks.length}${skipped.length ? `, без номера TVMaze: ${skipped.join(", ")}` : ""}.`);
+  console.log(`Загрузить: npx wrangler d1 execute recap --remote --file ${OUT}/seed.sql`);
+}
+
+const commands = { plan, submit, status, collect, local };
 if (!commands[command]) {
-  console.log("Команды: plan | submit | status | collect   (флаг --model, по умолчанию claude-haiku-4-5)");
+  console.log("Команды: plan | submit | status | collect | local   (флаг --model, по умолчанию claude-haiku-4-5)");
   process.exit(1);
 }
 await commands[command]();

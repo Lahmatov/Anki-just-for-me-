@@ -144,3 +144,169 @@ export function seedSQL(shows, decks) {
   }
   return lines.join("\n") + "\n";
 }
+
+// MARK: - Слова, собранные заранее
+
+/**
+ * Исходник каталога — текстовый файл на сериал (catalog/words/*.txt), по
+ * строке на слово. Текст, а не JSON: 15 000 записей в JSON — это ключи,
+ * кавычки и скобки на каждой строке; их больше, чем самих слов, и
+ * глазами такой файл не проверить.
+ *
+ *   # show: Friends
+ *   # year: 1994
+ *   # accent: US
+ *   ## 1 · The One Where Monica Gets a Roommate
+ *   term | /ipa/ | pos | ru | pt | en | example with [term] | example ru | example pt [| note ru | note pt | note en]
+ *
+ * Изучаемое в примере — в квадратных скобках: из них получается карточка
+ * с пропуском, без угадывания словоформ («hung out» для «hang out»).
+ */
+export const PARTS_OF_SPEECH = ["noun", "verb", "adjective", "adverb", "phrasal verb", "idiom", "phrase", "other"];
+
+export function parseWordsFile(text, fileName = "words.txt") {
+  const show = { name: "", year: null, accent: "US" };
+  const episodes = [];
+  const errors = [];
+  let current = null;
+  const lines = String(text ?? "").replace(/^﻿/, "").split(/\r?\n/);
+  lines.forEach((raw, index) => {
+    const where = `${fileName}:${index + 1}`;
+    const line = raw.trim();
+    if (!line || line.startsWith("//")) return;
+    const meta = /^#\s*(show|year|accent)\s*:\s*(.+)$/i.exec(line);
+    if (meta) {
+      const key = meta[1].toLowerCase();
+      const value = meta[2].trim();
+      if (key === "show") show.name = value;
+      if (key === "year") show.year = Number(value) || null;
+      if (key === "accent") show.accent = value.toUpperCase();
+      return;
+    }
+    const header = /^##\s*(?:S(\d+)E)?(\d+)\s*(?:·\s*(.*))?$/i.exec(line);
+    if (header) {
+      const season = Number(header[1] ?? 1);
+      const episode = Number(header[2]);
+      if (episodes.some((item) => item.season === season && item.episode === episode)) {
+        errors.push(`${where}: серия ${episode} уже была`);
+      }
+      current = { season, episode, title: (header[3] ?? "").trim(), notes: [] };
+      episodes.push(current);
+      return;
+    }
+    if (line.startsWith("#")) { errors.push(`${where}: непонятный заголовок`); return; }
+    if (!current) { errors.push(`${where}: слово до первой серии (## 1 · Название)`); return; }
+    const note = parseWordLine(line, where, errors);
+    if (!note) return;
+    if (current.notes.some((item) => item.term.toLowerCase() === note.term.toLowerCase())) {
+      errors.push(`${where}: «${note.term}» уже есть в этой серии`);
+      return;
+    }
+    current.notes.push(note);
+  });
+  if (!show.name) errors.push(`${fileName}: нет строки «# show: Название»`);
+  // Повтор в другой серии того же сериала импорт всё равно отбросит как
+  // дубль — и во второй серии молча станет на слово меньше.
+  const firstSeen = new Map();
+  for (const episode of episodes) {
+    for (const note of episode.notes) {
+      const key = note.term.toLowerCase();
+      if (firstSeen.has(key)) {
+        errors.push(`${fileName}: «${note.term}» в серии ${episode.episode} уже было в серии ${firstSeen.get(key)}`);
+      } else {
+        firstSeen.set(key, episode.episode);
+      }
+    }
+  }
+  for (const episode of episodes) {
+    if (episode.notes.length < 5) {
+      errors.push(`${fileName}: в серии ${episode.episode} слов меньше пяти (${episode.notes.length})`);
+    }
+  }
+  return { show, episodes, errors };
+}
+
+function parseWordLine(line, where, errors) {
+  const cells = line.split("|").map((cell) => cell.trim());
+  if (cells.length !== 9 && cells.length !== 12) {
+    errors.push(`${where}: ${cells.length} колонок, нужно 9 или 12`);
+    return null;
+  }
+  const [term, ipa, pos, ru, pt, en, marked, exampleRu, examplePt, noteRu = "", notePt = "", noteEn = ""] = cells;
+  for (const [name, value] of [["term", term], ["ru", ru], ["pt", pt], ["en", en], ["example", marked]]) {
+    if (!value) { errors.push(`${where}: пустое поле ${name}`); return null; }
+  }
+  if (!PARTS_OF_SPEECH.includes(pos)) { errors.push(`${where}: часть речи «${pos}» неизвестна`); return null; }
+  if (ipa && !/^\/[^/]+\/$/.test(ipa)) { errors.push(`${where}: транскрипция без косых черт`); return null; }
+  const marks = marked.match(/\[[^\]]+\]/g) ?? [];
+  if (marks.length !== 1) { errors.push(`${where}: в примере нужна ровно одна [пометка]`); return null; }
+  const note = {
+    term,
+    ...(ipa ? { ipa } : {}),
+    partOfSpeech: pos,
+    translation: { ru, pt, en },
+    example: marked.replace(/\[([^\]]+)\]/, "$1"),
+    cloze: marked.replace(/\[[^\]]+\]/, "___"),
+  };
+  if (exampleRu || examplePt) {
+    note.exampleTranslation = { ...(exampleRu ? { ru: exampleRu } : {}), ...(examplePt ? { pt: examplePt } : {}) };
+  }
+  const notes = Object.fromEntries([["ru", noteRu], ["pt", notePt], ["en", noteEn]].filter(([, value]) => value));
+  if (Object.keys(notes).length) note.note = notes;
+  return note;
+}
+
+/** Имя файла ресурса для сериала: «catalog-show-07». */
+export function showResourceName(rank) {
+  return `catalog-show-${String(rank).padStart(2, "0")}`;
+}
+
+/**
+ * Каталог для приложения: оглавление и файл на сериал. Ранг берётся из
+ * shows.json — там же, где он и так задан; сериал не из списка — ошибка.
+ */
+export function buildBundle(parsed, showList) {
+  const errors = [];
+  const byName = new Map(showList.map((entry) => [entry.name.toLowerCase(), entry]));
+  const files = {};
+  const index = [];
+  for (const { show, episodes } of parsed) {
+    const entry = byName.get(show.name.toLowerCase());
+    if (!entry) { errors.push(`«${show.name}» нет в catalog/shows.json`); continue; }
+    const resource = showResourceName(entry.rank);
+    const sorted = [...episodes].sort((a, b) => a.season - b.season || a.episode - b.episode);
+    files[resource] = { name: entry.name, year: entry.year ?? show.year, accent: entry.accent ?? show.accent,
+                        rank: entry.rank, episodes: sorted };
+    index.push({ resource, name: entry.name, year: entry.year ?? show.year, accent: entry.accent ?? show.accent,
+                 rank: entry.rank, episodes: sorted.length,
+                 words: sorted.reduce((sum, episode) => sum + episode.notes.length, 0) });
+  }
+  index.sort((a, b) => a.rank - b.rank);
+  return { index: { format: "recap-catalog", version: 1, shows: index }, files, errors };
+}
+
+/**
+ * Наборы для базы сервера: номера сериалов в TVMaze берутся из plan.json
+ * (его собирает `plan` — единственный шаг, которому нужна сеть). Сериал
+ * без номера пропускается и попадает в список пропущенных.
+ */
+export function decksFromBundle(bundle, planned) {
+  const byName = new Map(planned.map((show) => [show.name.toLowerCase(), show]));
+  const shows = [];
+  const decks = [];
+  const skipped = [];
+  for (const file of Object.values(bundle.files)) {
+    const found = byName.get(file.name.toLowerCase());
+    if (!found) { skipped.push(file.name); continue; }
+    shows.push({ id: found.id, name: found.name, posterURL: found.posterURL ?? null,
+                 year: found.year ?? file.year, rank: file.rank });
+    for (const episode of file.episodes) {
+      const tvmazeName = found.episodes?.find((item) => item.number === episode.episode)?.name;
+      const name = tvmazeName || episode.title;
+      const code = episodeCode(episode.season, episode.episode);
+      decks.push({ showId: found.id, season: episode.season, episode: episode.episode,
+                   title: name ? `${code} · ${name}` : code, notes: episode.notes });
+    }
+  }
+  return { shows, decks, skipped };
+}

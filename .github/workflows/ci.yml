@@ -39,6 +39,9 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+      # Слова каталога правятся в catalog/words, а в приложение попадает
+      # собранный из них JSON: они не должны разойтись.
+      - run: npm run catalog -- local --check
 
   core:
     name: Ядро (swift test)
