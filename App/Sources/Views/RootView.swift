@@ -27,6 +27,7 @@ struct RootView: View {
     @State private var tab: AppTab = .today
     @State private var keyboard = KeyboardObserver()
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
     private var tabBarVisibility: TabBarVisibility { .shared }
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
     /// Пустая строка — язык не выбран явно, действует системный.
@@ -94,8 +95,15 @@ struct RootView: View {
             BackupService(context: context).backupIfNeeded()
             SnapshotService.recordIfNeeded(context: context)
             RecapAccount.shared.start()
+            await NotificationService.reschedule(context: context)
             // Облако — последним: сеть может думать долго, а остальное локально.
             await CloudBackupService(context: context).uploadIfNeeded()
+        }
+        // Уходя в фон, перестраиваем напоминания: сегодня уже занимались —
+        // сегодняшнее снимается, а данные виджета обновляются.
+        .onChange(of: scenePhase) { _, phase in
+            guard phase == .background else { return }
+            Task { await NotificationService.reschedule(context: context) }
         }
         .fileImporter(
             isPresented: $showFileImporter,

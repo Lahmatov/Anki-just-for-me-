@@ -35,6 +35,8 @@ enum SettingsKey {
     static let reminderEnabled = "reminderEnabled"
     static let reminderHour = "reminderHour"
     static let reminderMinute = "reminderMinute"
+    /// Умное время напоминания — по привычке, а не по часам из настроек.
+    static let reminderSmart = "reminderSmart"
     static let appLanguage = "appLanguage"
     static let englishLevel = "englishLevel"
     static let fontStyle = "fontStyle"

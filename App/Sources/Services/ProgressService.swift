@@ -85,6 +85,11 @@ struct ProgressService {
     /// Награды, серия и неделя считаются только по честным повторам — правки
     /// руками не в счёт. Одно место, чтобы три цифры не разошлись, если
     /// правило «честности» когда-нибудь поменяется.
+    /// Когда занимались по-настоящему — для умного напоминания.
+    func honestReviewDates() -> [Date] {
+        honestReviews().map(\.timestamp)
+    }
+
     private func honestReviews() -> [Review] {
         ((try? context.fetch(FetchDescriptor<Review>())) ?? []).filter(\.isHonest)
     }

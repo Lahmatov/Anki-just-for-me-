@@ -587,14 +587,12 @@ struct OnboardingView: View {
             NotificationService.cancelDailyReminder()
             return
         }
-        let hour = reminderHour
-        let minute = reminderMinute
         Task {
             guard await NotificationService.requestAuthorization() else {
                 reminderEnabled = false
                 return
             }
-            await NotificationService.scheduleDailyReminder(hour: hour, minute: minute)
+            await NotificationService.reschedule(context: context)
         }
     }
 }

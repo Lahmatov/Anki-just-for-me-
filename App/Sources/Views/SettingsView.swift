@@ -26,6 +26,7 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.reminderEnabled) private var reminderEnabled = false
     @AppStorage(SettingsKey.reminderHour) private var reminderHour = 20
     @AppStorage(SettingsKey.reminderMinute) private var reminderMinute = 0
+    @AppStorage(SettingsKey.reminderSmart) private var reminderSmart = true
 
     @Environment(\.modelContext) private var context
     @State private var onboarding: OnboardingPlan?
@@ -434,6 +435,16 @@ struct SettingsView: View {
         Section {
             Toggle(tr("Напоминание", "Lembrete", "Reminder"), isOn: $reminderEnabled)
             if reminderEnabled {
+                Toggle(tr("Когда я обычно занимаюсь", "Quando costumo estudar", "When I usually study"),
+                       isOn: $reminderSmart)
+                    .onChange(of: reminderSmart) { _, _ in
+                        Task { await applyReminder(enabled: reminderEnabled) }
+                    }
+                    .accessibilityIdentifier("settings.reminderSmart")
+                if reminderSmart {
+                    LabeledContent(tr("Напомню в", "Lembro às", "I'll remind at"),
+                                   value: smartReminderText)
+                }
                 DatePicker(
                     tr("Время", "Hora", "Time"),
                     selection: Binding(
@@ -444,9 +455,15 @@ struct SettingsView: View {
         } header: {
             Text(tr("Напоминания", "Lembretes", "Reminders"))
         } footer: {
-            Text(tr("Локальное уведомление — работает без платного аккаунта Apple.",
-                    "Notificação local — funciona sem conta paga da Apple.",
-                    "A local notification — no paid Apple account needed."))
+            Text(tr("Напоминаю только в дни, когда ты ещё не занимался. Умное время — через "
+                        + "четверть часа после твоего обычного начала; пока истории меньше трёх "
+                        + "дней, беру время ниже.",
+                    "Só lembro nos dias em que ainda não estudaste. A hora inteligente é um quarto "
+                        + "de hora depois do teu início habitual; com menos de três dias de "
+                        + "histórico, uso a hora abaixo.",
+                    "I only remind you on days you haven't studied yet. Smart time is a quarter "
+                        + "hour after you usually start; with under three days of history I use "
+                        + "the time below."))
         }
     }
 
@@ -467,6 +484,14 @@ struct SettingsView: View {
         let short = info?["CFBundleShortVersionString"] as? String ?? "?"
         let build = info?["CFBundleVersion"] as? String ?? "?"
         return "Recap \(short) (\(build))"
+    }
+
+    private var smartReminderText: String {
+        let planned = NotificationService.plannedTime(context: context)
+        let date = Calendar.current.date(
+            from: DateComponents(hour: planned.time.hour, minute: planned.time.minute)) ?? Date()
+        let time = date.formatted(date: .omitted, time: .shortened)
+        return planned.learned ? time : time + tr(" (пока по часам)", " (por agora, pela hora)", " (fixed for now)")
     }
 
     private var reminderDate: Date {
@@ -490,7 +515,6 @@ struct SettingsView: View {
             reminderEnabled = false
             return
         }
-        await NotificationService.scheduleDailyReminder(
-            hour: reminderHour, minute: reminderMinute)
+        await NotificationService.reschedule(context: context)
     }
 }

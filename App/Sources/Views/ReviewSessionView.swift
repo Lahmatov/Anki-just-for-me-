@@ -28,6 +28,8 @@ struct ReviewSessionView: View {
                             ProgressService.recordSessionResult(
                                 accurate: model.stats.answered > 0 && model.stats.wrong == 0)
                             onFinish?()
+                            // Сегодня уже занимались — сегодняшнее напоминание не нужно.
+                            Task { await NotificationService.reschedule(context: context) }
                         }
                 } else {
                     sessionBody(model)
