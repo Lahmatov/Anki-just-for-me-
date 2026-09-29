@@ -107,6 +107,23 @@ final class SmokeUITests: XCTestCase {
                       "условия не открылись или не нашлись в сборке")
     }
 
+    /// Тап по аватарке открывает шторку, в которой выбор фото доступен
+    /// сразу. Раньше выбор фото шёл через меню и на телефоне не открывался.
+    func testAvatarSheetOffersPhotoPicker() {
+        let app = launch()
+        app.buttons["tab.settings"].tap()
+        let profile = app.buttons["settings.profile"]
+        XCTAssertTrue(profile.waitForExistence(timeout: 15))
+        profile.tap()
+
+        let avatar = app.buttons["profile.avatar"]
+        XCTAssertTrue(avatar.waitForExistence(timeout: 15), "нет кнопки аватарки")
+        avatar.tap()
+        let photo = app.buttons["avatar.photo"]
+        XCTAssertTrue(photo.waitForExistence(timeout: 10), "шторка без кнопки выбора фото")
+        XCTAssertTrue(photo.isHittable)
+    }
+
     func testPrivacyAndLicensesOpenFromProfile() {
         let app = launch()
         app.buttons["tab.settings"].tap()

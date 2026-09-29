@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import AJFMCore
 
 /// Общие примитивы оформления — игровой стиль обучающих приложений
 /// (Duolingo, Busuu, Speak): светлый фон, белые карточки с серой рамкой
@@ -309,6 +310,55 @@ struct CardLink<Destination: View>: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+}
+
+/// Значок-подсказка: объяснение прячется за «i» и открывается по тапу.
+///
+/// Подписи под каждым разделом превращали экран в инструкцию, которую никто
+/// не читает; кому интересно — нажмёт, остальным экран чище.
+struct HintButton: View {
+    let text: String
+    @State private var shown = false
+
+    var body: some View {
+        Button {
+            Haptics.tap()
+            shown = true
+        } label: {
+            Image(systemName: "info.circle")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(Theme.muted)
+                // Значок мелкий, а попадать по нему пальцем надо уверенно.
+                .frame(width: 32, height: 32)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(tr("Подсказка", "Dica", "Hint"))
+        .popover(isPresented: $shown) {
+            Text(text)
+                .font(.app(.callout))
+                .foregroundStyle(Theme.ink)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(16)
+                .frame(idealWidth: 280, maxWidth: 320, alignment: .leading)
+                .presentationCompactAdaptation(.popover)
+        }
+    }
+}
+
+/// Заголовок раздела списка со значком-подсказкой справа.
+struct HintHeader: View {
+    let title: String
+    let hint: String
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Text(title)
+            Spacer(minLength: 0)
+            HintButton(text: hint)
+                .textCase(nil)
+        }
     }
 }
 

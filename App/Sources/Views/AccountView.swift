@@ -21,8 +21,7 @@ struct AccountView: View {
 
     @State private var nameDraft = ""
     @State private var photoItem: PhotosPickerItem?
-    @State private var showPhotoPicker = false
-    @State private var showMascots = false
+    @State private var showAvatarSheet = false
     @State private var confirmSignOut = false
     @State private var confirmDelete = false
     @State private var showManageSubscription = false
@@ -49,12 +48,12 @@ struct AccountView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { nameDraft = profile.name }
         .task { await account.refresh() }
-        .photosPicker(isPresented: $showPhotoPicker, selection: $photoItem, matching: .images)
         .onChange(of: photoItem) { _, item in
             guard let item else { return }
+            showAvatarSheet = false
             Task { await loadPhoto(item) }
         }
-        .sheet(isPresented: $showMascots) { mascotPicker }
+        .sheet(isPresented: $showAvatarSheet) { avatarSheet }
         .manageSubscriptionsSheet(isPresented: $showManageSubscription)
         .confirmationDialog(tr("Выйти из аккаунта?", "Terminar sessão?", "Sign out?"),
                             isPresented: $confirmSignOut, titleVisibility: .visible) {
@@ -103,18 +102,12 @@ struct AccountView: View {
     private var headerSection: some View {
         Section {
             VStack(spacing: 14) {
-                Menu {
-                    Button(tr("Выбрать фото", "Escolher foto", "Choose a photo"),
-                           systemImage: "photo.on.rectangle") { showPhotoPicker = true }
-                    Button(tr("Выбрать Мончика", "Escolher o Monchik", "Choose Monchik"),
-                           systemImage: "face.smiling") { showMascots = true }
-                    if profile.avatar != .initials {
-                        Button(tr("Удалить аватарку", "Remover avatar", "Remove avatar"),
-                               systemImage: "trash", role: .destructive) {
-                            profile.resetAvatar()
-                            Haptics.tap()
-                        }
-                    }
+                // Кнопка со шторкой, а не меню: выбор фото, открытый из пункта
+                // меню, iOS часто не показывала — меню ещё закрывалось, и
+                // второе окно молча отбрасывалось. Фото не подгружалось.
+                Button {
+                    Haptics.tap()
+                    showAvatarSheet = true
                 } label: {
                     AvatarView(size: 96)
                         .overlay(alignment: .bottomTrailing) {
@@ -126,6 +119,8 @@ struct AccountView: View {
                                 .overlay(Circle().strokeBorder(Theme.surface, lineWidth: 2))
                         }
                 }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("profile.avatar")
                 .accessibilityLabel(tr("Изменить аватарку", "Alterar avatar", "Change avatar"))
 
                 TextField(tr("Как тебя зовут?", "Como te chamas?", "What's your name?"), text: $nameDraft)
@@ -148,16 +143,14 @@ struct AccountView: View {
                                 : tr("Промокод", "Código", "Promo"),
                              symbol: "star.fill", color: Theme.gold)
                     }
+                    HintButton(text: tr("Имя и аватарка хранятся только на этом телефоне.",
+                                        "O nome e o avatar ficam só neste telemóvel.",
+                                        "Your name and avatar are stored on this phone only."))
                 }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .listRowBackground(Color.clear)
-        } footer: {
-            Text(tr("Имя и аватарка хранятся только на этом телефоне.",
-                    "O nome e o avatar ficam só neste telemóvel.",
-                    "Your name and avatar are stored on this phone only."))
-                .frame(maxWidth: .infinity)
         }
     }
 
@@ -170,41 +163,69 @@ struct AccountView: View {
             .background(color.opacity(0.14), in: Capsule())
     }
 
-    private var mascotPicker: some View {
+    /// Всё про аватарку в одной шторке: фото, Мончик, удалить.
+    private var avatarSheet: some View {
         NavigationStack {
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 96), spacing: 16)], spacing: 16) {
-                    ForEach(MascotMood.allCases, id: \.self) { mood in
-                        Button {
-                            profile.setMascot(mood)
-                            Haptics.success()
-                            showMascots = false
-                        } label: {
-                            Image(mood.assetName)
-                                .resizable()
-                                .scaledToFit()
-                                .padding(10)
-                                .frame(width: 96, height: 96)
-                                .background(Theme.tint, in: Circle())
-                                .overlay(Circle().strokeBorder(
-                                    profile.avatar == .mascot(mood) ? Theme.primary : Theme.border,
-                                    lineWidth: 3))
+                VStack(spacing: Design.stackSpacing) {
+                    // PhotosPicker прямо на экране, а не через флаг: так окно
+                    // выбора открывает сама система, и оно не теряется.
+                    PhotosPicker(selection: $photoItem, matching: .images, photoLibrary: .shared()) {
+                        Label(tr("Выбрать фото", "Escolher foto", "Choose a photo"),
+                              systemImage: "photo.on.rectangle")
+                            .font(.app(.headline))
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.chunky)
+                    .accessibilityIdentifier("avatar.photo")
+
+                    CardSectionHeader(title: tr("Или Мончик", "Ou o Monchik", "Or Monchik"))
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 88), spacing: 14)], spacing: 14) {
+                        ForEach(MascotMood.allCases, id: \.self) { mood in
+                            Button {
+                                profile.setMascot(mood)
+                                Haptics.success()
+                                showAvatarSheet = false
+                            } label: {
+                                Image(mood.assetName)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .padding(10)
+                                    .frame(width: 88, height: 88)
+                                    .background(Theme.tint, in: Circle())
+                                    .overlay(Circle().strokeBorder(
+                                        profile.avatar == .mascot(mood) ? Theme.primary : Theme.border,
+                                        lineWidth: 3))
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
+                    }
+
+                    if profile.avatar != .initials {
+                        Button(role: .destructive) {
+                            profile.resetAvatar()
+                            Haptics.tap()
+                            showAvatarSheet = false
+                        } label: {
+                            Label(tr("Удалить аватарку", "Remover avatar", "Remove avatar"),
+                                  systemImage: "trash")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.chunkySecondary)
                     }
                 }
                 .padding()
             }
             .background(Theme.background.ignoresSafeArea())
-            .navigationTitle(Mascot.name)
+            .navigationTitle(tr("Аватарка", "Avatar", "Avatar"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(CommonText.close) { showMascots = false }
+                    Button(CommonText.close) { showAvatarSheet = false }
                 }
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
     }
 
     private func loadPhoto(_ item: PhotosPickerItem) async {
@@ -228,15 +249,8 @@ struct AccountView: View {
         Section {
             if account.signedIn {
                 Label {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(tr("Вход через Apple", "Sessão iniciada com a Apple", "Signed in with Apple"))
-                            .font(.app(.body, weight: .bold))
-                        Text(tr("Доступ работает на всех твоих телефонах",
-                                "O acesso funciona em todos os teus telemóveis",
-                                "Your access works on all your phones"))
-                            .font(.app(.caption))
-                            .foregroundStyle(Theme.muted)
-                    }
+                    Text(tr("Вход через Apple", "Sessão iniciada com a Apple", "Signed in with Apple"))
+                        .font(.app(.body, weight: .bold))
                 } icon: {
                     Image(systemName: "apple.logo").foregroundStyle(Theme.ink)
                 }
@@ -285,19 +299,17 @@ struct AccountView: View {
                     .foregroundStyle(Theme.muted)
             }
         } header: {
-            Text(tr("Аккаунт", "Conta", "Account"))
-        } footer: {
-            if !account.signedIn {
-                Text(tr("Вход не обязателен. Он нужен, чтобы Recap Plus и промокод работали на всех "
+            HintHeader(
+                title: tr("Аккаунт", "Conta", "Account"),
+                hint: tr("Вход не обязателен. Он нужен, чтобы Recap Plus и промокод работали на всех "
                             + "твоих телефонах. Слова и прогресс остаются на телефоне; серверу не "
                             + "передаются ни имя, ни почта.",
-                        "Iniciar sessão é opcional. Serve para o Recap Plus e o código funcionarem em "
+                         "Iniciar sessão é opcional. Serve para o Recap Plus e o código funcionarem em "
                             + "todos os teus telemóveis. As palavras ficam no telemóvel; o servidor não "
                             + "recebe nome nem e-mail.",
-                        "Signing in is optional. It lets Recap Plus and promo codes work on all your "
+                         "Signing in is optional. It lets Recap Plus and promo codes work on all your "
                             + "phones. Words and progress stay on the phone; the server gets neither "
                             + "your name nor your e-mail."))
-            }
         }
     }
 
@@ -325,13 +337,14 @@ struct AccountView: View {
                 }
             }
         } header: {
-            Text(tr("Подписка", "Subscrição", "Subscription"))
-        } footer: {
-            if account.plan?.kind == .subscription {
-                Text(tr("Оплату, отмену и возвраты ведёт Apple.",
-                        "Pagamentos, cancelamentos e reembolsos são geridos pela Apple.",
-                        "Apple handles payment, cancellation and refunds."))
-            }
+            HintHeader(
+                title: tr("Подписка", "Subscrição", "Subscription"),
+                hint: tr("Recap Plus — наборы и разговоры с Мончиком без своего ключа. Оплату, отмену "
+                            + "и возвраты ведёт Apple.",
+                         "Recap Plus — baralhos e conversas com o Monchik sem chave própria. "
+                            + "Pagamentos, cancelamentos e reembolsos são geridos pela Apple.",
+                         "Recap Plus — decks and chats with Monchik without your own key. Apple "
+                            + "handles payment, cancellation and refunds."))
         }
     }
 
@@ -355,21 +368,25 @@ struct AccountView: View {
                     IconBadge(systemName: "key.fill", color: Theme.blue)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(tr("Ключи ИИ", "Chaves de IA", "AI keys")).font(.app(.body, weight: .bold))
-                        Text(AIKeys.hasActiveKey
-                             ? tr("Работает: ", "Em uso: ", "In use: ") + AIKeys.active.shortName
-                             : tr("Claude, Gemini, ChatGPT, Kimi и другие",
-                                  "Claude, Gemini, ChatGPT, Kimi e outros",
-                                  "Claude, Gemini, ChatGPT, Kimi and more"))
-                            .font(.app(.caption))
-                            .foregroundStyle(Theme.muted)
+                        // Подпись — только состояние; что это такое, объясняет подсказка.
+                        if AIKeys.hasActiveKey {
+                            Text(tr("Работает: ", "Em uso: ", "In use: ") + AIKeys.active.shortName)
+                                .font(.app(.caption))
+                                .foregroundStyle(Theme.muted)
+                        }
                     }
                 }
             }
             .accessibilityIdentifier("profile.aikeys")
-        } footer: {
-            Text(tr("Свой ключ — если не хочешь подписку: платишь провайдеру напрямую.",
-                    "Chave própria — se não queres subscrição: pagas diretamente ao fornecedor.",
-                    "Your own key — if you'd rather skip the subscription and pay the provider directly."))
+        } header: {
+            HintHeader(
+                title: tr("Свой ИИ", "IA própria", "Your own AI"),
+                hint: tr("Claude, Gemini, ChatGPT, Kimi и другие. Свой ключ — если не хочешь подписку: "
+                            + "платишь провайдеру напрямую. Ключ хранится в Связке ключей телефона.",
+                         "Claude, Gemini, ChatGPT, Kimi e outros. Chave própria — se não queres "
+                            + "subscrição: pagas diretamente ao fornecedor. A chave fica no Porta-chaves.",
+                         "Claude, Gemini, ChatGPT, Kimi and more. Your own key — if you'd rather skip the "
+                            + "subscription and pay the provider directly. The key lives in the Keychain."))
         }
     }
 
@@ -393,11 +410,11 @@ struct AccountView: View {
                       systemImage: "hand.raised")
             }
         } header: {
-            Text(tr("Мои данные", "Os meus dados", "My data"))
-        } footer: {
-            Text(tr("Копия слов и прогресса — бэкап на вкладке «Наборы».",
-                    "A cópia das palavras e do progresso é o backup no separador «Baralhos».",
-                    "A copy of your words and progress is the backup on the Decks tab."))
+            HintHeader(
+                title: tr("Мои данные", "Os meus dados", "My data"),
+                hint: tr("Копия слов и прогресса — бэкап на вкладке «Наборы».",
+                         "A cópia das palavras e do progresso é o backup no separador «Baralhos».",
+                         "A copy of your words and progress is the backup on the Decks tab."))
         }
     }
 
@@ -455,15 +472,20 @@ struct AccountView: View {
                       systemImage: "star.bubble")
             }
             LabeledContent(tr("Версия", "Versão", "Version"), value: Self.version)
-        } header: {
-            Text(tr("Поддержка", "Suporte", "Support"))
-        } footer: {
             if let code = account.supportCode {
-                Text(tr("Код поддержки: ", "Código de suporte: ", "Support code: ") + code
-                     + tr(" — назови его в письме, по нему находится запись на сервере.",
-                          " — indica-o no e-mail; é assim que se encontra o registo no servidor.",
-                          " — mention it in your e-mail; it's how we find your record on the server."))
+                LabeledContent(tr("Код поддержки", "Código de suporte", "Support code")) {
+                    Text(code).textSelection(.enabled)
+                }
             }
+        } header: {
+            HintHeader(
+                title: tr("Поддержка", "Suporte", "Support"),
+                hint: tr("Monchik Help отвечает сразу. Если пишешь в поддержку — назови код поддержки: "
+                            + "по нему находится твоя запись на сервере.",
+                         "O Monchik Help responde logo. Se escreveres ao suporte, indica o código de "
+                            + "suporte: é assim que se encontra o teu registo no servidor.",
+                         "Monchik Help answers right away. If you e-mail support, mention your support "
+                            + "code: it's how we find your record on the server."))
         }
     }
 
