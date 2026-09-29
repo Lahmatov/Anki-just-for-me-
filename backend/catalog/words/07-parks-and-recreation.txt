@@ -1,0 +1,105 @@
+# show: Parks and Recreation
+# year: 2009
+# accent: US
+
+## 1 · Pilot
+deputy director | /ˈdepjuti dəˈrektər/ | noun | заместитель директора | diretora-adjunta | the second most important person in a department | Leslie is [deputy director] of Parks. | Лесли — замдиректора департамента парков. | A Leslie é diretora-adjunta dos Parques.
+public forum | /ˈpʌblɪk ˈfɔːrəm/ | noun | общественные слушания | assembleia pública | a meeting where citizens give opinions | Leslie hosted a [public forum]. | Лесли провела общественные слушания. | A Leslie organizou uma assembleia pública.
+pit | /pɪt/ | noun | котлован, яма | buraco | a large hole in the ground | There's a huge [pit] behind her house. | За её домом огромный котлован. | Há um buraco enorme atrás da casa dela.
+construction site | /kənˈstrʌkʃn saɪt/ | noun | стройплощадка | obra | a place where something is being built | The pit was an old [construction site]. | Яма осталась от заброшенной стройки. | O buraco era uma obra abandonada.
+turn into | /tɜːrn ˈɪntuː/ | phrasal verb | превратить в | transformar em | to change something into something else | She wants to [turn it into] a park. | Она хочет превратить её в парк. | Ela quer transformá-lo num parque.
+government | /ˈɡʌvərnmənt/ | noun | власть, правительство | governo | the people who run a city or country | Ron hates the [government]. | Рон ненавидит государство. | O Ron odeia o governo.
+bureaucracy | /bjʊˈrɑːkrəsi/ | noun | бюрократия | burocracia | slow official rules and paperwork | Nothing moves fast in a [bureaucracy]. | В бюрократии ничего не делается быстро. | Nada anda depressa numa burocracia.
+citizen | /ˈsɪtɪzn/ | noun | гражданин, житель | cidadão | a person who lives in a town | Angry [citizens] shouted at her. | Разгневанные жители кричали на неё. | Cidadãos zangados gritaram com ela.
+fall into | /fɔːl ˈɪntuː/ | phrasal verb | упасть в | cair em | to drop into something | Andy [fell into] the pit and broke his legs. | Энди упал в котлован и сломал ноги. | O Andy caiu no buraco e partiu as pernas.
+subcommittee | /ˈsʌbkəmɪti/ | noun | подкомитет | subcomissão | a small group inside a larger committee | She formed a [subcommittee]. | Она создала подкомитет. | Ela formou uma subcomissão.
+optimistic | /ˌɑːptɪˈmɪstɪk/ | adjective | оптимистичный | otimista | always expecting good things | Leslie is endlessly [optimistic]. | Лесли бесконечно оптимистична. | A Leslie é infinitamente otimista.
+nurse | /nɜːrs/ | noun | медсестра | enfermeira | a person who cares for sick people | Ann is a [nurse]. | Энн — медсестра. | A Ann é enfermeira.
+intern | /ˈɪntɜːrn/ | noun | стажёр | estagiária | a student working to gain experience | April is a bored [intern]. | Эйприл — скучающая стажёрка. | A April é uma estagiária entediada.
+passionate | /ˈpæʃənət/ | adjective | увлечённый | apaixonado | full of strong enthusiasm | She's [passionate] about parks. | Она обожает парки. | Ela é apaixonada por parques.
+make a difference | /meɪk ə ˈdɪfrəns/ | idiom | изменить что-то к лучшему | fazer a diferença | to have a good effect | She wants to [make a difference]. | Она хочет что-то изменить к лучшему. | Ela quer fazer a diferença.
+
+## 2 · Canvassing
+canvass | /ˈkænvəs/ | verb | обходить дома, агитировать | fazer porta a porta | to go door to door asking people's opinions | They went out to [canvass] the neighborhood. | Они пошли обходить дома в районе. | Foram fazer porta a porta no bairro.
+door to door | /dɔːr tuː dɔːr/ | phrase | от двери к двери | porta a porta | visiting each house one by one | They went [door to door]. | Они ходили от двери к двери. | Andaram porta a porta.
+petition | /pəˈtɪʃn/ | noun | петиция | petição | a document many people sign to ask for change | Please sign the [petition]. | Пожалуйста, подпишите петицию. | Por favor, assine a petição.
+support | /səˈpɔːrt/ | noun | поддержка | apoio | agreement and help | The park has little [support]. | У парка мало сторонников. | O parque tem pouco apoio.
+rude | /ruːd/ | adjective | грубый | mal-educado | not polite | The neighbors were very [rude]. | Соседи были очень грубы. | Os vizinhos foram muito mal-educados.
+community | /kəˈmjuːnəti/ | noun | местное сообщество | comunidade | the people who live in an area | The [community] needs a park. | Району нужен парк. | A comunidade precisa de um parque.
+meeting | /ˈmiːtɪŋ/ | noun | собрание | reunião | people coming together to talk | The town [meeting] went badly. | Городское собрание прошло плохо. | A reunião da vila correu mal.
+hostile | /ˈhɑːstl/ | adjective | враждебный | hostil | unfriendly and angry | The crowd was [hostile]. | Толпа была враждебной. | A multidão era hostil.
+sign up | /saɪn ʌp/ | phrasal verb | записаться | inscrever-se | to put your name on a list | Nobody wanted to [sign up]. | Никто не хотел записываться. | Ninguém se quis inscrever.
+survey | /ˈsɜːrveɪ/ | noun | опрос | inquérito | a list of questions to learn people's opinions | They did a quick [survey]. | Они провели небольшой опрос. | Fizeram um inquérito rápido.
+knock | /nɑːk/ | verb | стучать | bater | to hit a door to be let in | She [knocked] on every door. | Она стучала в каждую дверь. | Bateu a todas as portas.
+enthusiastic | /ɪnˌθuːziˈæstɪk/ | adjective | полный энтузиазма | entusiasta | very excited and interested | Leslie is always [enthusiastic]. | Лесли всегда полна энтузиазма. | A Leslie está sempre entusiasmada.
+backfire | /ˌbækˈfaɪər/ | verb | обернуться против | sair pela culatra | to have the opposite effect | The plan [backfired]. | План обернулся против неё. | O plano saiu pela culatra.
+turnout | /ˈtɜːrnaʊt/ | noun | явка | afluência | the number of people who come to an event | The [turnout] was tiny. | Народу пришло совсем мало. | A afluência foi mínima.
+volunteer | /ˌvɑːlənˈtɪr/ | noun | волонтёр | voluntário | a person who helps for free | They need more [volunteers]. | Им нужно больше волонтёров. | Precisam de mais voluntários.
+
+## 3 · The Reporter
+reporter | /rɪˈpɔːrtər/ | noun | репортёр | jornalista | a person who writes news stories | A [reporter] came to interview Leslie. | К Лесли пришла журналистка брать интервью. | Uma jornalista veio entrevistar a Leslie.
+newspaper | /ˈnuːzpeɪpər/ | noun | газета | jornal | printed daily news | The story is in the local [newspaper]. | Эта история в местной газете. | A história está no jornal local.
+quote | /kwoʊt/ | noun | цитата | citação | words someone said that are repeated | She gave a terrible [quote]. | Она выдала ужасную цитату. | Ela deu uma citação terrível.
+off the record | /ɔːf ðə ˈrekərd/ | idiom | не для печати | em off | not to be published | This is [off the record], okay? | Это не для печати, хорошо? | Isto é em off, está bem?
+misquote | /ˌmɪsˈkwoʊt/ | verb | переврать слова | citar mal | to repeat someone's words wrongly | The paper [misquoted] her. | Газета переврала её слова. | O jornal citou-a mal.
+embarrassing | /ɪmˈbærəsɪŋ/ | adjective | позорный | embaraçoso | making you feel ashamed | The article was [embarrassing]. | Статья вышла позорной. | O artigo foi embaraçoso.
+press | /pres/ | noun | пресса | imprensa | newspapers and journalists | Ron hates the [press]. | Рон ненавидит прессу. | O Ron odeia a imprensa.
+interview | /ˈɪntərvjuː/ | noun | интервью | entrevista | a meeting where someone is asked questions | Leslie prepared for the [interview]. | Лесли готовилась к интервью. | A Leslie preparou-se para a entrevista.
+headline | /ˈhedlaɪn/ | noun | заголовок | título | the title of a news story | The [headline] was a disaster. | Заголовок был катастрофой. | O título foi um desastre.
+spin | /spɪn/ | verb | подать в выгодном свете | dar a volta | to present information to look good | Try to [spin] it positively. | Попробуй подать это в выгодном свете. | Tenta dar-lhe uma volta positiva.
+say too much | /seɪ tuː mʌtʃ/ | phrase | сказать лишнее | falar demais | to share information you shouldn't | Tom always [says too much]. | Том вечно говорит лишнее. | O Tom fala sempre demais.
+publicity | /pʌbˈlɪsəti/ | noun | реклама, огласка | publicidade | attention from the media | Any [publicity] is good publicity. | Любая огласка — хорошая огласка. | Toda a publicidade é boa publicidade.
+statement | /ˈsteɪtmənt/ | noun | заявление | declaração | an official announcement | She released a [statement]. | Она сделала заявление. | Ela emitiu uma declaração.
+careful | /ˈkerfl/ | adjective | осторожный | cuidadoso | avoiding mistakes | Be [careful] what you say. | Осторожнее со словами. | Tem cuidado com o que dizes.
+local | /ˈloʊkl/ | adjective | местный | local | from a small area | She's a [local] celebrity now. | Теперь она местная знаменитость. | Agora é uma celebridade local.
+
+## 4 · Boys' Club
+boys' club | /bɔɪz klʌb/ | noun | мужской клуб | clube dos rapazes | a group of men who exclude women | The office has a [boys' club]. | В офисе есть мужской клуб. | O escritório tem um clube dos rapazes.
+gift basket | /ɡɪft ˈbæskɪt/ | noun | подарочная корзина | cesto de oferta | a basket of presents | Someone sent a [gift basket]. | Кто-то прислал подарочную корзину. | Alguém mandou um cesto de oferta.
+ethics | /ˈeθɪks/ | noun | этика | ética | rules about what is right and wrong | It's against government [ethics]. | Это нарушает этику госслужбы. | Isso é contra a ética do governo.
+accept | /əkˈsept/ | verb | принять | aceitar | to take something offered | Officials can't [accept] gifts. | Чиновники не могут принимать подарки. | Os funcionários não podem aceitar presentes.
+beer | /bɪr/ | noun | пиво | cerveja | an alcoholic drink made from grain | The guys were drinking [beer]. | Парни пили пиво. | Os rapazes estavam a beber cerveja.
+hang out | /hæŋ aʊt/ | phrasal verb | проводить время | conviver | to spend relaxed time together | She wanted to [hang out] with them. | Она хотела проводить время с ними. | Ela queria conviver com eles.
+exclude | /ɪkˈskluːd/ | verb | исключать | excluir | to leave someone out | They [excluded] her from the group. | Её не взяли в компанию. | Excluíram-na do grupo.
+scandal | /ˈskændl/ | noun | скандал | escândalo | an event that shocks people | It became a small [scandal]. | Это превратилось в маленький скандал. | Tornou-se um pequeno escândalo.
+investigation | /ɪnˌvestɪˈɡeɪʃn/ | noun | проверка, расследование | inquérito | an official check of what happened | There'll be an [investigation]. | Будет проверка. | Vai haver um inquérito.
+wine | /waɪn/ | noun | вино | vinho | a drink made from grapes | The basket had a bottle of [wine]. | В корзине была бутылка вина. | O cesto tinha uma garrafa de vinho.
+break the rules | /breɪk ðə ruːlz/ | idiom | нарушать правила | quebrar as regras | to not follow the rules | Leslie never [breaks the rules]. | Лесли никогда не нарушает правила. | A Leslie nunca quebra as regras.
+cool | /kuːl/ | adjective | классный | fixe | admired and fashionable | She wanted to seem [cool]. | Она хотела казаться своей. | Ela queria parecer fixe.
+confess | /kənˈfes/ | verb | признаться | confessar | to admit doing wrong | She [confessed] to her boss. | Она призналась начальнику. | Confessou ao chefe.
+consequences | /ˈkɑːnsəkwensɪz/ | noun | последствия | consequências | results of actions | She accepted the [consequences]. | Она приняла последствия. | Aceitou as consequências.
+hot tub | /ˈhɑːt tʌb/ | noun | джакузи | jacuzzi | a heated bath for several people | They sat in a [hot tub]. | Они сидели в джакузи. | Sentaram-se num jacuzzi.
+
+## 5 · The Banquet
+banquet | /ˈbæŋkwɪt/ | noun | банкет | banquete | a large formal dinner | Leslie's mom is honored at a [banquet]. | Маму Лесли чествуют на банкете. | A mãe da Leslie é homenageada num banquete.
+makeover | /ˈmeɪkoʊvər/ | noun | преображение | mudança de visual | a big change in how someone looks | Leslie got a [makeover]. | Лесли сменила образ. | A Leslie fez uma mudança de visual.
+hairdresser | /ˈherdresər/ | noun | парикмахер | cabeleireiro | a person who cuts and styles hair | Her [hairdresser] went too far. | Её парикмахер перестарался. | O cabeleireiro dela exagerou.
+honor | /ˈɑːnər/ | verb | чествовать | homenagear | to show great respect in public | They [honored] her mother. | Её мать чествовали. | Homenagearam a mãe dela.
+award | /əˈwɔːrd/ | noun | награда | prémio | a prize | Her mom got an [award]. | Её мама получила награду. | A mãe dela recebeu um prémio.
+influential | /ˌɪnfluˈenʃl/ | adjective | влиятельный | influente | having power over others | Her mother is very [influential]. | Её мать очень влиятельна. | A mãe dela é muito influente.
+favor | /ˈfeɪvər/ | noun | одолжение | favor | a kind act to help someone | Leslie asked a [favor]. | Лесли попросила об одолжении. | A Leslie pediu um favor.
+permit | /ˈpɜːrmɪt/ | noun | разрешение | licença | an official document allowing something | She needed a [permit] for the park. | Ей нужно было разрешение на парк. | Ela precisava de uma licença para o parque.
+approval | /əˈpruːvl/ | noun | одобрение | aprovação | official permission or agreement | She wants her mother's [approval]. | Ей нужно одобрение матери. | Ela quer a aprovação da mãe.
+dress up | /dres ʌp/ | phrasal verb | нарядиться | arranjar-se | to wear elegant clothes | Everyone [dressed up] for the banquet. | Все нарядились на банкет. | Todos se arranjaram para o banquete.
+tuxedo | /tʌkˈsiːdoʊ/ | noun | смокинг | smoking | a formal suit | Tom wore a [tuxedo]. | Том надел смокинг. | O Tom usou smoking.
+pressure | /ˈpreʃər/ | noun | давление | pressão | stress from expectations | She felt [pressure] from her mom. | Она чувствовала давление со стороны мамы. | Sentia a pressão da mãe.
+ambitious | /æmˈbɪʃəs/ | adjective | амбициозный | ambicioso | wanting to achieve a lot | Leslie is very [ambitious]. | Лесли очень амбициозна. | A Leslie é muito ambiciosa.
+guest of honor | /ɡest ʌv ˈɑːnər/ | noun | почётный гость | convidado de honra | the most important guest at an event | Her mom was [guest of honor]. | Её мама была почётной гостьей. | A mãe dela era a convidada de honra.
+disaster | /dɪˈzæstər/ | noun | провал | desastre | a total failure | The haircut was a [disaster]. | Стрижка была провалом. | O corte foi um desastre.
+
+## 6 · Rock Show
+rock show | /rɑːk ʃoʊ/ | noun | рок-концерт | concerto de rock | a concert of rock music | Andy's band played a [rock show]. | Группа Энди дала рок-концерт. | A banda do Andy deu um concerto de rock.
+band | /bænd/ | noun | группа | banda | musicians playing together | Andy has a terrible [band]. | У Энди ужасная группа. | O Andy tem uma banda horrível.
+cast | /kæst/ | noun | гипс | gesso | a hard cover for a broken bone | Andy finally got his [cast] off. | Энди наконец сняли гипс. | O Andy finalmente tirou o gesso.
+city planner | /ˈsɪti ˈplænər/ | noun | городской планировщик | urbanista | a person who plans how a city grows | Mark is a [city planner]. | Марк — городской планировщик. | O Mark é urbanista.
+kiss | /kɪs/ | noun | поцелуй | beijo | touching lips to show love | They shared a drunk [kiss]. | Они по-пьяному поцеловались. | Deram um beijo bêbedo.
+gig | /ɡɪɡ/ | noun | выступление | concerto | a live music performance | The [gig] was in a small bar. | Концерт был в маленьком баре. | O concerto foi num bar pequeno.
+break up | /breɪk ʌp/ | phrasal verb | расстаться | acabar | to end a relationship | Ann decided to [break up] with Andy. | Энн решила расстаться с Энди. | A Ann decidiu acabar com o Andy.
+lazy | /ˈleɪzi/ | adjective | ленивый | preguiçoso | not wanting to work | Andy is really [lazy]. | Энди ужасно ленив. | O Andy é muito preguiçoso.
+take advantage | /teɪk ədˈvæntɪdʒ/ | idiom | пользоваться чьей-то добротой | aproveitar-se | to use someone unfairly | He [took advantage] of her kindness. | Он пользовался её добротой. | Aproveitou-se da bondade dela.
+crush | /krʌʃ/ | noun | влюблённость | paixoneta | a romantic feeling for someone | Leslie has a [crush] on Mark. | Лесли влюблена в Марка. | A Leslie tem uma paixoneta pelo Mark.
+lot | /lɑːt/ | noun | участок | terreno | a piece of land | They visited the empty [lot]. | Они съездили на пустой участок. | Visitaram o terreno vazio.
+progress | /ˈprɑːɡres/ | noun | прогресс | progresso | moving forward | The park made real [progress]. | С парком наметился прогресс. | O parque teve progresso real.
+rock star | /ˈrɑːk stɑːr/ | noun | рок-звезда | estrela de rock | a famous rock musician | Andy dreams of being a [rock star]. | Энди мечтает стать рок-звездой. | O Andy sonha ser estrela de rock.
+crowd | /kraʊd/ | noun | толпа | multidão | many people together | The [crowd] was very small. | Публики было совсем мало. | A multidão era muito pequena.
+fresh start | /freʃ stɑːrt/ | noun | новое начало | recomeço | a chance to begin again | Everyone wants a [fresh start]. | Все хотят начать всё заново. | Toda a gente quer um recomeço.
