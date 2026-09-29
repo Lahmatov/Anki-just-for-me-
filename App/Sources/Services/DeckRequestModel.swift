@@ -33,6 +33,8 @@ final class DeckRequestModel {
 
     /// Серия, если набор просят с её экрана: номер уже известен, искать не нужно.
     var episode: EpisodeContext?
+    /// Фильм из поиска по каталогу Apple: набор ляжет в папку «Фильмы».
+    var movie: Movie?
     private let context: ModelContext
     /// Читается один раз: оценка цены пересчитывается на каждую букву в поле,
     /// и ходить за сотнями слов в базу при каждом нажатии незачем.
@@ -61,7 +63,7 @@ final class DeckRequestModel {
     }
 
     var canSubmit: Bool {
-        step != .working && (episode != nil
+        step != .working && (episode != nil || movie != nil
                              || !topic.trimmingCharacters(in: .whitespaces).isEmpty
                              || subtitles != nil)
     }
@@ -102,32 +104,41 @@ final class DeckRequestModel {
 
     // MARK: - Через сервер
 
-    /// Набор через сервер Recap. Сервер принимает только номер серии —
-    /// поэтому свободная тема («слова для собеседования») здесь не пройдёт:
-    /// так подписка тратится только на сериалы.
+    /// Набор через сервер Recap. Сервер принимает только номер серии или
+    /// фильма — поэтому свободная тема («слова для собеседования») здесь не
+    /// пройдёт: так подписка тратится только на сериалы и кино.
     private func generateOnServer() async -> ImportPlan? {
         step = .working
         do {
-            let target: (showID: Int, season: Int, episode: Int, show: String)
-            if let episode {
-                target = (episode.showID, episode.episode.season, episode.episode.number,
-                          episode.showName)
-            } else if let ref = EpisodeRef.parse(topic),
-                      let showID = await TVMazeClient().lookup(ref).showID {
-                target = (showID, ref.season, ref.episode, ref.show)
+            let response: BackendAPI.DeckResponse
+            if let movie {
+                response = try await RecapBackend.shared.movieDeck(BackendAPI.MovieDeckBody(
+                    movieId: movie.id, language: AppSettings.language, level: level,
+                    wordCount: wordCount, knownTerms: knownTerms, subtitles: subtitles,
+                    requestId: requestID))
             } else {
-                step = .failed(tr("С Recap Plus наборы — к сериям. Напиши, например, «Friends 1x03», "
-                                    + "или открой серию во вкладке «Сериалы».",
-                                  "Com o Recap Plus, os baralhos são de episódios. Escreve, por exemplo, "
-                                    + "«Friends 1x03», ou abre o episódio no separador «Séries».",
-                                  "With Recap Plus decks are for episodes. Type e.g. “Friends 1x03”, "
-                                    + "or open the episode on the Shows tab."))
-                return nil
+                let target: (showID: Int, season: Int, episode: Int, show: String)
+                if let episode {
+                    target = (episode.showID, episode.episode.season, episode.episode.number,
+                              episode.showName)
+                } else if let ref = EpisodeRef.parse(topic),
+                          let showID = await TVMazeClient().lookup(ref).showID {
+                    target = (showID, ref.season, ref.episode, ref.show)
+                } else {
+                    step = .failed(tr("С Recap Plus наборы — к сериям и фильмам. Напиши, например, "
+                                        + "«Friends 1x03», или найди серию или фильм во вкладке «Сериалы».",
+                                      "Com o Recap Plus, os baralhos são de episódios e filmes. Escreve, "
+                                        + "por exemplo, «Friends 1x03», ou procura o episódio ou o filme "
+                                        + "no separador «Séries».",
+                                      "With Recap Plus decks are for episodes and movies. Type e.g. "
+                                        + "“Friends 1x03”, or find the episode or movie on the Shows tab."))
+                    return nil
+                }
+                response = try await RecapBackend.shared.deck(BackendAPI.DeckBody(
+                    showId: target.showID, season: target.season, episode: target.episode,
+                    language: AppSettings.language, level: level, wordCount: wordCount,
+                    knownTerms: knownTerms, subtitles: subtitles, requestId: requestID))
             }
-            let response = try await RecapBackend.shared.deck(BackendAPI.DeckBody(
-                showId: target.showID, season: target.season, episode: target.episode,
-                language: AppSettings.language, level: level, wordCount: wordCount,
-                knownTerms: knownTerms, subtitles: subtitles, requestId: requestID))
             RecapAccount.shared.update(response.plan)
             var file = response.deck
             if file.deck.cover == nil, let episode {
@@ -242,7 +253,10 @@ final class DeckRequestModel {
             var file = try request.deckFile(fromResponse: text)
             // Серия — ищем постер и настоящее название серии. Не нашлось —
             // набор всё равно уже разложен по папкам сериала.
-            if let episode = request.episode(fromResponse: text) {
+            if let movie {
+                // Фильм — в «Фильмы», с постером из каталога Apple, как по подписке.
+                file = movie.decorate(file)
+            } else if let episode = request.episode(fromResponse: text) {
                 let info = await TVMazeClient().lookup(episode)
                 file = DeckRequest.decorate(
                     file, episode: episode, title: info.title, poster: info.poster)

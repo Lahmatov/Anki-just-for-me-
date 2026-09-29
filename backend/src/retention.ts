@@ -73,6 +73,8 @@ export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
     db.prepare("DELETE FROM reservations WHERE created_at < ?").bind(now - RESERVATION_TTL),
     db.prepare("DELETE FROM episode_cache WHERE fetched_at < ?")
       .bind(now - RETENTION.episodeCacheDays * DAY),
+    db.prepare("DELETE FROM movie_cache WHERE fetched_at < ?")
+      .bind(now - RETENTION.episodeCacheDays * DAY),
     db.prepare("DELETE FROM deck_requests WHERE created_at < ?")
       .bind(now - RETENTION.deckRequestDays * DAY),
     // Снимки уходят вместе с владельцем: забытым устройством или аккаунтом.
@@ -88,8 +90,8 @@ export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
     entitlements: changes(5),
     rateLimits: changes(6),
     reservations: changes(7),
-    episodeCache: changes(8),
-    deckRequests: changes(9),
-    backups: changes(11),
+    episodeCache: changes(8) + changes(9),
+    deckRequests: changes(10),
+    backups: changes(12),
   };
 }

@@ -34,6 +34,7 @@ it; otherwise Apple's speech service processes the audio under
 | **Recap server** (only with Recap Plus or a promo code) | You ask for words or chat with Monchik about an episode | A random device ID, the show/season/episode number, your language and level, the words you already have, attached subtitles and chat lines. The server forwards the text to Anthropic and does **not** store it. |
 | **Apple** (only if you sign in) | You tap “Sign in with Apple” | Apple confirms who you are to the Recap server. We ask only for your name, and it stays on your phone. We never ask for your e-mail. |
 | **Recap server: cloud backup** (optional) | Once a day, only if you turned on Cloud backup | A compressed copy of your learning database: decks, words, progress. Encrypted on the server. |
+| **Apple (iTunes movie catalog)** | You search for a movie or make a deck for it | The movie title you search for; the Recap server asks Apple for the chosen movie's details by its number. |
 | **TVmaze** | You look up a show or make a deck for it | The show name, season and episode number — to find the poster and episode title. |
 
 Nothing is sold or shared for advertising.

@@ -100,6 +100,33 @@ public enum BackendAPI {
         }
     }
 
+    /// Набор к фильму: вместо номера серии TVMaze — номер фильма в каталоге
+    /// Apple. Название и описание сервер берёт сам — как и у серий.
+    public struct MovieDeckBody: Encodable, Equatable, Sendable {
+        public var movieId: Int
+        public var language: String
+        public var level: String?
+        public var wordCount: Int
+        public var knownTerms: [String]
+        public var subtitles: String?
+        public var requestId: String?
+
+        public init(movieId: Int, language: AppLanguage, level: CEFRLevel?, wordCount: Int,
+                    knownTerms: [String], subtitles: String?, requestId: String? = nil) {
+            // Поля те же, что у серии, и обрезаются по тем же правилам.
+            let common = DeckBody(showId: 0, season: 0, episode: 0, language: language, level: level,
+                                  wordCount: wordCount, knownTerms: knownTerms, subtitles: subtitles,
+                                  requestId: requestId)
+            self.movieId = movieId
+            self.language = common.language
+            self.level = common.level
+            self.wordCount = common.wordCount
+            self.knownTerms = common.knownTerms
+            self.subtitles = common.subtitles
+            self.requestId = common.requestId
+        }
+    }
+
     public struct DeckResponse: Decodable, Sendable {
         public var deck: DeckFile
         /// «catalog» — готовый набор без расхода, «model» — собран моделью.
@@ -329,6 +356,14 @@ public enum BackendAPI {
                 return tr("Такой серии нет в TVMaze. Проверь сезон и номер.",
                           "Este episódio não existe no TVMaze. Verifica a temporada e o número.",
                           "This episode isn't on TVMaze. Check the season and number.")
+            case "movie_not_found":
+                return tr("Такого фильма нет в каталоге Apple. Найди его заново.",
+                          "Este filme não está no catálogo da Apple. Procura-o de novo.",
+                          "That movie isn't in Apple's catalog. Search for it again.")
+            case "movies_unavailable":
+                return tr("Каталог фильмов Apple не отвечает. Попробуй через минуту.",
+                          "O catálogo de filmes da Apple não responde. Tenta daqui a um minuto.",
+                          "Apple's movie catalog isn't responding. Try again in a minute.")
             case "backup_not_found":
                 return tr("Этого снимка на сервере уже нет — обнови список.",
                           "Esta cópia já não está no servidor — atualiza a lista.",

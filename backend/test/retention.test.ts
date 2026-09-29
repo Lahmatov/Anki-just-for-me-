@@ -131,9 +131,15 @@ describe("ночная чистка", () => {
       `INSERT INTO episode_cache (show_id, season, episode, show_name, name, summary, fetched_at)
        VALUES (1, 1, 1, 's', 'n', 'x', ?)`,
     ).run(world.now());
-    await purge(world.db, world.now() + (RETENTION.episodeCacheDays + 1) * DAY);
+    world.db.raw.prepare(
+      `INSERT INTO movie_cache (movie_id, title, year, summary, artwork, fetched_at)
+       VALUES (1, 't', 2000, 'x', NULL, ?)`,
+    ).run(world.now());
+    const report = await purge(world.db, world.now() + (RETENTION.episodeCacheDays + 1) * DAY);
     expect(count(world, "reservations")).toBe(0);
     expect(count(world, "episode_cache")).toBe(0);
+    expect(count(world, "movie_cache")).toBe(0);
+    expect(report.episodeCache).toBe(2);
   });
 
   it("на пустой базе ничего не ломает", async () => {

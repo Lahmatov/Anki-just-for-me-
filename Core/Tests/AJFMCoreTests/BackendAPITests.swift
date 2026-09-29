@@ -41,6 +41,35 @@ final class BackendAPITests: XCTestCase {
         XCTAssertFalse(body.knownTerms.contains(long))
     }
 
+    func testMovieDeckBodySendsTheMovieNumberInsteadOfAnEpisode() throws {
+        let body = try json(BackendAPI.MovieDeckBody(
+            movieId: 400763833, language: .english, level: .b2, wordCount: 15,
+            knownTerms: ["hello"], subtitles: nil, requestId: "req-12345678"))
+        XCTAssertEqual(body["movieId"] as? Int, 400763833)
+        XCTAssertNil(body["showId"], "иначе сервер принял бы фильм за серию")
+        XCTAssertNil(body["season"])
+        XCTAssertEqual(body["language"] as? String, "en")
+        XCTAssertEqual(body["level"] as? String, "B2")
+        XCTAssertEqual(body["requestId"] as? String, "req-12345678")
+    }
+
+    func testMovieDeckBodyRespectsTheSameLimits() {
+        let many = (0..<500).map { "w\($0)" }
+        let body = BackendAPI.MovieDeckBody(
+            movieId: 1, language: .russian, level: nil, wordCount: 1,
+            knownTerms: many, subtitles: "   ")
+        XCTAssertEqual(body.wordCount, DeckRequest.wordCountRange.lowerBound)
+        XCTAssertEqual(body.knownTerms.count, DeckRequest.knownTermsLimit)
+        XCTAssertNil(body.subtitles)
+    }
+
+    func testMovieErrorsHaveReadableMessages() {
+        for code in ["movie_not_found", "movies_unavailable"] {
+            let message = BackendAPI.Failure.server(code: code, status: 404).localizedDescription
+            XCTAssertFalse(message.contains(code), code)
+        }
+    }
+
     func testDiscussBodyTrimsAndLimitsTurns() throws {
         let body = BackendAPI.DiscussBody(
             showId: 1, season: 1, episode: 2, language: .english, level: .c1,

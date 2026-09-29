@@ -37,7 +37,7 @@ iPhone ──HTTPS──► Worker (backend/src) ──► Anthropic API   (кл
 | `POST /v1/promo/redeem` | погасить промокод | нет |
 | `POST /v1/subscription/verify` | проверить покупку у Apple | нет |
 | `GET /v1/catalog`, `/v1/catalog/{id}` | каталог сериалов | нет |
-| `POST /v1/deck` | слова к серии: из каталога — бесплатно, иначе модель | для модели |
+| `POST /v1/deck` | слова к серии: из каталога — бесплатно, иначе модель; с `movieId` вместо `showId` — к фильму из каталога Apple | для модели |
 | `POST /v1/discuss` | реплика Мончика о серии | да |
 | `GET /v1/backups` | список облачных снимков владельца | нет |
 | `POST /v1/backups?device=…&notes=…&mature=…` | снимок телом `application/octet-stream`, до 8 МБ | нет |

@@ -12,6 +12,8 @@ struct DeckRequestView: View {
     var initialTopic: String = ""
     /// Серия с экрана «Сериалы»: сервер получит её номер напрямую.
     var episode: EpisodeContext?
+    /// Фильм из поиска: вместо поля запроса — его карточка.
+    var movie: Movie?
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -52,9 +54,14 @@ struct DeckRequestView: View {
                 let created = DeckRequestModel(context: context)
                 if !initialTopic.isEmpty { created.topic = initialTopic }
                 created.episode = episode
+                if let movie {
+                    created.movie = movie
+                    created.topic = movie.deckTopic
+                }
                 model = created
             }
-            topicFocused = true
+            // У фильма поля запроса нет — и клавиатура выскакивать не должна.
+            topicFocused = movie == nil
         }
         .interactiveDismissDisabled(model?.step == .working || model?.step == .interrupted)
         // Вернулись в приложение — продолжаем оборванный запрос с тем же номером.
@@ -85,23 +92,51 @@ struct DeckRequestView: View {
     private func form(_ model: DeckRequestModel) -> some View {
         @Bindable var model = model
         Form {
-            Section {
-                TextField(
-                    tr("Friends 1x03, слова для собеседования…",
-                       "Friends 1x03, palavras para uma entrevista…",
-                       "Friends 1x03, words for a job interview…"),
-                    text: $model.topic, axis: .vertical)
-                    .lineLimit(2...5)
-                    .focused($topicFocused)
-            } header: {
-                Text(tr("Что нужно", "O que precisas", "What you need"))
-            } footer: {
-                Text(tr("Коротко, как в чате. Название серии, тема или ситуация — "
-                            + "модель сама решит, какие слова взять.",
-                        "Curto, como num chat. Nome do episódio, tema ou situação — "
-                            + "o modelo decide que palavras escolher.",
-                        "Short, like in a chat. An episode, a topic or a situation — "
-                            + "the model decides which words to pick."))
+            if let movie = model.movie {
+                Section {
+                    HStack(spacing: 14) {
+                        if let url = movie.posterURL.flatMap({ URL(string: $0) }) {
+                            CoverImage(url: url, width: 54)
+                        } else {
+                            IconBadge(systemName: "film", color: Theme.purple, size: 54)
+                        }
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(movie.title)
+                                .font(.app(.headline, weight: .heavy))
+                                .foregroundStyle(Theme.ink)
+                            if let year = movie.year {
+                                Text(String(year))
+                                    .font(.app(.subheadline))
+                                    .foregroundStyle(Theme.muted)
+                            }
+                        }
+                    }
+                    .padding(.vertical, 4)
+                } header: {
+                    Text(tr("Фильм", "Filme", "Movie"))
+                } footer: {
+                    Text(tr("Набор ляжет в папку «Фильмы».", "O baralho vai para a pasta «Filmes».",
+                            "The deck goes into the Movies folder."))
+                }
+            } else {
+                Section {
+                    TextField(
+                        tr("Friends 1x03, слова для собеседования…",
+                           "Friends 1x03, palavras para uma entrevista…",
+                           "Friends 1x03, words for a job interview…"),
+                        text: $model.topic, axis: .vertical)
+                        .lineLimit(2...5)
+                        .focused($topicFocused)
+                } header: {
+                    Text(tr("Что нужно", "O que precisas", "What you need"))
+                } footer: {
+                    Text(tr("Коротко, как в чате. Название серии, тема или ситуация — "
+                                + "модель сама решит, какие слова взять.",
+                            "Curto, como num chat. Nome do episódio, tema ou situação — "
+                                + "o modelo decide que palavras escolher.",
+                            "Short, like in a chat. An episode, a topic or a situation — "
+                                + "the model decides which words to pick."))
+                }
             }
 
             Section {

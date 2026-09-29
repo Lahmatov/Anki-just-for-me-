@@ -10,6 +10,7 @@ struct ShowsView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \TrackedShow.addedAt, order: .reverse) private var shows: [TrackedShow]
     @State private var showSearch = false
+    @State private var showMovieSearch = false
 
     var body: some View {
         NavigationStack {
@@ -21,13 +22,18 @@ struct ShowsView: View {
                             mood: .hello,
                             title: tr("Что смотришь?", "O que estás a ver?", "What are you watching?"),
                             message: tr("Добавь сериал — буду подсказывать следующую серию, "
-                                            + "подбирать к ней слова и обсуждать её с тобой.",
+                                            + "подбирать к ней слова и обсуждать её с тобой. "
+                                            + "Или возьми слова к фильму.",
                                         "Junta uma série — vou sugerir o próximo episódio, escolher "
-                                            + "palavras para ele e conversar contigo sobre ele.",
+                                            + "palavras para ele e conversar contigo sobre ele. "
+                                            + "Ou tira palavras de um filme.",
                                         "Add a show — I'll suggest the next episode, pick words for "
-                                            + "it and chat with you about it.")
+                                            + "it and chat with you about it. Or grab words from a movie.")
                         ) {
-                            addButton
+                            VStack(spacing: 10) {
+                                addButton
+                                movieButton
+                            }
                         }
                         .cardSurface()
                     } else {
@@ -35,6 +41,7 @@ struct ShowsView: View {
                             ShowCard(show: show)
                         }
                         addButton
+                        movieButton
                     }
 
                     CatalogStrip()
@@ -66,7 +73,26 @@ struct ShowsView: View {
             .sheet(isPresented: $showSearch) {
                 ShowSearchView()
             }
+            .sheet(isPresented: $showMovieSearch) {
+                MovieSearchView()
+            }
         }
+    }
+
+    /// Фильм — рядом с сериалом, но вторичной кнопкой: сериалы — главное,
+    /// с ними есть серии, пересказ и разговор с Мончиком.
+    private var movieButton: some View {
+        Button {
+            Haptics.tap()
+            showMovieSearch = true
+        } label: {
+            Label(tr("Слова к фильму", "Palavras de um filme", "Words from a movie"),
+                  systemImage: "film")
+                .font(.app(.headline))
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.chunkySecondary)
+        .accessibilityIdentifier("shows.movie")
     }
 
     private var addButton: some View {

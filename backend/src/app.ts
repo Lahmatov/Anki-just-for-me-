@@ -9,12 +9,13 @@ import {
 } from "./quota";
 import { redeem } from "./promo";
 import { verifySubscription } from "./appstore";
-import { episodeFacts } from "./tvmaze";
+import { episodeFacts, type EpisodeFacts } from "./tvmaze";
+import { movieFacts, type MovieFacts } from "./movies";
 import { catalogNotes, listShows, localizeNotes, showDecks } from "./catalog";
 import {
   DECK_MAX_TOKENS, DECK_SCHEMA, DISCUSSION_MAX_TOKENS, DISCUSSION_SCHEMA, HELP_MAX_TOKENS,
   HELP_QUESTION_LIMIT, HELP_SCHEMA, KNOWN_TERMS_LIMIT, helpSystem, helpUserMessage, parseHelpReply,
-  LANGUAGES, LEVELS, MAX_LEARNER_TURNS, deckFile, deckSystem, deckUserMessage,
+  LANGUAGES, LEVELS, MAX_LEARNER_TURNS, deckFile, deckSystem, deckUserMessage, movieDeckFile,
   discussionMessages, discussionSystem, estimateTokens, parseDeckNotes, parseDiscussionReply,
   type Turn,
 } from "./prompts";
@@ -365,9 +366,12 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
   const { device, entitlement } = await context(request, env, deps);
   const now = deps.now();
   const body = await readJson(request, BODY_LIMIT);
-  const showId = int(body, "showId", 1, 99_999_999);
-  const season = int(body, "season", 1, 99);
-  const episode = int(body, "episode", 1, 999);
+  // Фильм — номером из каталога Apple вместо номера серии TVMaze.
+  const movie = body.movieId !== undefined;
+  const showId = movie ? 0 : int(body, "showId", 1, 99_999_999);
+  const season = movie ? 0 : int(body, "season", 1, 99);
+  const episode = movie ? 0 : int(body, "episode", 1, 999);
+  const movieId = movie ? int(body, "movieId", 1, 99_999_999_999) : 0;
   const language = oneOf(body, "language", LANGUAGES)!;
   const level = oneOf(body, "level", LEVELS, true);
   const wordCount = int(body, "wordCount", 5, 40);
@@ -377,16 +381,19 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
   // Каталог открыт и без подписки — но каждый запрос ходит в TVMaze,
   // поэтому и бесплатные запросы ограничены.
   await hit(env.DB, "deck:" + device.id, 30, 60, now);
-  const facts = await episodeFacts(env.DB, deps, showId, season, episode);
+  const facts: EpisodeFacts | MovieFacts = movie
+    ? await movieFacts(env.DB, deps, movieId)
+    : await episodeFacts(env.DB, deps, showId, season, episode);
 
   // Готовый набор из каталога — бесплатно и без подписки: модель уже
-  // отработала один раз за всех, а сервер только читает базу.
-  if (!subtitles) {
+  // отработала один раз за всех, а сервер только читает базу. Фильмов
+  // в каталоге нет.
+  if (!subtitles && !movie) {
     const catalog = await catalogNotes(env.DB, showId, season, episode);
     if (catalog) {
       await rememberEpisode(env, deps, device, showId, season, episode);
       const notes = localizeNotes(catalog, language, knownTerms).slice(0, wordCount);
-      return json({ deck: deckFile(facts, language, notes), source: "catalog",
+      return json({ deck: deckFile(facts as EpisodeFacts, language, notes), source: "catalog",
                     plan: status(entitlement, now) });
     }
   }
@@ -412,8 +419,12 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
     });
     const notes = parseDeckNotes(result.text, wordCount);
     if (notes.length === 0) throw new ApiError(502, "model_error");
-    await rememberEpisode(env, deps, device, showId, season, episode);
-    return { deck: deckFile(facts, language, notes), source: "model",
+    // Разговор с Мончиком — только о сериях: у фильма его нет, и помнить нечего.
+    if (!movie) await rememberEpisode(env, deps, device, showId, season, episode);
+    const file = movie
+      ? movieDeckFile(facts as MovieFacts, language, notes)
+      : deckFile(facts as EpisodeFacts, language, notes);
+    return { deck: file, source: "model",
              plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) };
   })();
   if (!requestId) return json(await work);

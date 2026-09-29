@@ -47,6 +47,11 @@ final class RecapBackend {
         try await send("POST", "/v1/deck", body: encode(body), timeout: 90)
     }
 
+    /// Набор к фильму — тот же маршрут, что у серии, но с номером фильма.
+    func movieDeck(_ body: BackendAPI.MovieDeckBody) async throws -> BackendAPI.DeckResponse {
+        try await send("POST", "/v1/deck", body: encode(body), timeout: 90)
+    }
+
     func discuss(_ body: BackendAPI.DiscussBody) async throws -> BackendAPI.DiscussResponse {
         try await send("POST", "/v1/discuss", body: encode(body), timeout: 60)
     }
