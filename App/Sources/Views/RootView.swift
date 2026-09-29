@@ -29,6 +29,9 @@ struct RootView: View {
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
     /// Пустая строка — язык не выбран явно, действует системный.
     @AppStorage(SettingsKey.appLanguage) private var language = ""
+    @AppStorage(SettingsKey.appearance) private var appearanceRaw = AppAppearance.system.rawValue
+
+    private var appearance: AppAppearance { AppAppearance(rawValue: appearanceRaw) ?? .system }
 
     var body: some View {
         // Свои вкладки вместо системного TabView — стекло то же, что в iOS 26,
@@ -36,26 +39,29 @@ struct RootView: View {
         // сохранение в базе перерисовывало и скрытые — с полными выборками
         // карточек и повторов, — и телефон грелся. Цена — при переключении
         // вкладка открывается с начала.
-        Group {
-            switch tab {
-            case .today: TodayView()
-            case .decks: decksTab
-            case .rewards: RewardsView()
-            case .shows: ShowsView()
-            case .settings: SettingsView()
+        // Панель — под содержимым, а не поверх него. Поверх (overlay или
+        // safeAreaInset снаружи NavigationStack) экраны не всегда получали
+        // нижний отступ, и последние кнопки уезжали под панель.
+        VStack(spacing: 0) {
+            Group {
+                switch tab {
+                case .today: TodayView()
+                case .decks: decksTab
+                case .rewards: RewardsView()
+                case .shows: ShowsView()
+                case .settings: SettingsView()
+                }
             }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        // Стеклянная панель плавает над содержимым: списки прокручиваются
-        // под ней и просвечивают, а отступ снизу у экранов выставляется
-        // сам — нижние кнопки под панель не уезжают.
-        .safeAreaInset(edge: .bottom, spacing: 0) {
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
             // Пока открыта клавиатура, панель прячется: иначе она висела бы
             // над клавиатурой и отъедала место у поля ввода.
             if !keyboard.isVisible {
                 AppTabBar(selection: $tab)
+                    .background(Theme.background.ignoresSafeArea(edges: .bottom))
             }
         }
+        .preferredColorScheme(appearance.colorScheme)
         // Смена шрифта или языка перестраивает экраны целиком: тексты берут
         // и то и другое в момент отрисовки.
         .id(fontStyle + language)

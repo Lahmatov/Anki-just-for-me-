@@ -59,6 +59,12 @@ public enum Counted {
                 pt: ("palavra", "palavras"), en: ("word", "words"))
     }
 
+    /// Шаги по карте путешествия (очки пути).
+    public static func steps(_ count: Int) -> String {
+        trCount(count, ru: ("шаг", "шага", "шагов"),
+                pt: ("passo", "passos"), en: ("step", "steps"))
+    }
+
     public static func days(_ count: Int) -> String {
         trCount(count, ru: ("день", "дня", "дней"),
                 pt: ("dia", "dias"), en: ("day", "days"))

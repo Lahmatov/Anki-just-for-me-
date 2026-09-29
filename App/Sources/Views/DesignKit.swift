@@ -162,6 +162,9 @@ struct ChunkyButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         let pressed = configuration.isPressed
         let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
+        // Губа на месте всегда, при нажатии на неё опускается только лицо
+        // кнопки. Раньше губа на время нажатия убиралась, и с анимацией это
+        // читалось как мигание кнопки.
         return configuration.label
             .fontWeight(.bold)
             .foregroundStyle(isEnabled ? foreground : Theme.muted)
@@ -170,9 +173,6 @@ struct ChunkyButtonStyle: ButtonStyle {
             .frame(minHeight: 46)
             .background {
                 ZStack {
-                    if !pressed {
-                        shape.fill(isEnabled ? lip : Theme.border).offset(y: Theme.lip)
-                    }
                     shape.fill(isEnabled ? fill : Theme.border.opacity(0.6))
                     if kind == .secondary {
                         shape.strokeBorder(Theme.border, lineWidth: Theme.stroke)
@@ -180,6 +180,9 @@ struct ChunkyButtonStyle: ButtonStyle {
                 }
             }
             .offset(y: pressed ? Theme.lip : 0)
+            .background {
+                shape.fill(isEnabled ? lip : Theme.border).offset(y: Theme.lip)
+            }
             .padding(.bottom, Theme.lip)
             .contentShape(Rectangle())
             .animation(.snappy(duration: 0.08), value: pressed)

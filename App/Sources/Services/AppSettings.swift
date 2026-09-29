@@ -36,6 +36,8 @@ enum SettingsKey {
     static let appLanguage = "appLanguage"
     static let englishLevel = "englishLevel"
     static let fontStyle = "fontStyle"
+    /// Тема: как в системе, светлая или тёмная (`AppAppearance`).
+    static let appearance = "appearance"
     /// Имя и выбор аватарки в профиле (`ProfileStore`). Только на телефоне.
     static let profileName = "profileName"
     static let profileAvatar = "profileAvatar"
@@ -43,6 +45,12 @@ enum SettingsKey {
     /// отметки (`Celebration`): праздник — один раз, а не на каждом открытии.
     static let goalCelebratedDay = "goalCelebratedDay"
     static let celebratedStreak = "celebratedStreak"
+    /// Сквозной номер последней отпразднованной остановки на карте; -1 — ещё не начинали.
+    static let journeyCelebratedStop = "journeyCelebratedStop"
+    /// Где фишку видели на карте в прошлый раз: остановка и сквозной номер
+    /// старта её круга. Отсюда фишка шагает при следующем открытии.
+    static let journeyLastSeenStop = "journeyLastSeenStop"
+    static let journeyLastSeenLap = "journeyLastSeenLap"
     /// Выбранный провайдер ИИ и модель у каждого (`AIKeys`).
     static let aiProvider = "aiProvider"
     static let aiModelPrefix = "aiModel."

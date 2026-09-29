@@ -12,6 +12,9 @@ struct RewardsView: View {
 
     @AppStorage(SettingsKey.weeklyTarget) private var weeklyTarget = 5
 
+    /// Первая загрузка — без анимации. Экран вкладки создаётся заново при
+    /// каждом переходе, и анимированное «пусто → данные» мигало карточками.
+    @State private var loaded = false
     @State private var showNewContract = false
     @State private var celebrating: RewardContract?
     @State private var confirmCancel = false
@@ -19,6 +22,7 @@ struct RewardsView: View {
     @State private var week: WeekProgress?
     @State private var stats: LearningStats?
     @State private var matureWords = 0
+    @State private var journey: JourneyPosition?
     @State private var contracts: [RewardContract] = []
 
     private var service: ProgressService { ProgressService(context: context) }
@@ -28,6 +32,7 @@ struct RewardsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
+                    if let journey { JourneyCard(position: journey) }
                     contractCard
                     if let week { weekCard(week) }
                     if let stats { achievementsCard(stats) }
@@ -74,12 +79,14 @@ struct RewardsView: View {
 
     private func refresh() {
         let service = self.service
-        withAnimation(.snappy) {
+        withAnimation(loaded ? .snappy : nil) {
             matureWords = service.matureWordCount()
             stats = service.stats()
             week = service.weekProgress(target: weeklyTarget)
             contracts = service.contracts()
+            journey = service.journeyPosition()
         }
+        loaded = true
         checkCompletion()
     }
 

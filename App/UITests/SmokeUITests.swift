@@ -45,6 +45,31 @@ final class SmokeUITests: XCTestCase {
         }
     }
 
+    /// Долистанный до конца экран не прячет последние строки под панелью
+    /// вкладок. Жалоба «низ прибит» возвращалась дважды — теперь её ловит тест.
+    func testBottomOfEveryTabStaysAboveTabBar() {
+        let app = XCUIApplication()
+        // С демо-набором экраны длинные, и их есть куда долистывать.
+        app.launchArguments = ["-ui-testing", "-ui-demo", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+        for tab in ["today", "decks", "shows", "rewards", "settings"] {
+            let button = app.buttons["tab.\(tab)"]
+            XCTAssertTrue(button.waitForExistence(timeout: 15), "нет вкладки \(tab)")
+            button.tap()
+            for _ in 0..<6 { app.swipeUp(velocity: .fast) }
+            // Прокрутка должна успеть остановиться.
+            Thread.sleep(forTimeInterval: 1)
+            // Верх стеклянной капсулы: кнопка вкладки внутри неё с полями 5 pt.
+            let barTop = button.frame.minY - 5
+            for text in app.staticTexts.allElementsBoundByIndex where text.exists {
+                let frame = text.frame
+                guard frame.height > 0, frame.minY < barTop, !button.frame.intersects(frame) else { continue }
+                XCTAssertLessThanOrEqual(frame.maxY, barTop + 1,
+                                         "\(tab): «\(text.label)» уходит под панель вкладок")
+            }
+        }
+    }
+
     func testStarterDeckLeadsToAStudySession() {
         let app = launch()
         let starter = app.buttons["today.starter"]

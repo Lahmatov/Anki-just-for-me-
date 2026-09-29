@@ -14,15 +14,20 @@ final class ScreenshotUITests: XCTestCase {
     func testRussianScreens() { walkThrough(language: "ru") }
     func testPortugueseScreens() { walkThrough(language: "pt-PT") }
     func testEnglishScreens() { walkThrough(language: "en") }
+    /// Тёмная тема — на одном языке: переносы от темы не зависят, а цвета
+    /// и контраст видны на любом.
+    func testRussianScreensDark() { walkThrough(language: "ru", dark: true) }
 
     // MARK: - Проход
 
-    private func walkThrough(language: String) {
+    private func walkThrough(language: String, dark: Bool = false) {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-ui-demo", "-AppleLanguages", "(\(language))",
                                "-AppleLocale", language == "en" ? "en_US" : language.replacingOccurrences(of: "-", with: "_")]
+        // Аргумент попадает в UserDefaults и читается как выбранная тема.
+        if dark { app.launchArguments += ["-appearance", "dark"] }
         app.launch()
-        let prefix = language.prefix(2)
+        let prefix = language.prefix(2) + (dark ? "-dark" : "")
 
         XCTAssertTrue(app.buttons["tab.today"].waitForExistence(timeout: 20))
         snap(app, "\(prefix)-1-today")
@@ -59,6 +64,13 @@ final class ScreenshotUITests: XCTestCase {
                 help.tap()
                 snap(app, "\(prefix)-9-help")
             }
+        }
+
+        app.buttons["tab.rewards"].tap()
+        let journey = app.buttons["journey.card"]
+        if journey.waitForExistence(timeout: 10) {
+            journey.tap()
+            snap(app, "\(prefix)-10-map")
         }
     }
 

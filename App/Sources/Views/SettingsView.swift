@@ -16,6 +16,7 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.autoSpeak) private var autoSpeak = true
     @AppStorage(SettingsKey.dailyMinutesGoal) private var goalMinutes = DailyGoal.defaultMinutes
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
+    @AppStorage(SettingsKey.appearance) private var appearance = AppAppearance.system.rawValue
     @AppStorage(SettingsKey.englishLevel) private var storedLevel: String?
     @State private var showPlacementTest = false
     @AppStorage(SettingsKey.claudeModel) private var claudeModel = ClaudeModel.opus5.id
@@ -150,8 +151,19 @@ struct SettingsView: View {
 
     private var appearanceSection: some View {
         Section {
+            Picker(tr("Тема", "Tema", "Theme"), selection: Binding(
+                get: { AppAppearance(rawValue: appearance) ?? .system },
+                set: { appearance = $0.rawValue })
+            ) {
+                ForEach(AppAppearance.allCases) { option in
+                    Text(option.title).tag(option)
+                }
+            }
+            .pickerStyle(.segmented)
+            .accessibilityIdentifier("settings.theme")
+
             Picker(tr("Шрифт", "Tipo de letra", "Font"), selection: Binding(
-                get: { AppFont(rawValue: fontStyle) ?? .rubik },
+                get: { AppFont(rawValue: fontStyle) ?? .nunito },
                 set: { choice in
                     // Заголовки навигации — UIKit: им шрифт нужно отдать до того,
                     // как экраны перестроятся с новым выбором.

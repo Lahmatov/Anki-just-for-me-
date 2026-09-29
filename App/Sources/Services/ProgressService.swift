@@ -20,6 +20,22 @@ struct ProgressService {
         return Set(matureNotes).count
     }
 
+    /// Число начатых слов: хотя бы одна карточка слова вышла из «новых».
+    /// Как и выученные — по словам, а не по карточкам.
+    func startedWordCount() -> Int {
+        let cards = (try? context.fetch(FetchDescriptor<Card>())) ?? []
+        let started = cards
+            .filter { $0.state != .new }
+            .compactMap { $0.note?.persistentModelID }
+        return Set(started).count
+    }
+
+    /// Где фишка на карте путешествия.
+    func journeyPosition() -> JourneyPosition {
+        Journey.position(points: Journey.points(
+            startedWords: startedWordCount(), matureWords: matureWordCount()))
+    }
+
     func stats() -> LearningStats {
         let honest = honestReviews()
         let retells = (try? context.fetch(FetchDescriptor<RetellSession>())) ?? []

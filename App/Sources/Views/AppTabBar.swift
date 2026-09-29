@@ -1,9 +1,11 @@
 import SwiftUI
 import AJFMCore
 
-/// Панель вкладок в стиле iOS 26: плавающая капсула из «жидкого стекла»
-/// над содержимым, выбранная вкладка — цветная подложка, которая
-/// перетекает к новой вкладке, а не появляется в ней заново.
+/// Панель вкладок в стиле iOS 26: капсула из «жидкого стекла», выбранная
+/// вкладка — цветная подложка, которая перетекает к новой вкладке.
+///
+/// Панель стоит под содержимым, а не поверх него: когда она плавала над
+/// экраном, нижние кнопки на части экранов уезжали под неё.
 ///
 /// Своя панель, а не системный TabView: системный держит живыми все пять
 /// вкладок, и каждое сохранение в базе перерисовывало скрытые экраны —
@@ -14,8 +16,7 @@ struct AppTabBar: View {
     @Namespace private var selectionSpace
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     /// Счётчик нажатий по вкладкам: значок подпрыгивает только у той,
-    /// на которую перешли. Раньше эффект был привязан к «выбрана ли» и
-    /// срабатывал у обеих — и у новой, и у покинутой.
+    /// на которую перешли, а не у обеих.
     @State private var bounces: [AppTab: Int] = [:]
 
     var body: some View {
@@ -25,8 +26,15 @@ struct AppTabBar: View {
             }
         }
         .padding(5)
-        .glassEffect(.regular.interactive(), in: .capsule)
+        // Не `.interactive()`: интерактивное стекло вспыхивает под пальцем
+        // на всю ширину, и каждое нажатие выглядело как мигание.
+        .glassEffect(.regular, in: .capsule)
+        // Анимируется только подложка в самой панели. Смена экрана — без
+        // анимации: внутри анимации экран вкладки проявлялся через
+        // прозрачность, и это тоже мигало.
+        .animation(reduceMotion ? nil : .spring(response: 0.36, dampingFraction: 0.8), value: selection)
         .padding(.horizontal, 14)
+        .padding(.top, 6)
         .padding(.bottom, 2)
     }
 
@@ -36,10 +44,7 @@ struct AppTabBar: View {
             guard !selected else { return }
             Haptics.tap()
             bounces[item, default: 0] += 1
-            withAnimation(reduceMotion ? .easeInOut(duration: 0.15)
-                                       : .spring(response: 0.36, dampingFraction: 0.8)) {
-                selection = item
-            }
+            selection = item
         } label: {
             VStack(spacing: 2) {
                 Image(systemName: item.symbol)

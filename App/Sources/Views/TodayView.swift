@@ -18,6 +18,7 @@ struct TodayView: View {
     @State private var streak: StreakStatus?
     @State private var contract: RewardContract?
     @State private var matureWords = 0
+    @State private var journey: JourneyPosition?
     @State private var isSessionActive = false
     @State private var showDeckRequest = false
     @State private var starterFailed = false
@@ -25,7 +26,11 @@ struct TodayView: View {
     @AppStorage(SettingsKey.dayCutoffHour) private var dayCutoffHour = AppSettings.default.dayCutoffHour
     @AppStorage(SettingsKey.goalCelebratedDay) private var goalCelebratedDay = ""
     @AppStorage(SettingsKey.celebratedStreak) private var celebratedStreak = 0
+    @AppStorage(SettingsKey.journeyCelebratedStop) private var journeyCelebratedStop = -1
     @State private var celebration: CelebrationMoment?
+    /// Первая загрузка — без анимации. Экран вкладки создаётся заново при
+    /// каждом переходе, и анимированное «пусто → данные» мигало карточками.
+    @State private var loaded = false
 
     struct CelebrationMoment: Equatable {
         var title: String
@@ -47,6 +52,7 @@ struct TodayView: View {
 
                     if noteCount > 0 {
                         goalCard
+                        if let journey { JourneyCard(position: journey) }
                     }
 
                     if let streak, streak.days > 0 {
@@ -424,7 +430,7 @@ struct TodayView: View {
 
     private func refresh() {
         let goalBefore = DailyGoal.progress(studiedSeconds: studiedSeconds, goalMinutes: goalMinutes)
-        withAnimation(.snappy) {
+        withAnimation(loaded ? .snappy : nil) {
             noteCount = (try? context.fetchCount(FetchDescriptor<Note>())) ?? 0
             summary = (try? ReviewService(context: context).todayQueue())?.summary
             let progress = ProgressService(context: context)
@@ -432,7 +438,9 @@ struct TodayView: View {
             streak = progress.streakStatus()
             contract = progress.activeContract
             matureWords = progress.matureWordCount()
+            journey = progress.journeyPosition()
         }
+        loaded = true
         celebrateIfDeserved(goalBefore: goalBefore)
     }
 
@@ -442,12 +450,24 @@ struct TodayView: View {
     private func celebrateIfDeserved(goalBefore: Double) {
         let days = streak?.days ?? 0
         defer { celebratedStreak = days }
+        let chest = journeyMilestone()
         if let milestone = Celebration.streakMilestone(previous: celebratedStreak, current: days) {
             celebration = CelebrationMoment(
                 title: Counted.days(milestone) + tr(" подряд!", " seguidos!", " in a row!"),
                 subtitle: tr("Мончик гордится. Так слова и остаются в голове — понемногу каждый день.",
                              "O Monchik está orgulhoso. É assim que as palavras ficam — um pouco todos os dias.",
                              "Monchik is proud. That's how words stick — a little every day."))
+            return
+        }
+        if let chest {
+            let stop = Journey.stop(reached: chest)
+            celebration = CelebrationMoment(
+                title: stop.kind == .finish
+                    ? tr("Финиш! Круг пройден", "Meta! Volta completa", "Finish! Lap complete")
+                    : tr("Сундук в \(stop.place)!", "Baú em \(stop.place)!", "Chest in \(stop.place)!"),
+                subtitle: tr("Мончик дошёл до новой вехи на карте. Дальше — ещё интереснее.",
+                             "O Monchik chegou a um novo marco no mapa. O resto é ainda melhor.",
+                             "Monchik reached a new milestone on the map. It only gets better."))
             return
         }
         let today = Celebration.dayKey(cutoffHour: dayCutoffHour)
@@ -461,5 +481,15 @@ struct TodayView: View {
                     + tr(" английского сегодня. До завтра!", " de inglês hoje. Até amanhã!",
                          " of English today. See you tomorrow!"))
         }
+    }
+
+    /// Сундук или финиш, до которого дошли с прошлого праздника. Отметку
+    /// двигаем всегда, даже если праздник уступил серии: иначе тот же
+    /// сундук отпраздновали бы на следующем открытии экрана.
+    private func journeyMilestone() -> Int? {
+        guard let reached = journey?.reachedStops else { return nil }
+        let milestone = Journey.stopToCelebrate(celebrated: journeyCelebratedStop, reached: reached)
+        journeyCelebratedStop = max(journeyCelebratedStop, reached)
+        return milestone
     }
 }
