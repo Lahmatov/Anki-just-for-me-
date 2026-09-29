@@ -1,0 +1,411 @@
+# show: Modern Family
+# year: 2009
+# accent: US
+
+## 1 · Pilot
+adopt | /əˈdɑːpt/ | verb | усыновить, удочерить | adotar | to legally take another person's child as your own | Mitchell and Cam [adopted] a baby from Vietnam. | Митчелл и Кэм удочерили малышку из Вьетнама. | O Mitchell e o Cam adotaram uma bebé do Vietname.
+stepson | /ˈstepsʌn/ | noun | пасынок | enteado | the son of your husband or wife | Manny is Jay's [stepson]. | Мэнни — пасынок Джея. | O Manny é enteado do Jay.
+cool dad | /kuːl dæd/ | noun | крутой папа | pai fixe | a father who tries to be fun and modern | Phil thinks he's a [cool dad]. | Фил считает себя крутым папой. | O Phil acha que é um pai fixe.
+overprotective | /ˌoʊvərprəˈtektɪv/ | adjective | чрезмерно опекающий | superprotetor | protecting someone too much | Claire is a bit [overprotective]. | Клэр слишком опекает детей. | A Claire é um bocado superprotetora.
+curfew | /ˈkɜːrfjuː/ | noun | комендантский час (для подростка) | hora de recolher | the time a teenager must be home | Her [curfew] is ten o'clock. | Ей надо быть дома к десяти. | A hora de recolher dela é às dez.
+punish | /ˈpʌnɪʃ/ | verb | наказывать | castigar | to make someone suffer for doing wrong | Phil had to [punish] Luke. | Филу пришлось наказать Люка. | O Phil teve de castigar o Luke.
+BB gun | /ˈbiː biː ɡʌn/ | noun | пневматическое ружьё | pistola de pressão de ar | a gun that shoots small metal balls | Luke shot his sister with a [BB gun]. | Люк выстрелил в сестру из пневматики. | O Luke disparou contra a irmã com uma pistola de pressão de ar.
+boyfriend | /ˈbɔɪfrend/ | noun | парень | namorado | a man you are dating | Haley's [boyfriend] came to dinner. | Парень Хейли пришёл на ужин. | O namorado da Haley veio jantar.
+announcement | /əˈnaʊnsmənt/ | noun | объявление | anúncio | an important piece of news told to people | Mitchell made a big [announcement]. | Митчелл сделал важное объявление. | O Mitchell fez um grande anúncio.
+mall | /mɔːl/ | noun | торговый центр | centro comercial | a large building with many shops | Jay and Manny went to the [mall]. | Джей и Мэнни пошли в торговый центр. | O Jay e o Manny foram ao centro comercial.
+crush | /krʌʃ/ | noun | влюблённость | paixoneta | a strong feeling of liking someone | Manny has a [crush] on an older girl. | Мэнни влюблён в девочку постарше. | O Manny tem uma paixoneta por uma rapariga mais velha.
+family | /ˈfæməli/ | noun | семья | família | a group of related people | It's a big, crazy [family]. | Это большая сумасшедшая семья. | É uma família grande e maluca.
+reveal | /rɪˈviːl/ | verb | раскрыть, показать | revelar | to show something hidden | Cam [revealed] the baby with music. | Кэм торжественно показал малышку под музыку. | O Cam revelou a bebé com música.
+overreact | /ˌoʊvəriˈækt/ | verb | слишком бурно реагировать | exagerar na reação | to react too strongly | Don't [overreact], it's just a baby. | Не реагируй так бурно, это просто ребёнок. | Não exageres, é só uma bebé.
+judge | /dʒʌdʒ/ | verb | осуждать | julgar | to form a bad opinion about someone | Mitchell was afraid they'd [judge] him. | Митчелл боялся, что его осудят. | O Mitchell tinha medo que o julgassem.
+
+## 2 · The Bicycle Thief
+bike | /baɪk/ | noun | велосипед | bicicleta | a bicycle | Phil bought Luke a new [bike]. | Фил купил Люку новый велосипед. | O Phil comprou uma bicicleta nova ao Luke.
+steal | /stiːl/ | verb | украсть | roubar | to take something that isn't yours | Someone [stole] his bike. | У него украли велосипед. | Roubaram-lhe a bicicleta.
+lesson | /ˈlesn/ | noun | урок | lição | something that teaches you | It was meant to teach him a [lesson]. | Это должно было преподать ему урок. | Era para lhe dar uma lição.
+responsibility | /rɪˌspɑːnsəˈbɪləti/ | noun | ответственность | responsabilidade | a duty to take care of something | Luke needs to learn [responsibility]. | Люку нужно научиться ответственности. | O Luke tem de aprender responsabilidade.
+lock | /lɑːk/ | verb | запирать | trancar | to close with a key | Always [lock] your bike. | Всегда пристёгивай велосипед на замок. | Tranca sempre a bicicleta.
+soccer | /ˈsɑːkər/ | noun | футбол | futebol | a game where players kick a ball into a goal | Manny plays [soccer] with Jay. | Мэнни играет с Джеем в футбол. | O Manny joga futebol com o Jay.
+bond | /bɑːnd/ | verb | сблизиться | criar laços | to form a close relationship | Jay tries to [bond] with Manny. | Джей пытается сблизиться с Мэнни. | O Jay tenta criar laços com o Manny.
+kite | /kaɪt/ | noun | воздушный змей | papagaio de papel | a toy that flies in the wind on a string | They flew a [kite] in the park. | Они запускали воздушного змея в парке. | Lançaram um papagaio de papel no parque.
+stay-at-home dad | /ˌsteɪ ət hoʊm ˈdæd/ | noun | папа-домохозяин | pai dono de casa | a father who stays home to care for kids | Cam is a [stay-at-home dad]. | Кэм сидит дома с ребёнком. | O Cam é pai dono de casa.
+insecure | /ˌɪnsɪˈkjʊr/ | adjective | неуверенный | inseguro | not confident | Mitchell feels [insecure] as a parent. | Митчелл неуверен в себе как в родителе. | O Mitchell sente-se inseguro como pai.
+parenting | /ˈperəntɪŋ/ | noun | воспитание детей | parentalidade | the work of raising children | [Parenting] is harder than it looks. | Растить детей сложнее, чем кажется. | Ser pai é mais difícil do que parece.
+fake | /feɪk/ | adjective | фальшивый | falso | not real | He staged a [fake] theft. | Он инсценировал кражу. | Encenou um roubo falso.
+teach | /tiːtʃ/ | verb | учить | ensinar | to help someone learn | Phil wanted to [teach] him a lesson. | Фил хотел проучить его. | O Phil queria ensinar-lhe uma lição.
+backfire | /ˌbækˈfaɪər/ | verb | выйти боком | sair pela culatra | to have the opposite effect | The plan completely [backfired]. | План вышел боком. | O plano saiu completamente pela culatra.
+role model | /ˈroʊl ˌmɑːdl/ | noun | пример для подражания | exemplo | someone others copy | Phil wants to be a good [role model]. | Фил хочет быть хорошим примером. | O Phil quer ser um bom exemplo.
+
+## 3 · Come Fly with Me
+remote control | /rɪˌmoʊt kənˈtroʊl/ | adjective | радиоуправляемый | telecomandado | controlled from a distance | Jay loves his [remote control] plane. | Джей обожает свой радиоуправляемый самолёт. | O Jay adora o avião telecomandado.
+crash | /kræʃ/ | verb | разбить | despenhar-se | to hit the ground violently | The plane [crashed] into a tree. | Самолёт врезался в дерево. | O avião despenhou-se contra uma árvore.
+generation gap | /ˌdʒenəˈreɪʃn ɡæp/ | noun | конфликт поколений | fosso geracional | differences between old and young people | There's a big [generation gap]. | Здесь явный конфликт поколений. | Há um grande fosso geracional.
+retire | /rɪˈtaɪər/ | verb | выйти на пенсию | reformar-se | to stop working because of age | Jay doesn't want to [retire]. | Джей не хочет на пенсию. | O Jay não quer reformar-se.
+dirt bike | /ˈdɜːrt baɪk/ | noun | кроссовый мотоцикл | mota de todo-o-terreno | a motorcycle for rough ground | Phil secretly wanted a [dirt bike]. | Фил втайне хотел кроссовый мотоцикл. | O Phil queria secretamente uma mota de todo-o-terreno.
+midlife crisis | /ˌmɪdlaɪf ˈkraɪsɪs/ | noun | кризис среднего возраста | crise da meia-idade | worry about life around age 40-50 | Is this a [midlife crisis]? | Это кризис среднего возраста? | Isto é uma crise da meia-idade?
+dangerous | /ˈdeɪndʒərəs/ | adjective | опасный | perigoso | able to hurt you | Motorcycles are too [dangerous]. | Мотоциклы слишком опасны. | As motas são perigosas demais.
+lie | /laɪ/ | verb | врать | mentir | to say something untrue | Don't [lie] to your wife. | Не ври жене. | Não mintas à tua mulher.
+Hispanic | /hɪˈspænɪk/ | adjective | латиноамериканский | hispânico | from a Spanish-speaking culture | Gloria is proud of her [Hispanic] roots. | Глория гордится своими латинскими корнями. | A Gloria orgulha-se das raízes hispânicas.
+accent | /ˈæksent/ | noun | акцент | sotaque | the way people from a place pronounce words | Gloria has a strong [accent]. | У Глории сильный акцент. | A Gloria tem um sotaque forte.
+misunderstand | /ˌmɪsʌndərˈstænd/ | verb | неправильно понять | perceber mal | to understand wrongly | People often [misunderstand] her. | Её часто понимают неправильно. | As pessoas percebem-na mal muitas vezes.
+compromise | /ˈkɑːmprəmaɪz/ | verb | пойти на компромисс | ceder | to agree by each side giving a little | Married couples have to [compromise]. | Супругам приходится идти на компромиссы. | Os casais têm de ceder.
+thrill | /θrɪl/ | noun | острые ощущения | emoção | a sudden feeling of excitement | He just wanted a little [thrill]. | Ему просто хотелось острых ощущений. | Ele só queria um pouco de emoção.
+freedom | /ˈfriːdəm/ | noun | свобода | liberdade | being able to do what you want | Flying gives him a sense of [freedom]. | Полёт даёт ему чувство свободы. | Voar dá-lhe uma sensação de liberdade.
+act your age | /ækt jʊr eɪdʒ/ | idiom | вести себя по возрасту | agir de acordo com a idade | to behave like an adult | Phil, [act your age]! | Фил, веди себя по возрасту! | Phil, porta-te como um adulto!
+
+## 4 · The Incident
+ex-husband | /ˌeks ˈhʌzbənd/ | noun | бывший муж | ex-marido | a man someone used to be married to | Gloria's [ex-husband] visits. | Приезжает бывший муж Глории. | O ex-marido da Gloria vem de visita.
+birthday party | /ˈbɜːrθdeɪ ˈpɑːrti/ | noun | вечеринка на день рождения | festa de anos | a party to celebrate someone's birthday | It was Jay's [birthday party]. | Это был день рождения Джея. | Era a festa de anos do Jay.
+make a scene | /meɪk ə siːn/ | idiom | устроить сцену | fazer uma cena | to behave loudly and emotionally in public | Don't [make a scene]. | Не устраивай сцен. | Não faças uma cena.
+toast | /toʊst/ | noun | тост | brinde | a short speech before drinking | Claire gave an angry [toast]. | Клэр произнесла злой тост. | A Claire fez um brinde zangado.
+tension | /ˈtenʃn/ | noun | напряжение | tensão | a nervous, unfriendly feeling | There's [tension] between Claire and Gloria. | Между Клэр и Глорией напряжение. | Há tensão entre a Claire e a Gloria.
+stepmother | /ˈstepmʌðər/ | noun | мачеха | madrasta | your father's new wife | Gloria is Claire's [stepmother]. | Глория — мачеха Клэр. | A Gloria é madrasta da Claire.
+younger | /ˈjʌŋɡər/ | adjective | моложе | mais nova | having lived fewer years | Gloria is [younger] than Claire. | Глория моложе Клэр. | A Gloria é mais nova do que a Claire.
+awkward | /ˈɔːkwərd/ | adjective | неловкий | constrangedor | uncomfortable | Everything became very [awkward]. | Всё стало очень неловко. | Ficou tudo muito constrangedor.
+apologize | /əˈpɑːlədʒaɪz/ | verb | извиняться | pedir desculpa | to say sorry | Claire had to [apologize]. | Клэр пришлось извиниться. | A Claire teve de pedir desculpa.
+bring up | /brɪŋ ʌp/ | phrasal verb | поднять тему | trazer à baila | to start talking about a subject | Don't [bring up] the past. | Не вспоминай прошлое. | Não tragas o passado à baila.
+tipsy | /ˈtɪpsi/ | adjective | навеселе | alegrote | slightly drunk | She was a little [tipsy]. | Она была немного навеселе. | Ela estava um bocado alegrote.
+guitar | /ɡɪˈtɑːr/ | noun | гитара | guitarra | a musical instrument with strings | Manny played the [guitar]. | Мэнни играл на гитаре. | O Manny tocou guitarra.
+embarrassed | /ɪmˈbærəst/ | adjective | смущённый | envergonhado | feeling ashamed | Manny's dad [embarrassed] him. | Отец поставил Мэнни в неловкое положение. | O pai envergonhou o Manny.
+disappoint | /ˌdɪsəˈpɔɪnt/ | verb | разочаровать | desiludir | to fail to do what someone hoped | His father always [disappoints] him. | Отец вечно его разочаровывает. | O pai desilude-o sempre.
+promise | /ˈprɑːmɪs/ | noun | обещание | promessa | saying you will certainly do something | He broke another [promise]. | Он нарушил очередное обещание. | Quebrou outra promessa.
+
+## 5 · Coal Digger
+gold digger | /ˈɡoʊld ˌdɪɡər/ | noun | охотница за деньгами | interesseira | someone who dates people for their money | Claire joked that Gloria is a [gold digger]. | Клэр пошутила, что Глория охотница за деньгами. | A Claire brincou que a Gloria é uma interesseira.
+coal | /koʊl/ | noun | уголь | carvão | a black rock burned for heat | Luke misheard it as "[coal] digger". | Люк расслышал «угольщица». | O Luke percebeu "cavadora de carvão".
+fight | /faɪt/ | noun | драка | luta | a physical conflict | Luke and Manny had a [fight]. | Люк и Мэнни подрались. | O Luke e o Manny andaram à luta.
+take sides | /teɪk saɪdz/ | idiom | принимать сторону | tomar partido | to support one person in an argument | Don't [take sides]. | Не принимай ничью сторону. | Não tomes partido.
+defend | /dɪˈfend/ | verb | защищать | defender | to protect someone | Manny [defended] his mother. | Мэнни защищал свою мать. | O Manny defendeu a mãe.
+tease | /tiːz/ | verb | дразнить | gozar com | to make fun of someone | Stop [teasing] your cousin. | Хватит дразнить кузена. | Para de gozar com o teu primo.
+offended | /əˈfendɪd/ | adjective | обиженный | ofendido | upset by something said | Gloria was really [offended]. | Глория очень обиделась. | A Gloria ficou mesmo ofendida.
+misheard | /ˌmɪsˈhɜːrd/ | verb | ослышаться | ouvir mal | heard something wrongly | He [misheard] what she said. | Он ослышался. | Ele ouviu mal o que ela disse.
+hug it out | /hʌɡ ɪt aʊt/ | idiom | помириться объятиями | fazer as pazes com um abraço | to end a fight by hugging | Come on, let's [hug it out]. | Давайте обнимемся и помиримся. | Vá, vamos fazer as pazes com um abraço.
+sensitive | /ˈsensətɪv/ | adjective | чувствительный | sensível | easily upset | Manny is a [sensitive] boy. | Мэнни — чувствительный мальчик. | O Manny é um rapaz sensível.
+bruise | /bruːz/ | noun | синяк | nódoa negra | a dark mark on skin after being hit | Luke had a [bruise] on his arm. | У Люка был синяк на руке. | O Luke tinha uma nódoa negra no braço.
+temper | /ˈtempər/ | noun | вспыльчивость, нрав | mau feitio | a tendency to get angry quickly | Gloria has a hot [temper]. | У Глории вспыльчивый нрав. | A Gloria tem mau feitio.
+chill out | /tʃɪl aʊt/ | phrasal verb | успокоиться | acalmar-se | to relax and calm down | Everyone, just [chill out]! | Все, успокойтесь! | Toda a gente, acalmem-se!
+prejudice | /ˈpredʒudɪs/ | noun | предубеждение | preconceito | an unfair opinion about a group | That comment shows [prejudice]. | Это замечание выдаёт предубеждение. | Esse comentário mostra preconceito.
+misunderstanding | /ˌmɪsʌndərˈstændɪŋ/ | noun | недоразумение | mal-entendido | a failure to understand correctly | It was a funny [misunderstanding]. | Это было забавное недоразумение. | Foi um mal-entendido engraçado.
+
+## 6 · Run for Your Wife
+first day of school | /fɜːrst deɪ ʌv skuːl/ | noun | первый день в школе | primeiro dia de aulas | the day school begins | It's Manny's [first day of school]. | У Мэнни первый день в школе. | É o primeiro dia de aulas do Manny.
+poncho | /ˈpɑːntʃoʊ/ | noun | пончо | poncho | a loose cloak with a hole for the head | Manny wore a [poncho] to school. | Мэнни пошёл в школу в пончо. | O Manny foi para a escola de poncho.
+fit in | /fɪt ɪn/ | phrasal verb | вписаться | enquadrar-se | to be accepted by others | Jay wants Manny to [fit in]. | Джей хочет, чтобы Мэнни вписался. | O Jay quer que o Manny se enquadre.
+bully | /ˈbʊli/ | noun | хулиган, задира | rufia | someone who hurts weaker people | A [bully] picked on Manny. | К Мэнни пристал хулиган. | Um rufia meteu-se com o Manny.
+stairs | /sterz/ | noun | ступеньки | escadas | steps going up | The [stairs] have a loose step. | На лестнице шатается ступенька. | As escadas têm um degrau solto.
+fix | /fɪks/ | verb | чинить | arranjar | to repair | Phil keeps forgetting to [fix] the step. | Фил всё забывает починить ступеньку. | O Phil está sempre a esquecer-se de arranjar o degrau.
+jog | /dʒɑːɡ/ | verb | бегать трусцой | fazer jogging | to run slowly for exercise | Phil and Claire [jog] together. | Фил и Клэр бегают вместе. | O Phil e a Claire fazem jogging juntos.
+competitive | /kəmˈpetətɪv/ | adjective | азартный, соревновательный | competitivo | always wanting to win | Claire is super [competitive]. | Клэр ужасно азартна. | A Claire é super competitiva.
+chore | /tʃɔːr/ | noun | домашняя обязанность | tarefa doméstica | a regular job at home | Taking out the trash is a [chore]. | Выносить мусор — домашняя обязанность. | Levar o lixo é uma tarefa doméstica.
+nag | /næɡ/ | verb | пилить, ворчать | chatear | to keep asking or complaining | Stop [nagging] me about the step! | Хватит пилить меня из-за ступеньки! | Para de me chatear com o degrau!
+unique | /juˈniːk/ | adjective | уникальный, особенный | único | different from everyone else | Manny likes being [unique]. | Мэнни нравится быть особенным. | O Manny gosta de ser único.
+stand out | /stænd aʊt/ | phrasal verb | выделяться | destacar-se | to be easily noticed | He doesn't mind [standing out]. | Он не против выделяться. | Ele não se importa de se destacar.
+race | /reɪs/ | noun | гонка, забег | corrida | a competition to be the fastest | Phil challenged Claire to a [race]. | Фил вызвал Клэр на забег. | O Phil desafiou a Claire para uma corrida.
+trip | /trɪp/ | verb | споткнуться | tropeçar | to hit your foot and almost fall | Everyone [trips] on that step. | Все спотыкаются на этой ступеньке. | Toda a gente tropeça naquele degrau.
+confidence | /ˈkɑːnfɪdəns/ | noun | уверенность | confiança | believing in yourself | Manny has a lot of [confidence]. | У Мэнни полно уверенности в себе. | O Manny tem muita confiança.
+
+## 7 · En Garde
+fencing | /ˈfensɪŋ/ | noun | фехтование | esgrima | a sport of fighting with thin swords | Manny takes [fencing] lessons. | Мэнни занимается фехтованием. | O Manny tem aulas de esgrima.
+tournament | /ˈtʊrnəmənt/ | noun | турнир | torneio | a series of games to find the winner | He's in a fencing [tournament]. | Он участвует в турнире по фехтованию. | Está num torneio de esgrima.
+cheer | /tʃɪr/ | verb | болеть, подбадривать | torcer, apoiar | to shout to support someone | Jay came to [cheer] for him. | Джей пришёл поболеть за него. | O Jay veio torcer por ele.
+overbearing | /ˌoʊvərˈberɪŋ/ | adjective | властный, давящий | autoritário | trying too much to control others | Claire can be [overbearing]. | Клэр бывает слишком властной. | A Claire pode ser autoritária.
+sponge bath | /ˈspʌndʒ bæθ/ | noun | обтирание губкой | banho de esponja | washing someone with a wet sponge | Cam gave the baby a [sponge bath]. | Кэм обтёр малышку губкой. | O Cam deu um banho de esponja à bebé.
+opponent | /əˈpoʊnənt/ | noun | противник | adversário | a person you compete against | His [opponent] was much taller. | Его соперник был намного выше. | O adversário dele era muito mais alto.
+lose | /luːz/ | verb | проиграть | perder | to not win | It's okay to [lose]. | Проигрывать — это нормально. | Não faz mal perder.
+graceful | /ˈɡreɪsfl/ | adjective | изящный | gracioso | moving in a smooth, beautiful way | Manny is surprisingly [graceful]. | Мэнни на удивление изящен. | O Manny é surpreendentemente gracioso.
+self-esteem | /ˌself ɪˈstiːm/ | noun | самооценка | autoestima | how much you value yourself | Losing hurt his [self-esteem]. | Проигрыш ударил по его самооценке. | Perder magoou-lhe a autoestima.
+praise | /preɪz/ | verb | хвалить | elogiar | to say good things about someone | Jay rarely [praises] anyone. | Джей редко кого хвалит. | O Jay raramente elogia alguém.
+jealous | /ˈdʒeləs/ | adjective | завидующий | com inveja | wanting what someone else has | Mitchell was [jealous] of the attention. | Митчелл ревновал к вниманию. | O Mitchell ficou com inveja da atenção.
+gym | /dʒɪm/ | noun | спортзал | ginásio | a place for exercise and sport | The match was in a school [gym]. | Поединок проходил в школьном спортзале. | O combate foi num ginásio de escola.
+sword | /sɔːrd/ | noun | шпага | espada | a long, sharp weapon | He held the [sword] with confidence. | Он уверенно держал шпагу. | Segurou a espada com confiança.
+support | /səˈpɔːrt/ | verb | поддерживать | apoiar | to encourage someone | Family is there to [support] you. | Семья нужна, чтобы тебя поддерживать. | A família existe para te apoiar.
+touché | /tuːˈʃeɪ/ | phrase | туше, в точку | touché | used to admit a clever point | "You're just jealous." "[Touché]." | «Ты просто завидуешь». — «Туше». | "Estás só com inveja." "Touché."
+
+## 8 · Great Expectations
+expectations | /ˌekspekˈteɪʃnz/ | noun | ожидания | expectativas | what you think will happen | Don't have high [expectations]. | Не жди слишком многого. | Não tenhas expectativas altas.
+drummer | /ˈdrʌmər/ | noun | барабанщик | baterista | a person who plays drums | Claire's old crush was a [drummer]. | Бывшая любовь Клэр — барабанщик. | A antiga paixoneta da Claire era baterista.
+rock star | /ˈrɑːk stɑːr/ | noun | рок-звезда | estrela de rock | a famous rock musician | He's no longer a [rock star]. | Он давно уже не рок-звезда. | Já não é estrela de rock.
+old friend | /oʊld frend/ | noun | старый друг | velho amigo | a friend you've known for a long time | An [old friend] came to town. | В город приехал старый друг. | Um velho amigo veio à cidade.
+washed-up | /ˌwɑːʃt ˈʌp/ | adjective | ставший неудачником, исписавшийся | acabado | no longer successful | He was a [washed-up] musician. | Он был исписавшимся музыкантом. | Era um músico acabado.
+flirt | /flɜːrt/ | verb | флиртовать | namoriscar | to act as if attracted | Did he just [flirt] with you? | Он что, флиртовал с тобой? | Ele estava a namoriscar contigo?
+threatened | /ˈθretnd/ | adjective | почувствовавший угрозу | ameaçado | feeling that someone may take your place | Phil felt a little [threatened]. | Фил почувствовал лёгкую угрозу. | O Phil sentiu-se um bocado ameaçado.
+babysit | /ˈbeɪbisɪt/ | verb | присматривать за ребёнком | tomar conta de crianças | to care for children while parents are out | Can you [babysit] tonight? | Посидишь с ребёнком сегодня? | Podes tomar conta dos miúdos hoje?
+bowling | /ˈboʊlɪŋ/ | noun | боулинг | bowling | a game of rolling a ball at pins | Jay took the kids [bowling]. | Джей повёл детей в боулинг. | O Jay levou os miúdos ao bowling.
+disappointment | /ˌdɪsəˈpɔɪntmənt/ | noun | разочарование | desilusão | sadness when things aren't as hoped | The dinner was a total [disappointment]. | Ужин обернулся полным разочарованием. | O jantar foi uma desilusão total.
+reality | /riˈæləti/ | noun | реальность | realidade | the way things really are | [Reality] is different from memories. | Реальность отличается от воспоминаний. | A realidade é diferente das memórias.
+nostalgia | /nəˈstældʒə/ | noun | ностальгия | nostalgia | longing for the past | [Nostalgia] can trick you. | Ностальгия может обманывать. | A nostalgia pode enganar-te.
+idol | /ˈaɪdl/ | noun | кумир | ídolo | a person you admire very much | He was her teenage [idol]. | Он был её кумиром в юности. | Era o ídolo dela na adolescência.
+let down | /let daʊn/ | phrasal verb | подвести | desiludir | to disappoint someone | He [let everyone down]. | Он всех подвёл. | Desiludiu toda a gente.
+grounded | /ˈɡraʊndɪd/ | adjective | приземлённый, здравомыслящий | com os pés na terra | sensible and realistic | Claire is very [grounded]. | Клэр очень здравомыслящая. | A Claire tem os pés bem assentes na terra.
+
+## 9 · Fizbo
+clown | /klaʊn/ | noun | клоун | palhaço | a funny performer with a painted face | Cam used to be a [clown]. | Кэм когда-то был клоуном. | O Cam já foi palhaço.
+costume | /ˈkɑːstuːm/ | noun | костюм | fato, disfarce | special clothes to look like a character | He still has his clown [costume]. | У него до сих пор есть клоунский костюм. | Ainda tem o fato de palhaço.
+birthday | /ˈbɜːrθdeɪ/ | noun | день рождения | aniversário | the day of someone's birth | It's Luke's [birthday]. | У Люка день рождения. | É o aniversário do Luke.
+party planner | /ˈpɑːrti ˈplænər/ | noun | организатор праздников | organizador de festas | someone who organizes parties | Claire acted as [party planner]. | Клэр выступила организатором праздника. | A Claire fez de organizadora da festa.
+magic trick | /ˈmædʒɪk trɪk/ | noun | фокус | truque de magia | an act that seems impossible | The clown did a [magic trick]. | Клоун показал фокус. | O palhaço fez um truque de magia.
+injury | /ˈɪndʒəri/ | noun | травма | lesão | damage to the body | Luke got a small [injury]. | Люк получил небольшую травму. | O Luke teve uma pequena lesão.
+scared | /skerd/ | adjective | испуганный | assustado | afraid | Mitchell is [scared] of clowns. | Митчелл боится клоунов. | O Mitchell tem medo de palhaços.
+entertain | /ˌentərˈteɪn/ | verb | развлекать | entreter | to keep people amused | Cam wants to [entertain] the kids. | Кэм хочет развлечь детей. | O Cam quer entreter os miúdos.
+chaos | /ˈkeɪɑːs/ | noun | хаос | caos | complete disorder | The party turned into [chaos]. | Вечеринка превратилась в хаос. | A festa virou um caos.
+hire | /haɪər/ | verb | нанять | contratar | to pay someone to do work | They [hired] a real clown. | Они наняли настоящего клоуна. | Contrataram um palhaço verdadeiro.
+balloon animal | /bəˈluːn ˈænɪml/ | noun | животное из шариков | animal de balão | a shape made by twisting balloons | He made a [balloon animal] for every kid. | Он сделал каждому ребёнку зверушку из шарика. | Fez um animal de balão para cada miúdo.
+talent | /ˈtælənt/ | noun | талант | talento | a natural ability | Cam has a real [talent] for performing. | У Кэма настоящий талант к выступлениям. | O Cam tem um verdadeiro talento para atuar.
+dinosaur | /ˈdaɪnəsɔːr/ | noun | динозавр | dinossauro | a large animal that lived long ago | Luke wanted a [dinosaur] cake. | Люк хотел торт с динозавром. | O Luke queria um bolo de dinossauro.
+disaster | /dɪˈzæstər/ | noun | катастрофа | desastre | something that goes very badly | The whole day was a [disaster]. | Весь день был катастрофой. | O dia todo foi um desastre.
+secret | /ˈsiːkrət/ | noun | тайна | segredo | something kept hidden | Cam's clown past was a [secret]. | Клоунское прошлое Кэма было тайной. | O passado de palhaço do Cam era um segredo.
+
+## 10 · Undeck the Halls
+Christmas | /ˈkrɪsməs/ | noun | Рождество | Natal | the holiday on December 25 | The family gathers for [Christmas]. | Семья собирается на Рождество. | A família junta-se no Natal.
+Christmas tree | /ˈkrɪsməs triː/ | noun | ёлка | árvore de Natal | a decorated tree for Christmas | Someone damaged the [Christmas tree]. | Кто-то повредил ёлку. | Alguém estragou a árvore de Natal.
+confess | /kənˈfes/ | verb | признаться | confessar | to admit doing wrong | Nobody would [confess]. | Никто не признавался. | Ninguém confessava.
+cancel | /ˈkænsl/ | verb | отменить | cancelar | to stop something planned | Claire threatened to [cancel] Christmas. | Клэр пригрозила отменить Рождество. | A Claire ameaçou cancelar o Natal.
+decorations | /ˌdekəˈreɪʃnz/ | noun | украшения | decorações | things to make a place look festive | They put up the [decorations]. | Они повесили украшения. | Puseram as decorações.
+tradition | /trəˈdɪʃn/ | noun | традиция | tradição | a custom done every year | Every family has its [traditions]. | В каждой семье свои традиции. | Cada família tem as suas tradições.
+Santa | /ˈsæntə/ | noun | Санта | Pai Natal | Father Christmas | Does Luke still believe in [Santa]? | Люк всё ещё верит в Санту? | O Luke ainda acredita no Pai Natal?
+guilt | /ɡɪlt/ | noun | чувство вины | culpa | feeling bad about doing wrong | The kids were full of [guilt]. | Дети мучились чувством вины. | Os miúdos estavam cheios de culpa.
+cigarette | /ˌsɪɡəˈret/ | noun | сигарета | cigarro | rolled tobacco you smoke | Someone left a [cigarette] burn. | Кто-то оставил след от сигареты. | Alguém deixou uma queimadura de cigarro.
+blame | /bleɪm/ | verb | обвинять | culpar | to say someone is responsible | They [blamed] each other. | Они обвиняли друг друга. | Culparam-se uns aos outros.
+spoiled | /spɔɪld/ | adjective | избалованный | mimado | given too much, so behaving badly | The kids are a bit [spoiled]. | Дети немного избалованы. | Os miúdos são um bocado mimados.
+giving | /ˈɡɪvɪŋ/ | noun | отдавать, дарить | dar | the act of giving to others | Christmas is about [giving]. | Рождество — это про то, чтобы дарить. | O Natal é sobre dar.
+wrap | /ræp/ | verb | заворачивать | embrulhar | to cover a present with paper | Help me [wrap] the presents. | Помоги мне завернуть подарки. | Ajuda-me a embrulhar os presentes.
+stocking | /ˈstɑːkɪŋ/ | noun | рождественский чулок | meia de Natal | a large sock filled with small gifts | Check your [stocking]! | Загляни в свой чулок! | Vê a tua meia de Natal!
+forgive | /fərˈɡɪv/ | verb | простить | perdoar | to stop being angry | Claire finally [forgave] them. | В итоге Клэр их простила. | A Claire acabou por lhes perdoar.
+
+## 11 · Up All Night
+up all night | /ʌp ɔːl naɪt/ | idiom | не спать всю ночь | acordado a noite toda | awake the whole night | The baby kept them [up all night]. | Малышка не давала им спать всю ночь. | A bebé manteve-os acordados a noite toda.
+teething | /ˈtiːðɪŋ/ | noun | прорезывание зубов | dentição | when a baby's first teeth come through | Lily is [teething]. | У Лили режутся зубки. | A Lily está com a dentição.
+exhausted | /ɪɡˈzɔːstɪd/ | adjective | измотанный | exausto | extremely tired | The new parents are [exhausted]. | Молодые родители измотаны. | Os pais novos estão exaustos.
+fever | /ˈfiːvər/ | noun | жар, температура | febre | a high body temperature | The baby has a [fever]. | У малышки жар. | A bebé tem febre.
+pediatrician | /ˌpiːdiəˈtrɪʃn/ | noun | педиатр | pediatra | a doctor for children | Call the [pediatrician]! | Звони педиатру! | Liga ao pediatra!
+panic | /ˈpænɪk/ | verb | паниковать | entrar em pânico | to feel sudden fear | Cam [panicked] and drove to the hospital. | Кэм запаниковал и помчался в больницу. | O Cam entrou em pânico e foi para o hospital.
+nap | /næp/ | noun | дневной сон | sesta | a short sleep during the day | She needs her afternoon [nap]. | Ей нужен дневной сон. | Ela precisa da sesta da tarde.
+new car | /nuː kɑːr/ | noun | новая машина | carro novo | a car just bought | Phil wants a [new car]. | Фил хочет новую машину. | O Phil quer um carro novo.
+test drive | /ˈtest draɪv/ | noun | тест-драйв | test drive | driving a car before buying it | Let's take it for a [test drive]. | Давай съездим на тест-драйв. | Vamos fazer um test drive.
+salesman | /ˈseɪlzmən/ | noun | продавец | vendedor | a person who sells | The car [salesman] was very pushy. | Продавец машин был очень навязчив. | O vendedor de carros era muito insistente.
+pushy | /ˈpʊʃi/ | adjective | настырный | insistente | trying too hard to get what you want | Don't be so [pushy]. | Не будь таким настырным. | Não sejas tão insistente.
+negotiate | /nɪˈɡoʊʃieɪt/ | verb | торговаться, вести переговоры | negociar | to discuss to reach an agreement | Phil tried to [negotiate] the price. | Фил пытался сбить цену. | O Phil tentou negociar o preço.
+worry | /ˈwɜːri/ | verb | волноваться | preocupar-se | to feel anxious | Don't [worry], she'll be fine. | Не волнуйся, с ней всё будет хорошо. | Não te preocupes, ela vai ficar bem.
+calm down | /kɑːm daʊn/ | phrasal verb | успокоиться | acalmar-se | to become less excited or upset | Everybody [calm down]. | Всем успокоиться. | Acalmem-se todos.
+rookie | /ˈrʊki/ | noun | новичок | novato | a beginner | They're [rookie] parents. | Они родители-новички. | São pais novatos.
+
+## 12 · Not in My House
+sculpture | /ˈskʌlptʃər/ | noun | скульптура | escultura | a piece of art made from stone or wood | Gloria bought an ugly [sculpture]. | Глория купила уродливую скульптуру. | A Gloria comprou uma escultura feia.
+dog | /dɔːɡ/ | noun | собака | cão | an animal often kept as a pet | Jay got a new [dog]. | Джей завёл новую собаку. | O Jay arranjou um cão novo.
+house rules | /haʊs ruːlz/ | noun | правила дома | regras da casa | rules for people living in a home | My house, my [house rules]. | Мой дом — мои правила. | A minha casa, as minhas regras.
+ugly | /ˈʌɡli/ | adjective | уродливый | feio | unpleasant to look at | That statue is really [ugly]. | Эта статуя очень уродливая. | Aquela estátua é mesmo feia.
+taste | /teɪst/ | noun | вкус | gosto | the ability to judge what is beautiful | They have very different [taste]. | У них очень разный вкус. | Têm gostos muito diferentes.
+porn | /pɔːrn/ | noun | порно | pornografia | sexual films or pictures | Luke found [porn] on the computer. | Люк нашёл на компьютере порно. | O Luke encontrou pornografia no computador.
+browser history | /ˈbraʊzər ˈhɪstəri/ | noun | история браузера | histórico do navegador | the list of websites you visited | Claire checked the [browser history]. | Клэр проверила историю браузера. | A Claire viu o histórico do navegador.
+awkward talk | /ˈɔːkwərd tɔːk/ | noun | неловкий разговор | conversa constrangedora | a conversation that makes people uncomfortable | Phil had an [awkward talk] with Luke. | У Фила был неловкий разговор с Люком. | O Phil teve uma conversa constrangedora com o Luke.
+break | /breɪk/ | verb | разбить | partir | to damage something into pieces | Someone [broke] the statue. | Кто-то разбил статую. | Alguém partiu a estátua.
+accident | /ˈæksɪdənt/ | noun | несчастный случай | acidente | something bad that happens by chance | It was an [accident], I swear! | Это случайно, клянусь! | Foi um acidente, juro!
+take the fall | /teɪk ðə fɔːl/ | idiom | взять вину на себя | assumir as culpas | to accept punishment for someone else | Who's going to [take the fall]? | Кто возьмёт вину на себя? | Quem vai assumir as culpas?
+stubborn | /ˈstʌbərn/ | adjective | упрямый | teimoso | not willing to change | Jay is so [stubborn]. | Джей такой упрямый. | O Jay é tão teimoso.
+give in | /ɡɪv ɪn/ | phrasal verb | уступить | ceder | to finally agree after refusing | Jay finally [gave in]. | Джей в итоге уступил. | O Jay acabou por ceder.
+cover up | /ˈkʌvər ʌp/ | phrasal verb | скрыть | encobrir | to hide a mistake | They tried to [cover up] the mess. | Они пытались скрыть беспорядок. | Tentaram encobrir a confusão.
+furniture | /ˈfɜːrnɪtʃər/ | noun | мебель | mobília | chairs, tables, sofas | They argued about the [furniture]. | Они спорили из-за мебели. | Discutiram por causa da mobília.
+
+## 13 · Fifteen Percent
+fifteen percent | /ˌfɪfˈtiːn pərˈsent/ | phrase | пятнадцать процентов | quinze por cento | a part equal to 15 of 100 | He said he's only [fifteen percent] gay. | Он сказал, что гей только на пятнадцать процентов. | Disse que é só quinze por cento gay.
+remote | /rɪˈmoʊt/ | noun | пульт | comando | a device to control a TV | Where's the TV [remote]? | Где пульт от телевизора? | Onde está o comando da televisão?
+universal remote | /ˌjuːnɪˈvɜːrsl rɪˈmoʊt/ | noun | универсальный пульт | comando universal | one remote for all devices | Phil bought a [universal remote]. | Фил купил универсальный пульт. | O Phil comprou um comando universal.
+technology | /tekˈnɑːlədʒi/ | noun | технологии | tecnologia | computers and electronic devices | Jay hates new [technology]. | Джей терпеть не может новые технологии. | O Jay odeia tecnologia nova.
+set up | /set ʌp/ | phrasal verb | настроить, установить | configurar | to prepare a device to work | Can you help me [set up] this remote? | Поможешь настроить этот пульт? | Ajudas-me a configurar este comando?
+confused | /kənˈfjuːzd/ | adjective | сбитый с толку | confuso | unable to understand | Jay was totally [confused]. | Джей совершенно запутался. | O Jay ficou completamente confuso.
+come out | /kʌm aʊt/ | phrasal verb | совершить каминг-аут | assumir-se | to tell people you are gay | Mitchell's friend hasn't [come out] yet. | Друг Митчелла ещё не совершил каминг-аут. | O amigo do Mitchell ainda não se assumiu.
+pride | /praɪd/ | noun | гордость | orgulho | a feeling of being pleased with yourself | He swallowed his [pride]. | Он усмирил свою гордость. | Engoliu o orgulho.
+straight | /streɪt/ | adjective | гетеросексуальный | heterossexual | attracted to people of the opposite sex | He insists he's [straight]. | Он настаивает, что он натурал. | Ele insiste que é heterossexual.
+patient | /ˈpeɪʃnt/ | adjective | терпеливый | paciente | calm when waiting | Be [patient] with your dad. | Будь терпелив со своим отцом. | Tem paciência com o teu pai.
+instructions | /ɪnˈstrʌkʃnz/ | noun | инструкция | instruções | information on how to use something | Read the [instructions] first. | Сначала прочитай инструкцию. | Lê primeiro as instruções.
+manual | /ˈmænjuəl/ | noun | руководство | manual | a book explaining how to use a device | The [manual] is 200 pages long. | Руководство на 200 страниц. | O manual tem 200 páginas.
+button | /ˈbʌtn/ | noun | кнопка | botão | a small part you press | Press the red [button]. | Нажми на красную кнопку. | Carrega no botão vermelho.
+open-minded | /ˌoʊpən ˈmaɪndɪd/ | adjective | непредвзятый | de mente aberta | ready to accept new ideas | Jay is trying to be [open-minded]. | Джей старается быть непредвзятым. | O Jay está a tentar ter a mente aberta.
+tech-savvy | /ˈtek ˌsævi/ | adjective | разбирающийся в технике | entendido em tecnologia | good with modern technology | Phil thinks he's [tech-savvy]. | Фил считает, что разбирается в технике. | O Phil acha que é entendido em tecnologia.
+
+## 14 · Moon Landing
+job interview | /dʒɑːb ˈɪntərvjuː/ | noun | собеседование | entrevista de emprego | a meeting to get a job | Claire has a [job interview]. | У Клэр собеседование. | A Claire tem uma entrevista de emprego.
+go back to work | /ɡoʊ bæk tuː wɜːrk/ | phrase | вернуться на работу | voltar ao trabalho | to start working again after a break | She wants to [go back to work]. | Она хочет вернуться на работу. | Ela quer voltar ao trabalho.
+out of practice | /aʊt ʌv ˈpræktɪs/ | phrase | потерявший навык | destreinado | not good because you haven't done it recently | She's a bit [out of practice]. | Она немного потеряла навык. | Ela está um bocado destreinada.
+ex-boyfriend | /ˌeks ˈbɔɪfrend/ | noun | бывший парень | ex-namorado | a former boyfriend | Her interviewer was her [ex-boyfriend]. | Собеседование проводил её бывший парень. | Quem a entrevistou foi o ex-namorado.
+wedding cake | /ˈwedɪŋ keɪk/ | noun | свадебный торт | bolo de casamento | a big cake for a wedding | They argued over a [wedding cake]. | Они поспорили из-за свадебного торта. | Discutiram por causa de um bolo de casamento.
+frenemy | /ˈfrenəmi/ | noun | подруга-враг | amiga-inimiga | someone who acts like a friend but is a rival | Mitchell met his old [frenemy]. | Митчелл встретил свою давнюю «подругу-врага». | O Mitchell encontrou a velha amiga-inimiga.
+resentment | /rɪˈzentmənt/ | noun | обида | ressentimento | anger about unfair treatment | There's some old [resentment]. | Тут есть старая обида. | Há algum ressentimento antigo.
+moon landing | /ˈmuːn ˌlændɪŋ/ | noun | высадка на Луну | chegada à Lua | when humans first landed on the moon | Jay remembers the [moon landing]. | Джей помнит высадку на Луну. | O Jay lembra-se da chegada à Lua.
+housewife | /ˈhaʊswaɪf/ | noun | домохозяйка | dona de casa | a woman who works at home | She's been a [housewife] for years. | Она годами была домохозяйкой. | É dona de casa há anos.
+rusty | /ˈrʌsti/ | adjective | подзабывший, потерявший форму | enferrujado | not as good as before because of no practice | Her office skills are a bit [rusty]. | Её рабочие навыки немного подзабылись. | As competências de escritório dela estão um bocado enferrujadas.
+qualified | /ˈkwɑːlɪfaɪd/ | adjective | квалифицированный | qualificado | having the right skills | She's very [qualified]. | Она очень квалифицированная. | Ela é muito qualificada.
+lunch | /lʌntʃ/ | noun | обед | almoço | a meal in the middle of the day | Let's grab [lunch] together. | Давай пообедаем вместе. | Vamos almoçar juntos.
+nerve | /nɜːrv/ | noun | наглость | lata | rudeness, being too bold | He has some [nerve]! | Вот наглость! | Que lata!
+cringeworthy | /ˈkrɪndʒwɜːrði/ | adjective | стыдный до мурашек | de fazer vergonha | so embarrassing it makes you uncomfortable | The interview was [cringeworthy]. | Собеседование было стыдным до мурашек. | A entrevista foi de fazer vergonha.
+decline | /dɪˈklaɪn/ | verb | отклонить | recusar | to politely say no | She [declined] the job. | Она отказалась от работы. | Recusou o trabalho.
+
+## 15 · My Funky Valentine
+Valentine's Day | /ˈvæləntaɪnz deɪ/ | noun | День святого Валентина | Dia dos Namorados | a day for couples on February 14 | Phil planned a special [Valentine's Day]. | Фил спланировал особый День святого Валентина. | O Phil planeou um Dia dos Namorados especial.
+role-play | /ˈroʊl pleɪ/ | noun | ролевая игра | jogo de papéis | pretending to be another person | They tried a sexy [role-play]. | Они попробовали эротическую ролевую игру. | Experimentaram um jogo de papéis sexy.
+hotel | /hoʊˈtel/ | noun | отель | hotel | a building where you pay to stay | They met at a [hotel] bar. | Они встретились в баре отеля. | Encontraram-se no bar de um hotel.
+escalator | /ˈeskəleɪtər/ | noun | эскалатор | escada rolante | moving stairs | Her coat got stuck in the [escalator]. | Её плащ застрял в эскалаторе. | O casaco dela ficou preso na escada rolante.
+trench coat | /ˈtrentʃ koʊt/ | noun | плащ | gabardina | a long raincoat with a belt | She wore only a [trench coat]. | На ней был один только плащ. | Ela só tinha uma gabardina.
+spice things up | /spaɪs θɪŋz ʌp/ | idiom | внести перчинку | apimentar as coisas | to make a relationship more exciting | They wanted to [spice things up]. | Они хотели внести перчинку. | Queriam apimentar as coisas.
+poem | /ˈpoʊəm/ | noun | стихотворение | poema | a piece of writing with rhythm | Manny wrote a love [poem]. | Мэнни написал любовное стихотворение. | O Manny escreveu um poema de amor.
+comedy club | /ˈkɑːmədi klʌb/ | noun | стендап-клуб | clube de comédia | a place where comedians perform | Mitchell and Cam went to a [comedy club]. | Митчелл и Кэм пошли в стендап-клуб. | O Mitchell e o Cam foram a um clube de comédia.
+heckle | /ˈhekl/ | verb | выкрикивать, подкалывать выступающего | interromper com provocações | to shout rude comments at a performer | Cam [heckled] the comedian. | Кэм выкрикивал колкости комику. | O Cam interrompeu o humorista com provocações.
+embarrassing | /ɪmˈbærəsɪŋ/ | adjective | стыдный | embaraçoso | making you feel ashamed | It was the most [embarrassing] night. | Это был самый стыдный вечер. | Foi a noite mais embaraçosa.
+romantic | /roʊˈmæntɪk/ | adjective | романтичный | romântico | connected with love | It started so [romantic]. | Всё начиналось так романтично. | Começou tão romântico.
+reserve | /rɪˈzɜːrv/ | verb | бронировать | reservar | to book in advance | He [reserved] a table. | Он забронировал столик. | Reservou uma mesa.
+secret admirer | /ˈsiːkrət ədˈmaɪrər/ | noun | тайный поклонник | admirador secreto | someone who loves you without saying who they are | Manny was her [secret admirer]. | Мэнни был её тайным поклонником. | O Manny era o admirador secreto dela.
+brave | /breɪv/ | adjective | смелый | corajoso | ready to face fear | Reading a poem aloud is [brave]. | Прочитать стихи вслух — это смело. | Ler um poema em voz alta é corajoso.
+flustered | /ˈflʌstərd/ | adjective | растерянный, смущённый | atrapalhado | nervous and confused | Phil got totally [flustered]. | Фил совсем растерялся. | O Phil ficou completamente atrapalhado.
+
+## 16 · Fears
+fear | /fɪr/ | noun | страх | medo | the feeling of being afraid | Everyone has a [fear]. | У каждого есть свой страх. | Toda a gente tem um medo.
+haunted house | /ˈhɔːntɪd haʊs/ | noun | дом с привидениями | casa assombrada | a scary place with ghosts | Luke went to a [haunted house]. | Люк пошёл в дом с привидениями. | O Luke foi a uma casa assombrada.
+nightmare | /ˈnaɪtmer/ | noun | кошмар | pesadelo | a frightening dream | Manny had a [nightmare]. | Мэнни приснился кошмар. | O Manny teve um pesadelo.
+sleepover | /ˈsliːpoʊvər/ | noun | ночёвка у друга | noite de pijama | a night kids spend at a friend's house | He went to his first [sleepover]. | Он впервые пошёл с ночёвкой к другу. | Foi à primeira noite de pijama.
+ear infection | /ɪr ɪnˈfekʃn/ | noun | воспаление уха | infeção nos ouvidos | an illness inside the ear | Lily had an [ear infection]. | У Лили было воспаление уха. | A Lily tinha uma infeção nos ouvidos.
+brave face | /breɪv feɪs/ | idiom | храбрый вид | cara de coragem | pretending not to be afraid | He put on a [brave face]. | Он сделал храбрый вид. | Pôs uma cara de coragem.
+driving lesson | /ˈdraɪvɪŋ ˈlesn/ | noun | урок вождения | aula de condução | a class to learn to drive | Haley had a [driving lesson]. | У Хейли был урок вождения. | A Haley teve uma aula de condução.
+learner's permit | /ˈlɜːrnərz ˈpɜːrmɪt/ | noun | ученическое водительское удостоверение | licença de aprendizagem | a document to practice driving with an adult | She just got her [learner's permit]. | Она только что получила ученические права. | Acabou de tirar a licença de aprendizagem.
+nervous wreck | /ˈnɜːrvəs rek/ | idiom | комок нервов | pilha de nervos | a person who is extremely anxious | Claire was a [nervous wreck]. | Клэр была комком нервов. | A Claire estava uma pilha de nervos.
+calm | /kɑːm/ | adjective | спокойный | calmo | not worried or excited | Stay [calm] and keep driving. | Сохраняй спокойствие и веди машину. | Mantém a calma e continua a conduzir.
+brakes | /breɪks/ | noun | тормоза | travões | the part of a car that stops it | Hit the [brakes]! | Жми на тормоз! | Trava!
+face your fears | /feɪs jʊr fɪrz/ | idiom | взглянуть страху в глаза | enfrentar os medos | to deal with what scares you | It's time to [face your fears]. | Пора взглянуть страху в глаза. | Está na hora de enfrentar os teus medos.
+grown-up | /ˈɡroʊn ʌp/ | noun | взрослый | adulto | an adult | Even [grown-ups] get scared. | Даже взрослым бывает страшно. | Até os adultos têm medo.
+reassure | /ˌriːəˈʃʊr/ | verb | успокоить, ободрить | tranquilizar | to make someone feel less worried | Cam tried to [reassure] Mitchell. | Кэм пытался успокоить Митчелла. | O Cam tentou tranquilizar o Mitchell.
+shriek | /ʃriːk/ | verb | визжать | guinchar | to scream in a high voice | He [shrieked] like a little girl. | Он завизжал как девчонка. | Guinchou como uma menina.
+
+## 17 · Truth Be Told
+truth | /truːθ/ | noun | правда | verdade | the real facts | [Truth] be told, I did it. | По правде говоря, это сделал я. | Verdade seja dita, fui eu.
+run over | /rʌn ˈoʊvər/ | phrasal verb | сбить, переехать | atropelar | to hit with a car | Claire [ran over] a neighbor's cat... almost. | Клэр чуть не переехала соседского кота. | A Claire quase atropelou o gato do vizinho.
+neighbor | /ˈneɪbər/ | noun | сосед | vizinho | a person living near you | The [neighbor] was furious. | Сосед был в ярости. | O vizinho estava furioso.
+hide | /haɪd/ | verb | скрывать | esconder | to keep something secret | She tried to [hide] what happened. | Она пыталась скрыть, что случилось. | Ela tentou esconder o que aconteceu.
+honest | /ˈɑːnɪst/ | adjective | честный | honesto | telling the truth | Just be [honest] with them. | Просто будь с ними честной. | Sê honesta com eles.
+witness | /ˈwɪtnəs/ | noun | свидетель | testemunha | a person who saw something happen | There was a [witness]. | Был свидетель. | Havia uma testemunha.
+cover story | /ˈkʌvər ˈstɔːri/ | noun | легенда | história inventada | a false story to hide the truth | They needed a good [cover story]. | Им нужна была хорошая легенда. | Precisavam de uma boa história inventada.
+nanny | /ˈnæni/ | noun | няня | ama | a woman paid to look after children | Gloria hired a [nanny]. | Глория наняла няню. | A Gloria contratou uma ama.
+suspicious | /səˈspɪʃəs/ | adjective | подозрительный | desconfiado | believing something is wrong | Jay was [suspicious] of the nanny. | Джей с подозрением относился к няне. | O Jay desconfiava da ama.
+spill the beans | /spɪl ðə biːnz/ | idiom | проболтаться | dar com a língua nos dentes | to tell a secret | Luke [spilled the beans]. | Люк проболтался. | O Luke deu com a língua nos dentes.
+guilty conscience | /ˈɡɪlti ˈkɑːnʃəns/ | noun | нечистая совесть | consciência pesada | feeling bad about something you did | She had a [guilty conscience]. | Её мучила совесть. | Ela tinha a consciência pesada.
+white lie | /waɪt laɪ/ | noun | ложь во спасение | mentira piedosa | a small lie to avoid hurting someone | It was just a [white lie]. | Это была просто ложь во спасение. | Foi só uma mentira piedosa.
+come clean | /kʌm kliːn/ | idiom | признаться во всём | confessar tudo | to finally tell the truth | She decided to [come clean]. | Она решила во всём признаться. | Decidiu confessar tudo.
+consequences | /ˈkɑːnsəkwensɪz/ | noun | последствия | consequências | results of an action | Face the [consequences]. | Отвечай за последствия. | Enfrenta as consequências.
+trust | /trʌst/ | noun | доверие | confiança | belief that someone is honest | Lying breaks [trust]. | Ложь разрушает доверие. | Mentir quebra a confiança.
+
+## 18 · Starry Night
+telescope | /ˈtelɪskoʊp/ | noun | телескоп | telescópio | a tool for looking at stars | Jay and Manny look through a [telescope]. | Джей и Мэнни смотрят в телескоп. | O Jay e o Manny olham pelo telescópio.
+stars | /stɑːrz/ | noun | звёзды | estrelas | bright points in the night sky | The [stars] are beautiful tonight. | Звёзды сегодня прекрасны. | As estrelas estão lindas esta noite.
+ritual | /ˈrɪtʃuəl/ | noun | ритуал, обычай | ritual | something done regularly in the same way | Stargazing is their special [ritual]. | Смотреть на звёзды — их особый ритуал. | Ver as estrelas é o ritual especial deles.
+hide out | /haɪd aʊt/ | phrasal verb | прятаться | esconder-se | to stay somewhere secretly | Mitchell [hid out] at the office. | Митчелл отсиживался в офисе. | O Mitchell escondeu-se no escritório.
+seafood | /ˈsiːfuːd/ | noun | морепродукты | marisco | fish and shellfish as food | Cam cooked [seafood] for dinner. | Кэм приготовил морепродукты на ужин. | O Cam cozinhou marisco para o jantar.
+connection | /kəˈnekʃn/ | noun | связь, близость | ligação | a feeling of understanding between people | The two share a special [connection]. | У них особая близость. | Os dois têm uma ligação especial.
+lost | /lɔːst/ | adjective | потерявшийся | perdido | unable to find your way | Mitchell got [lost] on the way. | Митчелл заблудился по дороге. | O Mitchell perdeu-se pelo caminho.
+dark | /dɑːrk/ | adjective | тёмный | escuro | without light | It was too [dark] to see anything. | Было слишком темно, чтобы что-то разглядеть. | Estava escuro demais para ver alguma coisa.
+spot | /spɑːt/ | noun | место | sítio | a particular place | They have a secret [spot] on the hill. | У них есть тайное место на холме. | Têm um sítio secreto na colina.
+share | /ʃer/ | verb | разделять | partilhar | to have or do together | Jay doesn't [share] his feelings. | Джей не делится своими чувствами. | O Jay não partilha os sentimentos.
+awe | /ɔː/ | noun | благоговение | admiração | a feeling of wonder | They looked up in [awe]. | Они смотрели вверх с благоговением. | Olharam para cima com admiração.
+wander | /ˈwɑːndər/ | verb | бродить | vaguear | to walk without a clear plan | Luke [wandered] off alone. | Люк ушёл бродить в одиночку. | O Luke foi vaguear sozinho.
+reunite | /ˌriːjuˈnaɪt/ | verb | воссоединиться | reunir-se | to come together again | The family [reunited] at the end. | В конце семья снова собралась. | A família reuniu-se no fim.
+peaceful | /ˈpiːsfl/ | adjective | мирный, спокойный | tranquilo | quiet and calm | It was a [peaceful] night. | Это была спокойная ночь. | Foi uma noite tranquila.
+open up | /ˈoʊpən ʌp/ | phrasal verb | раскрыться | abrir-se | to talk honestly about feelings | Jay finally [opened up]. | Джей наконец раскрылся. | O Jay finalmente abriu-se.
+
+## 19 · Game Changer
+video game | /ˈvɪdioʊ ɡeɪm/ | noun | видеоигра | videojogo | a game played on a screen | Phil wanted the new [video game]. | Фил хотел новую видеоигру. | O Phil queria o videojogo novo.
+line up | /laɪn ʌp/ | phrasal verb | стоять в очереди | fazer fila | to wait in a row of people | Phil [lined up] all night for it. | Фил всю ночь простоял в очереди. | O Phil fez fila a noite toda.
+sold out | /soʊld aʊt/ | adjective | распроданный | esgotado | all sold, none left | The game was [sold out]. | Игра была распродана. | O jogo estava esgotado.
+compete | /kəmˈpiːt/ | verb | соревноваться | competir | to try to beat others | Phil and Luke [compete] at everything. | Фил и Люк соревнуются во всём. | O Phil e o Luke competem em tudo.
+chess | /tʃes/ | noun | шахматы | xadrez | a board game with kings and queens | Manny beat Jay at [chess]. | Мэнни обыграл Джея в шахматы. | O Manny ganhou ao Jay no xadrez.
+let someone win | /let ˈsʌmwʌn wɪn/ | phrase | поддаваться | deixar ganhar | to lose on purpose to be nice | Don't [let him win]! | Не поддавайся ему! | Não o deixes ganhar!
+rematch | /ˈriːmætʃ/ | noun | реванш | desforra | another game after a loss | Jay demanded a [rematch]. | Джей потребовал реванша. | O Jay exigiu a desforra.
+sore loser | /sɔːr ˈluːzər/ | noun | не умеющий проигрывать | mau perdedor | someone upset by losing | Jay is a [sore loser]. | Джей не умеет проигрывать. | O Jay é mau perdedor.
+genius | /ˈdʒiːniəs/ | adjective | гениальный | genial | extremely clever | That was a [genius] move. | Это был гениальный ход. | Foi uma jogada genial.
+strategy | /ˈstrætədʒi/ | noun | стратегия | estratégia | a plan to win | He needs a better [strategy]. | Ему нужна стратегия получше. | Ele precisa de uma estratégia melhor.
+upgrade | /ˈʌpɡreɪd/ | noun | обновление, апгрейд | atualização | a better version | Phil loves any tech [upgrade]. | Фил обожает любые технологические новинки. | O Phil adora qualquer atualização tecnológica.
+gadget | /ˈɡædʒɪt/ | noun | гаджет | gadget | a small clever device | His office is full of [gadgets]. | Его кабинет полон гаджетов. | O escritório dele está cheio de gadgets.
+ego | /ˈiːɡoʊ/ | noun | самолюбие | ego | your sense of your own importance | Losing hurt Jay's [ego]. | Проигрыш задел самолюбие Джея. | Perder feriu o ego do Jay.
+first in line | /fɜːrst ɪn laɪn/ | phrase | первый в очереди | primeiro da fila | at the very front of a queue | Phil wanted to be [first in line]. | Фил хотел быть первым в очереди. | O Phil queria ser o primeiro da fila.
+obsessed | /əbˈsest/ | adjective | одержимый | obcecado | thinking about something all the time | He's [obsessed] with that game. | Он помешан на этой игре. | Está obcecado com aquele jogo.
+
+## 20 · Benched
+bench | /bentʃ/ | verb | посадить на скамейку запасных | pôr no banco | to not let a player play | The coach [benched] Luke. | Тренер посадил Люка на скамейку. | O treinador pôs o Luke no banco.
+coach | /koʊtʃ/ | noun | тренер | treinador | a person who trains a team | Claire became the team [coach]. | Клэр стала тренером команды. | A Claire tornou-se treinadora da equipa.
+team | /tiːm/ | noun | команда | equipa | a group playing together | Luke's basketball [team] kept losing. | Баскетбольная команда Люка всё проигрывала. | A equipa de basquetebol do Luke estava sempre a perder.
+referee | /ˌrefəˈriː/ | noun | судья | árbitro | the person who controls a game | Claire yelled at the [referee]. | Клэр накричала на судью. | A Claire gritou com o árbitro.
+yell | /jel/ | verb | кричать | gritar | to shout loudly | Stop [yelling] at the kids! | Хватит кричать на детей! | Para de gritar com os miúdos!
+intense | /ɪnˈtens/ | adjective | напористый, одержимый | intenso | very serious and full of energy | Claire is way too [intense]. | Клэр слишком напориста. | A Claire é intensa demais.
+sportsmanship | /ˈspɔːrtsmənʃɪp/ | noun | спортивное поведение | desportivismo | fair and polite behavior in sport | Remember good [sportsmanship]. | Помните о честной игре. | Lembrem-se do desportivismo.
+lawsuit | /ˈlɔːsuːt/ | noun | судебный иск | processo judicial | a legal case against someone | Mitchell worked on a big [lawsuit]. | Митчелл работал над крупным иском. | O Mitchell trabalhou num grande processo judicial.
+jury | /ˈdʒʊri/ | noun | присяжные | júri | a group deciding a court case | Cam was called for [jury] duty. | Кэма вызвали в присяжные. | O Cam foi chamado para o júri.
+bribe | /braɪb/ | verb | подкупить | subornar | to give money to get something unfairly | Manny tried to [bribe] a classmate. | Мэнни пытался подкупить одноклассника. | O Manny tentou subornar um colega.
+win at all costs | /wɪn æt ɔːl kɔːsts/ | idiom | победить любой ценой | ganhar a qualquer custo | to want victory no matter what | She wants to [win at all costs]. | Она хочет победить любой ценой. | Ela quer ganhar a qualquer custo.
+halftime | /ˈhæftaɪm/ | noun | перерыв между таймами | intervalo | the break in the middle of a game | At [halftime], they were losing. | К перерыву они проигрывали. | Ao intervalo estavam a perder.
+teammate | /ˈtiːmmeɪt/ | noun | товарищ по команде | colega de equipa | a person on your team | Be nice to your [teammates]. | Будь добр к товарищам по команде. | Sê simpático com os teus colegas de equipa.
+cheer on | /tʃɪr ɑːn/ | phrasal verb | подбадривать | torcer por | to shout to encourage someone | The whole family [cheered him on]. | Вся семья за него болела. | A família toda torceu por ele.
+fair | /fer/ | adjective | честный | justo | following the rules | That wasn't [fair]! | Это было нечестно! | Isso não foi justo!
+
+## 21 · Travels with Scout
+pet owner | /pet ˈoʊnər/ | noun | хозяин питомца | dono de animal | a person who has a pet | Jay is a devoted [pet owner]. | Джей — преданный хозяин своей собаки. | O Jay é um dono de animal dedicado.
+ex-wife | /ˌeks ˈwaɪf/ | noun | бывшая жена | ex-mulher | a woman you used to be married to | Jay's [ex-wife] came to visit. | Приехала бывшая жена Джея. | A ex-mulher do Jay veio visitá-lo.
+drama | /ˈdrɑːmə/ | noun | драма | drama | exciting and emotional events | She always brings [drama]. | Она всегда приносит с собой драму. | Ela traz sempre drama.
+walk | /wɔːk/ | verb | выгуливать | passear | to take a dog outside | Who's going to [walk] the dog? | Кто выгуляет собаку? | Quem vai passear o cão?
+kennel | /ˈkenl/ | noun | собачий питомник, будка | canil | a place where dogs are kept | They left the dog at a [kennel]. | Они оставили собаку в передержке. | Deixaram o cão num canil.
+leash | /liːʃ/ | noun | поводок | trela | a strap to hold a dog | Keep her on the [leash]. | Держи её на поводке. | Mantém-na com a trela.
+vet | /vet/ | noun | ветеринар | veterinário | an animal doctor | They took the dog to the [vet]. | Они отвезли собаку к ветеринару. | Levaram o cão ao veterinário.
+fetch | /fetʃ/ | verb | принести (апорт) | ir buscar | to go and bring something back | The dog loves to [fetch]. | Пёс обожает приносить палку. | O cão adora ir buscar a bola.
+loyal | /ˈlɔɪəl/ | adjective | верный | leal | always supporting someone | Dogs are very [loyal]. | Собаки очень верные. | Os cães são muito leais.
+bark | /bɑːrk/ | verb | лаять | ladrar | the sound a dog makes | The dog [barked] all night. | Собака лаяла всю ночь. | O cão ladrou a noite toda.
+treat | /triːt/ | noun | лакомство | guloseima | a small special food | Give her a [treat]. | Дай ей вкусняшку. | Dá-lhe uma guloseima.
+awkward reunion | /ˈɔːkwərd riˈjuːnjən/ | noun | неловкая встреча | reencontro constrangedor | an uncomfortable meeting after a long time | It was an [awkward reunion]. | Встреча вышла неловкой. | Foi um reencontro constrangedor.
+patch things up | /pætʃ θɪŋz ʌp/ | idiom | помириться | fazer as pazes | to repair a relationship | They tried to [patch things up]. | Они пытались помириться. | Tentaram fazer as pazes.
+bitter | /ˈbɪtər/ | adjective | озлобленный | amargo | angry about past things | She's still [bitter] about the divorce. | Её до сих пор мучает обида за развод. | Ela ainda está amarga com o divórcio.
+move on | /muːv ɑːn/ | phrasal verb | отпустить прошлое | seguir em frente | to leave the past behind | It's time to [move on]. | Пора отпустить прошлое. | Está na hora de seguir em frente.
+
+## 22 · Airport 2010
+airport | /ˈerpɔːrt/ | noun | аэропорт | aeroporto | where planes take off and land | The family is stuck at the [airport]. | Семья застряла в аэропорту. | A família ficou presa no aeroporto.
+vacation | /veɪˈkeɪʃn/ | noun | отпуск, каникулы | férias | a trip for rest and fun | They're going on [vacation] to Hawaii. | Они едут в отпуск на Гавайи. | Vão de férias para o Havai.
+passport | /ˈpæspɔːrt/ | noun | паспорт | passaporte | an official document for travel | Gloria forgot her [passport]. | Глория забыла паспорт. | A Gloria esqueceu-se do passaporte.
+security check | /sɪˈkjʊrəti tʃek/ | noun | досмотр | controlo de segurança | where bags are checked before a flight | They got stuck at the [security check]. | Они застряли на досмотре. | Ficaram presos no controlo de segurança.
+delay | /dɪˈleɪ/ | noun | задержка | atraso | when something happens later than planned | There's a two-hour [delay]. | Рейс задерживается на два часа. | Há um atraso de duas horas.
+miss a flight | /mɪs ə flaɪt/ | phrase | опоздать на рейс | perder o voo | to arrive too late for your plane | Hurry, we'll [miss our flight]! | Быстрее, опоздаем на рейс! | Despachem-se, vamos perder o voo!
+carry-on | /ˈkæri ɑːn/ | noun | ручная кладь | bagagem de mão | a small bag you take on the plane | Is this your [carry-on]? | Это ваша ручная кладь? | Esta é a sua bagagem de mão?
+boarding | /ˈbɔːrdɪŋ/ | noun | посадка | embarque | getting on a plane | [Boarding] starts in ten minutes. | Посадка начнётся через десять минут. | O embarque começa daqui a dez minutos.
+madhouse | /ˈmædhaʊs/ | noun | сумасшедший дом | manicómio | a very noisy, disorganized place | The airport was a [madhouse]. | Аэропорт был сумасшедшим домом. | O aeroporto era um manicómio.
+immigration | /ˌɪmɪˈɡreɪʃn/ | noun | иммиграционный контроль | imigração | the check of foreign travelers | Gloria worried about [immigration]. | Глория переживала из-за паспортного контроля. | A Gloria estava preocupada com a imigração.
+pack | /pæk/ | verb | собирать вещи | fazer as malas | to put things in a bag for travel | Did you [pack] sunscreen? | Ты положил солнцезащитный крем? | Puseste protetor solar na mala?
+suitcase | /ˈsuːtkeɪs/ | noun | чемодан | mala | a bag for clothes when traveling | Her [suitcase] is way too heavy. | Её чемодан слишком тяжёлый. | A mala dela está pesada demais.
+first class | /ˌfɜːrst ˈklæs/ | noun | первый класс | primeira classe | the most expensive seats on a plane | Jay flew [first class]. | Джей летел первым классом. | O Jay voou em primeira classe.
+stressed out | /ˌstrest ˈaʊt/ | adjective | в стрессе | stressado | very worried and tense | Claire was [stressed out]. | Клэр была на взводе. | A Claire estava stressada.
+gate | /ɡeɪt/ | noun | выход на посадку | porta de embarque | the door to the plane at the airport | Run to the [gate]! | Бегите к выходу на посадку! | Corram para a porta de embarque!
+
+## 23 · Hawaii
+Hawaii | /həˈwaɪi/ | noun | Гавайи | Havai | a group of US islands in the Pacific | The family vacation in [Hawaii]. | Семейный отпуск на Гавайях. | As férias da família no Havai.
+beach | /biːtʃ/ | noun | пляж | praia | sand next to the sea | Let's spend the day at the [beach]. | Давай проведём день на пляже. | Vamos passar o dia na praia.
+resort | /rɪˈzɔːrt/ | noun | курорт | resort | a place where people go on holiday | The [resort] is beautiful. | Курорт прекрасен. | O resort é lindo.
+honeymoon | /ˈhʌnimuːn/ | noun | медовый месяц | lua de mel | a holiday after a wedding | Jay and Gloria had their [honeymoon] here. | Здесь у Джея и Глории был медовый месяц. | O Jay e a Gloria passaram cá a lua de mel.
+relax | /rɪˈlæks/ | verb | расслабиться | relaxar | to rest and feel calm | Jay just wants to [relax]. | Джей просто хочет расслабиться. | O Jay só quer relaxar.
+sunburn | /ˈsʌnbɜːrn/ | noun | солнечный ожог | escaldão | red, painful skin from the sun | Phil got a terrible [sunburn]. | Фил сильно обгорел. | O Phil apanhou um escaldão horrível.
+surf | /sɜːrf/ | verb | заниматься сёрфингом | fazer surf | to ride waves on a board | Phil tried to [surf]. | Фил попробовал заняться сёрфингом. | O Phil tentou fazer surf.
+couples | /ˈkʌplz/ | noun | пары | casais | two people in a relationship | The [couples] went to dinner. | Пары пошли на ужин. | Os casais foram jantar.
+romantic dinner | /roʊˈmæntɪk ˈdɪnər/ | noun | романтический ужин | jantar romântico | a special meal for two lovers | They had a [romantic dinner] on the beach. | У них был романтический ужин на пляже. | Tiveram um jantar romântico na praia.
+paradise | /ˈpærədaɪs/ | noun | рай | paraíso | a perfect, beautiful place | This island is [paradise]. | Этот остров — настоящий рай. | Esta ilha é um paraíso.
+snorkel | /ˈsnɔːrkl/ | verb | нырять с маской | fazer snorkel | to swim with a mask and tube | The kids went to [snorkel]. | Дети пошли нырять с маской. | Os miúdos foram fazer snorkel.
+souvenir | /ˌsuːvəˈnɪr/ | noun | сувенир | lembrança | something bought to remember a trip | Bring me a [souvenir]! | Привези мне сувенир! | Traz-me uma lembrança!
+recapture | /riːˈkæptʃər/ | verb | вновь пережить | recuperar | to experience a feeling again | They tried to [recapture] the magic. | Они пытались снова пережить то волшебство. | Tentaram recuperar a magia.
+waves | /weɪvz/ | noun | волны | ondas | moving water in the sea | The [waves] were huge. | Волны были огромными. | As ondas eram enormes.
+unwind | /ʌnˈwaɪnd/ | verb | расслабиться | descontrair | to relax after stress | She needed to [unwind]. | Ей нужно было расслабиться. | Ela precisava de descontrair.
+
+## 24 · Family Portrait
+family portrait | /ˈfæməli ˈpɔːrtrət/ | noun | семейный портрет | retrato de família | a formal photo of a family | Claire wants a perfect [family portrait]. | Клэр хочет идеальный семейный портрет. | A Claire quer um retrato de família perfeito.
+photographer | /fəˈtɑːɡrəfər/ | noun | фотограф | fotógrafo | a person who takes photos | The [photographer] is waiting. | Фотограф ждёт. | O fotógrafo está à espera.
+matching | /ˈmætʃɪŋ/ | adjective | одинаковый, в тон | a condizer | having the same color or style | Everyone wore [matching] white clothes. | Все надели одинаковую белую одежду. | Todos usaram roupa branca a condizer.
+pose | /poʊz/ | verb | позировать | posar | to stand in a position for a photo | Everyone, [pose]! | Все, позируем! | Toda a gente, posem!
+mud | /mʌd/ | noun | грязь | lama | wet, soft earth | They all ended up covered in [mud]. | В итоге все оказались в грязи. | Acabaram todos cobertos de lama.
+perfectionist | /pərˈfekʃənɪst/ | noun | перфекционист | perfeccionista | someone who wants everything perfect | Claire is a total [perfectionist]. | Клэр — полная перфекционистка. | A Claire é uma perfeccionista total.
+smile | /smaɪl/ | verb | улыбаться | sorrir | to make a happy expression | Everybody [smile]! | Все улыбаемся! | Toda a gente a sorrir!
+mess | /mes/ | noun | беспорядок | confusão | a dirty or untidy state | The photo shoot was a total [mess]. | Фотосессия превратилась в сплошной бардак. | A sessão de fotos foi uma confusão total.
+pigeon | /ˈpɪdʒɪn/ | noun | голубь | pombo | a common gray city bird | A [pigeon] got into the house. | В дом залетел голубь. | Entrou um pombo em casa.
+imperfect | /ɪmˈpɜːrfɪkt/ | adjective | несовершенный | imperfeito | having faults | Their family is beautifully [imperfect]. | Их семья прекрасна в своём несовершенстве. | A família deles é lindamente imperfeita.
+snap | /snæp/ | verb | сфотографировать, щёлкнуть | tirar (uma foto) | to take a photo quickly | He [snapped] the photo at the perfect moment. | Он щёлкнул фото в идеальный момент. | Tirou a foto no momento perfeito.
+cherish | /ˈtʃerɪʃ/ | verb | дорожить | estimar | to love and protect something | They'll [cherish] that photo forever. | Они всегда будут дорожить этим фото. | Vão estimar aquela foto para sempre.
+chaotic | /keɪˈɑːtɪk/ | adjective | хаотичный | caótico | completely disorganized | Their life is loud and [chaotic]. | Их жизнь шумная и хаотичная. | A vida deles é barulhenta e caótica.
+memory | /ˈmeməri/ | noun | воспоминание | memória | something you remember | It became a favorite [memory]. | Это стало любимым воспоминанием. | Tornou-se uma memória preferida.
+together | /təˈɡeðər/ | adverb | вместе | juntos | with each other | At least we're all [together]. | Главное, что мы все вместе. | Pelo menos estamos todos juntos.
