@@ -18,6 +18,7 @@ export interface Entitlement {
   kind: "promo" | "subscription";
   units_per_period: number;
   used: number;
+  /** Сумма действующих броней — считается запросом, в таблице её нет. */
   reserved: number;
   period_start: number;
   period_end: number;
@@ -33,11 +34,18 @@ export interface PlanStatus {
   periodEnd: string | null;
 }
 
+/** Бронь старше этого — оборванный запрос: Worker столько не живёт. */
+export const RESERVATION_TTL = 600;
+
 export async function entitlementOf(
-  db: D1Database, entitlementId: string | null,
+  db: D1Database, entitlementId: string | null, now: number,
 ): Promise<Entitlement | null> {
   if (!entitlementId) return null;
-  return db.prepare("SELECT * FROM entitlements WHERE id = ?").bind(entitlementId).first<Entitlement>();
+  return db.prepare(
+    `SELECT e.*, COALESCE((SELECT SUM(amount) FROM reservations r
+       WHERE r.entitlement_id = e.id AND r.created_at > ?2), 0) AS reserved
+     FROM entitlements e WHERE e.id = ?1`,
+  ).bind(entitlementId, now - RESERVATION_TTL).first<Entitlement>();
 }
 
 export function status(entitlement: Entitlement | null, now: number): PlanStatus {
@@ -58,27 +66,35 @@ export function status(entitlement: Entitlement | null, now: number): PlanStatus
 }
 
 /**
- * Бронь единиц до запроса к модели — одним условным UPDATE. Параллельные
- * запросы не могут вместе выйти за лимит: каждый видит брони остальных.
+ * Бронь единиц до запроса к модели — одним INSERT … SELECT с условием:
+ * запись появляется, только если лимит вмещает её вместе с остальными
+ * действующими бронями. Параллельные запросы не могут вместе выйти за лимит.
  */
 export async function reserve(
-  db: D1Database, entitlementId: string, amount: number, now: number,
-): Promise<void> {
+  db: D1Database, deps: Deps, entitlementId: string, amount: number,
+): Promise<string> {
+  const now = deps.now();
+  const id = toHex(deps.randomBytes(16));
   const result = await db.prepare(
-    `UPDATE entitlements SET reserved = reserved + ?1, updated_at = ?3
-     WHERE id = ?2 AND period_end > ?3 AND used + reserved + ?1 <= units_per_period`,
-  ).bind(amount, entitlementId, now).run();
+    `INSERT INTO reservations (id, entitlement_id, amount, created_at)
+     SELECT ?1, e.id, ?2, ?3 FROM entitlements e
+     WHERE e.id = ?4 AND e.period_end > ?3
+       AND e.used + ?2 + COALESCE((SELECT SUM(amount) FROM reservations r
+             WHERE r.entitlement_id = e.id AND r.created_at > ?5), 0) <= e.units_per_period`,
+  ).bind(id, amount, now, entitlementId, now - RESERVATION_TTL).run();
   if ((result.meta.changes ?? 0) === 0) throw new ApiError(402, "quota_exceeded");
+  return id;
 }
 
 /** Снять бронь и списать фактический расход (или ничего, если запрос упал). */
 export async function settle(
-  db: D1Database, entitlementId: string, reserved: number, spent: number, now: number,
+  db: D1Database, entitlementId: string, reservationId: string, spent: number, now: number,
 ): Promise<void> {
-  await db.prepare(
-    `UPDATE entitlements SET reserved = MAX(reserved - ?1, 0), used = used + ?2, updated_at = ?4
-     WHERE id = ?3`,
-  ).bind(reserved, spent, entitlementId, now).run();
+  await db.batch([
+    db.prepare("DELETE FROM reservations WHERE id = ?").bind(reservationId),
+    db.prepare("UPDATE entitlements SET used = used + ?, updated_at = ? WHERE id = ?")
+      .bind(spent, now, entitlementId),
+  ]);
 }
 
 // MARK: - Промокод
@@ -107,7 +123,7 @@ export async function grantPromo(
       ).bind(seconds, now, current.id).run();
     } else {
       await db.prepare(
-        `UPDATE entitlements SET period_start = ?1, period_end = ?2, used = 0, reserved = 0,
+        `UPDATE entitlements SET period_start = ?1, period_end = ?2, used = 0,
            units_per_period = ?3, updated_at = ?1 WHERE id = ?4`,
       ).bind(now, now + seconds, unitsPerPeriod, current.id).run();
     }
@@ -163,7 +179,7 @@ export async function applySubscription(
     if (subscription.expiresDate > existing.period_end) {
       // Подписка продлилась — новый период с чистым счётчиком.
       await db.prepare(
-        `UPDATE entitlements SET period_start = ?1, period_end = ?2, used = 0, reserved = 0,
+        `UPDATE entitlements SET period_start = ?1, period_end = ?2, used = 0,
            units_per_period = ?3, product_id = ?4, updated_at = ?5 WHERE id = ?6`,
       ).bind(subscription.purchaseDate, subscription.expiresDate, unitsPerPeriod,
         subscription.productId, now, entitlementId).run();

@@ -65,7 +65,7 @@ async function register(request: Request, env: Env, deps: Deps): Promise<Respons
 
 async function context(request: Request, env: Env, deps: Deps) {
   const device = await authenticate(request, env.DB, deps);
-  const entitlement = await entitlementOf(env.DB, device.entitlement_id);
+  const entitlement = await entitlementOf(env.DB, device.entitlement_id, deps.now());
   return { device, entitlement };
 }
 
@@ -149,8 +149,7 @@ async function callWithQuota(
 ) {
   const input = estimateTokens(call.system)
     + call.messages.reduce((sum, message) => sum + estimateTokens(message.content), 0);
-  const reservation = units(input, call.maxTokens);
-  await reserve(env.DB, entitlement.id, reservation, deps.now());
+  const reservationId = await reserve(env.DB, deps, entitlement.id, units(input, call.maxTokens));
   let spentIn = 0;
   let spentOut = 0;
   try {
@@ -166,7 +165,7 @@ async function callWithQuota(
     throw error;
   } finally {
     const spent = units(spentIn, spentOut);
-    await settle(env.DB, entitlement.id, reservation, spent, deps.now());
+    await settle(env.DB, entitlement.id, reservationId, spent, deps.now());
     if (spent > 0) {
       await env.DB.prepare(
         `INSERT INTO usage_log (entitlement_id, device_id, kind, input_tokens, output_tokens,
@@ -227,7 +226,7 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
   if (notes.length === 0) throw new ApiError(502, "model_error");
   await rememberEpisode(env, deps, device, showId, season, episode);
   return json({ deck: deckFile(facts, language, notes), source: "model",
-                plan: status(await entitlementOf(env.DB, active.id), deps.now()) });
+                plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) });
 }
 
 async function discuss(request: Request, env: Env, deps: Deps): Promise<Response> {
@@ -261,7 +260,7 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
   });
   const reply = parseDiscussionReply(result.text);
   if (!reply) throw new ApiError(502, "model_error");
-  return json({ ...reply, plan: status(await entitlementOf(env.DB, active.id), deps.now()) });
+  return json({ ...reply, plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) });
 }
 
 /** Реплики разговора: не больше шести ответов ученика, короткие тексты. */

@@ -45,8 +45,10 @@ iPhone ──HTTPS──► Worker (backend/src) ──► Anthropic API   (кл
 в `wrangler.toml` — без перевыпуска приложения.
 
 Перед каждым запросом к модели единицы **бронируются** по худшему случаю
-одним условным `UPDATE`, после ответа списывается фактический расход.
-Параллельные запросы не могут вместе выйти за лимит.
+одним условным `INSERT`, после ответа бронь снимается и списывается
+фактический расход. Параллельные запросы не могут вместе выйти за лимит,
+а бронь оборванного запроса через 10 минут перестаёт учитываться — лимит
+не «утекает».
 
 ## Безопасность: от чего защищено
 
@@ -82,7 +84,7 @@ iPhone ──HTTPS──► Worker (backend/src) ──► Anthropic API   (кл
 ```sh
 cd backend
 npm ci
-npm test                       # 52 теста на настоящем SQLite
+npm test                       # 54 теста на настоящем SQLite
 npx wrangler login             # откроется браузер
 npx wrangler d1 create recap   # скопировать database_id в wrangler.toml
 npx wrangler d1 migrations apply recap --remote

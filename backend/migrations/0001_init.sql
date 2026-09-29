@@ -16,19 +16,29 @@ CREATE INDEX devices_entitlement ON devices(entitlement_id);
 
 -- Доступ: подписка (общая для устройств одной покупки) или промокод.
 -- Единицы — токены, где выход весит как пять входов (так же соотносятся
--- цены модели). reserved — занято запросами, которые ещё идут.
+-- цены модели).
 CREATE TABLE entitlements (
     id                       TEXT PRIMARY KEY,
     kind                     TEXT NOT NULL CHECK (kind IN ('promo', 'subscription')),
     units_per_period         INTEGER NOT NULL,
     used                     INTEGER NOT NULL DEFAULT 0,
-    reserved                 INTEGER NOT NULL DEFAULT 0,
     period_start             INTEGER NOT NULL,
     period_end               INTEGER NOT NULL,
     original_transaction_id  TEXT UNIQUE,
     product_id               TEXT,
     updated_at               INTEGER NOT NULL
 );
+
+-- Брони единиц на время запроса к модели. Запись, а не счётчик: если
+-- запрос оборвётся на полпути, бронь не повиснет навсегда — через десять
+-- минут она просто перестаёт учитываться.
+CREATE TABLE reservations (
+    id              TEXT PRIMARY KEY,
+    entitlement_id  TEXT NOT NULL,
+    amount          INTEGER NOT NULL,
+    created_at      INTEGER NOT NULL
+);
+CREATE INDEX reservations_entitlement ON reservations(entitlement_id, created_at);
 
 -- Промокоды — только HMAC с секретным перцем: из базы их не восстановить.
 CREATE TABLE promo_codes (

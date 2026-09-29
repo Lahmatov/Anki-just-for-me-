@@ -17,8 +17,11 @@ export class FakeClaude implements ClaudeLike {
     ] }),
     inputTokens: 1_000, outputTokens: 500,
   });
+  /** Задержка ответа — чтобы параллельные запросы действительно пересеклись. */
+  delayMs = 0;
   async complete(call: ClaudeCall) {
     this.calls.push(call);
+    if (this.delayMs) await new Promise((resolve) => setTimeout(resolve, this.delayMs));
     return this.reply();
   }
 }

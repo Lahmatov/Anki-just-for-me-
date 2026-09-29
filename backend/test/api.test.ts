@@ -139,8 +139,8 @@ describe("набор слов", () => {
     const { body } = await world.call("POST", "/v1/deck", DECK_REQUEST, token);
     // 1000 входа + 5 × 500 выхода.
     expect(body.plan.unitsLeft).toBe(100_000 - 3_500);
-    const row = world.db.raw.prepare("SELECT used, reserved FROM entitlements").get();
-    expect(row).toEqual({ used: 3_500, reserved: 0 });
+    expect(world.db.raw.prepare("SELECT used FROM entitlements").get()).toEqual({ used: 3_500 });
+    expect(world.db.raw.prepare("SELECT COUNT(*) AS n FROM reservations").get()).toEqual({ n: 0 });
     const log = world.db.raw.prepare("SELECT * FROM usage_log").all();
     expect(log).toHaveLength(1);
     expect(JSON.stringify(log)).not.toContain("hang out");
@@ -198,8 +198,8 @@ describe("набор слов", () => {
     const response = await world.call("POST", "/v1/deck", DECK_REQUEST, token);
     expect(response.status).toBe(502);
     expect(response.body.error).toBe("model_refused");
-    expect(world.db.raw.prepare("SELECT used, reserved FROM entitlements").get())
-      .toEqual({ used: 850, reserved: 0 });
+    expect(world.db.raw.prepare("SELECT used FROM entitlements").get()).toEqual({ used: 850 });
+    expect(world.db.raw.prepare("SELECT COUNT(*) AS n FROM reservations").get()).toEqual({ n: 0 });
   });
 
   it("сбой до ответа снимает бронь без списания", async () => {
@@ -207,8 +207,34 @@ describe("набор слов", () => {
     const token = await withPromo(world);
     world.claude.reply = () => { throw new ApiError(503, "model_busy"); };
     expect((await world.call("POST", "/v1/deck", DECK_REQUEST, token)).status).toBe(503);
-    expect(world.db.raw.prepare("SELECT used, reserved FROM entitlements").get())
-      .toEqual({ used: 0, reserved: 0 });
+    expect(world.db.raw.prepare("SELECT used FROM entitlements").get()).toEqual({ used: 0 });
+    expect(world.db.raw.prepare("SELECT COUNT(*) AS n FROM reservations").get()).toEqual({ n: 0 });
+  });
+
+  it("оборванный запрос не съедает лимит навсегда", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world, 50_000);
+    const entitlement = world.db.raw.prepare("SELECT id FROM entitlements").get() as { id: string };
+    // Бронь, которую никто не снял: Worker оборвался посреди запроса.
+    world.db.raw.prepare("INSERT INTO reservations VALUES ('stuck', ?, 45000, ?)")
+      .run(entitlement.id, world.now());
+    expect((await world.call("GET", "/v1/me", undefined, token)).body.unitsLeft).toBe(5_000);
+    expect((await world.call("POST", "/v1/deck", DECK_REQUEST, token)).body.error).toBe("quota_exceeded");
+    world.advance(601);
+    expect((await world.call("GET", "/v1/me", undefined, token)).body.unitsLeft).toBe(50_000);
+    expect((await world.call("POST", "/v1/deck", DECK_REQUEST, token)).status).toBe(200);
+  });
+
+  it("параллельные запросы делят лимит честно", async () => {
+    const world = makeWorld();
+    // Хватает ровно на одну бронь худшего случая (~41 000 единиц).
+    const token = await withPromo(world, 60_000);
+    world.claude.delayMs = 30;
+    const results = await Promise.all([
+      world.call("POST", "/v1/deck", DECK_REQUEST, token),
+      world.call("POST", "/v1/deck", DECK_REQUEST, token),
+    ]);
+    expect(results.map((r) => r.status).sort()).toEqual([200, 402]);
   });
 
   it("готовый набор из каталога — без модели и без расхода", async () => {
