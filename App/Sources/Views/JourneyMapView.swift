@@ -21,6 +21,7 @@ struct JourneyMapView: View {
     /// Остановка, на которой сейчас нарисована фишка.
     @State private var tokenIndex = 0
     @State private var selected: JourneyStop?
+    @AppStorage(SettingsKey.monchikGift) private var chosenGift: String?
 
     private let rowHeight: CGFloat = 104
 
@@ -29,6 +30,7 @@ struct JourneyMapView: View {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
                     header
+                    giftShelf
                     GeometryReader { geometry in
                         board(width: geometry.size.width)
                     }
@@ -93,6 +95,66 @@ struct JourneyMapView: View {
         }
         .cardSurface()
         .padding(.top, 8)
+    }
+
+    // MARK: - Подарки
+
+    /// Полка подарков: открытые можно надеть на Мончика (или снять, нажав
+    /// на надетый ещё раз), закрытые показывают, сколько слов до них.
+    private var giftShelf: some View {
+        let worn = MonchikGifts.equipped(chosen: chosenGift, words: position.words)
+        return VStack(alignment: .leading, spacing: 10) {
+            HintHeader(title: tr("Подарки Мончику", "Presentes do Monchik", "Monchik's presents"),
+                       hint: tr("Каждый сундук на карте — подарок. Нажми на открытый, чтобы Мончик "
+                                    + "его надел, нажми ещё раз — снимет.",
+                                "Cada baú no mapa é um presente. Toca num aberto para o Monchik o usar; "
+                                    + "toca outra vez para tirar.",
+                                "Every chest on the map is a present. Tap an open one to put it on "
+                                    + "Monchik; tap again to take it off."))
+                .font(.app(.caption, weight: .heavy))
+                .foregroundStyle(Theme.muted)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(MonchikGifts.all) { gift in
+                        giftTile(gift, open: gift.words <= position.words, worn: gift == worn)
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+        }
+        .cardSurface()
+    }
+
+    private func giftTile(_ gift: MonchikGift, open: Bool, worn: Bool) -> some View {
+        Button {
+            guard open else { return }
+            Haptics.tap()
+            if worn {
+                chosenGift = MonchikGifts.takenOff
+            } else {
+                chosenGift = gift.id
+                Sounds.play(.sparkle)
+            }
+        } label: {
+            VStack(spacing: 4) {
+                Text(open ? gift.emoji : "🔒")
+                    .font(.system(size: 28))
+                    .frame(width: 54, height: 54)
+                    .background(worn ? Theme.primary.opacity(0.18) : Theme.surface, in: Circle())
+                    .overlay(Circle().strokeBorder(worn ? Theme.primary : Theme.border,
+                                                   lineWidth: worn ? 2.5 : Theme.stroke))
+                Text(open ? gift.name : Counted.words(gift.words))
+                    .font(.app(.caption2, weight: .semibold))
+                    .foregroundStyle(open ? Theme.ink : Theme.muted)
+                    .lineLimit(1)
+                    .frame(width: 70)
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(!open)
+        .accessibilityLabel(open ? gift.name : tr("закрыто", "fechado", "locked") + ", " + Counted.words(gift.words))
+        .accessibilityValue(worn ? tr("надет", "em uso", "worn") : "")
+        .accessibilityIdentifier("gift.\(gift.id)")
     }
 
     // MARK: - Поле
@@ -215,6 +277,17 @@ struct JourneyMapView: View {
                         "≈ \(Counted.episodes(stop.episodesEquivalent)) de baralhos prontos",
                         "≈ \(Counted.episodes(stop.episodesEquivalent)) of ready decks"))
                     .font(.app(.subheadline)).foregroundStyle(Theme.muted)
+            }
+            if let gift = MonchikGifts.gift(at: stop) {
+                Label {
+                    Text(isReached(stop)
+                         ? tr("В сундуке был \(gift.name)", "No baú estava: \(gift.name)", "The chest held: \(gift.name)")
+                         : tr("В сундуке — подарок Мончику", "No baú há um presente para o Monchik",
+                              "A present for Monchik inside"))
+                } icon: {
+                    Text(isReached(stop) ? gift.emoji : "🎁")
+                }
+                .font(.app(.subheadline, weight: .semibold))
             }
             Divider()
             Text(detailText(for: stop))

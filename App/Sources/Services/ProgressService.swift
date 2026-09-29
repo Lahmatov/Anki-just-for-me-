@@ -32,7 +32,9 @@ struct ProgressService {
 
     /// Где фишка на карте путешествия: остановки — число начатых слов.
     func journeyPosition() -> JourneyPosition {
-        Journey.position(words: startedWordCount())
+        let position = Journey.position(words: startedWordCount())
+        UserDefaults.standard.set(position.words, forKey: SettingsKey.journeyWords)
+        return position
     }
 
     func stats() -> LearningStats {

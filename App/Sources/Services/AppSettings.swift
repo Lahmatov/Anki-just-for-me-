@@ -20,6 +20,11 @@ enum SettingsKey {
     static let lastCloudBackupDate = "lastCloudBackupDate"
     static let cloudBackupEnabled = "cloudBackupEnabled"
     static let soundsEnabled = "soundsEnabled"
+    /// Подарок, надетый на Мончика (id или «none» — снят).
+    static let monchikGift = "monchikGift"
+    /// Сколько слов начато — последнее известное число. Мончик на любом
+    /// экране знает по нему, какие подарки открыты, не считая базу заново.
+    static let journeyWords = "journeyWords"
     static let deviceID = "deviceID"
     static let leechThreshold = "leechThreshold"
     /// Устаревший флаг «знакомство пройдено» — читается только для перехода

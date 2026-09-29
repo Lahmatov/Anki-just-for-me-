@@ -20,20 +20,41 @@ enum MascotMood: String, CaseIterable {
 struct MascotView: View {
     var mood: MascotMood = .hello
     var size: CGFloat = 120
+    /// Показывать ли подарок. Крошечному лосю рядом с прогрессом значок
+    /// не по размеру — там он выключен сам (см. `showsGift`).
+    var wearsGift = true
 
     @State private var appeared = false
+    @AppStorage(SettingsKey.monchikGift) private var chosenGift: String?
+    @AppStorage(SettingsKey.journeyWords) private var words = 0
+
+    private var gift: MonchikGift? {
+        wearsGift && size >= 56 ? MonchikGifts.equipped(chosen: chosenGift, words: words) : nil
+    }
 
     var body: some View {
         Image(mood.assetName)
             .resizable()
             .scaledToFit()
             .frame(width: size, height: size)
+            // Подарок — значком у лапы, а не нарисованным на лосе: позы у
+            // Мончика разные, и шарф на картинке «съезжал» бы с шеи.
+            .overlay(alignment: .bottomTrailing) {
+                if let gift {
+                    Text(gift.emoji)
+                        .font(.system(size: size * 0.2))
+                        .padding(size * 0.04)
+                        .background(Theme.surface, in: Circle())
+                        .overlay(Circle().strokeBorder(Theme.border, lineWidth: Theme.stroke))
+                        .accessibilityHidden(true)
+                }
+            }
             // Один прыжок при появлении, без вечной анимации: постоянно
             // шевелящийся лось грел бы телефон и отвлекал от карточек.
             .scaleEffect(appeared ? 1 : 0.8, anchor: .bottom)
             .animation(.spring(response: 0.45, dampingFraction: 0.55), value: appeared)
             .onAppear { appeared = true }
-            .accessibilityLabel(Mascot.name)
+            .accessibilityLabel(gift.map { Mascot.name + ", " + $0.name } ?? Mascot.name)
     }
 }
 

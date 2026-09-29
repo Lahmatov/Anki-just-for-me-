@@ -465,6 +465,19 @@ struct TodayView: View {
         if let chest {
             let stop = Journey.stops[chest]
             let episodes = Counted.episodes(stop.episodesEquivalent)
+            if let gift = MonchikGifts.gift(at: stop) {
+                // Новый подарок сразу надет: вручили — значит носит.
+                UserDefaults.standard.set(gift.id, forKey: SettingsKey.monchikGift)
+                celebration = CelebrationMoment(
+                    title: stop.title + "! " + gift.emoji,
+                    subtitle: tr("В сундуке — \(gift.name). Мончик уже примерил. Это примерно \(episodes) "
+                                     + "из готовых наборов.",
+                                 "No baú: \(gift.name). O Monchik já experimentou. É mais ou menos \(episodes) "
+                                     + "de baralhos prontos.",
+                                 "In the chest: \(gift.name). Monchik is already wearing it. That's about "
+                                     + "\(episodes) worth of ready decks."))
+                return
+            }
             celebration = CelebrationMoment(
                 title: stop.kind == .finish
                     ? tr("\(stop.title)! Карта пройдена", "\(stop.title)! Mapa completo",
