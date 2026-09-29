@@ -1,0 +1,375 @@
+# show: Brooklyn Nine-Nine
+# year: 2013
+# accent: US
+
+## 1 · Pilot
+precinct | /ˈpriːsɪŋkt/ | noun | полицейский участок | esquadra | a police station for one area of a city | Jake works at the 99th [precinct]. | Джейк работает в 99-м участке. | O Jake trabalha na 99.ª esquadra.
+detective | /dɪˈtektɪv/ | noun | детектив | detetive | a police officer who solves crimes | Jake is a talented [detective]. | Джейк — талантливый детектив. | O Jake é um detetive talentoso.
+captain | /ˈkæptɪn/ | noun | капитан | capitão | the officer in charge of a precinct | The new [captain] is very strict. | Новый капитан очень строгий. | O novo capitão é muito rigoroso.
+by the book | /baɪ ðə bʊk/ | idiom | строго по правилам | segundo as regras | following the rules exactly | Holt does everything [by the book]. | Холт делает всё строго по правилам. | O Holt faz tudo segundo as regras.
+case | /keɪs/ | noun | дело | caso | a crime that police investigate | Jake solved another [case]. | Джейк раскрыл очередное дело. | O Jake resolveu mais um caso.
+solve | /sɑːlv/ | verb | раскрыть, решить | resolver | to find the answer to a problem | He can [solve] any crime. | Он может раскрыть любое преступление. | Ele consegue resolver qualquer crime.
+tie | /taɪ/ | noun | галстук | gravata | a strip of cloth worn around the neck | Holt made Jake wear a [tie]. | Холт заставил Джейка надеть галстук. | O Holt obrigou o Jake a usar gravata.
+immature | /ˌɪməˈtʃʊr/ | adjective | незрелый, ребячливый | imaturo | acting younger than your age | Jake can be really [immature]. | Джейк бывает очень ребячливым. | O Jake consegue ser muito imaturo.
+suspect | /ˈsʌspekt/ | noun | подозреваемый | suspeito | a person police think did a crime | They arrested the [suspect]. | Подозреваемого арестовали. | Prenderam o suspeito.
+murder | /ˈmɜːrdər/ | noun | убийство | homicídio | the crime of killing someone | It's a [murder] case. | Это дело об убийстве. | É um caso de homicídio.
+paperwork | /ˈpeɪpərwɜːrk/ | noun | бумажная работа | papelada | forms and documents you must fill in | Jake hates [paperwork]. | Джейк ненавидит бумажную работу. | O Jake odeia papelada.
+rule | /ruːl/ | noun | правило | regra | something you must follow | You broke the [rules]. | Ты нарушил правила. | Quebraste as regras.
+cool | /kuːl/ | adjective | классный, крутой | fixe | great, impressive | Jake thinks he's so [cool]. | Джейк считает себя очень крутым. | O Jake acha-se muito fixe.
+nice | /naɪs/ | phrase | класс, отлично | boa | used to show you're pleased | Case closed? [Nice]! | Дело закрыто? Класс! | Caso fechado? Boa!
+title of your sex tape | /ˈtaɪtl ʌv jʊr seks teɪp/ | idiom | «название твоего секс-видео» (шутка) | título do teu vídeo íntimo | a joke turning a phrase into something rude | "I'm on a mission." "[Title of your sex tape]!" | «У меня миссия». — «Название твоего секс-видео!» | "Estou numa missão." "Título do teu vídeo íntimo!"
+
+## 2 · The Tagger
+graffiti | /ɡrəˈfiːti/ | noun | граффити | grafíti | writing or pictures painted on walls | Someone sprayed [graffiti] on a car. | Кто-то нарисовал граффити на машине. | Alguém pintou grafíti num carro.
+tagger | /ˈtæɡər/ | noun | райтер, граффитист | grafiter | a person who paints their name on walls | Jake had to catch a [tagger]. | Джейку нужно было поймать граффитиста. | O Jake tinha de apanhar um grafiter.
+vandalism | /ˈvændəlɪzəm/ | noun | вандализм | vandalismo | damaging property on purpose | It's just a [vandalism] case. | Это просто дело о вандализме. | É só um caso de vandalismo.
+beneath you | /bɪˈniːθ juː/ | phrase | ниже твоего достоинства | abaixo de ti | not good enough for someone of your level | This case is [beneath] me. | Это дело ниже моего достоинства. | Este caso está abaixo de mim.
+late | /leɪt/ | adjective | опоздавший | atrasado | after the expected time | Jake was [late] again. | Джейк опять опоздал. | O Jake chegou atrasado outra vez.
+punishment | /ˈpʌnɪʃmənt/ | noun | наказание | castigo | what happens after you do wrong | This case is your [punishment]. | Это дело — твоё наказание. | Este caso é o teu castigo.
+teenager | /ˈtiːneɪdʒər/ | noun | подросток | adolescente | a person aged 13-19 | The tagger was a [teenager]. | Граффитистом оказался подросток. | O grafiter era um adolescente.
+spray paint | /ˈspreɪ peɪnt/ | noun | краска в баллончике | tinta em spray | paint in a can that you spray | He had [spray paint] on his hands. | У него на руках была краска из баллончика. | Tinha tinta em spray nas mãos.
+clue | /kluː/ | noun | улика, зацепка | pista | a piece of information that helps solve a crime | The paint was the key [clue]. | Краска была главной зацепкой. | A tinta foi a pista principal.
+arrest | /əˈrest/ | verb | арестовать | prender | to take someone to jail for a crime | They [arrested] the wrong kid. | Они арестовали не того парня. | Prenderam o miúdo errado.
+lecture | /ˈlektʃər/ | verb | читать нотации | dar um sermão | to talk seriously to someone about their behavior | Holt [lectured] him about respect. | Холт прочитал ему нотацию об уважении. | O Holt deu-lhe um sermão sobre respeito.
+respect | /rɪˈspekt/ | noun | уважение | respeito | a good opinion of someone | You need to earn [respect]. | Уважение надо заслужить. | O respeito tem de ser conquistado.
+patrol | /pəˈtroʊl/ | noun | патруль | patrulha | police moving around an area | He was sent back to [patrol]. | Его отправили обратно в патруль. | Mandaram-no de volta para a patrulha.
+annoyed | /əˈnɔɪd/ | adjective | раздражённый | irritado | a little angry | Jake was very [annoyed]. | Джейк был очень раздражён. | O Jake estava muito irritado.
+prove | /pruːv/ | verb | доказать | provar | to show something is true | He wanted to [prove] Holt wrong. | Он хотел доказать, что Холт неправ. | Queria provar que o Holt estava errado.
+
+## 3 · The Slump
+slump | /slʌmp/ | noun | спад, полоса неудач | fase má | a period of doing badly | Jake is in a [slump]. | У Джейка полоса неудач. | O Jake está numa fase má.
+unsolved | /ʌnˈsɑːlvd/ | adjective | нераскрытый | por resolver | not yet solved | He has three [unsolved] cases. | У него три нераскрытых дела. | Tem três casos por resolver.
+superstitious | /ˌsuːpərˈstɪʃəs/ | adjective | суеверный | supersticioso | believing in luck and signs | Jake got very [superstitious]. | Джейк стал очень суеверным. | O Jake ficou muito supersticioso.
+lucky | /ˈlʌki/ | adjective | счастливый, удачливый | da sorte | bringing good luck | He wore his [lucky] shirt. | Он надел свою счастливую рубашку. | Vestiu a camisa da sorte.
+mentor | /ˈmentɔːr/ | noun | наставник | mentor | an experienced person who guides someone | Rosa became a [mentor] for a cadet. | Роза стала наставницей для курсанта. | A Rosa tornou-se mentora de um cadete.
+cadet | /kəˈdet/ | noun | курсант | cadete | a young person training to be an officer | The [cadet] was terrified of Rosa. | Курсант до ужаса боялся Розы. | O cadete tinha pavor da Rosa.
+losing streak | /ˈluːzɪŋ striːk/ | noun | полоса проигрышей | série de derrotas | many losses in a row | He's on a [losing streak]. | У него полоса проигрышей. | Está numa série de derrotas.
+confidence | /ˈkɑːnfɪdəns/ | noun | уверенность | confiança | trust in yourself | He lost all his [confidence]. | Он потерял всю уверенность. | Perdeu toda a confiança.
+dead end | /ded ˈend/ | noun | тупик | beco sem saída | a situation where nothing more can happen | Every lead is a [dead end]. | Каждая зацепка ведёт в тупик. | Todas as pistas dão num beco sem saída.
+lead | /liːd/ | noun | зацепка, наводка | pista | information that may help solve a case | We have a new [lead]. | У нас новая зацепка. | Temos uma pista nova.
+scary | /ˈskeri/ | adjective | страшный | assustador | making you afraid | Rosa is kind of [scary]. | Роза немного пугающая. | A Rosa é um bocado assustadora.
+toughen up | /ˈtʌfn ʌp/ | phrasal verb | закалиться, стать жёстче | ganhar calo | to become stronger and less sensitive | The cadet needs to [toughen up]. | Курсанту надо закалиться. | O cadete tem de ganhar calo.
+rut | /rʌt/ | noun | колея, застой | rotina, marasmo | a boring situation that's hard to change | He's stuck in a [rut]. | Он застрял в колее. | Está preso num marasmo.
+bounce back | /baʊns bæk/ | phrasal verb | прийти в себя, восстановиться | recuperar | to become successful again after a problem | He always [bounces back]. | Он всегда приходит в себя. | Ele recupera sempre.
+honesty | /ˈɑːnəsti/ | noun | честность | honestidade | telling the truth | Rosa values [honesty]. | Роза ценит честность. | A Rosa valoriza a honestidade.
+
+## 4 · M.E. Time
+medical examiner | /ˈmedɪkl ɪɡˈzæmɪnər/ | noun | судмедэксперт | médico-legista | a doctor who examines dead bodies for police | Jake is dating the [medical examiner]. | Джейк встречается с судмедэкспертом. | O Jake anda com a médica-legista.
+autopsy | /ˈɔːtɑːpsi/ | noun | вскрытие | autópsia | an examination of a dead body | The [autopsy] showed poison. | Вскрытие показало яд. | A autópsia mostrou veneno.
+evidence | /ˈevɪdəns/ | noun | улики, доказательства | provas | facts that show what happened | We need more [evidence]. | Нам нужно больше улик. | Precisamos de mais provas.
+conflict of interest | /ˈkɑːnflɪkt ʌv ˈɪntrəst/ | noun | конфликт интересов | conflito de interesses | when personal feelings affect your job | Dating her is a [conflict of interest]. | Встречаться с ней — это конфликт интересов. | Namorá-la é um conflito de interesses.
+sneak around | /sniːk əˈraʊnd/ | phrasal verb | шастать тайком, прятаться | andar às escondidas | to do something secretly | They were [sneaking around]. | Они встречались тайком. | Andavam às escondidas.
+cause of death | /kɔːz ʌv deθ/ | noun | причина смерти | causa da morte | what made someone die | What's the [cause of death]? | Какова причина смерти? | Qual é a causa da morte?
+body | /ˈbɑːdi/ | noun | тело | corpo | a dead person | They found a [body] in the park. | В парке нашли тело. | Encontraram um corpo no parque.
+morgue | /mɔːrɡ/ | noun | морг | morgue | a place where dead bodies are kept | Meet me at the [morgue]. | Встретимся в морге. | Encontra-te comigo na morgue.
+report | /rɪˈpɔːrt/ | noun | отчёт | relatório | an official written document | I need the [report] by tomorrow. | Мне нужен отчёт к завтрашнему дню. | Preciso do relatório até amanhã.
+professional | /prəˈfeʃənl/ | adjective | профессиональный | profissional | acting in a proper way at work | Keep it [professional]. | Давай без личного. | Mantém isto profissional.
+awkward | /ˈɔːkwərd/ | adjective | неловкий | constrangedor | uncomfortable | Their breakup was [awkward]. | Их расставание было неловким. | O fim da relação deles foi constrangedor.
+day off | /deɪ ɔːf/ | noun | выходной | dia de folga | a day when you don't work | Terry took a [day off]. | Терри взял выходной. | O Terry tirou um dia de folga.
+twins | /twɪnz/ | noun | близнецы | gémeos | two children born at the same time | Terry has [twins] at home. | У Терри дома близнецы. | O Terry tem gémeas em casa.
+overworked | /ˌoʊvərˈwɜːrkt/ | adjective | перегруженный | sobrecarregado | working too much | Everyone at the precinct is [overworked]. | Все в участке перегружены. | Toda a gente na esquadra está sobrecarregada.
+priority | /praɪˈɔːrəti/ | noun | приоритет | prioridade | the most important thing | The case is our top [priority]. | Это дело — наш главный приоритет. | O caso é a nossa prioridade máxima.
+
+## 5 · The Vulture
+steal a case | /stiːl ə keɪs/ | phrase | увести дело | roubar um caso | to take another officer's case | The Vulture [stole a case] from Jake. | «Стервятник» увёл дело у Джейка. | O Abutre roubou um caso ao Jake.
+vulture | /ˈvʌltʃər/ | noun | стервятник | abutre | a bird that eats dead animals; a person who takes others' work | He's a real [vulture]. | Он настоящий стервятник. | É um verdadeiro abutre.
+credit | /ˈkredɪt/ | noun | заслуга | mérito | praise for what you did | He took all the [credit]. | Он присвоил себе всю заслугу. | Ficou com o mérito todo.
+unfair | /ʌnˈfer/ | adjective | несправедливый | injusto | not treating people equally | That's so [unfair]! | Это так несправедливо! | Isso é tão injusto!
+homicide | /ˈhɑːmɪsaɪd/ | noun | убийство, отдел убийств | homicídio | killing a person; the police unit for it | He works in [homicide]. | Он работает в отделе убийств. | Trabalha na secção de homicídios.
+jerk | /dʒɜːrk/ | noun | придурок, козёл | parvalhão | an unpleasant person | The Vulture is a total [jerk]. | «Стервятник» — полный козёл. | O Abutre é um parvalhão total.
+revenge | /rɪˈvendʒ/ | noun | месть | vingança | hurting someone who hurt you | Jake wanted [revenge]. | Джейк жаждал мести. | O Jake queria vingança.
+new couch | /nuː kaʊtʃ/ | noun | новый диван | sofá novo | a newly bought sofa | Boyle bought a [new couch]. | Бойл купил новый диван. | O Boyle comprou um sofá novo.
+bet | /bet/ | noun | спор, пари | aposta | an agreement about who is right | Want to make a [bet]? | Хочешь поспорить? | Queres fazer uma aposta?
+team up | /tiːm ʌp/ | phrasal verb | объединиться | juntar-se | to work together | Let's [team up] on this. | Давай займёмся этим вместе. | Vamos juntar-nos nisto.
+authority | /əˈθɔːrəti/ | noun | полномочия, власть | autoridade | the right to give orders | He has no [authority] here. | У него здесь нет полномочий. | Ele não tem autoridade aqui.
+pull rank | /pʊl ræŋk/ | idiom | воспользоваться званием | impor a patente | to use your higher position to get your way | The Vulture [pulled rank]. | «Стервятник» воспользовался своим званием. | O Abutre impôs a patente.
+hot tip | /hɑːt tɪp/ | noun | ценная наводка | pista quente | important secret information | Jake got a [hot tip]. | Джейк получил ценную наводку. | O Jake recebeu uma pista quente.
+outsmart | /ˌaʊtˈsmɑːrt/ | verb | перехитрить | ser mais esperto que | to beat someone by being cleverer | Jake tried to [outsmart] him. | Джейк пытался его перехитрить. | O Jake tentou ser mais esperto que ele.
+fair and square | /fer ənd skwer/ | idiom | честно и справедливо | de forma justa | honestly, following the rules | We won [fair and square]. | Мы выиграли честно. | Ganhámos de forma justa.
+
+## 6 · Halloween
+heist | /haɪst/ | noun | ограбление | assalto | a big robbery | Jake planned a Halloween [heist]. | Джейк спланировал ограбление на Хэллоуин. | O Jake planeou um assalto no Halloween.
+medal | /ˈmedl/ | noun | медаль | medalha | a metal disc given as an award | He had to steal Holt's [medal]. | Ему надо было украсть медаль Холта. | Tinha de roubar a medalha do Holt.
+dare | /der/ | verb | бросить вызов, «слабо» | desafiar | to challenge someone to do something risky | I [dare] you to steal it. | Спорим, ты не сможешь её украсть? | Desafio-te a roubá-la.
+midnight | /ˈmɪdnaɪt/ | noun | полночь | meia-noite | 12 o'clock at night | You have until [midnight]. | У тебя время до полуночи. | Tens até à meia-noite.
+loser | /ˈluːzər/ | noun | проигравший | perdedor | the person who loses | The [loser] works overtime. | Проигравший работает сверхурочно. | O perdedor faz horas extra.
+overtime | /ˈoʊvərtaɪm/ | noun | сверхурочные | horas extra | extra hours at work | He'll do unpaid [overtime]. | Он будет работать сверхурочно бесплатно. | Vai fazer horas extra sem pagamento.
+sneaky | /ˈsniːki/ | adjective | хитрый, коварный | manhoso | doing things secretly and cleverly | That's a [sneaky] plan. | Это коварный план. | Esse é um plano manhoso.
+trick | /trɪk/ | noun | уловка, трюк | truque | a clever plan to fool someone | It was all a [trick]. | Всё это была уловка. | Foi tudo um truque.
+safe | /seɪf/ | noun | сейф | cofre | a strong box for valuables | The medal is in a [safe]. | Медаль лежит в сейфе. | A medalha está num cofre.
+outsmarted | /ˌaʊtˈsmɑːrtɪd/ | adjective | обведённый вокруг пальца | enganado | beaten by someone cleverer | Jake got [outsmarted]. | Джейка обвели вокруг пальца. | O Jake foi enganado.
+tradition | /trəˈdɪʃn/ | noun | традиция | tradição | something done every year | The heist became a [tradition]. | Ограбление стало традицией. | O assalto tornou-se uma tradição.
+gloat | /ɡloʊt/ | verb | злорадствовать | gabar-se | to show too much happiness about winning | Holt never [gloats]. | Холт никогда не злорадствует. | O Holt nunca se gaba.
+costume | /ˈkɑːstuːm/ | noun | костюм | disfarce | clothes for dressing up | Boyle wore a funny [costume]. | Бойл надел смешной костюм. | O Boyle vestiu um disfarce engraçado.
+plan | /plæn/ | noun | план | plano | a set of steps to achieve something | Jake's [plan] had many steps. | План Джейка состоял из множества шагов. | O plano do Jake tinha muitos passos.
+double-cross | /ˌdʌbl ˈkrɔːs/ | verb | предать, кинуть | trair | to betray someone you work with | Someone [double-crossed] Jake. | Кто-то кинул Джейка. | Alguém traiu o Jake.
+
+## 7 · 48 Hours
+48 hours | /ˈfɔːrti eɪt ˈaʊərz/ | noun | 48 часов | 48 horas | the time police can hold a suspect | You have [48 hours] to charge him. | У вас 48 часов, чтобы предъявить обвинение. | Têm 48 horas para o acusar.
+charge | /tʃɑːrdʒ/ | verb | предъявить обвинение | acusar | to officially accuse someone of a crime | We can't [charge] him without evidence. | Без улик мы не можем предъявить обвинение. | Não o podemos acusar sem provas.
+release | /rɪˈliːs/ | verb | отпустить | libertar | to let someone go free | They had to [release] the suspect. | Подозреваемого пришлось отпустить. | Tiveram de libertar o suspeito.
+lawsuit | /ˈlɔːsuːt/ | noun | иск | processo | a legal claim in court | He threatened a [lawsuit]. | Он пригрозил иском. | Ameaçou com um processo.
+sue | /suː/ | verb | подать в суд | processar | to take someone to court | He's going to [sue] the department. | Он подаст в суд на управление. | Vai processar o departamento.
+lawyer | /ˈlɔɪər/ | noun | адвокат | advogado | a person who gives legal advice | His [lawyer] is very expensive. | Его адвокат очень дорогой. | O advogado dele é muito caro.
+wrongful arrest | /ˈrɔːŋfl əˈrest/ | noun | незаконный арест | detenção ilegal | arresting someone without a good reason | It could be a [wrongful arrest]. | Это может оказаться незаконным арестом. | Pode ser uma detenção ilegal.
+jewelry | /ˈdʒuːəlri/ | noun | украшения | joias | rings, necklaces and similar | Someone stole the [jewelry]. | Кто-то украл украшения. | Alguém roubou as joias.
+alibi | /ˈæləbaɪ/ | noun | алиби | álibi | proof you were somewhere else | His [alibi] checks out. | Его алиби подтверждается. | O álibi dele confirma-se.
+interrogation | /ɪnˌterəˈɡeɪʃn/ | noun | допрос | interrogatório | a long questioning by police | The [interrogation] lasted hours. | Допрос длился часами. | O interrogatório durou horas.
+pressure | /ˈpreʃər/ | noun | давление | pressão | stress from demands | The captain is under [pressure]. | На капитана давят. | O capitão está sob pressão.
+reputation | /ˌrepjuˈteɪʃn/ | noun | репутация | reputação | what people think about you | His [reputation] is at stake. | На кону его репутация. | A reputação dele está em jogo.
+confession | /kənˈfeʃn/ | noun | признание | confissão | a statement admitting a crime | They need a [confession]. | Им нужно признание. | Precisam de uma confissão.
+deadline | /ˈdedlaɪn/ | noun | крайний срок | prazo | the latest time to finish something | The [deadline] is tomorrow morning. | Срок истекает завтра утром. | O prazo acaba amanhã de manhã.
+trust your gut | /trʌst jʊr ɡʌt/ | idiom | доверять чутью | confiar no instinto | to follow your feelings | Sometimes you have to [trust your gut]. | Иногда нужно доверять чутью. | Às vezes tens de confiar no instinto.
+
+## 8 · Old School
+reporter | /rɪˈpɔːrtər/ | noun | журналист | jornalista | a person who writes news | A famous crime [reporter] visited. | Приехал знаменитый криминальный журналист. | Um jornalista de crime famoso veio de visita.
+hero | /ˈhɪroʊ/ | noun | герой, кумир | herói | a person you admire | He was Jake's childhood [hero]. | Он был кумиром детства Джейка. | Era o herói de infância do Jake.
+book | /bʊk/ | noun | книга | livro | a written work | He's writing a [book] about the precinct. | Он пишет книгу об участке. | Está a escrever um livro sobre a esquadra.
+racist | /ˈreɪsɪst/ | adjective | расистский | racista | treating people badly because of race | His old articles were [racist]. | Его старые статьи были расистскими. | Os artigos antigos dele eram racistas.
+disappointed | /ˌdɪsəˈpɔɪntɪd/ | adjective | разочарованный | desiludido | sad because someone isn't as good as hoped | Jake was deeply [disappointed]. | Джейк был глубоко разочарован. | O Jake ficou profundamente desiludido.
+interview | /ˈɪntərvjuː/ | noun | интервью | entrevista | a meeting where someone answers questions | Holt refused the [interview]. | Холт отказался от интервью. | O Holt recusou a entrevista.
+past | /pæst/ | noun | прошлое | passado | the time before now | Holt had a hard [past] in the police. | У Холта было тяжёлое прошлое в полиции. | O Holt teve um passado difícil na polícia.
+old school | /ˌoʊld ˈskuːl/ | adjective | старой закалки | à moda antiga | following old-fashioned ways | He's a real [old school] cop. | Он настоящий коп старой закалки. | É um polícia à moda antiga.
+discrimination | /dɪˌskrɪmɪˈneɪʃn/ | noun | дискриминация | discriminação | unfair treatment of a group | Holt faced [discrimination]. | Холт сталкивался с дискриминацией. | O Holt enfrentou discriminação.
+admire | /ədˈmaɪər/ | verb | восхищаться | admirar | to respect and like someone | Jake [admires] Holt more now. | Теперь Джейк восхищается Холтом ещё больше. | O Jake admira ainda mais o Holt agora.
+publish | /ˈpʌblɪʃ/ | verb | опубликовать | publicar | to print for the public | The story was never [published]. | Эта история так и не была опубликована. | A história nunca foi publicada.
+embarrass | /ɪmˈbærəs/ | verb | опозорить | envergonhar | to make someone feel ashamed | He tried not to [embarrass] the captain. | Он старался не опозорить капитана. | Tentou não envergonhar o capitão.
+integrity | /ɪnˈteɡrəti/ | noun | честность, принципиальность | integridade | being honest and having strong principles | Holt is a man of [integrity]. | Холт — принципиальный человек. | O Holt é um homem íntegro.
+fan | /fæn/ | noun | поклонник | fã | a person who loves someone's work | Jake is a huge [fan]. | Джейк — большой поклонник. | O Jake é um grande fã.
+legend | /ˈledʒənd/ | noun | легенда | lenda | a very famous person | He's a [legend] in New York. | Он легенда Нью-Йорка. | É uma lenda em Nova Iorque.
+
+## 9 · Sal's Pizza
+pizza place | /ˈpiːtsə pleɪs/ | noun | пиццерия | pizzaria | a restaurant that sells pizza | Jake's favorite [pizza place] burned down. | Любимая пиццерия Джейка сгорела. | A pizzaria preferida do Jake ardeu.
+fire | /faɪər/ | noun | пожар | incêndio | flames that destroy something | The [fire] started at night. | Пожар начался ночью. | O incêndio começou à noite.
+arson | /ˈɑːrsn/ | noun | поджог | fogo posto | the crime of setting fire on purpose | It looks like [arson]. | Похоже на поджог. | Parece fogo posto.
+firefighter | /ˈfaɪərfaɪtər/ | noun | пожарный | bombeiro | a person who fights fires | The [firefighters] didn't like cops. | Пожарные недолюбливали копов. | Os bombeiros não gostavam de polícias.
+rivalry | /ˈraɪvlri/ | noun | соперничество | rivalidade | competition between two groups | There's a [rivalry] between cops and firefighters. | Между копами и пожарными соперничество. | Há rivalidade entre polícias e bombeiros.
+burn down | /bɜːrn daʊn/ | phrasal verb | сгореть дотла | arder por completo | to be destroyed by fire | The restaurant [burned down]. | Ресторан сгорел дотла. | O restaurante ardeu por completo.
+insurance | /ɪnˈʃʊrəns/ | noun | страховка | seguro | money paid if something bad happens | He wanted the [insurance] money. | Ему нужны были страховые деньги. | Ele queria o dinheiro do seguro.
+motive | /ˈmoʊtɪv/ | noun | мотив | motivo | a reason for doing something | What's the [motive]? | Каков мотив? | Qual é o motivo?
+owner | /ˈoʊnər/ | noun | владелец | dono | a person who owns something | The [owner] was a suspect. | Владелец был подозреваемым. | O dono era suspeito.
+investigation | /ɪnˌvestɪˈɡeɪʃn/ | noun | расследование | investigação | the process of finding the truth | The [investigation] took weeks. | Расследование заняло недели. | A investigação levou semanas.
+heartbroken | /ˈhɑːrtbroʊkən/ | adjective | убитый горем | desolado | very sad | Jake was [heartbroken] about the pizza. | Джейк был убит горем из-за пиццы. | O Jake ficou desolado por causa da pizza.
+bomb squad | /ˈbɑːm skwɑːd/ | noun | сапёрный отряд | brigada de explosivos | the police unit for bombs | They called the [bomb squad]. | Вызвали сапёров. | Chamaram a brigada de explosivos.
+cooperate | /koʊˈɑːpəreɪt/ | verb | сотрудничать | cooperar | to work together | The two teams had to [cooperate]. | Двум командам пришлось сотрудничать. | As duas equipas tiveram de cooperar.
+slice | /slaɪs/ | noun | кусок | fatia | a thin piece cut from something | I'd kill for a [slice] right now. | Всё отдал бы за кусок пиццы. | Matava por uma fatia agora.
+crime scene | /ˈkraɪm siːn/ | noun | место преступления | local do crime | the place where a crime happened | Don't touch the [crime scene]. | Не трогай место преступления. | Não mexas no local do crime.
+
+## 10 · Thanksgiving
+potluck | /ˈpɑːtlʌk/ | noun | вечеринка, куда каждый несёт еду | jantar partilhado | a meal where each guest brings a dish | Amy organized a [potluck]. | Эми организовала вечеринку, где каждый приносит блюдо. | A Amy organizou um jantar partilhado.
+host | /hoʊst/ | verb | принимать гостей | receber | to have guests at your home | Amy wanted to [host] Thanksgiving. | Эми хотела принимать гостей на День благодарения. | A Amy queria receber o Dia de Ação de Graças.
+disaster | /dɪˈzæstər/ | noun | катастрофа | desastre | a total failure | The dinner was a [disaster]. | Ужин обернулся катастрофой. | O jantar foi um desastre.
+impress | /ɪmˈpres/ | verb | произвести впечатление | impressionar | to make someone admire you | Amy wants to [impress] the captain. | Эми хочет впечатлить капитана. | A Amy quer impressionar o capitão.
+teacher's pet | /ˈtiːtʃərz pet/ | idiom | любимчик учителя, подлиза | queridinho do professor | someone who tries too hard to please the boss | Amy is such a [teacher's pet]. | Эми такая подлиза. | A Amy é tão queridinha do chefe.
+stuffing | /ˈstʌfɪŋ/ | noun | начинка | recheio | bread mix cooked inside a turkey | The [stuffing] was burned. | Начинка подгорела. | O recheio queimou.
+gravy | /ˈɡreɪvi/ | noun | мясная подливка | molho de carne | a sauce made from meat juices | Pass the [gravy]. | Передай подливку. | Passa o molho.
+food poisoning | /fuːd ˈpɔɪzənɪŋ/ | noun | пищевое отравление | intoxicação alimentar | illness from bad food | Half the team got [food poisoning]. | Половина команды отравилась. | Meia equipa teve intoxicação alimentar.
+speech | /spiːtʃ/ | noun | речь | discurso | a talk to a group | Holt gave a short [speech]. | Холт произнёс короткую речь. | O Holt fez um discurso curto.
+thankful | /ˈθæŋkfl/ | adjective | благодарный | grato | feeling grateful | I'm [thankful] for this team. | Я благодарен этой команде. | Estou grato por esta equipa.
+suck up | /sʌk ʌp/ | phrasal verb | подлизываться | dar graxa | to be too nice to someone to get favors | Stop [sucking up] to Holt. | Хватит подлизываться к Холту. | Para de dar graxa ao Holt.
+family | /ˈfæməli/ | noun | семья | família | people who are close like relatives | The squad is like a [family]. | Отдел — как семья. | A equipa é como uma família.
+leftovers | /ˈleftoʊvərz/ | noun | остатки | restos | food left after a meal | They ate the [leftovers] for days. | Остатки доедали несколько дней. | Comeram os restos durante dias.
+effort | /ˈefərt/ | noun | усилие, старание | esforço | trying hard | At least she made an [effort]. | По крайней мере, она старалась. | Pelo menos esforçou-se.
+guest list | /ˈɡest lɪst/ | noun | список гостей | lista de convidados | the names of invited people | Who's on the [guest list]? | Кто в списке гостей? | Quem está na lista de convidados?
+
+## 11 · Christmas
+Christmas | /ˈkrɪsməs/ | noun | Рождество | Natal | the December 25 holiday | Jake has to work over [Christmas]. | Джейку придётся работать на Рождество. | O Jake tem de trabalhar no Natal.
+threat | /θret/ | noun | угроза | ameaça | a warning that someone will hurt you | Holt received a death [threat]. | Холт получил угрозу убийством. | O Holt recebeu uma ameaça de morte.
+protect | /prəˈtekt/ | verb | защищать | proteger | to keep someone safe | Jake had to [protect] Holt. | Джейку пришлось охранять Холта. | O Jake teve de proteger o Holt.
+bodyguard | /ˈbɑːdiɡɑːrd/ | noun | телохранитель | guarda-costas | a person who guards someone | Jake became his [bodyguard]. | Джейк стал его телохранителем. | O Jake tornou-se guarda-costas dele.
+safe house | /ˈseɪf haʊs/ | noun | конспиративная квартира | casa segura | a secret place to hide someone | They went to a [safe house]. | Они поехали на конспиративную квартиру. | Foram para uma casa segura.
+present | /ˈpreznt/ | noun | подарок | presente | a gift | Terry got everyone a [present]. | Терри купил всем подарки. | O Terry deu um presente a toda a gente.
+Secret Santa | /ˈsiːkrət ˈsæntə/ | noun | тайный Санта | amigo secreto | a gift exchange where givers are secret | They did [Secret Santa] at work. | На работе они играли в Тайного Санту. | Fizeram amigo secreto no trabalho.
+stalker | /ˈstɔːkər/ | noun | преследователь | perseguidor | a person who secretly follows someone | Holt has a [stalker]. | У Холта есть преследователь. | O Holt tem um perseguidor.
+dangerous | /ˈdeɪndʒərəs/ | adjective | опасный | perigoso | able to cause harm | This guy is really [dangerous]. | Этот тип по-настоящему опасен. | Este tipo é mesmo perigoso.
+fake | /feɪk/ | adjective | поддельный | falso | not genuine | The threat turned out to be [fake]. | Угроза оказалась фальшивой. | A ameaça afinal era falsa.
+cabin | /ˈkæbɪn/ | noun | хижина | cabana | a small wooden house | They hid in a [cabin]. | Они спрятались в хижине. | Esconderam-se numa cabana.
+tense | /tens/ | adjective | напряжённый | tenso | nervous and anxious | The situation was very [tense]. | Обстановка была очень напряжённой. | A situação estava muito tensa.
+bonding | /ˈbɑːndɪŋ/ | noun | сближение | criar laços | becoming closer to someone | The trip was good for [bonding]. | Поездка помогла им сблизиться. | A viagem foi boa para criar laços.
+peppermint | /ˈpepərmɪnt/ | noun | мятная конфета | hortelã-pimenta | a mint-flavored sweet | Holt offered him a [peppermint]. | Холт предложил ему мятную конфету. | O Holt ofereceu-lhe um rebuçado de hortelã-pimenta.
+festive | /ˈfestɪv/ | adjective | праздничный | festivo | happy, like a celebration | The office looked [festive]. | Офис выглядел празднично. | O escritório estava festivo.
+
+## 12 · Pontiac Bandit
+bandit | /ˈbændɪt/ | noun | бандит, грабитель | bandido | a robber | The Pontiac [Bandit] steals cars. | «Понтиак-бандит» угоняет машины. | O Bandido do Pontiac rouba carros.
+car thief | /kɑːr θiːf/ | noun | угонщик | ladrão de carros | a person who steals cars | He's the best [car thief] in the city. | Он лучший угонщик в городе. | É o melhor ladrão de carros da cidade.
+informant | /ɪnˈfɔːrmənt/ | noun | информатор | informador | a person who gives secret info to police | Doug Judy became an [informant]. | Даг Джуди стал информатором. | O Doug Judy tornou-se informador.
+con | /kɑːn/ | verb | обмануть, развести | enganar | to trick someone | He [conned] Jake again. | Он снова обвёл Джейка вокруг пальца. | Enganou o Jake outra vez.
+charming | /ˈtʃɑːrmɪŋ/ | adjective | обаятельный | encantador | pleasant and likable | Doug Judy is very [charming]. | Даг Джуди очень обаятелен. | O Doug Judy é muito encantador.
+nemesis | /ˈneməsɪs/ | noun | заклятый враг | arqui-inimigo | a person's greatest enemy | Doug Judy is Jake's [nemesis]. | Даг Джуди — заклятый враг Джейка. | O Doug Judy é o arqui-inimigo do Jake.
+escape | /ɪˈskeɪp/ | verb | сбежать | escapar | to get away | He [escaped] again. | Он снова сбежал. | Escapou outra vez.
+sing along | /sɪŋ əˈlɔːŋ/ | phrasal verb | подпевать | cantar em coro | to sing with a song you hear | They [sang along] to the radio. | Они подпевали радио. | Cantaram em coro com o rádio.
+chop shop | /ˈtʃɑːp ʃɑːp/ | noun | мастерская по разборке угнанных машин | oficina de desmanche | a place where stolen cars are taken apart | They found the [chop shop]. | Они нашли подпольную разборку. | Encontraram a oficina de desmanche.
+injured | /ˈɪndʒərd/ | adjective | раненый, травмированный | ferido | hurt | Rosa's ankle was [injured]. | Роза повредила лодыжку. | A Rosa tinha o tornozelo ferido.
+painkillers | /ˈpeɪnkɪlərz/ | noun | обезболивающее | analgésicos | medicine to stop pain | Rosa was on [painkillers]. | Роза сидела на обезболивающих. | A Rosa estava a tomar analgésicos.
+high | /haɪ/ | adjective | под кайфом | pedrado | affected by drugs | Rosa acted strange while [high]. | Под лекарствами Роза вела себя странно. | A Rosa portou-se de forma estranha pedrada.
+backstab | /ˈbækstæb/ | verb | ударить в спину | apunhalar pelas costas | to betray someone | I can't believe he [backstabbed] me. | Не верится, что он ударил меня в спину. | Nem acredito que ele me apunhalou pelas costas.
+getaway | /ˈɡetəweɪ/ | noun | побег | fuga | an escape after a crime | He planned the perfect [getaway]. | Он спланировал идеальный побег. | Planeou a fuga perfeita.
+gullible | /ˈɡʌləbl/ | adjective | доверчивый | ingénuo | believing things too easily | Jake is a little [gullible]. | Джейк немного доверчивый. | O Jake é um bocado ingénuo.
+
+## 13 · The Bet
+stakes | /steɪks/ | noun | ставка, что на кону | o que está em jogo | what you can win or lose | The [stakes] were a date. | На кону было свидание. | O que estava em jogo era um encontro.
+arrests | /əˈrests/ | noun | аресты | detenções | times police take someone into custody | Whoever gets more [arrests] wins. | Выигрывает тот, у кого больше арестов. | Ganha quem tiver mais detenções.
+date | /deɪt/ | noun | свидание | encontro | a romantic evening out | The loser takes the winner on a [date]. | Проигравший ведёт победителя на свидание. | O perdedor leva o vencedor a um encontro.
+worst | /wɜːrst/ | adjective | худший | pior | most bad | He planned the [worst] date ever. | Он спланировал худшее свидание на свете. | Planeou o pior encontro de sempre.
+suit | /suːt/ | noun | костюм | fato | a formal jacket and trousers | Amy had to wear an ugly [suit]. | Эми пришлось надеть уродливый костюм. | A Amy teve de usar um fato feio.
+compete | /kəmˈpiːt/ | verb | соперничать | competir | to try to be better than others | They [compete] about everything. | Они соперничают во всём. | Competem em tudo.
+lose | /luːz/ | verb | проиграть | perder | to not win | Amy [lost] by one arrest. | Эми проиграла с разницей в один арест. | A Amy perdeu por uma detenção.
+unexpected | /ˌʌnɪkˈspektɪd/ | adjective | неожиданный | inesperado | surprising | The date was [unexpectedly] nice. | Свидание вышло неожиданно милым. | O encontro foi inesperadamente bom.
+spark | /spɑːrk/ | noun | искра | faísca | a sudden feeling of attraction | There was a [spark] between them. | Между ними проскочила искра. | Houve uma faísca entre eles.
+dinner | /ˈdɪnər/ | noun | ужин | jantar | an evening meal | He took her to [dinner]. | Он повёл её на ужин. | Levou-a a jantar.
+competitive | /kəmˈpetətɪv/ | adjective | азартный | competitivo | wanting to win | Amy is super [competitive]. | Эми ужасно азартна. | A Amy é super competitiva.
+rent | /rent/ | verb | арендовать, взять напрокат | alugar | to pay to use something | He [rented] a tux for the date. | Он взял напрокат смокинг для свидания. | Alugou um smoking para o encontro.
+tease | /tiːz/ | verb | дразнить | provocar | to make fun of playfully | He loves to [tease] her. | Ему нравится её дразнить. | Ele adora provocá-la.
+rival | /ˈraɪvl/ | noun | соперник | rival | a competitor | They're friendly [rivals]. | Они дружеские соперники. | São rivais amigáveis.
+wager | /ˈweɪdʒər/ | noun | ставка, пари | aposta | a bet | The [wager] was simple. | Условия пари были простыми. | A aposta era simples.
+
+## 14 · The Ebony Falcon
+superhero | /ˈsuːpərhɪroʊ/ | noun | супергерой | super-herói | a comic hero with powers | Terry once played a [superhero]. | Когда-то Терри сыграл супергероя. | O Terry já fez de super-herói.
+field work | /fiːld wɜːrk/ | noun | работа «в поле» | trabalho de campo | work outside the office | Terry is scared of [field work]. | Терри боится работать на выезде. | O Terry tem medo do trabalho de campo.
+desk job | /desk dʒɑːb/ | noun | офисная работа | trabalho de secretária | a job sitting at a desk | He's had a [desk job] for a year. | У него уже год сидячая работа. | Tem um trabalho de secretária há um ano.
+nervous | /ˈnɜːrvəs/ | adjective | нервный | nervoso | anxious | He gets [nervous] in the field. | На выезде он нервничает. | Fica nervoso no terreno.
+gun | /ɡʌn/ | noun | пистолет | arma | a weapon that fires bullets | Terry hasn't used his [gun] in months. | Терри месяцами не доставал пистолет. | O Terry não usa a arma há meses.
+yoga | /ˈjoʊɡə/ | noun | йога | ioga | exercise with stretching and breathing | Terry loves [yoga]. | Терри обожает йогу. | O Terry adora ioga.
+muscles | /ˈmʌslz/ | noun | мышцы | músculos | parts of the body that make you move | Terry has huge [muscles]. | У Терри огромные мускулы. | O Terry tem músculos enormes.
+family man | /ˈfæməli mæn/ | noun | семьянин | homem de família | a man devoted to his family | Terry is a real [family man]. | Терри — настоящий семьянин. | O Terry é um verdadeiro homem de família.
+comeback | /ˈkʌmbæk/ | noun | возвращение | regresso | returning to your old success | This is his big [comeback]. | Это его громкое возвращение. | Este é o grande regresso dele.
+risky | /ˈrɪski/ | adjective | рискованный | arriscado | possibly dangerous | The mission is [risky]. | Операция рискованная. | A missão é arriscada.
+backup | /ˈbækʌp/ | noun | подкрепление | reforços | extra police who help | We need [backup]. | Нам нужно подкрепление. | Precisamos de reforços.
+cover | /ˈkʌvər/ | verb | прикрывать | cobrir | to protect someone in danger | I'll [cover] you. | Я тебя прикрою. | Eu cubro-te.
+knock down | /nɑːk daʊn/ | phrasal verb | выбить (дверь) | arrombar | to break a door by force | Terry [knocked down] the door. | Терри выбил дверь. | O Terry arrombou a porta.
+brave | /breɪv/ | adjective | храбрый | corajoso | not afraid | That was really [brave]. | Это было очень храбро. | Isso foi mesmo corajoso.
+comic book | /ˈkɑːmɪk bʊk/ | noun | комикс | banda desenhada | a magazine telling a story in pictures | The movie was based on a [comic book]. | Фильм был снят по комиксу. | O filme era baseado numa banda desenhada.
+
+## 15 · Operation: Broken Feather
+mission | /ˈmɪʃn/ | noun | задание, операция | missão | an important task | This is a secret [mission]. | Это секретная операция. | Esta é uma missão secreta.
+feather | /ˈfeðər/ | noun | перо | pena | a light part of a bird's coat | Operation Broken [Feather] begins now. | Операция «Сломанное перо» начинается. | A Operação Pena Partida começa agora.
+transfer | /trænsˈfɜːr/ | verb | перевести (на другую работу) | transferir | to move someone to another job | Amy wanted to [transfer]. | Эми хотела перевестись. | A Amy queria ser transferida.
+elite | /eɪˈliːt/ | adjective | элитный | de elite | the best in a group | It's an [elite] unit. | Это элитное подразделение. | É uma unidade de elite.
+task force | /ˈtæsk fɔːrs/ | noun | спецгруппа | força-tarefa | a special group for one mission | She applied for a [task force]. | Она подала заявку в спецгруппу. | Candidatou-se a uma força-tarefa.
+reference | /ˈrefrəns/ | noun | рекомендация | referência | a letter saying a person is good | She needs a [reference] from Holt. | Ей нужна рекомендация от Холта. | Precisa de uma referência do Holt.
+ambitious | /æmˈbɪʃəs/ | adjective | амбициозный | ambicioso | wanting great success | Amy is very [ambitious]. | Эми очень амбициозна. | A Amy é muito ambiciosa.
+promotion | /prəˈmoʊʃn/ | noun | повышение | promoção | moving to a higher job | She's hoping for a [promotion]. | Она надеется на повышение. | Está à espera de uma promoção.
+compliment | /ˈkɑːmplɪmənt/ | noun | комплимент | elogio | a kind remark | Holt rarely gives a [compliment]. | Холт редко делает комплименты. | O Holt raramente faz um elogio.
+prank | /præŋk/ | noun | розыгрыш | partida | a funny trick | It was all a [prank]. | Это был всего лишь розыгрыш. | Foi tudo uma partida.
+drone | /droʊn/ | noun | дрон | drone | a small flying machine without a pilot | They used a [drone] to spy. | Они шпионили с помощью дрона. | Usaram um drone para espiar.
+surveillance | /sərˈveɪləns/ | noun | наблюдение, слежка | vigilância | watching someone secretly | They're on [surveillance] tonight. | Сегодня они на слежке. | Estão de vigilância esta noite.
+stakeout | /ˈsteɪkaʊt/ | noun | засада, слежка | vigia | police watching a place secretly | The [stakeout] lasted all night. | Засада длилась всю ночь. | A vigia durou a noite toda.
+teammate | /ˈtiːmmeɪt/ | noun | коллега по команде | colega de equipa | a person on your team | She's a great [teammate]. | Она отличный товарищ по команде. | É uma ótima colega de equipa.
+stay | /steɪ/ | verb | остаться | ficar | to not leave | In the end, she decided to [stay]. | В итоге она решила остаться. | No fim, decidiu ficar.
+
+## 16 · The Party
+birthday party | /ˈbɜːrθdeɪ ˈpɑːrti/ | noun | вечеринка на день рождения | festa de aniversário | a party for someone's birthday | Holt's husband threw a [birthday party]. | Муж Холта устроил вечеринку на день рождения. | O marido do Holt deu uma festa de aniversário.
+husband | /ˈhʌzbənd/ | noun | муж | marido | the man you are married to | Holt's [husband] is a professor. | Муж Холта — профессор. | O marido do Holt é professor.
+intellectual | /ˌɪntəˈlektʃuəl/ | adjective | интеллектуальный | intelectual | about serious thinking and ideas | The guests were very [intellectual]. | Гости были очень интеллектуальными. | Os convidados eram muito intelectuais.
+fit in | /fɪt ɪn/ | phrasal verb | вписаться | encaixar-se | to feel part of a group | The squad didn't [fit in]. | Отдел никак не вписывался в компанию. | A equipa não se encaixou.
+small talk | /ˈsmɔːl tɔːk/ | noun | светская беседа | conversa de circunstância | polite conversation about light topics | Jake is bad at [small talk]. | Джейк плохо поддерживает светские беседы. | O Jake é mau em conversa de circunstância.
+win over | /wɪn ˈoʊvər/ | phrasal verb | расположить к себе | conquistar | to make someone like you | They all wanted to [win over] the guests. | Все хотели расположить к себе гостей. | Todos queriam conquistar os convidados.
+guest | /ɡest/ | noun | гость | convidado | a person invited to an event | Every [guest] was a professor. | Каждый гость был профессором. | Todos os convidados eram professores.
+fancy | /ˈfænsi/ | adjective | изысканный | requintado | elegant and expensive | It was a [fancy] party. | Это была изысканная вечеринка. | Era uma festa requintada.
+boring | /ˈbɔːrɪŋ/ | adjective | скучный | aborrecido | not interesting | Jake found the party [boring]. | Джейку вечеринка показалась скучной. | O Jake achou a festa aborrecida.
+awkward silence | /ˈɔːkwərd ˈsaɪləns/ | noun | неловкая пауза | silêncio constrangedor | a quiet moment no one knows how to end | There was an [awkward silence]. | Повисла неловкая пауза. | Houve um silêncio constrangedor.
+spill | /spɪl/ | verb | пролить | entornar | to let liquid fall by accident | He [spilled] wine on the carpet. | Он пролил вино на ковёр. | Entornou vinho no tapete.
+toast | /toʊst/ | noun | тост | brinde | a short speech before drinking | Terry gave a lovely [toast]. | Терри произнёс чудесный тост. | O Terry fez um brinde encantador.
+gift | /ɡɪft/ | noun | подарок | presente | something you give | What [gift] do you buy a captain? | Что подарить капитану? | Que presente se compra a um capitão?
+hospitality | /ˌhɑːspɪˈtæləti/ | noun | гостеприимство | hospitalidade | being friendly to guests | Kevin's [hospitality] was very formal. | Гостеприимство Кевина было очень официальным. | A hospitalidade do Kevin era muito formal.
+be yourself | /bi jərˈself/ | idiom | будь собой | sê tu mesmo | act naturally | Just [be yourself]. | Просто будь собой. | Sê tu mesmo.
+
+## 17 · Full Boyle
+wine | /waɪn/ | noun | вино | vinho | an alcoholic drink made from grapes | Boyle is a [wine] expert. | Бойл — знаток вин. | O Boyle é especialista em vinhos.
+food blog | /fuːd blɑːɡ/ | noun | кулинарный блог | blogue de culinária | a website about food | Boyle writes a [food blog]. | Бойл ведёт кулинарный блог. | O Boyle escreve um blogue de culinária.
+restaurant review | /ˈrestərɑːnt rɪˈvjuː/ | noun | отзыв о ресторане | crítica de restaurante | an opinion about a restaurant | His [restaurant review] went viral. | Его отзыв о ресторане разлетелся по сети. | A crítica de restaurante dele tornou-se viral.
+jealous | /ˈdʒeləs/ | adjective | ревнивый | ciumento | upset about a partner's attention | Boyle gets very [jealous]. | Бойл очень ревнив. | O Boyle fica muito ciumento.
+new girlfriend | /nuː ˈɡɜːrlfrend/ | noun | новая девушка | namorada nova | a woman you just started dating | Boyle has a [new girlfriend]. | У Бойла новая девушка. | O Boyle tem uma namorada nova.
+overshare | /ˌoʊvərˈʃer/ | verb | рассказывать лишнее | contar demasiado | to share too many personal details | Boyle tends to [overshare]. | Бойл склонен рассказывать лишнее. | O Boyle tende a contar demasiado.
+too much information | /tuː mʌtʃ ˌɪnfərˈmeɪʃn/ | idiom | слишком много подробностей | informação a mais | details you didn't want to hear | Whoa, [too much information]! | Ого, это лишние подробности! | Uau, informação a mais!
+intense | /ɪnˈtens/ | adjective | чересчур эмоциональный | intenso | with very strong feelings | Boyle is a bit [intense]. | Бойл немного чересчур. | O Boyle é um bocado intenso.
+cute | /kjuːt/ | adjective | милый | querido | sweet and charming | They're a [cute] couple. | Они милая пара. | São um casal querido.
+drug dealer | /drʌɡ ˈdiːlər/ | noun | наркоторговец | traficante | a person who sells illegal drugs | They're hunting a [drug dealer]. | Они охотятся на наркоторговца. | Andam atrás de um traficante.
+sting | /stɪŋ/ | noun | операция под прикрытием | operação encoberta | a police trap to catch criminals | They set up a [sting]. | Они устроили операцию под прикрытием. | Montaram uma operação encoberta.
+undercover | /ˌʌndərˈkʌvər/ | adjective | под прикрытием | infiltrado | working secretly in disguise | Jake went [undercover]. | Джейк работал под прикрытием. | O Jake ficou infiltrado.
+blow someone's cover | /bloʊ ˈsʌmwʌnz ˈkʌvər/ | idiom | раскрыть чьё-то прикрытие | denunciar o disfarce de alguém | to reveal that someone is secretly police | Boyle almost [blew Jake's cover]. | Бойл чуть не раскрыл прикрытие Джейка. | O Boyle quase denunciou o disfarce do Jake.
+
+## 18 · The Apartment
+apartment | /əˈpɑːrtmənt/ | noun | квартира | apartamento | a home in a larger building | Jake might lose his [apartment]. | Джейк может лишиться квартиры. | O Jake pode perder o apartamento.
+landlord | /ˈlændlɔːrd/ | noun | арендодатель | senhorio | the owner who rents out a home | His [landlord] is selling the building. | Его арендодатель продаёт дом. | O senhorio dele vai vender o prédio.
+condo | /ˈkɑːndoʊ/ | noun | квартира в собственности | apartamento próprio | an apartment you own | The building is becoming [condos]. | Дом переделывают под квартиры в собственность. | O prédio vai passar a apartamentos para venda.
+down payment | /ˌdaʊn ˈpeɪmənt/ | noun | первоначальный взнос | entrada | the first part you pay when buying a home | He can't afford the [down payment]. | Ему не потянуть первоначальный взнос. | Não tem dinheiro para a entrada.
+broke | /broʊk/ | adjective | без гроша | teso | having no money | Jake is totally [broke]. | Джейк совсем на мели. | O Jake está completamente teso.
+debt | /det/ | noun | долг | dívida | money you owe | He's in serious [debt]. | У него серьёзные долги. | Tem dívidas sérias.
+lend | /lend/ | verb | одолжить | emprestar | to give money that must be paid back | Can you [lend] me some money? | Одолжишь мне денег? | Podes emprestar-me dinheiro?
+borrow | /ˈbɑːroʊ/ | verb | занять, взять в долг | pedir emprestado | to take money you'll pay back | He had to [borrow] from Boyle. | Ему пришлось занять у Бойла. | Teve de pedir emprestado ao Boyle.
+roommate | /ˈruːmmeɪt/ | noun | сосед по квартире | colega de casa | someone you share a home with | Boyle offered to be his [roommate]. | Бойл предложил жить вместе. | O Boyle ofereceu-se para ser colega de casa.
+mortgage | /ˈmɔːrɡɪdʒ/ | noun | ипотека | crédito à habitação | a loan to buy a home | He'd need a [mortgage]. | Ему понадобилась бы ипотека. | Precisava de um crédito à habitação.
+co-own | /koʊ ˈoʊn/ | verb | владеть совместно | ser coproprietário | to own something with someone | They agreed to [co-own] the place. | Они договорились владеть квартирой совместно. | Concordaram em ser coproprietários.
+move out | /muːv aʊt/ | phrasal verb | съехать | mudar-se | to leave your home | He doesn't want to [move out]. | Он не хочет съезжать. | Ele não quer mudar-se.
+neighborhood | /ˈneɪbərhʊd/ | noun | район | bairro | an area of a city | He loves this [neighborhood]. | Он любит этот район. | Ele adora este bairro.
+mess | /mes/ | noun | бардак | desarrumação | an untidy state | His apartment is a total [mess]. | В его квартире полный бардак. | O apartamento dele é uma desarrumação total.
+pride | /praɪd/ | noun | гордость | orgulho | self-respect | Asking for help hurt his [pride]. | Просить помощи было ударом по его гордости. | Pedir ajuda feriu-lhe o orgulho.
+
+## 19 · Tactical Village
+training | /ˈtreɪnɪŋ/ | noun | тренировка | treino | practice to learn skills | They went to a police [training]. | Они поехали на полицейскую тренировку. | Foram a um treino da polícia.
+simulation | /ˌsɪmjuˈleɪʃn/ | noun | симуляция | simulação | a fake situation for practice | It's a realistic [simulation]. | Это реалистичная симуляция. | É uma simulação realista.
+competition | /ˌkɑːmpəˈtɪʃn/ | noun | соревнование | competição | an event where people try to win | It turned into a [competition]. | Всё превратилось в соревнование. | Tornou-se uma competição.
+score | /skɔːr/ | noun | счёт, результат | pontuação | the number of points | Jake wants the highest [score]. | Джейк хочет набрать больше всех. | O Jake quer a pontuação mais alta.
+hostage | /ˈhɑːstɪdʒ/ | noun | заложник | refém | a person held by criminals | Save the [hostage]! | Спасите заложника! | Salvem o refém!
+paintball | /ˈpeɪntbɔːl/ | noun | пейнтбол | paintball | a game shooting paint balls | It's like [paintball] for cops. | Это как пейнтбол для копов. | É como paintball para polícias.
+tactics | /ˈtæktɪks/ | noun | тактика | tática | ways to achieve a goal | Their [tactics] were terrible. | Их тактика была ужасной. | A tática deles foi péssima.
+video game | /ˈvɪdioʊ ɡeɪm/ | noun | видеоигра | videojogo | a game on a screen | Rosa is addicted to a [video game]. | Роза подсела на видеоигру. | A Rosa está viciada num videojogo.
+addicted | /əˈdɪktɪd/ | adjective | зависимый | viciado | unable to stop doing something | He got [addicted] to the game. | Он подсел на эту игру. | Ficou viciado no jogo.
+record | /ˈrekərd/ | noun | рекорд | recorde | the best result ever | Amy broke the [record]. | Эми побила рекорд. | A Amy bateu o recorde.
+reflexes | /ˈriːfleksɪz/ | noun | рефлексы, реакция | reflexos | how fast your body reacts | You need fast [reflexes]. | Нужна быстрая реакция. | Precisas de reflexos rápidos.
+show off | /ʃoʊ ɔːf/ | phrasal verb | выпендриваться | exibir-se | to try to impress people | Stop [showing off]! | Хватит выпендриваться! | Para de te exibires!
+team player | /tiːm ˈpleɪər/ | noun | командный игрок | jogador de equipa | someone who works well in a group | Be a [team player]. | Будь командным игроком. | Sê um jogador de equipa.
+fail | /feɪl/ | verb | провалиться | falhar | to not succeed | They [failed] the first round. | Они провалили первый раунд. | Falharam a primeira ronda.
+redemption | /rɪˈdempʃn/ | noun | искупление | redenção | making up for a failure | This is his shot at [redemption]. | Это его шанс искупить вину. | Esta é a hipótese de redenção dele.
+
+## 20 · Fancy Brudgom
+best man | /best mæn/ | noun | шафер | padrinho | the groom's main helper at a wedding | Boyle asked Jake to be [best man]. | Бойл попросил Джейка быть шафером. | O Boyle pediu ao Jake para ser padrinho.
+bachelor party | /ˈbætʃələr ˈpɑːrti/ | noun | мальчишник | despedida de solteiro | a party for a man before his wedding | Jake planned the [bachelor party]. | Джейк организовал мальчишник. | O Jake organizou a despedida de solteiro.
+fiancée | /ˌfiːɑːnˈseɪ/ | noun | невеста | noiva | the woman you will marry | Boyle's [fiancée] is very strange. | Невеста Бойла очень странная. | A noiva do Boyle é muito estranha.
+custom | /ˈkʌstəm/ | noun | обычай | costume | a traditional way of doing something | It's a Norwegian wedding [custom]. | Это норвежский свадебный обычай. | É um costume de casamento norueguês.
+best man speech | /best mæn spiːtʃ/ | noun | речь шафера | discurso do padrinho | a funny talk by the groom's friend | Jake wrote a [best man speech]. | Джейк написал речь шафера. | O Jake escreveu o discurso do padrinho.
+honor | /ˈɑːnər/ | noun | честь | honra | great respect | It's an [honor] to be your best man. | Для меня честь быть твоим шафером. | É uma honra ser o teu padrinho.
+cold feet | /koʊld fiːt/ | noun | страх перед свадьбой | medo de avançar | nerves before a big commitment | Boyle has [cold feet]. | Бойл засомневался перед свадьбой. | O Boyle está com medo de avançar.
+rehearsal | /rɪˈhɜːrsl/ | noun | репетиция | ensaio | a practice before an event | The wedding [rehearsal] went badly. | Репетиция свадьбы прошла плохо. | O ensaio do casamento correu mal.
+raise a glass | /reɪz ə ɡlæs/ | idiom | поднять бокал | erguer o copo | to drink in honor of someone | Let's [raise a glass] to the couple! | Поднимем бокалы за пару! | Vamos erguer o copo ao casal!
+ring | /rɪŋ/ | noun | кольцо | anel | a band worn on the finger | Don't lose the [ring]! | Не потеряй кольцо! | Não percas o anel!
+groom | /ɡruːm/ | noun | жених | noivo | a man getting married | The [groom] looked nervous. | Жених выглядел взволнованным. | O noivo parecia nervoso.
+dance | /dæns/ | noun | танец | dança | movement to music | The first [dance] was a disaster. | Первый танец провалился. | A primeira dança foi um desastre.
+loyal | /ˈlɔɪəl/ | adjective | преданный | leal | always supporting | Boyle is a [loyal] friend. | Бойл — преданный друг. | O Boyle é um amigo leal.
+support | /səˈpɔːrt/ | verb | поддерживать | apoiar | to help and encourage | Friends [support] each other. | Друзья поддерживают друг друга. | Os amigos apoiam-se uns aos outros.
+call off | /kɔːl ɔːf/ | phrasal verb | отменить | cancelar | to cancel an event | They [called off] the wedding. | Свадьбу отменили. | Cancelaram o casamento.
+
+## 21 · Unsolvable
+cold case | /koʊld keɪs/ | noun | нераскрытое старое дело | caso arquivado | an old crime that was never solved | Jake reopened a [cold case]. | Джейк возобновил старое нераскрытое дело. | O Jake reabriu um caso arquivado.
+reopen | /riˈoʊpən/ | verb | возобновить | reabrir | to start again | They decided to [reopen] the case. | Они решили возобновить дело. | Decidiram reabrir o caso.
+file | /faɪl/ | noun | папка, досье | processo | a folder of documents | Read the whole [file]. | Прочитай всё досье. | Lê o processo todo.
+witness | /ˈwɪtnəs/ | noun | свидетель | testemunha | someone who saw a crime | The old [witness] finally talked. | Старый свидетель наконец заговорил. | A velha testemunha finalmente falou.
+impossible | /ɪmˈpɑːsəbl/ | adjective | невозможный | impossível | not able to happen | They said it was [impossible] to solve. | Говорили, что раскрыть его невозможно. | Diziam que era impossível de resolver.
+decades | /ˈdekeɪdz/ | noun | десятилетия | décadas | periods of ten years | The crime happened [decades] ago. | Преступление случилось десятки лет назад. | O crime aconteceu há décadas.
+obsessed | /əbˈsest/ | adjective | одержимый | obcecado | thinking about something all the time | Jake got [obsessed] with the case. | Джейк помешался на этом деле. | O Jake ficou obcecado com o caso.
+breakthrough | /ˈbreɪkθruː/ | noun | прорыв | avanço decisivo | an important discovery | They finally had a [breakthrough]. | Наконец у них случился прорыв. | Finalmente tiveram um avanço decisivo.
+DNA | /ˌdiː en ˈeɪ/ | noun | ДНК | ADN | genetic material that identifies a person | The [DNA] matched. | ДНК совпала. | O ADN correspondeu.
+match | /mætʃ/ | verb | совпадать | coincidir | to be the same | The prints [matched] his. | Отпечатки совпали с его. | As impressões coincidiram com as dele.
+fingerprints | /ˈfɪŋɡərprɪnts/ | noun | отпечатки пальцев | impressões digitais | marks left by fingers | They found [fingerprints] on the glass. | На стакане нашли отпечатки пальцев. | Encontraram impressões digitais no copo.
+persistent | /pərˈsɪstənt/ | adjective | настойчивый | persistente | continuing despite problems | Jake is incredibly [persistent]. | Джейк невероятно настойчив. | O Jake é incrivelmente persistente.
+give up | /ɡɪv ʌp/ | phrasal verb | сдаться | desistir | to stop trying | Never [give up]. | Никогда не сдавайся. | Nunca desistas.
+justice | /ˈdʒʌstɪs/ | noun | справедливость | justiça | fair treatment by law | The family finally got [justice]. | Семья наконец добилась справедливости. | A família finalmente teve justiça.
+closure | /ˈkloʊʒər/ | noun | ощущение завершённости | encerramento | the feeling that something is finally over | It gave the family [closure]. | Это помогло семье поставить точку. | Deu à família um encerramento.
+
+## 22 · Charges and Specs
+charges | /ˈtʃɑːrdʒɪz/ | noun | обвинения | acusações | formal accusations of a crime | Holt faced false [charges]. | Холту предъявили ложные обвинения. | O Holt enfrentou acusações falsas.
+mafia | /ˈmɑːfiə/ | noun | мафия | máfia | an organized crime group | Jake went undercover in the [mafia]. | Джейк внедрился в мафию. | O Jake infiltrou-se na máfia.
+FBI | /ˌef biː ˈaɪ/ | noun | ФБР | FBI | the US federal police | The [FBI] asked for his help. | ФБР попросило его о помощи. | O FBI pediu-lhe ajuda.
+fired | /ˈfaɪərd/ | adjective | уволенный | despedido | removed from a job | Jake pretended to be [fired]. | Джейк притворился уволенным. | O Jake fingiu que foi despedido.
+secret | /ˈsiːkrət/ | adjective | тайный | secreto | kept hidden | It was a [secret] operation. | Это была тайная операция. | Foi uma operação secreta.
+goodbye | /ɡʊdˈbaɪ/ | noun | прощание | despedida | words said when leaving | It was a sad [goodbye]. | Это было грустное прощание. | Foi uma despedida triste.
+confess | /kənˈfes/ | verb | признаться | confessar | to admit your feelings | Jake [confessed] his feelings to Amy. | Джейк признался Эми в чувствах. | O Jake confessou os sentimentos à Amy.
+feelings | /ˈfiːlɪŋz/ | noun | чувства | sentimentos | emotions | Do you have [feelings] for me? | У тебя есть ко мне чувства? | Tens sentimentos por mim?
+engaged | /ɪnˈɡeɪdʒd/ | adjective | помолвленный | noivo | promised to marry | Boyle got [engaged]. | Бойл обручился. | O Boyle ficou noivo.
+betray | /bɪˈtreɪ/ | verb | предать | trair | to break someone's trust | Jake felt [betrayed]. | Джейк чувствовал себя преданным. | O Jake sentiu-se traído.
+dramatic | /drəˈmætɪk/ | adjective | драматичный | dramático | exciting and emotional | What a [dramatic] finale! | Какой драматичный финал! | Que final dramático!
+risk | /rɪsk/ | noun | риск | risco | danger | It's a huge [risk]. | Это огромный риск. | É um risco enorme.
+undercover assignment | /ˌʌndərˈkʌvər əˈsaɪnmənt/ | noun | задание под прикрытием | missão infiltrada | a secret job pretending to be someone else | His [undercover assignment] could take months. | Его работа под прикрытием может занять месяцы. | A missão infiltrada dele pode levar meses.
+see you later | /siː juː ˈleɪtər/ | phrase | до встречи | até logo | a casual goodbye | [See you later], guys. | До встречи, ребята. | Até logo, pessoal.
+cool cool cool | /kuːl kuːl kuːl/ | phrase | ладно-ладно, круто-круто | fixe, fixe, fixe | a nervous way to say okay | "You're leaving?" "[Cool cool cool]." | «Ты уезжаешь?» — «Ладно-ладно-ладно». | "Vais embora?" "Fixe, fixe, fixe."
