@@ -1,0 +1,207 @@
+# show: Suits
+# year: 2011
+# accent: US
+
+## 1 · Pilot
+law firm | /ˈlɔː fɜːrm/ | noun | юридическая фирма | escritório de advogados | a company of lawyers | Harvey works at a top [law firm]. | Харви работает в ведущей юридической фирме. | O Harvey trabalha num escritório de advogados de topo.
+associate | /əˈsoʊʃiət/ | noun | младший юрист | associado | a junior lawyer at a firm | Harvey needs a new [associate]. | Харви нужен новый младший юрист. | O Harvey precisa de um novo associado.
+photographic memory | /ˌfoʊtəˈɡræfɪk ˈmeməri/ | noun | фотографическая память | memória fotográfica | the ability to remember everything you see | Mike has a [photographic memory]. | У Майка фотографическая память. | O Mike tem memória fotográfica.
+law degree | /lɔː dɪˈɡriː/ | noun | юридическое образование, диплом | licenciatura em Direito | a university qualification in law | Mike doesn't have a [law degree]. | У Майка нет юридического диплома. | O Mike não tem licenciatura em Direito.
+hire | /haɪər/ | verb | нанять | contratar | to give someone a job | Harvey decided to [hire] him anyway. | Харви всё равно решил его нанять. | O Harvey decidiu contratá-lo na mesma.
+fraud | /frɔːd/ | noun | мошенник | fraude, impostor | a person pretending to be something they're not | Mike is technically a [fraud]. | Технически Майк — мошенник. | Tecnicamente, o Mike é um impostor.
+closer | /ˈkloʊzər/ | noun | тот, кто закрывает сделки | especialista em fechar negócios | someone great at finishing deals | Harvey is the best [closer] in the city. | Харви — лучший в городе по закрытию сделок. | O Harvey é o melhor a fechar negócios da cidade.
+cocky | /ˈkɑːki/ | adjective | самоуверенный | convencido | too confident | Harvey is [cocky] but brilliant. | Харви самоуверен, но гениален. | O Harvey é convencido mas brilhante.
+settle | /ˈsetl/ | verb | урегулировать (дело) | chegar a acordo | to end a legal case without a trial | They decided to [settle] out of court. | Они решили урегулировать дело без суда. | Decidiram chegar a acordo fora do tribunal.
+Harvard | /ˈhɑːrvərd/ | noun | Гарвард | Harvard | a famous US university | The firm only hires from [Harvard]. | Фирма берёт только выпускников Гарварда. | O escritório só contrata de Harvard.
+interview | /ˈɪntərvjuː/ | noun | собеседование | entrevista | a meeting to get a job | Mike walked into the [interview] by accident. | Майк случайно попал на собеседование. | O Mike entrou na entrevista por acaso.
+briefcase | /ˈbriːfkeɪs/ | noun | портфель | pasta | a flat case for documents | He was carrying a [briefcase] full of drugs. | Он нёс портфель, полный наркотиков. | Levava uma pasta cheia de droga.
+secret | /ˈsiːkrət/ | noun | тайна | segredo | something hidden | Mike's [secret] must never come out. | Тайна Майка никогда не должна раскрыться. | O segredo do Mike nunca pode vir a público.
+pro bono | /ˌproʊ ˈboʊnoʊ/ | adjective | бесплатный (о юридической помощи) | pro bono | legal work done for free | He took a [pro bono] case. | Он взялся за бесплатное дело. | Aceitou um caso pro bono.
+second chance | /ˈsekənd tʃæns/ | noun | второй шанс | segunda oportunidade | another opportunity after a failure | The job was Mike's [second chance]. | Работа стала для Майка вторым шансом. | O emprego foi a segunda oportunidade do Mike.
+
+## 2 · Errors and Omissions
+omission | /oʊˈmɪʃn/ | noun | упущение | omissão | something left out | There was an [omission] in the contract. | В договоре было упущение. | Havia uma omissão no contrato.
+contract | /ˈkɑːntrækt/ | noun | контракт | contrato | a legal agreement | Read the [contract] carefully. | Внимательно прочитай контракт. | Lê o contrato com atenção.
+client | /ˈklaɪənt/ | noun | клиент | cliente | a person who pays for a service | A new [client] came to the firm. | В фирму пришёл новый клиент. | Um novo cliente veio ao escritório.
+lawsuit | /ˈlɔːsuːt/ | noun | иск | processo | a legal case | They're facing a [lawsuit]. | Против них подан иск. | Estão a enfrentar um processo.
+blackmail | /ˈblækmeɪl/ | noun | шантаж | chantagem | getting money by threatening to reveal secrets | Harvey was accused of [blackmail]. | Харви обвинили в шантаже. | O Harvey foi acusado de chantagem.
+bar | /bɑːr/ | noun | коллегия адвокатов | Ordem dos Advogados | the official group of lawyers | He could lose his place at the [bar]. | Его могут лишить статуса адвоката. | Pode perder o lugar na Ordem dos Advogados.
+disbar | /dɪsˈbɑːr/ | verb | лишить адвокатского статуса | expulsar da Ordem | to stop someone working as a lawyer | Harvey could get [disbarred]. | Харви могут лишить лицензии. | O Harvey pode ser expulso da Ordem.
+favor | /ˈfeɪvər/ | noun | одолжение | favor | a kind act | He owes me a [favor]. | Он мне должен. | Ele deve-me um favor.
+leverage | /ˈlevərɪdʒ/ | noun | рычаг давления | trunfo | power to influence a situation | We need [leverage] against them. | Нам нужен рычаг давления на них. | Precisamos de um trunfo contra eles.
+pick your battles | /pɪk jʊr ˈbætlz/ | idiom | выбирай, где сражаться | escolhe as tuas batalhas | only fight for what matters | You have to [pick your battles]. | Нужно выбирать, за что бороться. | Tens de escolher as tuas batalhas.
+paralegal | /ˌpærəˈliːɡl/ | noun | помощник юриста | assistente jurídica | a person who helps lawyers | Rachel is a top [paralegal]. | Рэйчел — лучшая помощница юриста. | A Rachel é uma assistente jurídica de topo.
+research | /ˈriːsɜːrtʃ/ | noun | исследование, поиск информации | pesquisa | careful study to find facts | Mike did all the [research]. | Майк провёл всё исследование. | O Mike fez a pesquisa toda.
+mistake | /mɪˈsteɪk/ | noun | ошибка | erro | something wrong | One small [mistake] can cost millions. | Одна маленькая ошибка может стоить миллионы. | Um pequeno erro pode custar milhões.
+cover up | /ˈkʌvər ʌp/ | phrasal verb | скрывать | encobrir | to hide a mistake | Don't try to [cover up] the error. | Не пытайся скрыть ошибку. | Não tentes encobrir o erro.
+loyal | /ˈlɔɪəl/ | adjective | преданный | leal | faithful | Donna is [loyal] to Harvey. | Донна предана Харви. | A Donna é leal ao Harvey.
+
+## 3 · Inside Track
+inside track | /ˈɪnsaɪd træk/ | noun | преимущество, особый доступ | vantagem | an advantage from special access | Harvey has the [inside track]. | У Харви есть особое преимущество. | O Harvey tem vantagem.
+promotion | /prəˈmoʊʃn/ | noun | повышение | promoção | moving to a higher job | Harvey is up for a [promotion]. | Харви претендует на повышение. | O Harvey está na corrida a uma promoção.
+senior partner | /ˈsiːniər ˈpɑːrtnər/ | noun | старший партнёр | sócio sénior | a top owner of a firm | He wants to be [senior partner]. | Он хочет стать старшим партнёром. | Quer ser sócio sénior.
+rival | /ˈraɪvl/ | noun | соперник | rival | a competitor | Louis is Harvey's [rival]. | Луис — соперник Харви. | O Louis é o rival do Harvey.
+ambitious | /æmˈbɪʃəs/ | adjective | амбициозный | ambicioso | wanting success | Louis is very [ambitious]. | Луис очень амбициозен. | O Louis é muito ambicioso.
+merger | /ˈmɜːrdʒər/ | noun | слияние | fusão | when two companies join | They handled a big [merger]. | Они вели крупное слияние. | Trataram de uma grande fusão.
+shareholder | /ˈʃerhoʊldər/ | noun | акционер | acionista | someone who owns part of a company | The [shareholders] must approve it. | Акционеры должны это одобрить. | Os acionistas têm de aprovar.
+deal | /diːl/ | noun | сделка | negócio | a business agreement | The [deal] almost fell apart. | Сделка чуть не сорвалась. | O negócio quase se desfez.
+fall apart | /fɔːl əˈpɑːrt/ | phrasal verb | развалиться | desmoronar-se | to fail completely | The plan started to [fall apart]. | План начал разваливаться. | O plano começou a desmoronar-se.
+negotiate | /nɪˈɡoʊʃieɪt/ | verb | вести переговоры | negociar | to discuss to agree | Harvey knows how to [negotiate]. | Харви умеет вести переговоры. | O Harvey sabe negociar.
+office politics | /ˈɔːfɪs ˈpɑːlətɪks/ | noun | офисные интриги | política de escritório | competition and games at work | [Office politics] can be brutal. | Офисные интриги бывают жестокими. | A política de escritório pode ser brutal.
+ally | /ˈælaɪ/ | noun | союзник | aliado | someone who supports you | Jessica is his strongest [ally]. | Джессика — его главная союзница. | A Jessica é a maior aliada dele.
+edge | /edʒ/ | noun | преимущество | vantagem | a small advantage | Mike gives Harvey an [edge]. | Майк даёт Харви преимущество. | O Mike dá ao Harvey vantagem.
+cut corners | /kʌt ˈkɔːrnərz/ | idiom | халтурить, срезать углы | facilitar | to do something badly to save time | Never [cut corners] on a contract. | Никогда не халтурь с контрактом. | Nunca facilites num contrato.
+take credit | /teɪk ˈkredɪt/ | phrase | присвоить заслугу | ficar com os louros | to say you did something good | Louis tried to [take credit]. | Луис пытался присвоить себе заслугу. | O Louis tentou ficar com os louros.
+
+## 4 · Dirty Little Secrets
+dirty secret | /ˈdɜːrti ˈsiːkrət/ | noun | грязная тайна | segredo sujo | a shameful hidden fact | Every company has a [dirty secret]. | У каждой компании есть грязная тайна. | Todas as empresas têm um segredo sujo.
+whistleblower | /ˈwɪslbloʊər/ | noun | информатор (о нарушениях) | denunciante | someone who reports wrongdoing | The [whistleblower] was fired. | Информатора уволили. | O denunciante foi despedido.
+wrongful termination | /ˈrɔːŋfl ˌtɜːrmɪˈneɪʃn/ | noun | незаконное увольнение | despedimento ilícito | firing someone illegally | She sued for [wrongful termination]. | Она подала в суд за незаконное увольнение. | Processou por despedimento ilícito.
+cover-up | /ˈkʌvər ʌp/ | noun | сокрытие | encobrimento | hiding the truth | It's a corporate [cover-up]. | Это корпоративное сокрытие. | É um encobrimento empresarial.
+evidence | /ˈevɪdəns/ | noun | доказательства | provas | facts that prove something | We need [evidence]. | Нам нужны доказательства. | Precisamos de provas.
+testify | /ˈtestɪfaɪ/ | verb | давать показания | testemunhar | to speak in court | She agreed to [testify]. | Она согласилась дать показания. | Ela concordou em testemunhar.
+deposition | /ˌdepəˈzɪʃn/ | noun | показания под присягой (досудебные) | depoimento | questions answered under oath before trial | The [deposition] lasted six hours. | Допрос под присягой длился шесть часов. | O depoimento durou seis horas.
+under oath | /ˈʌndər oʊθ/ | phrase | под присягой | sob juramento | having promised to tell the truth | You're [under oath]. | Вы под присягой. | Está sob juramento.
+dig up | /dɪɡ ʌp/ | phrasal verb | раскопать (информацию) | desenterrar | to find hidden information | Mike [dug up] old emails. | Майк раскопал старые письма. | O Mike desenterrou e-mails antigos.
+emails | /ˈiːmeɪlz/ | noun | электронные письма | e-mails | electronic messages | The [emails] proved everything. | Письма всё доказали. | Os e-mails provaram tudo.
+hidden | /ˈhɪdn/ | adjective | скрытый | escondido | kept out of sight | The truth was [hidden] for years. | Правду скрывали годами. | A verdade esteve escondida durante anos.
+moral | /ˈmɔːrəl/ | adjective | нравственный | moral | about right and wrong | Mike has a strong [moral] compass. | У Майка сильный нравственный стержень. | O Mike tem uma bússola moral forte.
+integrity | /ɪnˈteɡrəti/ | noun | принципиальность | integridade | being honest | Mike acts with [integrity]. | Майк поступает принципиально. | O Mike age com integridade.
+expose | /ɪkˈspoʊz/ | verb | разоблачить | expor | to reveal something bad | They [exposed] the company. | Они разоблачили компанию. | Expuseram a empresa.
+settlement | /ˈsetlmənt/ | noun | мировое соглашение | acordo | an agreement ending a legal case | They reached a [settlement]. | Они пришли к мировому соглашению. | Chegaram a um acordo.
+
+## 5 · Bail Out
+bailout | /ˈbeɪlaʊt/ | noun | финансовое спасение | resgate financeiro | money given to save a failing company | The bank needs a [bailout]. | Банку нужна финансовая помощь. | O banco precisa de um resgate financeiro.
+bankruptcy | /ˈbæŋkrʌptsi/ | noun | банкротство | falência | when a company can't pay its debts | The client is facing [bankruptcy]. | Клиенту грозит банкротство. | O cliente enfrenta a falência.
+investor | /ɪnˈvestər/ | noun | инвестор | investidor | someone who puts money into a business | They need a new [investor]. | Им нужен новый инвестор. | Precisam de um novo investidor.
+shark | /ʃɑːrk/ | noun | акула (о человеке) | tubarão | a ruthless businessperson | He's a real business [shark]. | Он настоящая акула бизнеса. | É um verdadeiro tubarão dos negócios.
+hostile takeover | /ˈhɑːstl ˈteɪkoʊvər/ | noun | враждебное поглощение | aquisição hostil | buying a company against its will | They faced a [hostile takeover]. | Им грозило враждебное поглощение. | Enfrentaram uma aquisição hostil.
+grandmother | /ˈɡrænmʌðər/ | noun | бабушка | avó | the mother of your parent | Mike takes care of his [grandmother]. | Майк заботится о бабушке. | O Mike cuida da avó.
+nursing home | /ˈnɜːrsɪŋ hoʊm/ | noun | дом престарелых | lar | a place caring for old people | She lives in a [nursing home]. | Она живёт в доме престарелых. | Vive num lar.
+bills | /bɪlz/ | noun | счета | contas | money you owe for services | Mike can barely pay the [bills]. | Майк едва оплачивает счета. | O Mike mal consegue pagar as contas.
+loan | /loʊn/ | noun | заём, кредит | empréstimo | money borrowed | He needs a [loan]. | Ему нужен кредит. | Precisa de um empréstimo.
+risk | /rɪsk/ | noun | риск | risco | chance of loss | It's a big financial [risk]. | Это большой финансовый риск. | É um grande risco financeiro.
+bluff | /blʌf/ | verb | блефовать | fazer bluff | to pretend to be stronger | Harvey is [bluffing]. | Харви блефует. | O Harvey está a fazer bluff.
+call someone's bluff | /kɔːl ˈsʌmwʌnz blʌf/ | idiom | разоблачить блеф | pagar para ver | to challenge someone to prove a threat | They [called his bluff]. | Они разоблачили его блеф. | Pagaram para ver o bluff dele.
+save the company | /seɪv ðə ˈkʌmpəni/ | phrase | спасти компанию | salvar a empresa | to stop a company from failing | Harvey had to [save the company]. | Харви пришлось спасать компанию. | O Harvey teve de salvar a empresa.
+desperate | /ˈdespərət/ | adjective | в отчаянии | desesperado | ready to do anything | The client was [desperate]. | Клиент был в отчаянии. | O cliente estava desesperado.
+walk away | /wɔːk əˈweɪ/ | phrasal verb | уйти от сделки | abandonar | to leave a negotiation | Be ready to [walk away]. | Будь готов уйти. | Está pronto para abandonar.
+
+## 6 · Tricks of the Trade
+tricks of the trade | /trɪks ʌv ðə treɪd/ | idiom | профессиональные хитрости | truques do ofício | clever methods experts use | Harvey knows all the [tricks of the trade]. | Харви знает все профессиональные хитрости. | O Harvey conhece todos os truques do ofício.
+con artist | /ˈkɑːn ˌɑːrtɪst/ | noun | мошенник, аферист | vigarista | someone who tricks people for money | The client is a [con artist]. | Клиент — аферист. | O cliente é um vigarista.
+scam | /skæm/ | noun | афера | burla | a dishonest plan to get money | It was all a [scam]. | Всё это было аферой. | Foi tudo uma burla.
+trick | /trɪk/ | verb | обмануть | enganar | to make someone believe something false | He [tricked] his investors. | Он обманул своих инвесторов. | Enganou os investidores.
+fake | /feɪk/ | adjective | поддельный | falso | not real | The documents were [fake]. | Документы были поддельными. | Os documentos eram falsos.
+investigate | /ɪnˈvestɪɡeɪt/ | verb | расследовать | investigar | to find the truth | Mike [investigated] the client. | Майк провёл проверку клиента. | O Mike investigou o cliente.
+Ponzi scheme | /ˈpɑːnzi skiːm/ | noun | финансовая пирамида | esquema Ponzi | a fraud paying old investors with new money | It was a [Ponzi scheme]. | Это была финансовая пирамида. | Era um esquema Ponzi.
+victims | /ˈvɪktɪmz/ | noun | жертвы | vítimas | people harmed | Hundreds of [victims] lost money. | Сотни пострадавших потеряли деньги. | Centenas de vítimas perderam dinheiro.
+trust | /trʌst/ | noun | доверие | confiança | belief in honesty | He abused their [trust]. | Он злоупотребил их доверием. | Abusou da confiança deles.
+bait | /beɪt/ | noun | приманка | isco | something used to attract | Mike was used as [bait]. | Майка использовали как приманку. | O Mike foi usado como isco.
+set a trap | /set ə træp/ | idiom | устроить ловушку | montar uma armadilha | to plan to catch someone | Harvey [set a trap]. | Харви устроил ловушку. | O Harvey montou uma armadilha.
+outsmart | /ˌaʊtˈsmɑːrt/ | verb | перехитрить | ser mais esperto | to beat by being clever | Harvey [outsmarted] the con man. | Харви перехитрил афериста. | O Harvey foi mais esperto que o vigarista.
+greedy | /ˈɡriːdi/ | adjective | жадный | ganancioso | wanting too much money | [Greedy] people fall for scams. | Жадные люди попадаются на аферы. | As pessoas gananciosas caem em burlas.
+fall for | /fɔːl fɔːr/ | phrasal verb | попасться на | cair em | to be tricked by | Don't [fall for] his lies. | Не ведись на его ложь. | Não caias nas mentiras dele.
+confidence | /ˈkɑːnfɪdəns/ | noun | доверие (в «con») | confiança | trust; "con" comes from this word | A con man wins your [confidence]. | Аферист завоёвывает доверие. | Um vigarista ganha a tua confiança.
+
+## 7 · Play the Man
+play the man | /pleɪ ðə mæn/ | idiom | играть против человека, а не карт | jogar contra o homem | focus on your opponent, not the game | Harvey says: [play the man], not the cards. | Харви говорит: играй против человека, а не карт. | O Harvey diz: joga contra o homem, não contra as cartas.
+poker | /ˈpoʊkər/ | noun | покер | póquer | a card game with betting | Harvey plays [poker] with clients. | Харви играет в покер с клиентами. | O Harvey joga póquer com clientes.
+read people | /riːd ˈpiːpl/ | idiom | читать людей | ler as pessoas | to understand what others think | Harvey can [read people]. | Харви умеет читать людей. | O Harvey sabe ler as pessoas.
+opponent | /əˈpoʊnənt/ | noun | противник | adversário | the person against you | Study your [opponent]. | Изучай противника. | Estuda o teu adversário.
+mock trial | /mɑːk ˈtraɪəl/ | noun | учебный суд | julgamento simulado | a practice court case | The associates had a [mock trial]. | Юристы провели учебный суд. | Os associados fizeram um julgamento simulado.
+jury | /ˈdʒʊri/ | noun | присяжные | júri | people who decide a court case | The [jury] liked Mike. | Присяжным понравился Майк. | O júri gostou do Mike.
+closing argument | /ˈkloʊzɪŋ ˈɑːrɡjumənt/ | noun | заключительная речь | alegações finais | the last speech in a trial | His [closing argument] was brilliant. | Его заключительная речь была блестящей. | As alegações finais dele foram brilhantes.
+persuade | /pərˈsweɪd/ | verb | убедить | convencer | to make someone agree | He [persuaded] the jury. | Он убедил присяжных. | Convenceu o júri.
+nerves | /nɜːrvz/ | noun | нервы | nervos | nervousness | Mike fought his [nerves]. | Майк боролся с волнением. | O Mike lutou contra os nervos.
+tell | /tel/ | noun | выдающий жест (в покере) | tique revelador | a small habit that shows what you think | Louis has an obvious [tell]. | У Луиса очевидный выдающий жест. | O Louis tem um tique revelador óbvio.
+bet | /bet/ | noun | ставка | aposta | money risked | He doubled his [bet]. | Он удвоил ставку. | Duplicou a aposta.
+confident | /ˈkɑːnfɪdənt/ | adjective | уверенный | confiante | sure of yourself | Look [confident], even if you're not. | Выгляди уверенно, даже если не уверен. | Parece confiante, mesmo que não estejas.
+psychology | /saɪˈkɑːlədʒi/ | noun | психология | psicologia | how the mind works | Law is all [psychology]. | Юриспруденция — это сплошная психология. | O Direito é pura psicologia.
+advantage | /ədˈvæntɪdʒ/ | noun | преимущество | vantagem | something that helps you win | Use every [advantage]. | Используй любое преимущество. | Usa todas as vantagens.
+win | /wɪn/ | verb | выиграть | ganhar | to be the best | Harvey always wants to [win]. | Харви всегда хочет выигрывать. | O Harvey quer sempre ganhar.
+
+## 8 · Identity Crisis
+identity crisis | /aɪˈdentəti ˈkraɪsɪs/ | noun | кризис идентичности | crise de identidade | confusion about who you are | Mike is having an [identity crisis]. | У Майка кризис идентичности. | O Mike está numa crise de identidade.
+pretend | /prɪˈtend/ | verb | притворяться | fingir | to act as if something is true | Mike [pretends] to be a lawyer. | Майк притворяется юристом. | O Mike finge ser advogado.
+imposter | /ɪmˈpɑːstər/ | noun | самозванец | impostor | someone pretending to be another person | He feels like an [imposter]. | Он чувствует себя самозванцем. | Sente-se um impostor.
+old friend | /oʊld frend/ | noun | старый друг | velho amigo | a friend from the past | Mike's [old friend] Trevor is trouble. | Старый друг Майка Тревор — ходячие неприятности. | O velho amigo do Mike, o Trevor, só traz problemas.
+drug dealer | /drʌɡ ˈdiːlər/ | noun | наркоторговец | traficante | a person selling drugs | Trevor is a [drug dealer]. | Тревор — наркоторговец. | O Trevor é traficante.
+past | /pæst/ | noun | прошлое | passado | the time before | Mike can't escape his [past]. | Майк не может убежать от своего прошлого. | O Mike não consegue fugir do passado.
+double life | /ˈdʌbl laɪf/ | noun | двойная жизнь | vida dupla | living as two different people | Mike lives a [double life]. | Майк живёт двойной жизнью. | O Mike vive uma vida dupla.
+caught | /kɔːt/ | adjective | пойманный | apanhado | discovered | He's afraid of getting [caught]. | Он боится, что его поймают. | Tem medo de ser apanhado.
+background check | /ˈbækɡraʊnd tʃek/ | noun | проверка биографии | verificação de antecedentes | checking someone's history | The firm did a [background check]. | Фирма проверила его биографию. | O escritório fez uma verificação de antecedentes.
+records | /ˈrekərdz/ | noun | записи, документы | registos | official documents about someone | They checked his school [records]. | Они проверили его школьные документы. | Verificaram os registos escolares dele.
+hack | /hæk/ | verb | взломать | piratear | to break into a computer system | Someone [hacked] the database. | Кто-то взломал базу данных. | Alguém pirateou a base de dados.
+nervous | /ˈnɜːrvəs/ | adjective | нервный | nervoso | worried | Mike got [nervous]. | Майк занервничал. | O Mike ficou nervoso.
+protect | /prəˈtekt/ | verb | защищать | proteger | to keep safe | Harvey [protects] his secret. | Харви оберегает его тайну. | O Harvey protege o segredo dele.
+who you are | /huː juː ɑːr/ | phrase | кто ты есть | quem és | your real identity | Never forget [who you are]. | Никогда не забывай, кто ты. | Nunca te esqueças de quem és.
+turn your back on | /tɜːrn jʊr bæk ɑːn/ | idiom | отвернуться от | virar as costas a | to stop supporting someone | He couldn't [turn his back on] his friend. | Он не мог отвернуться от друга. | Não conseguiu virar as costas ao amigo.
+
+## 9 · Undefeated
+undefeated | /ˌʌndɪˈfiːtɪd/ | adjective | непобеждённый | invicto | never having lost | Harvey is [undefeated] in court. | Харви не проиграл ни одного дела. | O Harvey é invicto em tribunal.
+trial | /ˈtraɪəl/ | noun | судебный процесс | julgamento | a case in court | The [trial] starts tomorrow. | Суд начинается завтра. | O julgamento começa amanhã.
+witness | /ˈwɪtnəs/ | noun | свидетель | testemunha | someone who saw something | The key [witness] changed his story. | Главный свидетель изменил показания. | A testemunha-chave mudou a versão.
+cross-examine | /ˌkrɔːs ɪɡˈzæmɪn/ | verb | проводить перекрёстный допрос | contrainterrogar | to question the other side's witness | Harvey [cross-examined] her. | Харви провёл перекрёстный допрос. | O Harvey contrainterrogou-a.
+objection | /əbˈdʒekʃn/ | noun | возражение | objeção | a formal protest in court | [Objection], Your Honor! | Возражаю, ваша честь! | Objeção, Meritíssimo!
+judge | /dʒʌdʒ/ | noun | судья | juiz | the person who controls a court | The [judge] overruled him. | Судья отклонил его возражение. | O juiz indeferiu-o.
+verdict | /ˈvɜːrdɪkt/ | noun | вердикт | veredicto | the jury's decision | The [verdict] was not guilty. | Вердикт — невиновен. | O veredicto foi inocente.
+reputation | /ˌrepjuˈteɪʃn/ | noun | репутация | reputação | what people think of you | His [reputation] is on the line. | Его репутация под угрозой. | A reputação dele está em jogo.
+lose | /luːz/ | verb | проиграть | perder | to not win | Harvey hates to [lose]. | Харви ненавидит проигрывать. | O Harvey odeia perder.
+record | /ˈrekərd/ | noun | послужной список | historial | a history of results | He has a perfect [record]. | У него безупречный послужной список. | Tem um historial perfeito.
+pressure | /ˈpreʃər/ | noun | давление | pressão | stress | He works well under [pressure]. | Он хорошо работает под давлением. | Trabalha bem sob pressão.
+defendant | /dɪˈfendənt/ | noun | обвиняемый, ответчик | arguido | the person accused in court | The [defendant] looked nervous. | Обвиняемый выглядел нервно. | O arguido parecia nervoso.
+prosecutor | /ˈprɑːsɪkjuːtər/ | noun | прокурор | procurador | the lawyer who accuses | The [prosecutor] was tough. | Прокурор был жёстким. | O procurador era duro.
+guilty | /ˈɡɪlti/ | adjective | виновный | culpado | responsible for a crime | Was he really [guilty]? | Был ли он действительно виновен? | Seria ele realmente culpado?
+courtroom | /ˈkɔːrtruːm/ | noun | зал суда | sala de audiências | the room where a trial happens | The [courtroom] went silent. | В зале суда воцарилась тишина. | A sala de audiências ficou em silêncio.
+
+## 10 · The Shelf Life
+shelf life | /ˈʃelf laɪf/ | noun | срок годности | prazo de validade | how long something stays good | Every lie has a [shelf life]. | У любой лжи есть срок годности. | Todas as mentiras têm prazo de validade.
+patent | /ˈpætnt/ | noun | патент | patente | a legal right to an invention | The company owns the [patent]. | Компании принадлежит патент. | A empresa detém a patente.
+invention | /ɪnˈvenʃn/ | noun | изобретение | invenção | something new that someone created | Who owns the [invention]? | Кому принадлежит изобретение? | A quem pertence a invenção?
+steal an idea | /stiːl ən aɪˈdiːə/ | phrase | украсть идею | roubar uma ideia | to take someone's idea | They [stole his idea]. | Они украли его идею. | Roubaram-lhe a ideia.
+royalties | /ˈrɔɪəltiz/ | noun | роялти, авторские отчисления | direitos de autor | money paid to an inventor for each use | He wants his [royalties]. | Он хочет свои отчисления. | Quer os direitos de autor.
+petty | /ˈpeti/ | adjective | мелочный | mesquinho | caring too much about small things | Louis can be very [petty]. | Луис бывает очень мелочным. | O Louis consegue ser muito mesquinho.
+grudge | /ɡrʌdʒ/ | noun | обида, злость | rancor | a lasting feeling of anger | Louis holds a [grudge]. | Луис затаил обиду. | O Louis guarda rancor.
+revenge | /rɪˈvendʒ/ | noun | месть | vingança | getting back at someone | He wanted [revenge]. | Он жаждал мести. | Queria vingança.
+expire | /ɪkˈspaɪər/ | verb | истечь | expirar | to end after a period | The patent will [expire] soon. | Патент скоро истечёт. | A patente vai expirar em breve.
+deadline | /ˈdedlaɪn/ | noun | крайний срок | prazo | the last moment to do something | They're racing against a [deadline]. | Они не успевают к сроку. | Estão numa corrida contra o prazo.
+filing | /ˈfaɪlɪŋ/ | noun | подача документов | registo | officially submitting a document | The [filing] was late. | Документы подали с опозданием. | O registo foi tardio.
+paperwork | /ˈpeɪpərwɜːrk/ | noun | бумаги | papelada | documents to complete | Mike found an error in the [paperwork]. | Майк нашёл ошибку в бумагах. | O Mike encontrou um erro na papelada.
+inventor | /ɪnˈventər/ | noun | изобретатель | inventor | a person who invents | The [inventor] was cheated. | Изобретателя обманули. | O inventor foi enganado.
+fair share | /fer ʃer/ | noun | справедливая доля | parte justa | what you deserve | He only wants his [fair share]. | Он просто хочет свою справедливую долю. | Só quer a parte justa dele.
+hardball | /ˈhɑːrdbɔːl/ | noun | жёсткая игра | jogo duro | tough, aggressive methods | Harvey plays [hardball]. | Харви играет жёстко. | O Harvey joga duro.
+
+## 11 · Rules of the Game
+rules of the game | /ruːlz ʌv ðə ɡeɪm/ | idiom | правила игры | regras do jogo | how things work in a situation | Everyone must follow the [rules of the game]. | Все должны соблюдать правила игры. | Todos têm de seguir as regras do jogo.
+district attorney | /ˈdɪstrɪkt əˈtɜːrni/ | noun | окружной прокурор | procurador distrital | the chief prosecutor of an area | Harvey used to work for the [district attorney]. | Харви раньше работал у окружного прокурора. | O Harvey trabalhava para o procurador distrital.
+old case | /oʊld keɪs/ | noun | старое дело | caso antigo | a case from the past | An [old case] came back to haunt him. | Старое дело вернулось, чтобы преследовать его. | Um caso antigo voltou para o assombrar.
+bury | /ˈberi/ | verb | скрыть, похоронить | enterrar | to hide something | Someone [buried] evidence. | Кто-то скрыл улики. | Alguém enterrou provas.
+wrongly convicted | /ˈrɔːŋli kənˈvɪktɪd/ | adjective | осуждённый несправедливо | condenado injustamente | found guilty but innocent | The man was [wrongly convicted]. | Этого человека осудили несправедливо. | O homem foi condenado injustamente.
+prison | /ˈprɪzn/ | noun | тюрьма | prisão | a place for criminals | He spent years in [prison]. | Он провёл годы в тюрьме. | Passou anos na prisão.
+appeal | /əˈpiːl/ | noun | апелляция | recurso | asking a higher court to change a decision | They filed an [appeal]. | Они подали апелляцию. | Interpuseram recurso.
+justice | /ˈdʒʌstɪs/ | noun | правосудие | justiça | fairness in law | He finally got [justice]. | Он наконец добился правосудия. | Finalmente teve justiça.
+conscience | /ˈkɑːnʃəns/ | noun | совесть | consciência | your sense of right and wrong | Harvey has a [conscience] after all. | У Харви всё-таки есть совесть. | Afinal o Harvey tem consciência.
+mentor | /ˈmentɔːr/ | noun | наставник | mentor | someone who guides you | Harvey's old [mentor] was involved. | Был замешан старый наставник Харви. | O antigo mentor do Harvey estava envolvido.
+betray | /bɪˈtreɪ/ | verb | предать | trair | to break trust | His mentor [betrayed] him. | Наставник предал его. | O mentor traiu-o.
+clean hands | /kliːn hændz/ | idiom | чистые руки, невиновность | mãos limpas | being innocent of wrongdoing | Nobody here has [clean hands]. | Здесь ни у кого не чистые руки. | Ninguém aqui tem as mãos limpas.
+file | /faɪl/ | noun | досье | processo | a folder of documents | The [file] was missing a page. | В досье не хватало страницы. | Faltava uma página no processo.
+right thing | /raɪt θɪŋ/ | noun | правильный поступок | coisa certa | the morally correct action | Do the [right thing]. | Поступи правильно. | Faz a coisa certa.
+exonerate | /ɪɡˈzɑːnəreɪt/ | verb | оправдать | ilibar | to officially clear of blame | New evidence [exonerated] him. | Новые улики оправдали его. | Novas provas ilibaram-no.
+
+## 12 · Dog Fight
+dog fight | /ˈdɔːɡ faɪt/ | noun | ожесточённая схватка | luta renhida | a fierce fight | The case turned into a [dog fight]. | Дело превратилось в ожесточённую схватку. | O caso tornou-se uma luta renhida.
+offer | /ˈɔːfər/ | noun | предложение | proposta | what someone proposes to give | They made a settlement [offer]. | Они предложили мировую. | Fizeram uma proposta de acordo.
+counteroffer | /ˈkaʊntərɔːfər/ | noun | встречное предложение | contraproposta | an offer made in response | Harvey made a [counteroffer]. | Харви сделал встречное предложение. | O Harvey fez uma contraproposta.
+stubborn | /ˈstʌbərn/ | adjective | упрямый | teimoso | not willing to change | Both sides were [stubborn]. | Обе стороны упрямились. | Os dois lados eram teimosos.
+back down | /bæk daʊn/ | phrasal verb | отступить | recuar | to stop demanding something | Harvey never [backs down]. | Харви никогда не отступает. | O Harvey nunca recua.
+threat | /θret/ | noun | угроза | ameaça | a warning of harm | Was that a [threat]? | Это была угроза? | Isso foi uma ameaça?
+ego | /ˈiːɡoʊ/ | noun | самолюбие | ego | pride in yourself | Their [egos] got in the way. | Им помешало самолюбие. | Os egos deles atrapalharam.
+teamwork | /ˈtiːmwɜːrk/ | noun | работа в команде | trabalho de equipa | working together | Mike and Harvey showed great [teamwork]. | Майк и Харви отлично сработались. | O Mike e o Harvey mostraram ótimo trabalho de equipa.
+partner | /ˈpɑːrtnər/ | noun | партнёр | sócio | an owner of a law firm | Jessica is the managing [partner]. | Джессика — управляющий партнёр. | A Jessica é a sócia-gerente.
+risk it all | /rɪsk ɪt ɔːl/ | idiom | поставить всё на карту | arriscar tudo | to risk everything | Harvey decided to [risk it all]. | Харви решил поставить всё на карту. | O Harvey decidiu arriscar tudo.
+loyalty | /ˈlɔɪəlti/ | noun | верность | lealdade | faithful support | [Loyalty] is everything to Harvey. | Для Харви верность — это всё. | Para o Harvey, a lealdade é tudo.
+junior partner | /ˈdʒuːniər ˈpɑːrtnər/ | noun | младший партнёр | sócio júnior | a new, lower-level owner of a firm | Could Mike one day be [junior partner]? | Сможет ли Майк однажды стать младшим партнёром? | Poderá o Mike um dia ser sócio júnior?
+end game | /ˈend ɡeɪm/ | noun | конечная цель, развязка | objetivo final | the final stage of a plan | What's your [end game]? | Какова твоя конечная цель? | Qual é o teu objetivo final?
+make a name for yourself | /meɪk ə neɪm fɔːr jərˈself/ | idiom | сделать себе имя | fazer nome | to become known and respected | Mike [made a name for himself]. | Майк сделал себе имя. | O Mike fez nome.
+season finale | /ˈsiːzn fɪˈnæli/ | noun | финал сезона | final de temporada | the last episode | The [season finale] was intense. | Финал сезона был напряжённым. | O final de temporada foi intenso.
