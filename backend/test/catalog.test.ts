@@ -132,6 +132,11 @@ describe("слова, собранные заранее", () => {
     expect(lib.parseWordsFile(`${good("a")}`).errors.join()).toMatch(/до первой серии/);
   });
 
+  it("прочерк вместо перевода — ошибка, а не слово", () => {
+    const stub = "x | /x/ | noun | р | п | e | A [x]. | — | —";
+    expect(lib.parseWordsFile(file(five + "\n" + stub)).errors.join()).toMatch(/прочерк/);
+  });
+
   it("комментарии, пустые строки и BOM не мешают", () => {
     const { errors } = lib.parseWordsFile("﻿// заметка\n\n" + file(five));
     expect(errors).toEqual([]);

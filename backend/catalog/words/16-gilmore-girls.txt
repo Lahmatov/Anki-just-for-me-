@@ -1,0 +1,360 @@
+# show: Gilmore Girls
+# year: 2000
+# accent: US
+
+## 1 · Pilot
+diner | /ˈdaɪnər/ | noun | закусочная | snack-bar | a small cheap restaurant | Lorelai drinks coffee at Luke's [diner]. | Лорелай пьёт кофе в закусочной Люка. | A Lorelai bebe café no snack-bar do Luke.
+private school | /ˈpraɪvət skuːl/ | noun | частная школа | colégio privado | a school you pay to attend | Rory got into a [private school]. | Рори поступила в частную школу. | A Rory entrou num colégio privado.
+tuition | /tuˈɪʃn/ | noun | плата за обучение | propinas | money paid for school | Lorelai can't afford the [tuition]. | Лорелай не может оплатить учёбу. | A Lorelai não tem dinheiro para as propinas.
+loan | /loʊn/ | noun | заём | empréstimo | money you borrow | She asked her parents for a [loan]. | Она попросила у родителей денег взаймы. | Pediu um empréstimo aos pais.
+Friday night dinner | /ˈfraɪdeɪ naɪt ˈdɪnər/ | noun | ужин по пятницам | jantar de sexta à noite | a weekly family dinner | In return: [Friday night dinner] every week. | Взамен — ужин каждую пятницу. | Em troca: jantar todas as sextas à noite.
+small town | /smɔːl taʊn/ | noun | маленький городок | vila pequena | a town with few people | They live in a quirky [small town]. | Они живут в чудаковатом городке. | Vivem numa vila pequena e peculiar.
+single mom | /ˈsɪŋɡl mɑːm/ | noun | мать-одиночка | mãe solteira | a mother raising a child alone | Lorelai is a young [single mom]. | Лорелай — молодая мать-одиночка. | A Lorelai é uma mãe solteira jovem.
+fast talker | /fæst ˈtɔːkər/ | noun | тот, кто быстро говорит | pessoa que fala depressa | a person who speaks very quickly | Lorelai is a [fast talker]. | Лорелай тараторит. | A Lorelai fala muito depressa.
+coffee addict | /ˈkɔːfi ˈædɪkt/ | noun | кофеман | viciada em café | someone who drinks too much coffee | She's a total [coffee addict]. | Она законченная кофеманка. | É uma viciada em café total.
+inn | /ɪn/ | noun | гостиница, постоялый двор | estalagem | a small hotel | Lorelai runs an [inn]. | Лорелай управляет гостиницей. | A Lorelai gere uma estalagem.
+overbearing | /ˌoʊvərˈberɪŋ/ | adjective | властный | autoritária | trying to control others | Her mother is [overbearing]. | Её мать очень властная. | A mãe dela é autoritária.
+best friend | /best frend/ | noun | лучшая подруга | melhor amiga | your closest friend | Rory is her mom's [best friend]. | Рори — лучшая подруга своей мамы. | A Rory é a melhor amiga da mãe.
+Harvard | /ˈhɑːrvərd/ | noun | Гарвард | Harvard | a top US university | Rory dreams of [Harvard]. | Рори мечтает о Гарварде. | A Rory sonha com Harvard.
+proud | /praʊd/ | adjective | гордый | orgulhosa | pleased about something | Lorelai is so [proud] of Rory. | Лорелай так гордится Рори. | A Lorelai está tão orgulhosa da Rory.
+bookworm | /ˈbʊkwɜːrm/ | noun | книжный червь | rato de biblioteca | someone who loves reading | Rory is a [bookworm]. | Рори — книжный червь. | A Rory é um rato de biblioteca.
+
+## 2 · The Lorelais' First Day at Chilton
+first day | /fɜːrst deɪ/ | noun | первый день | primeiro dia | the day something begins | It's Rory's [first day] at Chilton. | У Рори первый день в Чилтоне. | É o primeiro dia da Rory em Chilton.
+uniform | /ˈjuːnɪfɔːrm/ | noun | форма | farda | special clothes everyone must wear | Rory has to wear a [uniform]. | Рори должна носить форму. | A Rory tem de usar farda.
+overslept | /ˌoʊvərˈslept/ | verb | проспать | adormecer | slept too long | Lorelai [overslept]. | Лорелай проспала. | A Lorelai adormeceu.
+rival | /ˈraɪvl/ | noun | соперница | rival | a competitor | Paris is Rory's [rival]. | Пэрис — соперница Рори. | A Paris é a rival da Rory.
+headmaster | /ˈhedmæstər/ | noun | директор школы | diretor | the head of a school | The [headmaster] is very strict. | Директор очень строгий. | O diretor é muito rigoroso.
+behind | /bɪˈhaɪnd/ | adjective | отстающий | atrasada | not as advanced as others | Rory is [behind] in class. | Рори отстаёт по учёбе. | A Rory está atrasada nas aulas.
+catch up | /kætʃ ʌp/ | phrasal verb | наверстать | recuperar | to reach the same level as others | She needs to [catch up] fast. | Ей нужно быстро нагнать. | Precisa de recuperar depressa.
+judgmental | /dʒʌdʒˈmentl/ | adjective | склонный осуждать | crítico | quick to criticize | The other parents are [judgmental]. | Другие родители любят осуждать. | Os outros pais são muito críticos.
+outfit | /ˈaʊtfɪt/ | noun | наряд | roupa | a set of clothes | Lorelai wore a wild [outfit]. | Лорелай надела вызывающий наряд. | A Lorelai vestiu uma roupa extravagante.
+fit in | /fɪt ɪn/ | phrasal verb | вписаться | integrar-se | to feel part of a group | Rory doesn't [fit in] at first. | Сначала Рори не вписывается. | Ao início, a Rory não se integra.
+competitive | /kəmˈpetətɪv/ | adjective | соревновательный | competitivo | full of people trying to win | Chilton is very [competitive]. | В Чилтоне жёсткая конкуренция. | Chilton é muito competitivo.
+nervous | /ˈnɜːrvəs/ | adjective | взволнованный | nervosa | worried and excited | Rory felt [nervous]. | Рори волновалась. | A Rory sentiu-se nervosa.
+snob | /snɑːb/ | noun | сноб | snobe | someone who thinks they're better | Some students are real [snobs]. | Некоторые ученики — настоящие снобы. | Alguns alunos são verdadeiros snobes.
+homework | /ˈhoʊmwɜːrk/ | noun | домашнее задание | trabalhos de casa | school work done at home | Rory has tons of [homework]. | У Рори куча домашки. | A Rory tem montes de trabalhos de casa.
+adjust | /əˈdʒʌst/ | verb | привыкнуть | adaptar-se | to get used to something new | She'll [adjust] in time. | Со временем она привыкнет. | Com o tempo vai adaptar-se.
+
+## 3 · Kill Me Now
+golf | /ɡɑːlf/ | noun | гольф | golfe | a sport with clubs and small balls | Rory plays [golf] with her grandfather. | Рори играет в гольф с дедушкой. | A Rory joga golfe com o avô.
+grandfather | /ˈɡrænfɑːðər/ | noun | дедушка | avô | your parent's father | Her [grandfather] is very formal. | Её дедушка очень чопорный. | O avô dela é muito formal.
+country club | /ˈkʌntri klʌb/ | noun | загородный клуб | clube de campo | a private club for rich people | They went to the [country club]. | Они поехали в загородный клуб. | Foram ao clube de campo.
+bond | /bɑːnd/ | verb | сблизиться | criar laços | to become close | Rory and Richard [bonded]. | Рори сблизилась с Ричардом. | A Rory e o Richard criaram laços.
+jealous | /ˈdʒeləs/ | adjective | ревнивый | com ciúmes | upset about attention | Lorelai got a little [jealous]. | Лорелай немного приревновала. | A Lorelai ficou com um bocadinho de ciúmes.
+kill me now | /kɪl miː naʊ/ | idiom | убейте меня | matem-me já | said when something is very embarrassing | Oh, [kill me now]. | Ох, убейте меня. | Ai, matem-me já.
+lesson | /ˈlesn/ | noun | урок | aula | a class | She took a golf [lesson]. | Она взяла урок гольфа. | Teve uma aula de golfe.
+lecture | /ˈlektʃər/ | verb | читать нотации | dar sermões | to scold at length | Emily [lectures] Lorelai constantly. | Эмили постоянно читает Лорелай нотации. | A Emily está sempre a dar sermões à Lorelai.
+chef | /ʃef/ | noun | шеф-повар | cozinheira | a professional cook | Sookie is the [chef] at the inn. | Суки — шеф-повар гостиницы. | A Sookie é a cozinheira da estalagem.
+clumsy | /ˈklʌmzi/ | adjective | неуклюжий | desajeitada | often dropping or hitting things | Sookie is famously [clumsy]. | Суки невероятно неуклюжа. | A Sookie é famosamente desajeitada.
+pie | /paɪ/ | noun | пирог | tarte | a baked dish with a pastry crust | Sookie baked a [pie]. | Суки испекла пирог. | A Sookie fez uma tarte.
+rebel | /ˈrebl/ | noun | бунтарка | rebelde | someone who doesn't follow rules | Lorelai was a teenage [rebel]. | Лорелай в юности была бунтаркой. | A Lorelai foi uma rebelde na adolescência.
+sore | /sɔːr/ | adjective | больной, ноющий | dorido | painful | Her arms were [sore] after golf. | После гольфа у неё болели руки. | Tinha os braços doridos depois do golfe.
+disapprove | /ˌdɪsəˈpruːv/ | verb | не одобрять | desaprovar | to think something is bad | Emily [disapproves] of Lorelai's life. | Эмили не одобряет жизнь Лорелай. | A Emily desaprova a vida da Lorelai.
+connection | /kəˈnekʃn/ | noun | связь | ligação | a close relationship | Rory made a real [connection]. | Рори установила настоящую связь. | A Rory criou uma verdadeira ligação.
+
+## 4 · The Deer Hunters
+deer | /dɪr/ | noun | олень | veado | a wild animal with antlers | Lorelai hit a [deer] with her car. | Лорелай сбила на машине оленя. | A Lorelai atropelou um veado.
+test | /test/ | noun | контрольная | teste | an exam at school | Rory missed an important [test]. | Рори пропустила важную контрольную. | A Rory faltou a um teste importante.
+late | /leɪt/ | adjective | опоздавший | atrasada | after the expected time | She was [late] because of the deer. | Она опоздала из-за оленя. | Chegou atrasada por causa do veado.
+grade | /ɡreɪd/ | noun | оценка | nota | a mark for school work | Rory got a bad [grade]. | Рори получила плохую оценку. | A Rory teve uma má nota.
+teacher | /ˈtiːtʃər/ | noun | учитель | professor | a person who teaches | The [teacher] refused to help. | Учитель отказался помочь. | O professor recusou-se a ajudar.
+unfair | /ʌnˈfer/ | adjective | несправедливый | injusto | not fair | That grade is so [unfair]! | Эта оценка такая несправедливая! | Essa nota é tão injusta!
+complain | /kəmˈpleɪn/ | verb | жаловаться | queixar-se | to say you're unhappy | Lorelai went to [complain]. | Лорелай пошла жаловаться. | A Lorelai foi queixar-se.
+embarrass | /ɪmˈbærəs/ | verb | опозорить | envergonhar | to make someone feel ashamed | Her mom [embarrassed] her at school. | Мама опозорила её в школе. | A mãe envergonhou-a na escola.
+pressure | /ˈpreʃər/ | noun | давление | pressão | stress | Rory feels a lot of [pressure]. | На Рори сильно давят. | A Rory sente muita pressão.
+perfectionist | /pərˈfekʃənɪst/ | noun | перфекционист | perfeccionista | someone who wants everything perfect | Rory is a [perfectionist]. | Рори — перфекционистка. | A Rory é perfeccionista.
+fight for | /faɪt fɔːr/ | phrasal verb | бороться за | lutar por | to try hard to get something | Lorelai [fought for] her daughter. | Лорелай боролась за дочь. | A Lorelai lutou pela filha.
+calm down | /kɑːm daʊn/ | phrasal verb | успокоиться | acalmar-se | to become less upset | Mom, please [calm down]. | Мам, пожалуйста, успокойся. | Mãe, por favor, acalma-te.
+study | /ˈstʌdi/ | verb | учиться, заниматься | estudar | to learn | Rory [studied] all night. | Рори занималась всю ночь. | A Rory estudou a noite toda.
+stressed | /strest/ | adjective | в стрессе | stressada | very worried | She was so [stressed]. | Она была в таком стрессе. | Estava tão stressada.
+tough | /tʌf/ | adjective | тяжёлый | difícil | difficult | Chilton is [tough]. | В Чилтоне тяжело. | Chilton é difícil.
+
+## 5 · Cinnamon's Wake
+wake | /weɪk/ | noun | поминки | velório | a gathering after someone dies | Babette held a [wake] for her cat. | Бабетт устроила поминки по кошке. | A Babette fez um velório para a gata.
+neighbor | /ˈneɪbər/ | noun | соседка | vizinha | someone who lives next door | Babette is their [neighbor]. | Бабетт — их соседка. | A Babette é vizinha delas.
+condolences | /kənˈdoʊlənsɪz/ | noun | соболезнования | condolências | words of sympathy after a death | Everyone offered [condolences]. | Все выражали соболезнования. | Toda a gente deu as condolências.
+first kiss | /fɜːrst kɪs/ | noun | первый поцелуй | primeiro beijo | the first time you kiss someone | Rory had her [first kiss]. | У Рори был первый поцелуй. | A Rory deu o primeiro beijo.
+new guy | /nuː ɡaɪ/ | noun | новенький | rapaz novo | a boy recently arrived | Dean is the [new guy] in town. | Дин — новенький в городе. | O Dean é o rapaz novo na vila.
+date | /deɪt/ | noun | свидание | encontro | a romantic meeting | Lorelai went on a [date] with a teacher. | Лорелай пошла на свидание с учителем. | A Lorelai foi a um encontro com um professor.
+awkward | /ˈɔːkwərd/ | adjective | неловкий | constrangedor | uncomfortable | Dating Rory's teacher is [awkward]. | Встречаться с учителем Рори неловко. | Namorar o professor da Rory é constrangedor.
+casserole | /ˈkæsəroʊl/ | noun | запеканка | caçarola | food baked in a deep dish | Neighbors brought [casseroles]. | Соседи принесли запеканки. | Os vizinhos trouxeram caçarolas.
+mourn | /mɔːrn/ | verb | горевать | fazer luto | to feel sad after a death | The town [mourned] the cat. | Весь город горевал о кошке. | A vila fez luto pela gata.
+quirky | /ˈkwɜːrki/ | adjective | чудаковатый | peculiar | unusual in an interesting way | The town is full of [quirky] people. | Городок полон чудаков. | A vila está cheia de gente peculiar.
+buried | /ˈberid/ | adjective | похороненный | enterrada | put in the ground after death | The cat was [buried] in the garden. | Кошку похоронили в саду. | A gata foi enterrada no jardim.
+butterflies | /ˈbʌtərflaɪz/ | noun | бабочки в животе | borboletas na barriga | a nervous excited feeling | Rory had [butterflies] around Dean. | Рядом с Дином у Рори порхали бабочки в животе. | A Rory sentia borboletas na barriga ao pé do Dean.
+freak out | /friːk aʊt/ | phrasal verb | запаниковать | passar-se | to react with panic | Rory [freaked out] after the kiss. | После поцелуя Рори запаниковала. | A Rory passou-se depois do beijo.
+thank you | /θæŋk juː/ | phrase | спасибо | obrigada | words of gratitude | Rory said "[thank you]" after the kiss. | После поцелуя Рори сказала «спасибо». | A Rory disse "obrigada" depois do beijo.
+sweet | /swiːt/ | adjective | милый | querido | kind and lovely | Dean is really [sweet]. | Дин очень милый. | O Dean é mesmo querido.
+
+## 6 · Rory's Birthday Parties
+birthday party | /ˈbɜːrθdeɪ ˈpɑːrti/ | noun | вечеринка на день рождения | festa de anos | a celebration of a birthday | Rory had two [birthday parties]. | У Рори было два дня рождения. | A Rory teve duas festas de anos.
+formal | /ˈfɔːrml/ | adjective | официальный | formal | serious and proper | Her grandparents threw a [formal] party. | Бабушка с дедушкой устроили официальный приём. | Os avós deram uma festa formal.
+classmates | /ˈklæsmeɪts/ | noun | одноклассники | colegas de turma | students in your class | Emily invited Rory's [classmates]. | Эмили пригласила одноклассников Рори. | A Emily convidou os colegas de turma da Rory.
+present | /ˈpreznt/ | noun | подарок | presente | a gift | Rory got an expensive [present]. | Рори получила дорогой подарок. | A Rory recebeu um presente caro.
+tension | /ˈtenʃn/ | noun | напряжение | tensão | a strained feeling between people | There's [tension] between mother and daughter. | Между матерью и дочерью напряжение. | Há tensão entre mãe e filha.
+guest | /ɡest/ | noun | гость | convidado | someone invited | The [guests] were all adults. | Все гости были взрослыми. | Os convidados eram todos adultos.
+cake | /keɪk/ | noun | торт | bolo | a sweet dessert | Sookie made a huge [cake]. | Суки испекла огромный торт. | A Sookie fez um bolo enorme.
+mixed feelings | /mɪkst ˈfiːlɪŋz/ | noun | смешанные чувства | sentimentos contraditórios | both happy and sad | Rory had [mixed feelings]. | У Рори были смешанные чувства. | A Rory tinha sentimentos contraditórios.
+throw a party | /θroʊ ə ˈpɑːrti/ | phrase | закатить вечеринку | dar uma festa | to organize a party | Lorelai [threw a party] at home. | Лорелай закатила вечеринку дома. | A Lorelai deu uma festa em casa.
+sixteen | /ˌsɪkˈstiːn/ | noun | шестнадцать | dezasseis | the number 16 | Rory turned [sixteen]. | Рори исполнилось шестнадцать. | A Rory fez dezasseis anos.
+grandmother | /ˈɡrænmʌðər/ | noun | бабушка | avó | your parent's mother | Her [grandmother] planned everything. | Бабушка всё спланировала. | A avó planeou tudo.
+wrap | /ræp/ | verb | упаковывать | embrulhar | to cover a gift with paper | She [wrapped] the gift herself. | Она сама упаковала подарок. | Ela própria embrulhou o presente.
+surprise | /sərˈpraɪz/ | noun | сюрприз | surpresa | something unexpected | It was a big [surprise]. | Это был большой сюрприз. | Foi uma grande surpresa.
+disaster | /dɪˈzæstər/ | noun | катастрофа | desastre | something that goes very wrong | The party was almost a [disaster]. | Вечеринка чуть не провалилась. | A festa quase foi um desastre.
+belong | /bɪˈlɔːŋ/ | verb | принадлежать | pertencer | to be a part of | Rory [belongs] to both worlds. | Рори принадлежит обоим мирам. | A Rory pertence aos dois mundos.
+
+## 7 · Kiss and Tell
+kiss and tell | /kɪs ənd tel/ | idiom | рассказывать о личном | beijar e contar | to share private romantic details | Rory didn't [kiss and tell]. | Рори не рассказывала о поцелуе. | A Rory não foi beijar e contar.
+boyfriend | /ˈbɔɪfrend/ | noun | парень | namorado | a boy you date | Dean is Rory's first [boyfriend]. | Дин — первый парень Рори. | O Dean é o primeiro namorado da Rory.
+hurt | /hɜːrt/ | adjective | обиженный | magoada | emotionally upset | Lorelai felt [hurt] that Rory didn't tell her. | Лорелай обиделась, что Рори ей не рассказала. | A Lorelai ficou magoada por a Rory não lhe ter contado.
+meet the parents | /miːt ðə ˈperənts/ | idiom | познакомиться с родителями | conhecer os pais | to be introduced to a partner's family | Dean had to [meet the parents]. | Дину пришлось знакомиться с мамой. | O Dean teve de conhecer os pais.
+protective | /prəˈtektɪv/ | adjective | заботливый | protetora | wanting to keep someone safe | Lorelai is very [protective]. | Лорелай очень оберегает дочь. | A Lorelai é muito protetora.
+movie night | /ˈmuːvi naɪt/ | noun | вечер кино | noite de cinema | an evening watching films | They had a [movie night]. | Они устроили вечер кино. | Fizeram uma noite de cinema.
+share | /ʃer/ | verb | делиться | partilhar | to tell someone something | Rory usually [shares] everything. | Обычно Рори всем делится. | A Rory costuma partilhar tudo.
+open | /ˈoʊpən/ | adjective | открытый | aberta | not hiding things | They have an [open] relationship. | У них открытые отношения. | Têm uma relação aberta.
+private | /ˈpraɪvət/ | adjective | личный | privado | personal | Some things are [private]. | Некоторые вещи — личное. | Algumas coisas são privadas.
+grow up | /ɡroʊ ʌp/ | phrasal verb | взрослеть | crescer | to become an adult | Rory is starting to [grow up]. | Рори начинает взрослеть. | A Rory está a começar a crescer.
+approve | /əˈpruːv/ | verb | одобрять | aprovar | to think something is good | Does Lorelai [approve] of Dean? | Одобряет ли Лорелай Дина? | A Lorelai aprova o Dean?
+tall | /tɔːl/ | adjective | высокий | alto | of great height | Dean is very [tall]. | Дин очень высокий. | O Dean é muito alto.
+grocery store | /ˈɡroʊsəri stɔːr/ | noun | продуктовый магазин | mercearia | a shop selling food | Dean works at the [grocery store]. | Дин работает в продуктовом. | O Dean trabalha na mercearia.
+trust | /trʌst/ | verb | доверять | confiar | to believe someone is reliable | Lorelai [trusts] Rory. | Лорелай доверяет Рори. | A Lorelai confia na Rory.
+heart-to-heart | /ˌhɑːrt tə ˈhɑːrt/ | noun | разговор по душам | conversa franca | a honest, emotional talk | They had a [heart-to-heart]. | Они поговорили по душам. | Tiveram uma conversa franca.
+
+## 8 · Love and War and Snow
+snow | /snoʊ/ | noun | снег | neve | white frozen rain | Lorelai loves the first [snow]. | Лорелай обожает первый снег. | A Lorelai adora a primeira neve.
+snowstorm | /ˈsnoʊstɔːrm/ | noun | снежная буря | tempestade de neve | a storm with lots of snow | A [snowstorm] trapped them. | Их отрезала снежная буря. | Uma tempestade de neve prendeu-os.
+stuck | /stʌk/ | adjective | застрявший | preso | unable to leave | Rory got [stuck] at her grandparents'. | Рори застряла у бабушки с дедушкой. | A Rory ficou presa em casa dos avós.
+war | /wɔːr/ | noun | война | guerra | a big conflict | It's the anniversary of a [war] reenactment. | Годовщина реконструкции битвы. | É o aniversário de uma recriação de guerra.
+reenactment | /ˌriːɪˈnæktmənt/ | noun | историческая реконструкция | recriação histórica | acting out a past event | The town holds a battle [reenactment]. | Город проводит реконструкцию битвы. | A vila faz uma recriação histórica de uma batalha.
+magical | /ˈmædʒɪkl/ | adjective | волшебный | mágico | wonderful, like magic | Snow makes everything [magical]. | Снег делает всё волшебным. | A neve torna tudo mágico.
+stay the night | /steɪ ðə naɪt/ | phrase | остаться на ночь | passar a noite | to sleep at someone's house | Rory had to [stay the night] there. | Рори пришлось там заночевать. | A Rory teve de passar a noite lá.
+bored | /bɔːrd/ | adjective | скучающий | aborrecida | not interested | Rory was [bored] at the party. | Рори скучала на вечеринке. | A Rory estava aborrecida na festa.
+old-fashioned | /ˌoʊld ˈfæʃnd/ | adjective | старомодный | antiquado | not modern | Her grandparents are [old-fashioned]. | Её бабушка с дедушкой старомодны. | Os avós dela são antiquados.
+fireplace | /ˈfaɪərpleɪs/ | noun | камин | lareira | a place for a fire inside a house | They sat by the [fireplace]. | Они сидели у камина. | Sentaram-se ao pé da lareira.
+cozy | /ˈkoʊzi/ | adjective | уютный | aconchegante | warm and comfortable | The house felt [cozy]. | В доме было уютно. | A casa estava aconchegante.
+fight | /faɪt/ | noun | ссора | discussão | an argument | Lorelai and Emily had a [fight]. | Лорелай и Эмили поссорились. | A Lorelai e a Emily tiveram uma discussão.
+peace | /piːs/ | noun | мир | paz | calm without conflict | They made [peace] by morning. | К утру они помирились. | Fizeram as pazes de manhã.
+walk | /wɔːk/ | noun | прогулка | passeio | a trip on foot | They took a [walk] in the snow. | Они прогулялись по снегу. | Deram um passeio na neve.
+wish | /wɪʃ/ | verb | желать | desejar | to want something | She [wished] it would snow all night. | Она хотела, чтобы снег шёл всю ночь. | Desejou que nevasse a noite toda.
+
+## 9 · Rory's Dance
+school dance | /skuːl dæns/ | noun | школьные танцы | baile da escola | a party with dancing at school | Rory went to her first [school dance]. | Рори впервые пошла на школьные танцы. | A Rory foi ao primeiro baile da escola.
+dress | /dres/ | noun | платье | vestido | a piece of clothing for women | Lorelai made Rory's [dress]. | Лорелай сшила Рори платье. | A Lorelai fez o vestido da Rory.
+fall asleep | /fɔːl əˈsliːp/ | phrase | заснуть | adormecer | to begin sleeping | Rory and Dean [fell asleep] at school. | Рори и Дин заснули в школе. | A Rory e o Dean adormeceram na escola.
+all night | /ɔːl naɪt/ | phrase | всю ночь | a noite toda | the whole night | They were out [all night]. | Их не было всю ночь. | Estiveram fora a noite toda.
+furious | /ˈfjʊriəs/ | adjective | в ярости | furiosa | extremely angry | Emily was [furious]. | Эмили была в ярости. | A Emily estava furiosa.
+blame | /bleɪm/ | verb | винить | culpar | to say someone is responsible | Emily [blamed] Lorelai. | Эмили обвинила Лорелай. | A Emily culpou a Lorelai.
+history repeats itself | /ˈhɪstəri rɪˈpiːts ɪtˈself/ | idiom | история повторяется | a história repete-se | the same thing happens again | Emily feared that [history repeats itself]. | Эмили боялась, что история повторяется. | A Emily temia que a história se repetisse.
+worried sick | /ˈwɜːrid sɪk/ | idiom | до смерти обеспокоенный | preocupadíssima | extremely worried | Lorelai was [worried sick]. | Лорелай до смерти волновалась. | A Lorelai estava preocupadíssima.
+innocent | /ˈɪnəsnt/ | adjective | невинный | inocente | not having done anything wrong | Nothing happened; it was [innocent]. | Ничего не было, всё невинно. | Não aconteceu nada; foi inocente.
+curfew | /ˈkɜːrfjuː/ | noun | время возвращения домой | hora de chegar | when you must be home | Rory broke her [curfew]. | Рори нарушила время возвращения. | A Rory não cumpriu a hora de chegar.
+argue | /ˈɑːrɡjuː/ | verb | спорить | discutir | to disagree angrily | Mother and daughter [argued] all night. | Мать и дочь спорили всю ночь. | Mãe e filha discutiram a noite toda.
+corsage | /kɔːrˈsɑːʒ/ | noun | цветок на запястье | corsage | a small flower worn on the wrist | Dean gave Rory a [corsage]. | Дин подарил Рори цветок на запястье. | O Dean deu um corsage à Rory.
+slow dance | /ˈsloʊ dæns/ | noun | медленный танец | dança lenta | dancing slowly and close | They shared a [slow dance]. | Они станцевали медленный танец. | Dançaram uma dança lenta.
+teen | /tiːn/ | noun | подросток | adolescente | a teenager | Lorelai was once a [teen] mom. | Лорелай когда-то была мамой-подростком. | A Lorelai já foi mãe adolescente.
+consequences | /ˈkɑːnsəkwensɪz/ | noun | последствия | consequências | results of an action | There were [consequences]. | Последствия не заставили себя ждать. | Houve consequências.
+
+## 10 · Forgiveness and Stuff
+forgiveness | /fərˈɡɪvnəs/ | noun | прощение | perdão | stopping being angry with someone | Emily and Lorelai need [forgiveness]. | Эмили и Лорелай нужно простить друг друга. | A Emily e a Lorelai precisam de perdão.
+heart attack | /hɑːrt əˈtæk/ | noun | сердечный приступ | ataque cardíaco | a sudden heart problem | Richard had a [heart attack]. | У Ричарда случился сердечный приступ. | O Richard teve um ataque cardíaco.
+hospital | /ˈhɑːspɪtl/ | noun | больница | hospital | a place for sick people | The family rushed to the [hospital]. | Семья помчалась в больницу. | A família correu para o hospital.
+scared | /skerd/ | adjective | испуганный | assustada | afraid | Lorelai was [scared] for her father. | Лорелай испугалась за отца. | A Lorelai teve medo pelo pai.
+mortality | /mɔːrˈtæləti/ | noun | смертность, бренность | mortalidade | the fact that everyone dies | Richard faced his own [mortality]. | Ричард столкнулся с мыслью о смерти. | O Richard enfrentou a própria mortalidade.
+Christmas party | /ˈkrɪsməs ˈpɑːrti/ | noun | рождественская вечеринка | festa de Natal | a party at Christmas | Emily's [Christmas party] was ruined. | Рождественская вечеринка Эмили была испорчена. | A festa de Natal da Emily ficou estragada.
+make up | /meɪk ʌp/ | phrasal verb | помириться | fazer as pazes | to become friends again | Lorelai and Rory [made up]. | Лорелай и Рори помирились. | A Lorelai e a Rory fizeram as pazes.
+stubborn | /ˈstʌbərn/ | adjective | упрямый | teimoso | not willing to change | Richard is too [stubborn] to rest. | Ричард слишком упрям, чтобы отдыхать. | O Richard é teimoso demais para descansar.
+gown | /ɡaʊn/ | noun | больничная рубашка, халат | bata | a long loose garment | He hated the hospital [gown]. | Он ненавидел больничную рубашку. | Odiava a bata do hospital.
+recover | /rɪˈkʌvər/ | verb | поправиться | recuperar | to get well | He [recovered] quickly. | Он быстро поправился. | Recuperou depressa.
+visiting hours | /ˈvɪzɪtɪŋ ˈaʊərz/ | noun | часы посещений | horário de visitas | times you can visit patients | [Visiting hours] are over. | Часы посещений закончились. | O horário de visitas acabou.
+grudge | /ɡrʌdʒ/ | noun | обида | rancor | a lasting angry feeling | Don't hold a [grudge]. | Не держи обиду. | Não guardes rancor.
+tearful | /ˈtɪrfl/ | adjective | заплаканный | em lágrimas | crying or about to cry | It was a [tearful] goodbye. | Это было прощание со слезами. | Foi uma despedida em lágrimas.
+reconcile | /ˈrekənsaɪl/ | verb | примириться | reconciliar-se | to become friendly again after a fight | They tried to [reconcile]. | Они пытались примириться. | Tentaram reconciliar-se.
+fragile | /ˈfrædʒl/ | adjective | хрупкий | frágil | easily broken | Life is [fragile]. | Жизнь хрупка. | A vida é frágil.
+
+## 11 · Paris Is Burning
+school newspaper | /skuːl ˈnuːzpeɪpər/ | noun | школьная газета | jornal da escola | a newspaper made by students | Rory joined the [school newspaper]. | Рори стала работать в школьной газете. | A Rory entrou para o jornal da escola.
+editor | /ˈedɪtər/ | noun | редактор | editora | the person in charge of a newspaper | Paris is the [editor]. | Пэрис — главный редактор. | A Paris é a editora.
+assignment | /əˈsaɪnmənt/ | noun | задание | tarefa | a task you are given | Paris gave her a boring [assignment]. | Пэрис дала ей скучное задание. | A Paris deu-lhe uma tarefa aborrecida.
+article | /ˈɑːrtɪkl/ | noun | статья | artigo | a piece of writing in a newspaper | Rory wrote a great [article]. | Рори написала отличную статью. | A Rory escreveu um ótimo artigo.
+journalist | /ˈdʒɜːrnəlɪst/ | noun | журналист | jornalista | a person who writes news | Rory wants to be a [journalist]. | Рори хочет стать журналисткой. | A Rory quer ser jornalista.
+deadline | /ˈdedlaɪn/ | noun | крайний срок | prazo | the time something must be done | The [deadline] is tomorrow. | Срок сдачи — завтра. | O prazo é amanhã.
+bossy | /ˈbɔːsi/ | adjective | командирский | mandona | always telling others what to do | Paris is really [bossy]. | Пэрис очень любит командовать. | A Paris é muito mandona.
+prove | /pruːv/ | verb | доказать | provar | to show that something is true | Rory wanted to [prove] herself. | Рори хотела себя проявить. | A Rory queria provar o seu valor.
+interview | /ˈɪntərvjuː/ | verb | брать интервью | entrevistar | to ask someone questions for a story | She [interviewed] a local business owner. | Она взяла интервью у местного предпринимателя. | Entrevistou um empresário local.
+fire | /ˈfaɪər/ | verb | уволить | despedir | to remove from a job | Lorelai had to [fire] an employee. | Лорелай пришлось уволить сотрудника. | A Lorelai teve de despedir um empregado.
+manager | /ˈmænɪdʒər/ | noun | управляющий | gerente | a person in charge | Lorelai is the inn [manager]. | Лорелай — управляющая гостиницей. | A Lorelai é a gerente da estalagem.
+respect | /rɪˈspekt/ | noun | уважение | respeito | good opinion of someone | Rory earned Paris's [respect]. | Рори заслужила уважение Пэрис. | A Rory ganhou o respeito da Paris.
+publish | /ˈpʌblɪʃ/ | verb | опубликовать | publicar | to print for people to read | Her story was [published]. | Её статью опубликовали. | A história dela foi publicada.
+headline | /ˈhedlaɪn/ | noun | заголовок | manchete | the title of a news story | Paris wrote the [headline]. | Пэрис придумала заголовок. | A Paris escreveu a manchete.
+workaholic | /ˌwɜːrkəˈhɔːlɪk/ | noun | трудоголик | workaholic | a person who works too much | Paris is a [workaholic]. | Пэрис — трудоголик. | A Paris é workaholic.
+
+## 12 · Double Date
+double date | /ˈdʌbl deɪt/ | noun | двойное свидание | encontro a quatro | two couples going out together | Sookie and Jackson go on a [double date]. | Суки и Джексон идут на двойное свидание. | A Sookie e o Jackson vão a um encontro a quatro.
+cousin | /ˈkʌzn/ | noun | двоюродный брат | primo | the son of your aunt or uncle | Jackson brought his [cousin]. | Джексон привёл своего кузена. | O Jackson levou o primo.
+set up | /set ʌp/ | phrasal verb | свести | arranjar | to arrange a date for someone | Sookie wants to [set up] Lorelai. | Суки хочет свести Лорелай с кем-нибудь. | A Sookie quer arranjar alguém à Lorelai.
+vegetable | /ˈvedʒtəbl/ | noun | овощ | legume | a plant used as food | Jackson grows [vegetables]. | Джексон выращивает овощи. | O Jackson cultiva legumes.
+farmer | /ˈfɑːrmər/ | noun | фермер | agricultor | a person who works on a farm | He's a local [farmer]. | Он местный фермер. | É um agricultor local.
+tongue-tied | /ˈtʌŋ taɪd/ | adjective | потерявший дар речи | sem palavras | too nervous to speak | Sookie got [tongue-tied] around Jackson. | Рядом с Джексоном Суки теряла дар речи. | A Sookie ficava sem palavras ao pé do Jackson.
+chemistry | /ˈkemɪstri/ | noun | химия | química | attraction between people | There was no [chemistry]. | Никакой химии не было. | Não houve química.
+restaurant | /ˈrestərɑːnt/ | noun | ресторан | restaurante | a place to eat | They met at a fancy [restaurant]. | Они встретились в модном ресторане. | Encontraram-se num restaurante chique.
+awkward silence | /ˈɔːkwərd ˈsaɪləns/ | noun | неловкое молчание | silêncio constrangedor | an uncomfortable quiet | The dinner had many [awkward silences]. | На ужине было много неловких пауз. | O jantar teve muitos silêncios constrangedores.
+matchmaker | /ˈmætʃmeɪkər/ | noun | сваха | casamenteira | someone who sets people up | Sookie loves being a [matchmaker]. | Суки любит быть свахой. | A Sookie adora fazer de casamenteira.
+dessert | /dɪˈzɜːrt/ | noun | десерт | sobremesa | a sweet dish after a meal | Let's skip [dessert]. | Давай без десерта. | Vamos saltar a sobremesa.
+hit it off | /hɪt ɪt ɔːf/ | idiom | сразу поладить | dar-se bem logo | to like each other immediately | Sookie and Jackson [hit it off]. | Суки и Джексон сразу поладили. | A Sookie e o Jackson deram-se logo bem.
+favor | /ˈfeɪvər/ | noun | одолжение | favor | a kind act | Lorelai did it as a [favor]. | Лорелай сделала это из одолжения. | A Lorelai fê-lo como favor.
+small talk | /ˈsmɔːl tɔːk/ | noun | пустая болтовня | conversa fiada | light, polite conversation | Lorelai hates [small talk]. | Лорелай ненавидит пустую болтовню. | A Lorelai odeia conversa fiada.
+worth it | /wɜːrθ ɪt/ | phrase | того стоит | vale a pena | good enough to justify effort | In the end, it was [worth it]. | В итоге оно того стоило. | No fim, valeu a pena.
+
+## 13 · Concert Interruptus
+concert | /ˈkɑːnsərt/ | noun | концерт | concerto | a live music performance | Lorelai took the girls to a [concert]. | Лорелай повезла девчонок на концерт. | A Lorelai levou as raparigas a um concerto.
+ticket | /ˈtɪkɪt/ | noun | билет | bilhete | a paper that lets you enter an event | She had four extra [tickets]. | У неё было четыре лишних билета. | Tinha quatro bilhetes a mais.
+band | /bænd/ | noun | группа | banda | a group of musicians | Rory loves this [band]. | Рори обожает эту группу. | A Rory adora esta banda.
+classmate | /ˈklæsmeɪt/ | noun | одноклассница | colega de turma | a student in your class | She invited some [classmates]. | Она пригласила нескольких одноклассниц. | Convidou algumas colegas de turma.
+rude | /ruːd/ | adjective | грубый | mal-educada | not polite | The girls were [rude] at first. | Сначала девочки были грубыми. | Ao início as raparigas foram mal-educadas.
+crowd | /kraʊd/ | noun | толпа | multidão | many people together | The [crowd] went wild. | Толпа неистовствовала. | A multidão ficou louca.
+leave early | /liːv ˈɜːrli/ | phrase | уйти пораньше | sair mais cedo | to go before the end | They had to [leave early]. | Им пришлось уйти пораньше. | Tiveram de sair mais cedo.
+interrupt | /ˌɪntəˈrʌpt/ | verb | прервать | interromper | to stop something while it happens | Their fun was [interrupted]. | Их веселье прервалось. | A diversão delas foi interrompida.
+cool mom | /kuːl mɑːm/ | noun | крутая мама | mãe fixe | a mother who is fun and relaxed | Lorelai is the [cool mom]. | Лорелай — крутая мама. | A Lorelai é a mãe fixe.
+girl talk | /ɡɜːrl tɔːk/ | noun | девичьи разговоры | conversa de raparigas | casual chat between girls | They shared some [girl talk]. | Они поболтали по-девичьи. | Tiveram uma conversa de raparigas.
+loud | /laʊd/ | adjective | громкий | alto | making a lot of noise | The music was very [loud]. | Музыка была очень громкой. | A música estava muito alta.
+backstage | /ˌbækˈsteɪdʒ/ | adverb | за кулисами | nos bastidores | behind the stage | They sneaked [backstage]. | Они пробрались за кулисы. | Entraram às escondidas nos bastidores.
+mosh pit | /ˈmɑːʃ pɪt/ | noun | мош-пит | mosh | an area near a stage where people jump and push | Paris ended up in the [mosh pit]. | Пэрис оказалась в мош-пите. | A Paris acabou no mosh.
+unexpected | /ˌʌnɪkˈspektɪd/ | adjective | неожиданный | inesperado | surprising | It was an [unexpected] friendship. | Это была неожиданная дружба. | Foi uma amizade inesperada.
+memorable | /ˈmemərəbl/ | adjective | запоминающийся | memorável | worth remembering | It was a [memorable] night. | Это был незабываемый вечер. | Foi uma noite memorável.
+
+## 14 · That Damn Donna Reed
+housewife | /ˈhaʊswaɪf/ | noun | домохозяйка | dona de casa | a woman who works at home | They watched a show about a perfect [housewife]. | Они смотрели шоу про идеальную домохозяйку. | Viram um programa sobre uma dona de casa perfeita.
+gender roles | /ˈdʒendər roʊlz/ | noun | гендерные роли | papéis de género | ideas about how men and women should act | They argued about [gender roles]. | Они спорили о гендерных ролях. | Discutiram sobre papéis de género.
+feminist | /ˈfemənɪst/ | noun | феминистка | feminista | someone who supports women's equality | Rory calls herself a [feminist]. | Рори называет себя феминисткой. | A Rory diz que é feminista.
+traditional | /trəˈdɪʃənl/ | adjective | традиционный | tradicional | following old customs | Dean has [traditional] ideas. | У Дина традиционные взгляды. | O Dean tem ideias tradicionais.
+apron | /ˈeɪprən/ | noun | фартук | avental | clothing worn while cooking | Rory put on an [apron] as a joke. | Рори в шутку надела фартук. | A Rory pôs um avental a brincar.
+dinner | /ˈdɪnər/ | noun | ужин | jantar | an evening meal | Rory cooked [dinner] for Dean. | Рори приготовила Дину ужин. | A Rory fez o jantar ao Dean.
+sitcom | /ˈsɪtkɑːm/ | noun | ситком | sitcom | a funny TV series | They love old [sitcoms]. | Они обожают старые ситкомы. | Adoram sitcoms antigos.
+debate | /dɪˈbeɪt/ | noun | спор, дебаты | debate | a discussion with different opinions | It turned into a big [debate]. | Это переросло в серьёзный спор. | Tornou-se um grande debate.
+tease | /tiːz/ | verb | подкалывать | provocar | to joke with someone | Lorelai loves to [tease] Rory. | Лорелай любит подкалывать Рори. | A Lorelai adora provocar a Rory.
+ideal | /aɪˈdiːəl/ | adjective | идеальный | ideal | perfect | There's no [ideal] family. | Идеальных семей не бывает. | Não há famílias ideais.
+point of view | /pɔɪnt ʌv vjuː/ | noun | точка зрения | ponto de vista | a way of thinking | Everyone has a different [point of view]. | У каждого своя точка зрения. | Cada um tem o seu ponto de vista.
+compromise | /ˈkɑːmprəmaɪz/ | verb | идти на компромисс | ceder | to meet in the middle | They learned to [compromise]. | Они научились идти на компромисс. | Aprenderam a ceder.
+pothole | /ˈpɑːthoʊl/ | noun | выбоина | buraco na estrada | a hole in a road | Luke complained about a [pothole]. | Люк жаловался на выбоину. | O Luke queixou-se de um buraco na estrada.
+rerun | /ˈriːrʌn/ | noun | повтор (передачи) | reposição | a TV show shown again | They watched old [reruns]. | Они смотрели старые повторы. | Viram reposições antigas.
+opinionated | /əˈpɪnjəneɪtɪd/ | adjective | с твёрдым мнением | cheia de opiniões | having strong opinions | Both of them are very [opinionated]. | У обеих очень твёрдые взгляды. | As duas são muito cheias de opiniões.
+
+## 15 · Christopher Returns
+ex-boyfriend | /ˌeks ˈbɔɪfrend/ | noun | бывший парень | ex-namorado | a man you used to date | Rory's father is Lorelai's [ex-boyfriend]. | Отец Рори — бывший парень Лорелай. | O pai da Rory é o ex-namorado da Lorelai.
+show up | /ʃoʊ ʌp/ | phrasal verb | объявиться | aparecer | to arrive unexpectedly | Christopher suddenly [showed up]. | Кристофер внезапно объявился. | O Christopher apareceu de repente.
+motorcycle | /ˈmoʊtərsaɪkl/ | noun | мотоцикл | mota | a two-wheeled motor vehicle | He arrived on a [motorcycle]. | Он приехал на мотоцикле. | Chegou de mota.
+absent father | /ˈæbsənt ˈfɑːðər/ | noun | отсутствующий отец | pai ausente | a father who isn't around | Christopher was an [absent father]. | Кристофер был отцом, которого не было рядом. | O Christopher foi um pai ausente.
+irresponsible | /ˌɪrɪˈspɑːnsəbl/ | adjective | безответственный | irresponsável | not reliable | He's charming but [irresponsible]. | Он обаятелен, но безответственен. | É encantador mas irresponsável.
+propose | /prəˈpoʊz/ | verb | сделать предложение | pedir em casamento | to ask someone to marry you | Christopher [proposed] again. | Кристофер снова сделал предложение. | O Christopher voltou a pedi-la em casamento.
+turn down | /tɜːrn daʊn/ | phrasal verb | отказать | recusar | to say no to an offer | Lorelai [turned him down]. | Лорелай ему отказала. | A Lorelai recusou-o.
+teenage pregnancy | /ˈtiːneɪdʒ ˈpreɡnənsi/ | noun | подростковая беременность | gravidez na adolescência | getting pregnant as a teenager | Lorelai had a [teenage pregnancy]. | Лорелай забеременела подростком. | A Lorelai teve uma gravidez na adolescência.
+charming | /ˈtʃɑːrmɪŋ/ | adjective | обаятельный | encantador | pleasant and attractive | Christopher is very [charming]. | Кристофер очень обаятелен. | O Christopher é muito encantador.
+reunion | /riˈjuːnjən/ | noun | встреча после разлуки | reencontro | meeting again after a long time | It was an emotional [reunion]. | Это была трогательная встреча. | Foi um reencontro emotivo.
+grandparents | /ˈɡrænperənts/ | noun | бабушка с дедушкой | avós | your parents' parents | Her [grandparents] love Christopher. | Бабушка с дедушкой обожают Кристофера. | Os avós dela adoram o Christopher.
+settle down | /ˈsetl daʊn/ | phrasal verb | остепениться | assentar | to start a calm, stable life | Is he ready to [settle down]? | Готов ли он остепениться? | Estará pronto para assentar?
+second chance | /ˈsekənd tʃæns/ | noun | второй шанс | segunda oportunidade | another opportunity | He wanted a [second chance]. | Он хотел второго шанса. | Queria uma segunda oportunidade.
+disappointed | /ˌdɪsəˈpɔɪntɪd/ | adjective | разочарованный | desiludida | sad because of broken hopes | Rory was [disappointed] when he left. | Рори расстроилась, когда он уехал. | A Rory ficou desiludida quando ele partiu.
+drift | /drɪft/ | verb | плыть по течению | andar à deriva | to move without a plan | Christopher tends to [drift]. | Кристофер привык плыть по течению. | O Christopher costuma andar à deriva.
+
+## 16 · Star-Crossed Lovers and Other Strangers
+star-crossed lovers | /ˌstɑːr krɔːst ˈlʌvərz/ | idiom | влюблённые, которым не суждено быть вместе | amantes malfadados | lovers who are unlucky in love | They're like [star-crossed lovers]. | Они как влюблённые, которым не суждено быть вместе. | São como amantes malfadados.
+anniversary | /ˌænɪˈvɜːrsəri/ | noun | годовщина | aniversário de namoro | the same date as a past event | It's their three-month [anniversary]. | У них три месяца отношений. | É o aniversário de três meses deles.
+say I love you | /seɪ aɪ lʌv juː/ | phrase | сказать «я тебя люблю» | dizer amo-te | to confess love | Dean was the first to [say I love you]. | Дин первым сказал «я тебя люблю». | O Dean foi o primeiro a dizer amo-te.
+not ready | /nɑːt ˈredi/ | phrase | не готов | não estar pronta | not prepared | Rory said she was [not ready]. | Рори сказала, что не готова. | A Rory disse que não estava pronta.
+car | /kɑːr/ | noun | машина | carro | a vehicle | Dean built Rory a [car]. | Дин собрал для Рори машину. | O Dean construiu um carro para a Rory.
+hurt feelings | /hɜːrt ˈfiːlɪŋz/ | noun | задетые чувства | sentimentos feridos | emotional pain | There were a lot of [hurt feelings]. | Много кто обиделся. | Houve muitos sentimentos feridos.
+break up | /breɪk ʌp/ | phrasal verb | расстаться | acabar | to end a relationship | Dean and Rory [broke up]. | Дин и Рори расстались. | O Dean e a Rory acabaram.
+festival | /ˈfestɪvl/ | noun | праздник, фестиваль | festival | a public celebration | The town held a winter [festival]. | Город устроил зимний праздник. | A vila fez um festival de inverno.
+legend | /ˈledʒənd/ | noun | легенда | lenda | an old traditional story | There's a town [legend] about two lovers. | Есть городская легенда о двух влюблённых. | Há uma lenda da vila sobre dois amantes.
+confused | /kənˈfjuːzd/ | adjective | растерянный | confusa | not sure what she feels | Rory felt [confused]. | Рори запуталась в чувствах. | A Rory sentiu-se confusa.
+rushed | /rʌʃt/ | adjective | поспешный | apressado | done too quickly | It felt [rushed]. | Всё казалось слишком поспешным. | Pareceu apressado.
+stranger | /ˈstreɪndʒər/ | noun | незнакомец | estranho | someone you don't know | Luke met a [stranger]. | Люк познакомился с незнакомкой. | O Luke conheceu uma estranha.
+heartbroken | /ˈhɑːrtbroʊkən/ | adjective | убитый горем | de coração partido | very sad | Dean was [heartbroken]. | Дин был убит горем. | O Dean ficou de coração partido.
+gift | /ɡɪft/ | noun | подарок | presente | a present | Rory didn't know what [gift] to give. | Рори не знала, что подарить. | A Rory não sabia que presente dar.
+emotions | /ɪˈmoʊʃnz/ | noun | эмоции | emoções | strong feelings | Her [emotions] were all over the place. | Её эмоции скакали. | As emoções dela estavam descontroladas.
+
+## 17 · The Breakup, Part 2
+breakup | /ˈbreɪkʌp/ | noun | расставание | fim da relação | the end of a relationship | Rory is sad after the [breakup]. | Рори грустит после расставания. | A Rory está triste depois do fim da relação.
+wallow | /ˈwɑːloʊ/ | verb | упиваться жалостью | afundar-se | to enjoy feeling sad about yourself | Lorelai let her [wallow] for a day. | Лорелай позволила ей день пожалеть себя. | A Lorelai deixou-a afundar-se durante um dia.
+ice cream | /ˌaɪs ˈkriːm/ | noun | мороженое | gelado | a frozen sweet dessert | They ate [ice cream] and watched movies. | Они ели мороженое и смотрели фильмы. | Comeram gelado e viram filmes.
+move on | /muːv ɑːn/ | phrasal verb | жить дальше | seguir em frente | to stop focusing on the past | Rory needs to [move on]. | Рори нужно жить дальше. | A Rory precisa de seguir em frente.
+distraction | /dɪˈstrækʃn/ | noun | отвлечение | distração | something that takes your mind off a problem | She needed a [distraction]. | Ей нужно было отвлечься. | Ela precisava de uma distração.
+party | /ˈpɑːrti/ | noun | вечеринка | festa | a social event | Paris invited Rory to a [party]. | Пэрис пригласила Рори на вечеринку. | A Paris convidou a Rory para uma festa.
+cry | /kraɪ/ | verb | плакать | chorar | to have tears | It's okay to [cry]. | Плакать — это нормально. | Não faz mal chorar.
+comfort food | /ˈkʌmfərt fuːd/ | noun | утешительная еда | comida de conforto | food that makes you feel better | Pizza is their [comfort food]. | Пицца — их еда для утешения. | A pizza é a comida de conforto delas.
+rebound | /ˈriːbaʊnd/ | noun | отношения «на отскоке» | relação de recurso | a quick relationship after a breakup | Tristan wanted to be her [rebound]. | Тристан хотел стать её утешением после расставания. | O Tristan queria ser a relação de recurso dela.
+support | /səˈpɔːrt/ | noun | поддержка | apoio | help and comfort | Lorelai gave her full [support]. | Лорелай всячески её поддержала. | A Lorelai deu-lhe todo o apoio.
+heal | /hiːl/ | verb | залечить | sarar | to become healthy again | Time will [heal] it. | Время лечит. | O tempo vai sarar isso.
+kiss | /kɪs/ | verb | поцеловать | beijar | to touch with lips | Tristan [kissed] her at the party. | Тристан поцеловал её на вечеринке. | O Tristan beijou-a na festa.
+regret | /rɪˈɡret/ | verb | жалеть | arrepender-se | to wish you hadn't done something | She [regretted] it immediately. | Она сразу об этом пожалела. | Arrependeu-se logo.
+lonely | /ˈloʊnli/ | adjective | одинокий | sozinha | sad without company | Rory felt [lonely]. | Рори было одиноко. | A Rory sentia-se sozinha.
+healing process | /ˈhiːlɪŋ ˈprɑːses/ | noun | процесс исцеления | processo de cura | the time it takes to feel better | It's part of the [healing process]. | Это часть исцеления. | Faz parte do processo de cura.
+
+## 18 · The Third Lorelai
+great-grandmother | /ˌɡreɪt ˈɡrænmʌðər/ | noun | прабабушка | bisavó | your grandparent's mother | Rory's [great-grandmother] came to visit. | В гости приехала прабабушка Рори. | A bisavó da Rory veio de visita.
+critical | /ˈkrɪtɪkl/ | adjective | придирчивый | crítica | pointing out faults | She's very [critical] of Emily. | Она очень придирчива к Эмили. | É muito crítica com a Emily.
+mother-in-law | /ˈmʌðər ɪn lɔː/ | noun | свекровь, тёща | sogra | your husband's or wife's mother | Emily's [mother-in-law] is tough. | Свекровь Эмили очень строгая. | A sogra da Emily é dura.
+inheritance | /ɪnˈherɪtəns/ | noun | наследство | herança | money you get when someone dies | Rory might get an [inheritance]. | Рори может получить наследство. | A Rory pode receber uma herança.
+generation | /ˌdʒenəˈreɪʃn/ | noun | поколение | geração | people born around the same time | Three [generations] of Lorelais. | Три поколения Лорелай. | Três gerações de Lorelais.
+tea | /tiː/ | noun | чай | chá | a hot drink | They had afternoon [tea]. | Они пили послеобеденный чай. | Tomaram o chá da tarde.
+approval | /əˈpruːvl/ | noun | одобрение | aprovação | permission or praise | Emily craves her [approval]. | Эмили жаждет её одобрения. | A Emily anseia pela aprovação dela.
+payback | /ˈpeɪbæk/ | noun | расплата, реванш | desforra | getting even with someone | Lorelai enjoyed a little [payback]. | Лорелай насладилась маленьким реваншем. | A Lorelai saboreou uma pequena desforra.
+manners | /ˈmænərz/ | noun | манеры | boas maneiras | polite behavior | Mind your [manners]. | Следи за манерами. | Tem atenção às boas maneiras.
+family history | /ˈfæməli ˈhɪstəri/ | noun | семейная история | história da família | the past of your family | Rory learned her [family history]. | Рори узнала историю семьи. | A Rory conheceu a história da família.
+wealthy | /ˈwelθi/ | adjective | богатый | rica | having a lot of money | The family is very [wealthy]. | Семья очень богата. | A família é muito rica.
+stiff | /stɪf/ | adjective | натянутый, чопорный | rígido | too formal and not relaxed | Dinner was very [stiff]. | Ужин был очень чопорным. | O jantar foi muito rígido.
+snub | /snʌb/ | verb | игнорировать | desprezar | to ignore someone rudely | She [snubbed] Emily all evening. | Весь вечер она игнорировала Эмили. | Desprezou a Emily a noite toda.
+eye-opening | /ˈaɪ ˌoʊpnɪŋ/ | adjective | открывающий глаза | revelador | teaching you something surprising | The visit was [eye-opening]. | Визит открыл им глаза. | A visita foi reveladora.
+namesake | /ˈneɪmseɪk/ | noun | тёзка | homónimo | a person with the same name | Rory is her [namesake]. | Рори — её тёзка. | A Rory é homónima dela.
+
+## 19 · Emily in Wonderland
+envious | /ˈenviəs/ | adjective | завидующий | invejosa | wanting what someone else has | Emily was [envious] of Lorelai's life. | Эмили завидовала жизни Лорелай. | A Emily tinha inveja da vida da Lorelai.
+bedroom | /ˈbedruːm/ | noun | спальня | quarto | a room for sleeping | Emily saw Rory's [bedroom]. | Эмили увидела комнату Рори. | A Emily viu o quarto da Rory.
+wonderland | /ˈwʌndərlænd/ | noun | страна чудес | país das maravilhas | a magical, wonderful place | Stars Hollow felt like a [wonderland]. | Старз-Холлоу казался страной чудес. | Stars Hollow parecia um país das maravilhas.
+potting shed | /ˈpɑːtɪŋ ʃed/ | noun | садовый сарай | barracão de jardim | a small garden building | Lorelai lived in a [potting shed]. | Лорелай жила в садовом сарае. | A Lorelai viveu num barracão de jardim.
+sink in | /sɪŋk ɪn/ | phrasal verb | дойти (о смысле) | cair em si | to be fully understood | The truth finally [sank in]. | До неё наконец дошла правда. | A verdade finalmente assentou.
+miss out on | /mɪs aʊt ɑːn/ | phrasal verb | упустить | perder | to not have an experience | Emily [missed out on] Rory's childhood. | Эмили пропустила детство Рори. | A Emily perdeu a infância da Rory.
+lacrimose | /ˈlækrɪmoʊs/ | adjective | слезливый | lacrimoso | tending to cry | Emily left in a [lacrimose] mood. | Эмили ушла в слезливом настроении. | A Emily saiu num estado lacrimoso.
+guesthouse | /ˈɡesthaʊs/ | noun | гостевой домик | casa de hóspedes | a small house for visitors | Emily walked through the [guesthouse]. | Эмили прошлась по гостевому домику. | A Emily percorreu a casa de hóspedes.
+modest | /ˈmɑːdɪst/ | adjective | скромный | modesta | not large or expensive | The house was [modest] but warm. | Дом был скромным, но тёплым. | A casa era modesta mas acolhedora.
+wounded | /ˈwuːndɪd/ | adjective | задетый | ferida | emotionally hurt | Emily felt [wounded]. | Эмили чувствовала себя задетой. | A Emily sentiu-se ferida.
+distance | /ˈdɪstəns/ | noun | отчуждённость | distância | emotional separation | There's [distance] between them. | Между ними отчуждённость. | Há distância entre elas.
+understand | /ˌʌndərˈstænd/ | verb | понимать | compreender | to know how someone feels | She finally [understood] her daughter. | Она наконец поняла дочь. | Finalmente compreendeu a filha.
+simple life | /ˈsɪmpl laɪf/ | noun | простая жизнь | vida simples | life without luxury | Lorelai chose a [simple life]. | Лорелай выбрала простую жизнь. | A Lorelai escolheu uma vida simples.
+pride | /praɪd/ | noun | гордость | orgulho | self-respect | Emily's [pride] kept her quiet. | Гордость заставила Эмили промолчать. | O orgulho da Emily fê-la ficar calada.
+remorse | /rɪˈmɔːrs/ | noun | раскаяние | remorso | deep regret | Emily felt real [remorse]. | Эмили испытала настоящее раскаяние. | A Emily sentiu verdadeiro remorso.
+
+## 20 · P.S. I Lo...
+love letter | /lʌv ˈletər/ | noun | любовное письмо | carta de amor | a letter expressing love | Dean wrote Rory a [love letter]. | Дин написал Рори любовное письмо. | O Dean escreveu uma carta de amor à Rory.
+love rival | /lʌv ˈraɪvl/ | noun | соперник в любви | rival amoroso | someone competing for the same person | Tristan is Dean's [love rival]. | Тристан — соперник Дина в любви. | O Tristan é o rival amoroso do Dean.
+get back together | /ɡet bæk təˈɡeðər/ | phrasal verb | снова сойтись | voltar a namorar | to start dating again | Rory and Dean [got back together]. | Рори и Дин снова сошлись. | A Rory e o Dean voltaram a namorar.
+talk it out | /tɔːk ɪt aʊt/ | idiom | всё обсудить | falar sobre isso | to discuss a problem until it's solved | They needed to [talk it out]. | Им нужно было всё обсудить. | Precisavam de falar sobre isso.
+scuffle | /ˈskʌfl/ | noun | потасовка | briga | a short, messy fight | Dean and Tristan almost had a [scuffle]. | Дин и Тристан чуть не устроили потасовку. | O Dean e o Tristan quase se meteram numa briga.
+confession | /kənˈfeʃn/ | noun | признание | confissão | admitting feelings | Rory made a [confession]. | Рори сделала признание. | A Rory fez uma confissão.
+still care | /stɪl ker/ | phrase | всё ещё небезразличен | ainda se importar | to continue to have feelings | She showed she [still cares]. | Она показала, что он ей небезразличен. | Mostrou que ainda se importa.
+signs | /saɪnz/ | noun | знаки | sinais | things that show something | There were [signs] she wasn't over him. | Были знаки, что она его не забыла. | Havia sinais de que não o tinha esquecido.
+courage | /ˈkɜːrɪdʒ/ | noun | смелость | coragem | the ability to face fear | It took [courage] to say it. | Чтобы сказать это, нужна была смелость. | Foi preciso coragem para o dizer.
+unfinished sentence | /ʌnˈfɪnɪʃt ˈsentəns/ | noun | недосказанная фраза | frase inacabada | words that stop before the end | "P.S. I lo..." is an [unfinished sentence]. | «P.S. Я лю...» — недосказанная фраза. | "P.S. Eu a..." é uma frase inacabada.
+Max | /mæks/ | noun | Макс | Max | Rory's English teacher | Lorelai started dating [Max]. | Лорелай начала встречаться с Максом. | A Lorelai começou a namorar com o Max.
+boundary | /ˈbaʊndri/ | noun | граница | limite | a limit you shouldn't cross | Dating her teacher crossed a [boundary]. | Роман с её учителем переходил границу. | Namorar o professor dela ultrapassava um limite.
+honest | /ˈɑːnɪst/ | adjective | честный | honesta | truthful | Lorelai was [honest] with Rory. | Лорелай была с Рори честна. | A Lorelai foi honesta com a Rory.
+sweet gesture | /swiːt ˈdʒestʃər/ | noun | милый жест | gesto querido | a kind, thoughtful action | The letter was a [sweet gesture]. | Письмо было милым жестом. | A carta foi um gesto querido.
+mended | /ˈmendɪd/ | adjective | исправленный, починённый | reparado | repaired | Their relationship was [mended]. | Их отношения наладились. | A relação deles ficou reparada.
+
+## 21 · Love, Daisies and Troubadours
+daisies | /ˈdeɪziz/ | noun | ромашки | margaridas | white flowers with yellow centers | Max filled the inn with [daisies]. | Макс заполнил гостиницу ромашками. | O Max encheu a estalagem de margaridas.
+proposal | /prəˈpoʊzl/ | noun | предложение руки и сердца | pedido de casamento | asking someone to marry you | Max made a [proposal]. | Макс сделал предложение. | O Max fez um pedido de casamento.
+a thousand yellow daisies | /ə ˈθaʊznd ˈjeloʊ ˈdeɪziz/ | phrase | тысяча жёлтых ромашек | mil margaridas amarelas | a huge romantic gesture of flowers | He sent her [a thousand yellow daisies]. | Он прислал ей тысячу жёлтых ромашек. | Mandou-lhe mil margaridas amarelas.
+troubadour | /ˈtruːbədɔːr/ | noun | трубадур, бродячий певец | trovador | a traveling singer | A [troubadour] played in the town square. | На площади пел бродячий музыкант. | Um trovador tocava na praça.
+town square | /taʊn skwer/ | noun | городская площадь | praça da vila | the central open area of a town | The [town square] was full of music. | Городская площадь была полна музыки. | A praça da vila estava cheia de música.
+say yes | /seɪ jes/ | phrase | согласиться | dizer que sim | to accept | Lorelai decided to [say yes]. | Лорелай решила согласиться. | A Lorelai decidiu dizer que sim.
+happy ending | /ˈhæpi ˈendɪŋ/ | noun | счастливый конец | final feliz | a good ending to a story | Everyone wants a [happy ending]. | Все хотят счастливого конца. | Toda a gente quer um final feliz.
+romantic gesture | /roʊˈmæntɪk ˈdʒestʃər/ | noun | романтический жест | gesto romântico | an action showing love | It was the ultimate [romantic gesture]. | Это был самый романтический жест. | Foi o gesto romântico supremo.
+territorial | /ˌterəˈtɔːriəl/ | adjective | ревностно оберегающий своё | territorial | protective of what you think is yours | Luke seemed a bit [territorial]. | Люк, кажется, ревностно охранял своё. | O Luke parecia um bocado territorial.
+music festival | /ˈmjuːzɪk ˈfestɪvl/ | noun | музыкальный праздник | festival de música | an event with live music | The town had a [music festival]. | В городе был музыкальный праздник. | A vila teve um festival de música.
+engaged | /ɪnˈɡeɪdʒd/ | adjective | помолвленный | noiva | promised to marry | Lorelai is now [engaged]. | Теперь Лорелай помолвлена. | A Lorelai está agora noiva.
+Ivy League | /ˌaɪvi ˈliːɡ/ | noun | Лига плюща | Ivy League | a group of elite US universities | Rory still dreams of the [Ivy League]. | Рори всё ещё мечтает о Лиге плюща. | A Rory ainda sonha com a Ivy League.
+summer | /ˈsʌmər/ | noun | лето | verão | the warm season | [Summer] is almost here. | Лето уже почти наступило. | O verão está quase a chegar.
+future | /ˈfjuːtʃər/ | noun | будущее | futuro | the time to come | Their [future] looks bright. | Их будущее кажется светлым. | O futuro delas parece risonho.
+finale | /fɪˈnæli/ | noun | финал | final | the last episode | The season [finale] was sweet. | Финал сезона был трогательным. | O final da temporada foi ternurento.

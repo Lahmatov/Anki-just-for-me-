@@ -236,6 +236,11 @@ function parseWordLine(line, where, errors) {
   for (const [name, value] of [["term", term], ["ru", ru], ["pt", pt], ["en", en], ["example", marked]]) {
     if (!value) { errors.push(`${where}: пустое поле ${name}`); return null; }
   }
+  // Прочерк вместо перевода — заглушка, а не слово: такая строка пустая по сути.
+  if (cells.some((cell) => /^[—–-]+$/.test(cell))) {
+    errors.push(`${where}: прочерк вместо значения`);
+    return null;
+  }
   if (!PARTS_OF_SPEECH.includes(pos)) { errors.push(`${where}: часть речи «${pos}» неизвестна`); return null; }
   if (ipa && !/^\/[^/]+\/$/.test(ipa)) { errors.push(`${where}: транскрипция без косых черт`); return null; }
   const marks = marked.match(/\[[^\]]+\]/g) ?? [];
