@@ -87,7 +87,9 @@ final class OnboardingPlanBuilderTests: XCTestCase {
 
     func testFreshInstallAsksLanguageAndLevel() throws {
         let plan = OnboardingPlanBuilder.make(context: try TestDB.makeContext())
-        XCTAssertEqual(plan.steps.first, .language)
+        // Сначала Мончик здоровается (шаг welcome), сразу за ним — выбор языка:
+        // до языка всё остальное читалось бы на системном.
+        XCTAssertEqual(Array(plan.steps.prefix(2)), [.welcome, .language])
         XCTAssertTrue(plan.steps.contains(.level))
     }
 

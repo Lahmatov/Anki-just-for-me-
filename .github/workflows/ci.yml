@@ -93,12 +93,15 @@ jobs:
             > app.log 2>&1
           STATUS=$?
           # Полный вывод xcodebuild — десятки тысяч строк; в журнал — только суть.
-          grep -E "error:|Test Case .* failed|Executed [0-9]+ test|\*\* (BUILD|TEST)" app.log | tail -200
+          # CoreData на симуляторе сыплет диагностикой со словом «error:» —
+          # это не ошибки сборки и не проваленные тесты.
+          grep -E "error:|Test Case .* failed|Executed [0-9]+ test|\*\* (BUILD|TEST)" app.log \
+            | grep -v "CoreData:" | tail -200
           exit $STATUS
       - name: Ошибки коротко
         if: failure()
         run: |
           echo "=== ошибки компиляции ==="
-          grep -E "error:" app.log | sed "s|$GITHUB_WORKSPACE/||" | sort -u | head -150 || true
+          grep -E "error:" app.log | grep -v "CoreData:" | sed "s|$GITHUB_WORKSPACE/||" | sort -u | head -150 || true
           echo "=== проваленные тесты ==="
           grep -E "error: -\[|Test Case .* failed|XCTAssert" app.log | head -80 || true
