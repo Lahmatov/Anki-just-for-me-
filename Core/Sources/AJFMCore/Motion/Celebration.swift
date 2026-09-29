@@ -26,6 +26,14 @@ public enum Celebration {
         progressBefore < 1 && progressAfter >= 1 && celebratedDay != day
     }
 
+    /// Ключ учебного дня («2026-09-30»): занятие в час ночи при конце дня
+    /// в 4:00 — ещё вчерашний день, как и в подсчёте серии.
+    public static func dayKey(cutoffHour: Int, now: Date = Date(), calendar: Calendar = .current) -> String {
+        let shifted = now.addingTimeInterval(-Double(max(0, cutoffHour)) * 3600)
+        let parts = calendar.dateComponents([.year, .month, .day], from: shifted)
+        return String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
+    }
+
     /// Отметка серии, которую только что достигли, или nil.
     public static func streakMilestone(previous: Int, current: Int) -> Int? {
         guard current > previous else { return nil }

@@ -39,6 +39,10 @@ enum SettingsKey {
     /// Имя и выбор аватарки в профиле (`ProfileStore`). Только на телефоне.
     static let profileName = "profileName"
     static let profileAvatar = "profileAvatar"
+    /// День, когда уже праздновали цель дня, и серия, до которой праздновали
+    /// отметки (`Celebration`): праздник — один раз, а не на каждом открытии.
+    static let goalCelebratedDay = "goalCelebratedDay"
+    static let celebratedStreak = "celebratedStreak"
 }
 
 extension AppSettings {

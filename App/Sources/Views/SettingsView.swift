@@ -33,16 +33,18 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
+            // На первом экране — то, что меняют все: язык, уровень, цель,
+            // звук, напоминание. Лимиты FSRS, свой ключ Claude и облако
+            // Postgres — для тех, кто знает, зачем они; им место глубже.
             Form {
                 profileSection
                 languageSection
                 levelSection
+                goalSection
                 appearanceSection
-                loadSection
                 speechSection
-                claudeSection
-                cloudSection
                 reminderSection
+                advancedSection
                 aboutSection
             }
             .themedScreen()
@@ -181,14 +183,63 @@ struct SettingsView: View {
 
     // MARK: - Учёба
 
-    @ViewBuilder
-    private var loadSection: some View {
+    private var goalSection: some View {
         Section {
             Picker(tr("Цель дня", "Objetivo do dia", "Daily goal"), selection: $goalMinutes) {
                 ForEach(DailyGoal.options, id: \.self) { minutes in
                     Text(DailyGoal.format(minutes: minutes)).tag(minutes)
                 }
             }
+        } footer: {
+            Text(tr("Минуты на карточках за день. Выполнишь — Мончик устроит праздник.",
+                    "Minutos nos cartões por dia. Quando cumprires, o Monchik faz a festa.",
+                    "Minutes on cards per day. Hit it and Monchik throws a party."))
+        }
+    }
+
+    // MARK: - Для продвинутых
+
+    private var advancedSection: some View {
+        Section {
+            NavigationLink {
+                Form {
+                    loadSection
+                    claudeSection
+                    cloudSection
+                    Section {
+                        NavigationLink {
+                            LogView()
+                        } label: {
+                            Label(tr("Журнал событий", "Registo de eventos", "Event log"),
+                                  systemImage: "text.alignleft")
+                        }
+                    } footer: {
+                        Text(tr("Что происходило внутри приложения. Если что-то повело себя "
+                                    + "странно — журнал можно переслать одним нажатием, это "
+                                    + "быстрее любых описаний.",
+                                "O que aconteceu dentro da aplicação. Se algo se portou de forma "
+                                    + "estranha, o registo envia-se com um toque — é mais rápido "
+                                    + "do que qualquer descrição.",
+                                "What happened inside the app. If something behaved oddly, the log "
+                                    + "can be shared with one tap — faster than any description."))
+                    }
+                }
+                .themedScreen()
+                .navigationTitle(tr("Для продвинутых", "Avançado", "Advanced"))
+                .navigationBarTitleDisplayMode(.inline)
+            } label: {
+                Label(tr("Для продвинутых", "Avançado", "Advanced"), systemImage: "slider.horizontal.3")
+            }
+        } footer: {
+            Text(tr("Лимиты и алгоритм повторений, свой ключ Claude, облачный бэкап, журнал.",
+                    "Limites e algoritmo de revisão, chave própria do Claude, cópia na nuvem, registo.",
+                    "Review limits and algorithm, your own Claude key, cloud backup, event log."))
+        }
+    }
+
+    @ViewBuilder
+    private var loadSection: some View {
+        Section {
             Stepper(tr("Новых в день: ", "Novos por dia: ", "New per day: ") + "\(newPerDay)",
                     value: $newPerDay, in: 0...200, step: 5)
             Stepper(tr("Повторов в день: ", "Revisões por dia: ", "Reviews per day: ")
@@ -384,22 +435,7 @@ struct SettingsView: View {
                 Label(tr("Показать знакомство", "Mostrar a introdução", "Show the intro"),
                       systemImage: "sparkles")
             }
-            NavigationLink {
-                LogView()
-            } label: {
-                Label(tr("Журнал событий", "Registo de eventos", "Event log"),
-                      systemImage: "text.alignleft")
-            }
             LabeledContent(tr("Версия", "Versão", "Version"), value: Self.version)
-        } footer: {
-            Text(tr("Что происходило внутри приложения. Если что-то повело себя "
-                        + "странно — журнал можно переслать одним нажатием, это "
-                        + "быстрее любых описаний.",
-                    "O que aconteceu dentro da aplicação. Se algo se portou de forma "
-                        + "estranha, o registo envia-se com um toque — é mais rápido "
-                        + "do que qualquer descrição.",
-                    "What happened inside the app. If something behaved oddly, the log "
-                        + "can be shared with one tap — faster than any description."))
         }
     }
 

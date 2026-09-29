@@ -154,6 +154,36 @@ final class CelebrationTests: XCTestCase {
                                                celebratedDay: nil, day: "2026-09-30"))
     }
 
+    private var utc: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
+        return calendar
+    }
+
+    private func date(_ text: String) -> Date {
+        ISO8601DateFormatter().date(from: text)!
+    }
+
+    func testDayKeyIsZeroPadded() {
+        XCTAssertEqual(Celebration.dayKey(cutoffHour: 0, now: date("2026-03-05T12:00:00Z"), calendar: utc),
+                       "2026-03-05")
+    }
+
+    func testLateNightCountsAsPreviousDay() {
+        XCTAssertEqual(Celebration.dayKey(cutoffHour: 4, now: date("2026-09-30T01:30:00Z"), calendar: utc),
+                       "2026-09-29")
+    }
+
+    func testAfterCutoffIsTheNewDay() {
+        XCTAssertEqual(Celebration.dayKey(cutoffHour: 4, now: date("2026-09-30T04:00:00Z"), calendar: utc),
+                       "2026-09-30")
+    }
+
+    func testNegativeCutoffIsTreatedAsMidnight() {
+        XCTAssertEqual(Celebration.dayKey(cutoffHour: -3, now: date("2026-09-30T00:30:00Z"), calendar: utc),
+                       "2026-09-30")
+    }
+
     func testStreakMilestoneWhenCrossed() {
         XCTAssertEqual(Celebration.streakMilestone(previous: 6, current: 7), 7)
         XCTAssertEqual(Celebration.streakMilestone(previous: 29, current: 30), 30)

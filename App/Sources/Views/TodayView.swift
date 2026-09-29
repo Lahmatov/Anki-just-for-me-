@@ -22,6 +22,16 @@ struct TodayView: View {
     @State private var showDeckRequest = false
     @State private var starterFailed = false
 
+    @AppStorage(SettingsKey.dayCutoffHour) private var dayCutoffHour = AppSettings.default.dayCutoffHour
+    @AppStorage(SettingsKey.goalCelebratedDay) private var goalCelebratedDay = ""
+    @AppStorage(SettingsKey.celebratedStreak) private var celebratedStreak = 0
+    @State private var celebration: CelebrationMoment?
+
+    struct CelebrationMoment: Equatable {
+        var title: String
+        var subtitle: String
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -67,6 +77,14 @@ struct TodayView: View {
                 .padding(.bottom, 24)
             }
             .background(Theme.background.ignoresSafeArea())
+            .overlay {
+                if let celebration {
+                    CelebrationOverlay(title: celebration.title, subtitle: celebration.subtitle) {
+                        self.celebration = nil
+                    }
+                    .transition(.opacity)
+                }
+            }
             .navigationTitle(tr("Сегодня", "Hoje", "Today"))
             .navigationDestination(isPresented: $isSessionActive) {
                 ReviewSessionView(deck: nil)
@@ -404,6 +422,7 @@ struct TodayView: View {
     }
 
     private func refresh() {
+        let goalBefore = DailyGoal.progress(studiedSeconds: studiedSeconds, goalMinutes: goalMinutes)
         withAnimation(.snappy) {
             noteCount = (try? context.fetchCount(FetchDescriptor<Note>())) ?? 0
             summary = (try? ReviewService(context: context).todayQueue())?.summary
@@ -412,6 +431,34 @@ struct TodayView: View {
             streak = progress.streakStatus()
             contract = progress.activeContract
             matureWords = progress.matureWordCount()
+        }
+        celebrateIfDeserved(goalBefore: goalBefore)
+    }
+
+    // MARK: - Праздники
+
+    /// Отметка серии важнее цели дня: цель — каждый день, а 30 дней подряд — раз в жизни.
+    private func celebrateIfDeserved(goalBefore: Double) {
+        let days = streak?.days ?? 0
+        defer { celebratedStreak = days }
+        if let milestone = Celebration.streakMilestone(previous: celebratedStreak, current: days) {
+            celebration = CelebrationMoment(
+                title: Counted.days(milestone) + tr(" подряд!", " seguidos!", " in a row!"),
+                subtitle: tr("Мончик гордится. Так слова и остаются в голове — понемногу каждый день.",
+                             "O Monchik está orgulhoso. É assim que as palavras ficam — um pouco todos os dias.",
+                             "Monchik is proud. That's how words stick — a little every day."))
+            return
+        }
+        let today = Celebration.dayKey(cutoffHour: dayCutoffHour)
+        let goalAfter = DailyGoal.progress(studiedSeconds: studiedSeconds, goalMinutes: goalMinutes)
+        if Celebration.goalReached(progressBefore: goalBefore, progressAfter: goalAfter,
+                                   celebratedDay: goalCelebratedDay, day: today) {
+            goalCelebratedDay = today
+            celebration = CelebrationMoment(
+                title: tr("Цель дня выполнена!", "Objetivo do dia cumprido!", "Daily goal done!"),
+                subtitle: DailyGoal.format(minutes: goalMinutes)
+                    + tr(" английского сегодня. До завтра!", " de inglês hoje. Até amanhã!",
+                         " of English today. See you tomorrow!"))
         }
     }
 }

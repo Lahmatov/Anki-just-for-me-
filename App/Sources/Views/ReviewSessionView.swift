@@ -8,7 +8,12 @@ struct ReviewSessionView: View {
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var model: ReviewSessionModel?
+    /// Счётчик ответов — будит реакцию Мончика даже на два одинаковых вердикта подряд.
+    @State private var reactions = 0
+    /// Растёт на единицу с каждым неверным ответом: одно покачивание карточки.
+    @State private var shakes: CGFloat = 0
 
     var body: some View {
         Group {
@@ -50,11 +55,25 @@ struct ReviewSessionView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: Design.stackSpacing) {
                     if let card = model.current {
+                        // Новая карточка въезжает справа, старая уходит влево —
+                        // видно, что колода движется, а не текст подменился.
                         CardPromptView(card: card, model: model)
                             .cardSurface(emphasized: model.isRevealed)
+                            .modifier(ShakeEffect(trigger: shakes))
+                            .id(card.persistentModelID)
+                            .transition(cardTransition)
                     }
                 }
                 .padding()
+                .animation(reduceMotion ? .easeInOut(duration: 0.2) : .snappy(duration: 0.3),
+                           value: model.index)
+            }
+            .onChange(of: model.isRevealed) { _, revealed in
+                guard revealed else { return }
+                reactions += 1
+                if model.check?.verdict == .wrong, !reduceMotion {
+                    withAnimation(.linear(duration: 0.45)) { shakes += 1 }
+                }
             }
             .safeAreaInset(edge: .bottom) {
                 footer(model)
@@ -120,11 +139,20 @@ struct ReviewSessionView: View {
                     .contentTransition(.numericText())
             }
             Spacer()
+            MascotReactionView(verdict: model.isRevealed ? model.check?.verdict : nil,
+                               trigger: reactions, size: 40)
         }
         .font(.app(.caption))
         .foregroundStyle(Theme.muted)
         .monospacedDigit()
         .animation(.snappy, value: model.index)
+    }
+
+    private var cardTransition: AnyTransition {
+        reduceMotion
+            ? .opacity
+            : .asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity),
+                          removal: .move(edge: .leading).combined(with: .opacity))
     }
 }
 
@@ -377,12 +405,34 @@ struct SessionSummaryView: View {
 
     @State private var shownAccuracy = 0.0
 
+    private var level: Celebration.Level {
+        Celebration.session(answered: stats.answered, accuracy: stats.accuracy)
+    }
+
     var body: some View {
+        content
+            .background {
+                // Сияние — только за отличную сессию: праздник должен что-то значить.
+                if level == .big {
+                    AuroraBackground(intensity: 0.45)
+                } else {
+                    Theme.background.ignoresSafeArea()
+                }
+            }
+            .overlay {
+                if level == .big { ConfettiView(origin: (0.5, 0.25)) }
+            }
+            .onAppear {
+                if level == .big { Haptics.success() }
+            }
+    }
+
+    private var content: some View {
         VStack(spacing: 20) {
             Spacer()
 
             if stats.answered > 0 {
-                MascotView(mood: stats.accuracy >= 0.7 ? .cheer : .hello, size: 120)
+                MascotView(mood: level == .none ? .hello : .cheer, size: 120)
                 accuracyRing
                 Text(tr("Сессия закончена", "Sessão terminada", "Session complete"))
                     .font(.app(.title2, weight: .bold))
@@ -418,9 +468,8 @@ struct SessionSummaryView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Theme.background.ignoresSafeArea())
         .onAppear {
-            withAnimation(.easeOut(duration: 0.8).delay(0.15)) {
+            withAnimation(.easeOut(duration: 0.9).delay(0.15)) {
                 shownAccuracy = stats.accuracy
             }
         }
@@ -430,7 +479,8 @@ struct SessionSummaryView: View {
     /// ради которой сессию и проходят, должна читаться с первого взгляда.
     private var accuracyRing: some View {
         VStack(spacing: 14) {
-            Text("\(Int((stats.accuracy * 100).rounded()))%")
+            // Цифра набегает вместе с полосой: «0 → 92%» читается как итог работы.
+            CountingText(value: shownAccuracy * 100, suffix: "%")
                 .font(.display(.largeTitle))
                 .scaleEffect(1.6)
                 .padding(.vertical, 12)
