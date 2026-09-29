@@ -12,3 +12,14 @@ DEVELOPMENT_TEAM =
 // у App ID com.lahmatov.ajfm в developer.apple.com → Identifiers).
 // CODE_SIGN_ENTITLEMENTS = Config/SignInWithApple.entitlements
 // RECAP_SIGN_IN_WITH_APPLE = YES
+
+// Виджет с цифрами. Ему нужна группа приложений (App Groups), а она, как и
+// вход через Apple, есть только у платного аккаунта. Без неё виджет всё равно
+// ставится и зовёт открыть приложение. Когда аккаунт платный — создай группу
+// group.com.lahmatov.ajfm в developer.apple.com → Identifiers → App Groups,
+// включи её у com.lahmatov.ajfm и com.lahmatov.ajfm.widget и раскомментируй:
+// RECAP_APP_GROUP = group.com.lahmatov.ajfm
+// RECAP_WIDGET_ENTITLEMENTS = Config/Widget.entitlements
+// и у приложения права с группой — вместо строки выше про вход через Apple:
+// CODE_SIGN_ENTITLEMENTS = Config/AppGroupSignIn.entitlements
+// (или Config/AppGroup.entitlements, если вход через Apple не включён).

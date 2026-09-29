@@ -41,6 +41,8 @@ targets:
     dependencies:
       - package: AJFMCore
         product: AJFMCore
+      # Виджет на экран «Домой» встраивается в приложение.
+      - target: AJFMWidget
     # Схема с тестами: иначе `xcodebuild test` (и ⌘U) не знает, что гонять.
     scheme:
       testTargets:
@@ -90,6 +92,9 @@ targets:
         # Вход через Apple включается в Config/Signing.xcconfig вместе со
         # способностью: на бесплатном аккаунте её нет, и кнопка была бы мёртвой.
         RecapSignInWithApple: $(RECAP_SIGN_IN_WITH_APPLE)
+        # Группа приложений для виджета — тоже только на платном аккаунте
+        # (Config/Signing.xcconfig). Пусто — виджет без цифр.
+        RecapAppGroup: $(RECAP_APP_GROUP)
         # Шрифт интерфейса по умолчанию. Статические начертания, а не
         # вариативный файл: так каждое находится по имени (tools/make_fonts.py).
         UIAppFonts:
@@ -117,6 +122,40 @@ targets:
             LSHandlerRank: Alternate
             LSItemContentTypes:
               - public.json
+
+  # Виджет: сколько карточек ждёт, серия и Мончик. Читает снимок, который
+  # приложение оставляет в группе приложений (WidgetBridge), базу не открывает.
+  AJFMWidget:
+    type: app-extension
+    platform: iOS
+    configFiles:
+      Debug: Config/WidgetSigning.xcconfig
+      Release: Config/WidgetSigning.xcconfig
+    sources:
+      # Info.plist генерируется XcodeGen — в ресурсы его класть нельзя.
+      - path: Widget
+        excludes:
+          - Info.plist
+    dependencies:
+      - package: AJFMCore
+        product: AJFMCore
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    settings:
+      base:
+        # Новый идентификатор расходует один App ID из лимита бесплатного аккаунта.
+        PRODUCT_BUNDLE_IDENTIFIER: com.lahmatov.ajfm.widget
+        MARKETING_VERSION: "0.1"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1"
+        SKIP_INSTALL: YES
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: Recap
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        RecapAppGroup: $(RECAP_APP_GROUP)
 
   AJFMTests:
     type: bundle.unit-test

@@ -1,0 +1,5 @@
+// Подпись виджета: та же команда, что у приложения, а права — свои.
+// Все настройки — в Signing.xcconfig; здесь только выбор файла прав.
+#include "Signing.xcconfig"
+
+CODE_SIGN_ENTITLEMENTS = $(RECAP_WIDGET_ENTITLEMENTS)

@@ -1,6 +1,7 @@
 # Проект генерируется из project.yml — в репозитории ему не место.
 *.xcodeproj/
 App/Info.plist
+Widget/Info.plist
 *.xcworkspace/
 
 .build/

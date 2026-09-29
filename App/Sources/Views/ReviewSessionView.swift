@@ -30,6 +30,7 @@ struct ReviewSessionView: View {
                             onFinish?()
                             // Сегодня уже занимались — сегодняшнее напоминание не нужно.
                             Task { await NotificationService.reschedule(context: context) }
+                            WidgetBridge.update(context: context)
                         }
                 } else {
                     sessionBody(model)

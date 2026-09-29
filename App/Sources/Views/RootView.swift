@@ -96,6 +96,7 @@ struct RootView: View {
             SnapshotService.recordIfNeeded(context: context)
             RecapAccount.shared.start()
             await NotificationService.reschedule(context: context)
+            WidgetBridge.update(context: context)
             // Облако — последним: сеть может думать долго, а остальное локально.
             await CloudBackupService(context: context).uploadIfNeeded()
         }
@@ -103,6 +104,7 @@ struct RootView: View {
         // сегодняшнее снимается, а данные виджета обновляются.
         .onChange(of: scenePhase) { _, phase in
             guard phase == .background else { return }
+            WidgetBridge.update(context: context)
             Task { await NotificationService.reschedule(context: context) }
         }
         .fileImporter(

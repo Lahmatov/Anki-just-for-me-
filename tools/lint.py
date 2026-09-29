@@ -15,7 +15,9 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CORE = sorted(glob.glob(os.path.join(ROOT, 'Core/Sources/**/*.swift'), recursive=True))
 CORE_TESTS = sorted(glob.glob(os.path.join(ROOT, 'Core/Tests/**/*.swift'), recursive=True))
-APP = sorted(glob.glob(os.path.join(ROOT, 'App/**/*.swift'), recursive=True))
+APP = sorted(glob.glob(os.path.join(ROOT, 'App/**/*.swift'), recursive=True)
+             # Виджет — тот же код приложения, только в своём процессе.
+             + glob.glob(os.path.join(ROOT, 'Widget/**/*.swift'), recursive=True))
 ALL = CORE + CORE_TESTS + APP
 
 
