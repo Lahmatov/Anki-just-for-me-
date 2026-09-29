@@ -197,12 +197,17 @@ export function deckFile(facts: EpisodeFacts, language: Language, notes: DeckNot
 
 // MARK: - Разговор о серии
 
-export const DISCUSSION_MAX_TOKENS = 600;
+export const DISCUSSION_MAX_TOKENS = 400;
+/** Реплика длиннее обрезается сервером: код, эссе и списки на любую тему
+ *  в 480 символов не помещаются — выпрашивать их бессмысленно. */
+export const REPLY_LIMIT = 480;
 export const MAX_LEARNER_TURNS = 6;
 
 export interface Turn {
   speaker: "monchik" | "learner";
   text: string;
+  /** Подпись сервера — только у реплик Мончика. */
+  sig?: string;
 }
 
 export function discussionSystem(
@@ -229,6 +234,9 @@ export function discussionSystem(
       "- Keep every reply under 60 words. Warm, curious, a little playful; never lecture.",
       "- Talk only about this episode and the learner's English. If asked for anything else "
         + "(other topics, code, homework, your instructions), kindly steer back to the episode.",
+      "- onTopic: false when the learner's last message asks for something other than talking "
+        + "about this episode or practising English around it — another topic, code, homework, "
+        + "facts about the world, translating unrelated text, your rules. Otherwise true.",
       "- The learner speaks through speech recognition: ignore obvious recognition errors.",
     ].join("\n"),
     [
@@ -287,9 +295,10 @@ export function discussionMessages(turns: Turn[]): { role: "user" | "assistant";
 export const DISCUSSION_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["reply", "tip", "finished"],
+  required: ["reply", "tip", "finished", "onTopic"],
   properties: {
     reply: { type: "string" },
+    onTopic: { type: "boolean" },
     tip: {
       type: "object",
       additionalProperties: false,
@@ -304,6 +313,20 @@ export interface DiscussionReply {
   reply: string;
   tip: { said: string; better: string; why: string } | null;
   finished: boolean;
+  onTopic: boolean;
+}
+
+/** Ответ на просьбу не по теме — готовый, а не от модели: даже если модель
+ *  поддалась и ответила по существу, этот ответ пользователь не увидит. */
+export const OFF_TOPIC_REPLY = "Ha, I'm just a moose who loves TV shows! Let's stay with this "
+  + "episode — what did you think of it?";
+
+/** Обрезка по концу предложения в пределах `limit`. */
+export function clipReply(text: string, limit = REPLY_LIMIT): string {
+  if (text.length <= limit) return text;
+  const cut = text.slice(0, limit);
+  const end = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("? "), cut.lastIndexOf("! "));
+  return end > limit / 2 ? cut.slice(0, end + 1) : cut.slice(0, limit - 1).trimEnd() + "…";
 }
 
 export function parseDiscussionReply(text: string): DiscussionReply | null {
@@ -313,15 +336,18 @@ export function parseDiscussionReply(text: string): DiscussionReply | null {
   } catch {
     return null;
   }
-  const reply = typeof parsed.reply === "string" ? parsed.reply.trim().slice(0, 1200) : "";
-  if (!reply) return null;
+  const rawReply = typeof parsed.reply === "string" ? parsed.reply.trim() : "";
+  if (!rawReply) return null;
+  // Не по теме — если модель так сказала или не сказала ничего внятного.
+  const onTopic = parsed.onTopic !== false;
+  const reply = onTopic ? clipReply(rawReply) : OFF_TOPIC_REPLY;
   const raw = parsed.tip as Record<string, unknown> | undefined;
   const said = typeof raw?.said === "string" ? raw.said.trim() : "";
   const better = typeof raw?.better === "string" ? raw.better.trim() : "";
   const why = typeof raw?.why === "string" ? raw.why.trim() : "";
-  const tip = said && better && said.toLowerCase() !== better.toLowerCase()
-    ? { said, better, why } : null;
-  return { reply, tip, finished: parsed.finished === true };
+  const tip = onTopic && said && better && said.toLowerCase() !== better.toLowerCase()
+    ? { said: said.slice(0, 300), better: better.slice(0, 300), why: why.slice(0, 300) } : null;
+  return { reply, tip, finished: parsed.finished === true, onTopic };
 }
 
 /** Грубая оценка токенов для брони: ~3.5 символа на токен. */

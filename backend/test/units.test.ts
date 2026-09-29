@@ -75,11 +75,23 @@ describe("промпты", () => {
   });
 
   it("ответ Мончика: пустая или ложная поправка — не поправка", () => {
-    expect(parseDiscussionReply(JSON.stringify({ reply: "Hi", tip: { said: "", better: "", why: "" }, finished: false })))
-      .toEqual({ reply: "Hi", tip: null, finished: false });
+    expect(parseDiscussionReply(JSON.stringify({ reply: "Hi", tip: { said: "", better: "", why: "" }, finished: false, onTopic: true })))
+      .toEqual({ reply: "Hi", tip: null, finished: false, onTopic: true });
     expect(parseDiscussionReply(JSON.stringify({ reply: "Hi", tip: { said: "Ok", better: "ok", why: "" }, finished: true }))!.tip)
       .toBeNull();
     expect(parseDiscussionReply("oops")).toBeNull();
+  });
+});
+
+describe("обрезка реплики", () => {
+  it("режет по концу предложения, короткое не трогает", async () => {
+    const { clipReply } = await import("../src/prompts");
+    expect(clipReply("Short.")).toBe("Short.");
+    const long = "One two three. ".repeat(50);
+    const clipped = clipReply(long, 100);
+    expect(clipped.length).toBeLessThanOrEqual(100);
+    expect(clipped.endsWith(".")).toBe(true);
+    expect(clipReply("x".repeat(200), 100).length).toBeLessThanOrEqual(100);
   });
 });
 

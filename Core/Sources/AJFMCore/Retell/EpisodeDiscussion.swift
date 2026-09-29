@@ -35,12 +35,17 @@ public enum EpisodeDiscussion {
         public var text: String
         /// Поправка к предыдущему ответу ученика — только у реплик Мончика.
         public var tip: Tip?
+        /// Подпись сервера Recap под репликой Мончика. Сервер не примет
+        /// историю, где реплика Мончика изменена или вписана на телефоне.
+        public var signature: String?
 
-        public init(id: UUID = UUID(), speaker: Speaker, text: String, tip: Tip? = nil) {
+        public init(id: UUID = UUID(), speaker: Speaker, text: String, tip: Tip? = nil,
+                    signature: String? = nil) {
             self.id = id
             self.speaker = speaker
             self.text = text
             self.tip = tip
+            self.signature = signature
         }
     }
 
@@ -49,6 +54,8 @@ public enum EpisodeDiscussion {
         public var text: String
         public var tip: Tip?
         public var finished: Bool
+        /// Подпись сервера — есть только у ответов, пришедших через него.
+        public var signature: String? = nil
     }
 
     /// Сколько ответов ученика до прощания. Шесть вопросов — минут пять

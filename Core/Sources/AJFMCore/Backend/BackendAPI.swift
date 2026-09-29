@@ -99,6 +99,8 @@ public enum BackendAPI {
         public struct Turn: Encodable, Equatable, Sendable {
             public var speaker: String
             public var text: String
+            /// Подпись сервера у реплик Мончика; без неё сервер историю не примет.
+            public var sig: String?
         }
 
         public var showId: Int
@@ -117,10 +119,14 @@ public enum BackendAPI {
             self.language = language.rawValue
             self.level = level?.rawValue
             self.turns = turns.compactMap { turn in
+                // Реплику Мончика нельзя менять ни на символ: подпись сервера
+                // сделана по точному тексту.
+                if turn.speaker == .monchik {
+                    return Turn(speaker: turn.speaker.rawValue, text: turn.text, sig: turn.signature)
+                }
                 let text = turn.text.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard !text.isEmpty else { return nil }
-                let limit = turn.speaker == .learner ? 600 : 1_200
-                return Turn(speaker: turn.speaker.rawValue, text: String(text.prefix(limit)))
+                return Turn(speaker: turn.speaker.rawValue, text: String(text.prefix(600)), sig: nil)
             }
             let trimmed = retelling?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             self.retelling = trimmed.isEmpty ? nil : String(trimmed.prefix(4_000))
@@ -132,9 +138,13 @@ public enum BackendAPI {
         public var tip: EpisodeDiscussion.Tip?
         public var finished: Bool
         public var plan: PlanStatus
+        /// Подпись этой реплики — её надо вернуть серверу со следующим ходом.
+        public var turnSig: String?
+        /// false — просьба была не по теме, и сервер ответил готовой фразой.
+        public var onTopic: Bool?
 
         public var asReply: EpisodeDiscussion.Reply {
-            EpisodeDiscussion.Reply(text: reply, tip: tip, finished: finished)
+            EpisodeDiscussion.Reply(text: reply, tip: tip, finished: finished, signature: turnSig)
         }
     }
 
@@ -232,6 +242,9 @@ public enum BackendAPI {
             case "subscription_not_active", "subscription_not_found", "subscription_not_valid":
                 return tr("Активная подписка не найдена.", "Não foi encontrada uma subscrição ativa.",
                           "No active subscription found.")
+            case "turns_tampered":
+                return tr("Разговор сбился. Начни его заново.", "A conversa baralhou-se. Começa de novo.",
+                          "The chat got out of sync. Start it again.")
             case "conversation_over":
                 return tr("Разговор окончен — начни новый.", "A conversa terminou — começa outra.",
                           "The chat is over — start a new one.")

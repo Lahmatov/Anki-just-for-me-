@@ -77,7 +77,8 @@ final class EpisodeDiscussionModel {
             let result = try await AIService.discuss(
                 context: context, episode: episode, turns: turns, retelling: retelling)
             turns.append(EpisodeDiscussion.Turn(
-                speaker: .monchik, text: result.reply.text, tip: result.reply.tip))
+                speaker: .monchik, text: result.reply.text, tip: result.reply.tip,
+                signature: result.reply.signature))
             spent += result.cost
             if UserDefaults.standard.object(forKey: SettingsKey.autoSpeak) as? Bool ?? true {
                 SpeechService.shared.speak(result.reply.text)

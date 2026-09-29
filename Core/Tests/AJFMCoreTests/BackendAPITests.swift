@@ -52,8 +52,26 @@ final class BackendAPITests: XCTestCase {
             retelling: "")
         XCTAssertEqual(body.turns.map(\.speaker), ["monchik", "learner"])
         XCTAssertEqual(body.turns[1].text.count, 600)
+        XCTAssertNil(body.turns[1].sig)
         XCTAssertNil(body.retelling)
         XCTAssertEqual(try json(body)["language"] as? String, "en")
+    }
+
+    func testMonchikTurnsGoBackUnchangedWithTheirSignature() throws {
+        // Сервер подписал точный текст: даже пробел в конце менять нельзя.
+        let body = BackendAPI.DiscussBody(
+            showId: 1, season: 1, episode: 2, language: .russian, level: nil,
+            turns: [EpisodeDiscussion.Turn(speaker: .monchik, text: "Hi! ", signature: "ab12"),
+                    EpisodeDiscussion.Turn(speaker: .learner, text: " hello ")],
+            retelling: nil)
+        XCTAssertEqual(body.turns[0].text, "Hi! ")
+        XCTAssertEqual(body.turns[0].sig, "ab12")
+        XCTAssertEqual(body.turns[1].text, "hello")
+        let encoded = try XCTUnwrap(try JSONSerialization.jsonObject(
+            with: JSONEncoder().encode(body)) as? [String: Any])
+        let turns = try XCTUnwrap(encoded["turns"] as? [[String: Any]])
+        XCTAssertEqual(turns[0]["sig"] as? String, "ab12")
+        XCTAssertNil(turns[1]["sig"], "у реплики ученика подписи нет")
     }
 
     // MARK: - Ответы
@@ -98,12 +116,14 @@ final class BackendAPITests: XCTestCase {
          "plan":{"plan":"subscription","active":true,"unitsTotal":1,"unitsLeft":1,"periodEnd":null}}
         """.utf8))
         XCTAssertEqual(withTip.asReply.tip?.better, "b")
+        XCTAssertNil(withTip.asReply.signature, "старый сервер без подписи — не ошибка")
         let without = try JSONDecoder().decode(BackendAPI.DiscussResponse.self, from: Data("""
-        {"reply":"Bye!","tip":null,"finished":true,
+        {"reply":"Bye!","tip":null,"finished":true,"onTopic":true,"turnSig":"cafe",
          "plan":{"plan":"subscription","active":true,"unitsTotal":1,"unitsLeft":1,"periodEnd":null}}
         """.utf8))
         XCTAssertNil(without.asReply.tip)
         XCTAssertTrue(without.asReply.finished)
+        XCTAssertEqual(without.asReply.signature, "cafe")
     }
 
     // MARK: - Ошибки
@@ -120,7 +140,8 @@ final class BackendAPITests: XCTestCase {
     func testEveryKnownCodeHasItsOwnMessage() {
         let codes = ["no_plan", "plan_expired", "quota_exceeded", "episode_locked",
                      "episode_not_found", "rate_limited", "invalid_code", "code_not_valid",
-                     "subscription_not_active", "conversation_over", "model_busy", "model_error",
+                     "subscription_not_active", "conversation_over", "turns_tampered",
+                     "model_busy", "model_error",
                      "unauthorized"]
         let fallback = BackendAPI.Failure.message(for: "something_new")
         for code in codes {

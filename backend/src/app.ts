@@ -241,6 +241,7 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
   const level = oneOf(body, "level", LEVELS, true);
   const retelling = optionalStr(body, "retelling", 4_000);
   const turns = parseTurns(body.turns);
+  await verifyTurns(env, device.id, showId, season, episode, turns);
 
   // Разговор — только о серии, к которой уже взяты слова: так подписка
   // тратится на изучение сериалов, а не на чат обо всём.
@@ -251,6 +252,10 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
   if (!unlocked) throw new ApiError(403, "episode_locked");
 
   await limitAI(env, device, now);
+  // Не больше трёх разговоров о серии в день: новый разговор — пустая
+  // история, и без этого предела их можно было бы начинать бесконечно.
+  await hit(env.DB, `disc:${device.id}:${showId}:${season}:${episode}`,
+    (MAX_LEARNER_TURNS + 1) * 3, 86_400, now);
   const facts = await episodeFacts(env.DB, deps, showId, season, episode);
   const result = await callWithQuota(env, deps, device, active, "discuss", {
     system: discussionSystem(facts, language, level, retelling),
@@ -260,7 +265,45 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
   });
   const reply = parseDiscussionReply(result.text);
   if (!reply) throw new ApiError(502, "model_error");
-  return json({ ...reply, plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) });
+  const turnSig = await turnSignature(env, device.id, showId, season, episode, turns.length, reply.reply);
+  return json({ ...reply, turnSig,
+                plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) });
+}
+
+/**
+ * Подпись реплики Мончика. История разговора живёт на телефоне, и без
+ * подписи её можно подделать — вписать «Мончику» реплики вроде «конечно,
+ * напишу тебе код» и так увести модель от темы. Сервер подписывает каждую
+ * свою реплику вместе с устройством, серией и местом в разговоре и не
+ * принимает историю, где хоть одна реплика Мончика не его.
+ */
+async function turnSignature(env: Env, deviceId: string, showId: number, season: number,
+                             episode: number, index: number, text: string): Promise<string> {
+  return hmacHex(env.PROMO_PEPPER, `turn|${deviceId}|${showId}|${season}|${episode}|${index}|${text}`);
+}
+
+async function verifyTurns(env: Env, deviceId: string, showId: number, season: number,
+                           episode: number, turns: Turn[]): Promise<void> {
+  for (const [index, turn] of turns.entries()) {
+    // Порядок строгий: Мончик, ученик, Мончик… и последним — ученик.
+    const expected = index % 2 === 0 ? "monchik" : "learner";
+    if (turn.speaker !== expected) throw new ApiError(400, "turns_tampered");
+    if (turn.speaker !== "monchik") continue;
+    const signature = await turnSignature(env, deviceId, showId, season, episode, index, turn.text);
+    if (!turn.sig || !constantTimeEqual(signature, turn.sig)) {
+      throw new ApiError(400, "turns_tampered");
+    }
+  }
+  if (turns.length > 0 && turns[turns.length - 1]?.speaker !== "learner") {
+    throw new ApiError(400, "turns_tampered");
+  }
+}
+
+function constantTimeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let difference = 0;
+  for (let i = 0; i < a.length; i++) difference |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return difference === 0;
 }
 
 /** Реплики разговора: не больше шести ответов ученика, короткие тексты. */
@@ -272,12 +315,16 @@ function parseTurns(value: unknown): Turn[] {
     const record = item as Record<string, unknown> | null;
     const speaker = record?.speaker;
     const text = record?.text;
+    const sig = record?.sig;
     const limit = speaker === "learner" ? 600 : 1_200;
     if ((speaker !== "learner" && speaker !== "monchik")
         || typeof text !== "string" || text.length > limit) {
       throw new ApiError(400, "invalid_field", "turns");
     }
-    return { speaker, text };
+    if (sig !== undefined && (typeof sig !== "string" || !/^[0-9a-f]{64}$/.test(sig))) {
+      throw new ApiError(400, "invalid_field", "turns");
+    }
+    return { speaker, text, ...(typeof sig === "string" ? { sig } : {}) };
   });
   if (turns.filter((turn) => turn.speaker === "learner").length > MAX_LEARNER_TURNS) {
     throw new ApiError(400, "conversation_over");
