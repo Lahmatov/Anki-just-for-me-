@@ -33,7 +33,7 @@ o áudio é processado pelo serviço da Apple, segundo a
 | **Anthropic (API do Claude)**, com a tua chave | Pedes um baralho ou uma análise de reconto, depois de autorizares | O texto do pedido, legendas anexadas, o texto do reconto e a lista de palavras que já tens. Vai do telemóvel diretamente para a Anthropic, na **tua** conta Anthropic; o criador não o recebe. Ver a [política da Anthropic](https://www.anthropic.com/legal/privacy). |
 | **Servidor Recap** (só com Recap Plus ou código promocional) | Pedes palavras ou conversas com o Monchik sobre um episódio | Um número aleatório do dispositivo, o número da série/temporada/episódio, o idioma e o nível, as palavras que já tens, legendas anexadas e as falas da conversa. O servidor envia o texto à Anthropic e **não** o guarda. |
 | **Apple** (só se iniciares sessão) | Tocas em «Iniciar sessão com a Apple» | A Apple confirma ao servidor Recap quem és. Pedimos apenas o nome, que fica no telemóvel. Nunca pedimos o e-mail. |
-| **Neon** (opcional) | Uma vez por dia, só se ligaste a **tua própria** base de dados Neon | Uma cópia da base de dados de estudo. |
+| **Servidor Recap: cópia na nuvem** (opcional) | Uma vez por dia, só se ligaste a «Cópia na nuvem» | Uma cópia comprimida da base de dados de estudo: baralhos, palavras, progresso. Cifrada no servidor. |
 | **TVmaze** | Procuras uma série ou crias um baralho para ela | O nome da série, a temporada e o episódio — para encontrar o cartaz e o título do episódio. |
 
 Nada é vendido nem partilhado para publicidade.
@@ -51,10 +51,12 @@ recebe o teu nome, e-mail ou foto.
 | Número da transação da subscrição, produto, período, limite usado | Verificar a subscrição junto da Apple e aplicar o limite mensal | Contrato — art. 6.º, n.º 1, al. b) | Enquanto a subscrição estiver ligada a um dispositivo ou conta; caso contrário, 30 dias após terminar |
 | Episódios para os quais obtiveste palavras | A conversa com o Monchik só é permitida sobre esses episódios | Contrato — art. 6.º, n.º 1, al. b) | Como o número do dispositivo |
 | Número de tokens por pedido (sem conteúdo) | Ver custos e detetar abusos | Interesse legítimo — art. 6.º, n.º 1, al. f) | 90 dias |
+| Cópia na nuvem: cópias comprimidas e cifradas da base de estudo, com data, número de palavras e nome do dispositivo | Restaurar num telemóvel novo | Contrato — art. 6.º, n.º 1, al. b) | As últimas 7 cópias; apagadas quando tocas em «Apagar todas as cópias», apagas os dados ou a conta, ou com o dispositivo ou a conta nos prazos acima |
 | Contadores de pedidos por número do dispositivo ou HMAC do endereço IP | Evitar abusos (limites de frequência, tentativas de adivinhar códigos) | Interesse legítimo — art. 6.º, n.º 1, al. f) | Até ao fim da janela do contador (no máximo 24 horas) |
 
 O texto dos pedidos, as legendas, os recontos e as falas da conversa nunca são
-guardados no servidor nem nos seus registos.
+guardados no servidor nem nos seus registos. A cópia na nuvem é a única exceção, e só
+se a ligaste.
 
 ## Quem trata os dados por nossa conta
 
@@ -82,7 +84,7 @@ dados, e de oposição ao tratamento baseado em interesse legítimo.
   com a Apple é revogado.
 - **Apagar tudo:** Perfil → Privacidade e apagar dados → **Apagar todos os dados**
   apaga tudo no telemóvel, a conta e o registo do dispositivo no servidor e, se
-  escolheres, as cópias na tua base de dados Neon. Apagar a aplicação também apaga os
+  escolheres, as cópias na nuvem no servidor Recap. Apagar a aplicação também apaga os
   dados locais. A subscrição pertence ao Apple ID e cancela-se nas definições da Apple.
 - **Qualquer outro pedido:** escreve para CONTACT_EMAIL e indica o código de suporte
   do Perfil — sem contas por e-mail, é a única forma de encontrar o teu registo.

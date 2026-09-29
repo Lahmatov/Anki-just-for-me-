@@ -1,3 +1,4 @@
+import { handle } from "../src/app";
 import { describe, expect, it } from "vitest";
 import { CODE, DECK_REQUEST, makeWorld } from "./helpers";
 import { base64url, open, seal, sha256Hex } from "../src/crypto";
@@ -300,6 +301,21 @@ describe("удаление аккаунта", () => {
     expect(response.body.signedIn).toBe(false);
     expect(w.state.revoked).toEqual(["rt-u7"]);
     expect(w.count("accounts")).toBe(0);
+  });
+
+  it("стирает облачные снимки аккаунта вместе с частями", async () => {
+    const w = await appleWorld();
+    const a = await w.device();
+    await w.signIn(a);
+    await handle(new Request("https://api.test/v1/backups?device=iPhone&notes=1&mature=0", {
+      method: "POST",
+      headers: { authorization: `Bearer ${a}`, "content-type": "application/octet-stream" },
+      body: new Uint8Array([1, 2, 3]),
+    }), w.env, w.deps);
+    expect(w.count("backups")).toBe(1);
+    await w.call("DELETE", "/v1/account", undefined, a);
+    expect(w.count("backups")).toBe(0);
+    expect(w.count("backup_chunks")).toBe(0);
   });
 
   it("забирает промо-доступ аккаунта со всех телефонов", async () => {

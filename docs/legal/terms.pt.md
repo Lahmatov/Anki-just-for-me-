@@ -96,7 +96,7 @@ regras. O resto da aplicação continua a funcionar.
 
 ## 8. Serviços de terceiros
 
-Quando usas a Anthropic com a tua chave, uma base de dados Neon que ligas, o TVmaze ou
+Quando usas a Anthropic com a tua chave, o TVmaze ou
 serviços da Apple, aplicam-se também os respetivos termos e políticas de privacidade.
 
 ## 9. Disponibilidade e alterações

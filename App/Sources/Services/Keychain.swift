@@ -45,7 +45,8 @@ enum Keychain {
     }
 
     static let claudeAPIKey = "claude-api-key"
-    /// Строка подключения Neon — в ней пароль от базы.
+    /// Строка подключения Neon от прежнего облачного бэкапа. Больше не
+    /// используется, но у обновившихся могла остаться — «Удалить все данные» её стирает.
     static let neonConnection = "neon-connection-string"
     /// Токен устройства на сервере Recap. Как пароль: только здесь.
     static let recapDeviceToken = "recap-device-token"

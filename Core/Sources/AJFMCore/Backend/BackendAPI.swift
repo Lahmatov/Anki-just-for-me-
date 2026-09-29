@@ -238,6 +238,12 @@ public enum BackendAPI {
             public var outputTokens: Int
             public var at: String
         }
+        public struct Backup: Decodable, Equatable, Sendable {
+            public var device: String
+            public var words: Int
+            public var bytes: Int
+            public var at: String
+        }
         public struct Retention: Decodable, Equatable, Sendable {
             public var inactiveDevice: Int
             public var usageLog: Int
@@ -250,6 +256,8 @@ public enum BackendAPI {
         public var plan: PlanStatus
         public var episodes: [Episode]
         public var usage: [Usage]
+        /// Снимки облачного бэкапа. Старый сервер поля не присылает — пусто.
+        public var backups: [Backup]?
         public var retentionDays: Retention
 
         /// Токенов за всё время в журнале — одной строкой для экрана.
@@ -321,6 +329,18 @@ public enum BackendAPI {
                 return tr("Такой серии нет в TVMaze. Проверь сезон и номер.",
                           "Este episódio não existe no TVMaze. Verifica a temporada e o número.",
                           "This episode isn't on TVMaze. Check the season and number.")
+            case "backup_not_found":
+                return tr("Этого снимка на сервере уже нет — обнови список.",
+                          "Esta cópia já não está no servidor — atualiza a lista.",
+                          "That snapshot is no longer on the server — refresh the list.")
+            case "backup_damaged":
+                return tr("Снимок на сервере повреждён. Возьми другой из списка.",
+                          "A cópia no servidor está danificada. Escolhe outra da lista.",
+                          "The snapshot on the server is damaged. Pick another one.")
+            case "payload_too_large":
+                return tr("Слишком большой снимок для облака. Сохрани бэкап файлом.",
+                          "Cópia grande demais para a nuvem. Guarda o backup num ficheiro.",
+                          "The snapshot is too big for the cloud. Save a backup file instead.")
             case "deck_pending":
                 return tr("Набор ещё собирается — продолжу через пару секунд.",
                           "O baralho ainda está a ser feito — continuo daqui a uns segundos.",

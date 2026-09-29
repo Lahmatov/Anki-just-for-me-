@@ -25,6 +25,13 @@ export function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: SECURITY_HEADERS });
 }
 
+/** Двоичный ответ — снимок бэкапа. Заголовки защиты те же, тип — байты. */
+export function bytes(body: Uint8Array, status = 200): Response {
+  return new Response(body, {
+    status, headers: { ...SECURITY_HEADERS, "content-type": "application/octet-stream" },
+  });
+}
+
 export function errorResponse(error: ApiError): Response {
   return json({ error: error.code, message: error.message }, error.status);
 }
@@ -49,6 +56,19 @@ export async function readJson(request: Request, maxBytes: number): Promise<Reco
     throw new ApiError(400, "invalid_json");
   }
   return parsed as Record<string, unknown>;
+}
+
+/** Двоичное тело (снимок бэкапа) с тем же жёстким пределом размера. */
+export async function readBytes(request: Request, maxBytes: number): Promise<Uint8Array> {
+  const type = request.headers.get("content-type") ?? "";
+  if (!type.toLowerCase().startsWith("application/octet-stream")) {
+    throw new ApiError(415, "unsupported_media_type");
+  }
+  const declared = Number(request.headers.get("content-length") ?? "0");
+  if (declared > maxBytes) throw new ApiError(413, "payload_too_large");
+  const buffer = await request.arrayBuffer();
+  if (buffer.byteLength > maxBytes) throw new ApiError(413, "payload_too_large");
+  return new Uint8Array(buffer);
 }
 
 // MARK: - Проверка полей. Всё, что не прошло, — 400 с именем поля.

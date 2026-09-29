@@ -1,4 +1,6 @@
-import { ApiError, errorResponse, int, json, oneOf, optionalStr, readJson, str, stringList } from "./http";
+import {
+  ApiError, bytes, errorResponse, int, json, oneOf, optionalStr, readBytes, readJson, str, stringList,
+} from "./http";
 import { authenticate, registerDevice, type Device } from "./auth";
 import { hit } from "./ratelimit";
 import {
@@ -21,6 +23,9 @@ import { hmacHex } from "./crypto";
 import { intVar, type Deps, type Env } from "./env";
 import { accountOf, deleteAccount, followAccount, shareWithAccount, signIn, signOut } from "./accounts";
 import { RETENTION } from "./retention";
+import {
+  BACKUP, adoptDeviceBackups, deleteBackupsStatements, listBackups, loadBackup, ownerOf, saveBackup,
+} from "./backups";
 
 /** Субтитры одной серии — 30–60 тысяч символов; больше — это сезон. */
 const SUBTITLES_LIMIT = 200_000;
@@ -48,6 +53,13 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
       case "POST /v1/discuss": return await discuss(request, env, deps);
       case "POST /v1/help": return await help(request, env, deps);
       case "GET /v1/catalog": return await catalog(request, env, deps);
+      case "GET /v1/backups": return await backups(request, env, deps);
+      case "POST /v1/backups": return await uploadBackup(request, env, deps, url);
+      case "DELETE /v1/backups": return await eraseBackups(request, env, deps);
+    }
+    const backup = /^\/v1\/backups\/([0-9a-f]{32})$/.exec(url.pathname);
+    if (request.method === "GET" && backup?.[1]) {
+      return await downloadBackup(request, env, deps, backup[1]);
     }
     const show = /^\/v1\/catalog\/(\d{1,8})$/.exec(url.pathname);
     if (request.method === "GET" && show?.[1]) {
@@ -164,6 +176,9 @@ async function exportData(request: Request, env: Env, deps: Deps): Promise<Respo
       kind: item.kind, inputTokens: item.input_tokens, outputTokens: item.output_tokens,
       at: iso(item.created_at),
     })),
+    backups: (await listBackups(env.DB, ownerOf(device))).map((item) => ({
+      device: item.device, words: item.noteCount, bytes: item.size, at: iso(item.createdAt),
+    })),
     retentionDays: {
       inactiveDevice: RETENTION.inactiveDeviceDays,
       usageLog: RETENTION.usageLogDays,
@@ -185,6 +200,9 @@ export function supportCode(deviceId: string): string {
 async function forget(request: Request, env: Env, deps: Deps): Promise<Response> {
   const { device, entitlement } = await context(request, env, deps);
   const statements = [
+    // Снимки, сделанные без входа, принадлежат телефону и уходят с ним.
+    // Снимки аккаунта — нет: их стирает «Удалить копии в облаке» или удаление аккаунта.
+    ...deleteBackupsStatements(env.DB, device.id),
     env.DB.prepare("DELETE FROM device_episodes WHERE device_id = ?").bind(device.id),
     env.DB.prepare("DELETE FROM usage_log WHERE device_id = ?").bind(device.id),
     env.DB.prepare("DELETE FROM devices WHERE id = ?").bind(device.id),
@@ -229,6 +247,60 @@ async function verify(request: Request, env: Env, deps: Deps): Promise<Response>
   await shareWithAccount(env.DB, device.id, deps.now());
   const refreshed = await context(request, env, deps);
   return json(status(refreshed.entitlement, deps.now()));
+}
+
+// MARK: - Облачный бэкап
+
+/** Бэкап бесплатный и без подписки: он про сохранность своих слов, а не про ИИ. */
+async function backupContext(request: Request, env: Env, deps: Deps) {
+  const { device } = await context(request, env, deps);
+  await adoptDeviceBackups(env.DB, device);
+  return { device, owner: ownerOf(device) };
+}
+
+async function backups(request: Request, env: Env, deps: Deps): Promise<Response> {
+  const { device, owner } = await backupContext(request, env, deps);
+  return json({ backups: await listBackups(env.DB, owner), keep: BACKUP.keep,
+                signedIn: device.account_id !== null });
+}
+
+/**
+ * Снимок — телом запроса как есть, описание — в адресе: base64 внутри
+ * JSON раздул бы снимок на треть, а тело всё равно непрозрачно для сервера.
+ */
+async function uploadBackup(request: Request, env: Env, deps: Deps, url: URL): Promise<Response> {
+  const { owner } = await backupContext(request, env, deps);
+  const now = deps.now();
+  // Раз в сутки сам и изредка вручную; больше — это уже ошибка в приложении.
+  await hit(env.DB, "backup-up:" + owner, 20, 86_400, now);
+  const query = Object.fromEntries(url.searchParams.entries());
+  const numbers = (key: string) => {
+    const value = Number(query[key]);
+    if (!Number.isInteger(value) || value < 0 || value > 10_000_000) {
+      throw new ApiError(400, "invalid_field", key);
+    }
+    return value;
+  };
+  const meta = {
+    device: str(query, "device", 64),
+    noteCount: numbers("notes"),
+    matureWords: numbers("mature"),
+  };
+  const payload = await readBytes(request, BACKUP.maxBytes);
+  const entry = await saveBackup(env, deps, owner, meta, payload);
+  return json({ backup: entry }, 201);
+}
+
+async function downloadBackup(request: Request, env: Env, deps: Deps, id: string): Promise<Response> {
+  const { owner } = await backupContext(request, env, deps);
+  await hit(env.DB, "backup-down:" + owner, 30, 3600, deps.now());
+  return bytes(await loadBackup(env, owner, id));
+}
+
+async function eraseBackups(request: Request, env: Env, deps: Deps): Promise<Response> {
+  const { owner } = await backupContext(request, env, deps);
+  const results = await env.DB.batch(deleteBackupsStatements(env.DB, owner));
+  return json({ deleted: results[1]?.meta?.changes ?? 0 });
 }
 
 // MARK: - ИИ

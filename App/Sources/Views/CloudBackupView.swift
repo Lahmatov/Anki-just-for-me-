@@ -2,81 +2,67 @@ import SwiftUI
 import SwiftData
 import AJFMCore
 
-/// Облачный бэкап в Neon: подключение, отправка снимка, восстановление.
+/// Облачный бэкап на сервере Recap: включение, отправка снимка, восстановление.
 struct CloudBackupView: View {
     @Environment(\.modelContext) private var context
 
-    @State private var connectionText = ""
-    @State private var entries: [CloudBackupEntry] = []
+    @State private var enabled = CloudBackupService.isEnabled
+    @State private var list: CloudBackupList?
     @State private var busy = false
     @State private var status: String?
     @State private var error: String?
+    @State private var confirmErase = false
     @State private var pendingRestore: PendingCloudRestore?
     @State private var restored: RestoreService.Result?
 
     private var service: CloudBackupService { CloudBackupService(context: context) }
+    private var entries: [CloudBackupEntry] { list?.backups ?? [] }
 
     var body: some View {
         List {
-            connectionSection
-
-            if CloudBackupService.isConfigured {
+            if RecapBackend.isConfigured {
+                switchSection
+                if enabled { uploadSection }
+                if list?.signedIn == false { signInHint }
+                snapshotsSection
+            } else {
                 Section {
-                    Button(tr("Отправить снимок сейчас", "Enviar cópia agora", "Back up now"),
-                           systemImage: "icloud.and.arrow.up") {
-                        perform { try await service.upload() }
-                    }
-                    if let last = CloudBackupService.lastUpload {
-                        LabeledContent(tr("Последний", "Última", "Last"),
-                                       value: last.formatted(date: .abbreviated, time: .shortened))
-                    }
-                } footer: {
-                    Text(tr("Раз в сутки снимок уходит сам при запуске приложения. "
-                                + "Хранятся последние \(CloudBackupSQL.keep).",
-                            "Uma vez por dia a cópia vai sozinha quando abres a aplicação. "
-                                + "Ficam guardadas as últimas \(CloudBackupSQL.keep).",
-                            "Once a day a snapshot goes up by itself when you open the app. "
-                                + "The last \(CloudBackupSQL.keep) are kept."))
-                }
-
-                Section(tr("Снимки в облаке", "Cópias na nuvem", "Cloud snapshots")) {
-                    if entries.isEmpty {
-                        Text(tr("Пока ни одного.", "Ainda nenhuma.", "None yet."))
-                            .foregroundStyle(Theme.muted)
-                    }
-                    ForEach(entries) { entry in
-                        Button {
-                            prepareRestore(entry)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(entry.createdAt.formatted(date: .abbreviated, time: .shortened))
-                                    .foregroundStyle(Theme.ink)
-                                Text(Counted.words(entry.noteCount) + " · " + entry.device + " · "
-                                     + ByteCountFormatter.string(
-                                        fromByteCount: Int64(entry.bytes), countStyle: .file))
-                                    .font(.app(.caption))
-                                    .foregroundStyle(Theme.muted)
-                            }
-                        }
-                    }
+                    Text(tr("Сервер Recap не подключён в этой сборке — облачный бэкап недоступен. "
+                                + "Бэкап файлом на вкладке «Наборы» работает всегда.",
+                            "O servidor Recap não está ligado nesta versão — a cópia na nuvem não "
+                                + "está disponível. O backup em ficheiro em «Baralhos» funciona sempre.",
+                            "The Recap server isn't set up in this build, so cloud backup is off. "
+                                + "File backups on the Decks tab always work."))
+                        .foregroundStyle(Theme.muted)
                 }
             }
 
             if let status {
-                Section { Label(status, systemImage: "checkmark.circle").foregroundStyle(.green) }
+                Section { Label(status, systemImage: "checkmark.circle").foregroundStyle(Theme.green) }
             }
             if let error {
                 Section {
-                    Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(.orange)
+                    Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(Theme.orange)
                 }
             }
         }
         .themedScreen()
-        .navigationTitle(tr("Облако Neon", "Nuvem Neon", "Neon cloud"))
+        .navigationTitle(tr("Облачный бэкап", "Cópia na nuvem", "Cloud backup"))
+        .navigationBarTitleDisplayMode(.inline)
         .overlay { if busy { MonchikLoader() } }
         .disabled(busy)
         .task { await refresh() }
         .refreshable { await refresh() }
+        .confirmationDialog(
+            tr("Удалить все копии с сервера?", "Apagar todas as cópias do servidor?",
+               "Delete all copies from the server?"),
+            isPresented: $confirmErase, titleVisibility: .visible
+        ) {
+            Button(tr("Удалить", "Apagar", "Delete"), role: .destructive) {
+                perform { try await service.eraseAll() }
+            }
+            Button(CommonText.cancel, role: .cancel) {}
+        }
         .alert(
             tr("Восстановить из облака?", "Restaurar da nuvem?", "Restore from the cloud?"),
             isPresented: Binding(
@@ -106,47 +92,88 @@ struct CloudBackupView: View {
         }
     }
 
-    // MARK: - Подключение
+    // MARK: - Секции
 
-    private var connectionSection: some View {
+    private var switchSection: some View {
         Section {
-            if let connection = CloudBackupService.connection {
-                LabeledContent(tr("База", "Base de dados", "Database"), value: connection.redacted)
-                Button(tr("Отключить", "Desligar", "Disconnect"), role: .destructive) {
-                    Keychain.set("", for: Keychain.neonConnection)
-                    entries = []
-                    status = nil
+            Toggle(tr("Хранить копии в облаке", "Guardar cópias na nuvem", "Keep copies in the cloud"),
+                   isOn: $enabled)
+                .accessibilityIdentifier("cloud.toggle")
+                .onChange(of: enabled) { _, on in
+                    CloudBackupService.isEnabled = on
+                    // Включил — первая копия сразу, а не завтра.
+                    if on { perform { try await service.upload() } }
                 }
-            } else {
-                SecureField("postgresql://…neon.tech/neondb", text: $connectionText)
-                    .autocorrectionDisabled()
-                    .textInputAutocapitalization(.never)
-                Button(tr("Подключить", "Ligar", "Connect"), systemImage: "link") {
-                    connect()
-                }
-                .disabled(connectionText.trimmingCharacters(in: .whitespaces).isEmpty)
-            }
-        } header: {
-            Text("Neon")
         } footer: {
-            Text(tr("Бесплатно: neon.tech → создать проект → Connect → скопировать "
-                        + "Connection string. Строка хранится в Keychain телефона.",
-                    "Grátis: neon.tech → criar projeto → Connect → copiar a "
-                        + "Connection string. A ligação fica no Keychain do telemóvel.",
-                    "Free: neon.tech → create a project → Connect → copy the "
-                        + "Connection string. It's kept in the phone's Keychain."))
+            Text(tr("Раз в сутки сжатый снимок слов и прогресса уходит на сервер Recap и там "
+                        + "шифруется. Хранятся последние \(list?.keep ?? 7). Никаких сторонних служб.",
+                    "Uma vez por dia uma cópia comprimida das palavras e do progresso vai para o "
+                        + "servidor Recap e é cifrada lá. Ficam as últimas \(list?.keep ?? 7). "
+                        + "Sem serviços de terceiros.",
+                    "Once a day a compressed snapshot of your words and progress goes to the Recap "
+                        + "server and is encrypted there. The last \(list?.keep ?? 7) are kept. "
+                        + "No third-party services."))
         }
     }
 
-    private func connect() {
-        do {
-            let connection = try NeonConnection(connectionString: connectionText)
-            perform {
-                try await service.connect(connection)
-                connectionText = ""
+    private var uploadSection: some View {
+        Section {
+            Button(tr("Отправить снимок сейчас", "Enviar cópia agora", "Back up now"),
+                   systemImage: "icloud.and.arrow.up") {
+                perform { try await service.upload() }
             }
-        } catch {
-            self.error = error.localizedDescription
+            .accessibilityIdentifier("cloud.upload")
+            if let last = CloudBackupService.lastUpload {
+                LabeledContent(tr("Последний", "Última", "Last"),
+                               value: last.formatted(date: .abbreviated, time: .shortened))
+            }
+        }
+    }
+
+    private var signInHint: some View {
+        Section {
+            Label {
+                Text(tr("Войди через Apple в «Профиле» — тогда копии найдутся и на новом телефоне. "
+                            + "Без входа они привязаны к этому.",
+                        "Entra com a Apple no «Perfil» — assim as cópias aparecem também num "
+                            + "telemóvel novo. Sem entrar, ficam ligadas a este.",
+                        "Sign in with Apple in Profile so the copies show up on a new phone too. "
+                            + "Without it they're tied to this one."))
+                    .font(.app(.callout))
+            } icon: {
+                Image(systemName: "person.crop.circle.badge.exclamationmark")
+                    .foregroundStyle(Theme.orange)
+            }
+        }
+    }
+
+    private var snapshotsSection: some View {
+        Section(tr("Снимки в облаке", "Cópias na nuvem", "Cloud snapshots")) {
+            if entries.isEmpty {
+                Text(tr("Пока ни одного.", "Ainda nenhuma.", "None yet."))
+                    .foregroundStyle(Theme.muted)
+            }
+            ForEach(entries) { entry in
+                Button {
+                    prepareRestore(entry)
+                } label: {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(entry.createdAt.formatted(date: .abbreviated, time: .shortened))
+                            .foregroundStyle(Theme.ink)
+                        Text(Counted.words(entry.noteCount) + " · " + entry.device + " · "
+                             + ByteCountFormatter.string(
+                                fromByteCount: Int64(entry.bytes), countStyle: .file))
+                            .font(.app(.caption))
+                            .foregroundStyle(Theme.muted)
+                    }
+                }
+            }
+            if !entries.isEmpty {
+                Button(tr("Удалить все копии", "Apagar todas as cópias", "Delete all copies"),
+                       role: .destructive) {
+                    confirmErase = true
+                }
+            }
         }
     }
 
@@ -169,9 +196,9 @@ struct CloudBackupView: View {
     }
 
     private func refresh() async {
-        guard CloudBackupService.isConfigured else { return }
+        guard RecapBackend.isConfigured else { return }
         do {
-            entries = try await service.list()
+            list = try await service.list()
         } catch {
             self.error = error.localizedDescription
         }

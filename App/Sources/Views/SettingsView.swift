@@ -44,6 +44,8 @@ struct SettingsView: View {
                 appearanceSection
                 speechSection
                 reminderSection
+                // Облачный бэкап больше не требует своей базы — ему место на виду.
+                cloudSection
                 advancedSection
                 aboutSection
             }
@@ -216,7 +218,6 @@ struct SettingsView: View {
                 Form {
                     loadSection
                     claudeSection
-                    cloudSection
                     Section {
                         NavigationLink {
                             LogView()
@@ -400,19 +401,19 @@ struct SettingsView: View {
             } label: {
                 LabeledContent {
                     Text(CloudBackupService.isConfigured
-                         ? tr("подключено", "ligado", "connected")
-                         : tr("не подключено", "desligado", "not connected"))
+                         ? tr("включено", "ligada", "on")
+                         : tr("выключено", "desligada", "off"))
                 } label: {
                     Label(tr("Облачный бэкап", "Cópia na nuvem", "Cloud backup"),
                           systemImage: "icloud")
                 }
             }
         } footer: {
-            Text(tr("Снимок базы раз в сутки уходит в Neon — бесплатный облачный Postgres. "
-                        + "С него можно восстановиться на новом телефоне.",
-                    "Uma vez por dia, uma cópia da base vai para o Neon — Postgres na nuvem, "
-                        + "grátis. Dá para restaurar num telemóvel novo.",
-                    "Once a day a snapshot goes to Neon — free cloud Postgres. "
+            Text(tr("Раз в сутки копия слов и прогресса уходит на сервер Recap. "
+                        + "С неё можно восстановиться на новом телефоне.",
+                    "Uma vez por dia, uma cópia das palavras e do progresso vai para o "
+                        + "servidor Recap. Dá para restaurar num telemóvel novo.",
+                    "Once a day a copy of your words and progress goes to the Recap server. "
                         + "You can restore from it on a new phone."))
         }
     }

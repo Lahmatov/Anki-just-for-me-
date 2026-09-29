@@ -8,8 +8,11 @@ export function toHex(bytes: ArrayBuffer | Uint8Array): string {
 }
 
 export function base64url(bytes: Uint8Array): string {
+  // Кусками, а не по байту: снимки бэкапа — сотни килобайт.
   let binary = "";
-  for (const byte of bytes) binary += String.fromCharCode(byte);
+  for (let start = 0; start < bytes.length; start += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(start, start + 0x8000));
+  }
   return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
@@ -70,21 +73,30 @@ async function aesKey(secret: string, purpose: string): Promise<CryptoKey> {
 export async function seal(
   secret: string, purpose: string, plaintext: string, randomBytes: (count: number) => Uint8Array,
 ): Promise<string> {
-  const iv = randomBytes(12);
-  const ciphertext = new Uint8Array(await crypto.subtle.encrypt(
-    { name: "AES-GCM", iv }, await aesKey(secret, purpose), encoder.encode(plaintext)));
-  const out = new Uint8Array(iv.length + ciphertext.length);
-  out.set(iv);
-  out.set(ciphertext, iv.length);
-  return base64url(out);
+  return base64url(await sealBytes(secret, purpose, encoder.encode(plaintext), randomBytes));
 }
 
 /** Обратное к `seal`. Подменённый или чужой шифротекст — исключение. */
 export async function open(secret: string, purpose: string, sealed: string): Promise<string> {
-  const bytes = base64urlDecode(sealed);
-  const plaintext = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv: bytes.slice(0, 12) }, await aesKey(secret, purpose), bytes.slice(12));
-  return new TextDecoder().decode(plaintext);
+  return new TextDecoder().decode(await openBytes(secret, purpose, base64urlDecode(sealed)));
+}
+
+/** То же для байтов: снимки бэкапа — сжатые данные, не текст. */
+export async function sealBytes(
+  secret: string, purpose: string, plaintext: Uint8Array, randomBytes: (count: number) => Uint8Array,
+): Promise<Uint8Array> {
+  const iv = randomBytes(12);
+  const ciphertext = new Uint8Array(await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv }, await aesKey(secret, purpose), plaintext));
+  const out = new Uint8Array(iv.length + ciphertext.length);
+  out.set(iv);
+  out.set(ciphertext, iv.length);
+  return out;
+}
+
+export async function openBytes(secret: string, purpose: string, sealed: Uint8Array): Promise<Uint8Array> {
+  return new Uint8Array(await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: sealed.slice(0, 12) }, await aesKey(secret, purpose), sealed.slice(12)));
 }
 
 /** Алфавит Crockford: без I, L, O и U — их путают с 1, 0 и V. */

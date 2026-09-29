@@ -93,7 +93,7 @@ of the app keeps working.
 
 ## 8. Third-party services
 
-When you use Anthropic with your own key, a Neon database you connect, TVmaze or
+When you use Anthropic with your own key, TVmaze or
 Apple services, their own terms and privacy policies also apply.
 
 ## 9. Availability and changes

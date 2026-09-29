@@ -105,6 +105,36 @@ final class RecapBackend {
         }
     }
 
+    // MARK: - Облачный бэкап
+
+    func backups() async throws -> CloudBackupList {
+        try await send("GET", "/v1/backups")
+    }
+
+    /// Снимок уходит телом как есть — base64 в JSON раздул бы его на треть.
+    func uploadBackup(_ payload: Data, query: [URLQueryItem]) async throws -> CloudBackupEntry {
+        struct Saved: Decodable { let backup: CloudBackupEntry }
+        let data = try await request("POST", "/v1/backups", body: payload,
+                                     contentType: "application/octet-stream", query: query, timeout: 120)
+        do {
+            return try JSONDecoder().decode(Saved.self, from: data).backup
+        } catch {
+            throw BackendAPI.Failure.server(code: "bad_response", status: 201)
+        }
+    }
+
+    func downloadBackup(id: String) async throws -> Data {
+        try await request("GET", "/v1/backups/\(id)", timeout: 120)
+    }
+
+    /// Стереть все снимки — часть «Удалить все данные». Не регистрирует
+    /// устройство ради удаления: без токена снимков у него и нет.
+    func eraseBackups() async throws {
+        guard Keychain.get(Keychain.recapDeviceToken) != nil else { return }
+        struct Deleted: Decodable { let deleted: Int }
+        let _: Deleted = try await send("DELETE", "/v1/backups", retrying: false)
+    }
+
     // MARK: - Транспорт
 
     private func encode(_ value: some Encodable) throws -> Data {
@@ -125,17 +155,20 @@ final class RecapBackend {
 
     private func request(
         _ method: String, _ path: String, body: Data? = nil,
+        contentType: String = "application/json", query: [URLQueryItem] = [],
         timeout: TimeInterval = 20, retrying: Bool = true
     ) async throws -> Data {
         guard let base = Self.baseURL else { throw BackendAPI.Failure.notConfigured }
         let token = try await deviceToken()
 
-        var urlRequest = URLRequest(url: base.appending(path: path))
+        var url = base.appending(path: path)
+        if !query.isEmpty { url.append(queryItems: query) }
+        var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method
         urlRequest.timeoutInterval = timeout
         urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "authorization")
         if let body {
-            urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
+            urlRequest.setValue(contentType, forHTTPHeaderField: "content-type")
             urlRequest.httpBody = body
         }
 
@@ -152,7 +185,8 @@ final class RecapBackend {
         // а подписку приложение восстановит само при следующей проверке.
         if status == 401, retrying {
             Keychain.remove(Keychain.recapDeviceToken)
-            return try await request(method, path, body: body, timeout: timeout, retrying: false)
+            return try await request(method, path, body: body, contentType: contentType, query: query,
+                                     timeout: timeout, retrying: false)
         }
         guard (200..<300).contains(status) else {
             let failure = BackendAPI.Failure.from(status: status, body: data)

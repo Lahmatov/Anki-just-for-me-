@@ -33,7 +33,7 @@ it; otherwise Apple's speech service processes the audio under
 | **Anthropic (Claude API)**, with your own key | You ask for a deck or a retelling review, after you allow it | Your request text, attached subtitles, the retelling text and a list of words you already have. This goes from your phone straight to Anthropic under **your own** Anthropic account; the developer does not receive it. See [Anthropic's privacy policy](https://www.anthropic.com/legal/privacy). |
 | **Recap server** (only with Recap Plus or a promo code) | You ask for words or chat with Monchik about an episode | A random device ID, the show/season/episode number, your language and level, the words you already have, attached subtitles and chat lines. The server forwards the text to Anthropic and does **not** store it. |
 | **Apple** (only if you sign in) | You tap “Sign in with Apple” | Apple confirms who you are to the Recap server. We ask only for your name, and it stays on your phone. We never ask for your e-mail. |
-| **Neon** (optional) | Once a day, only if you connected **your own** Neon database | A copy of your learning database. |
+| **Recap server: cloud backup** (optional) | Once a day, only if you turned on Cloud backup | A compressed copy of your learning database: decks, words, progress. Encrypted on the server. |
 | **TVmaze** | You look up a show or make a deck for it | The show name, season and episode number — to find the poster and episode title. |
 
 Nothing is sold or shared for advertising.
@@ -51,10 +51,12 @@ never receives your name, e-mail or photo.
 | Subscription transaction ID, product, period, allowance used | To check the subscription with Apple and apply the monthly limit | Contract — Art. 6(1)(b) | While the subscription is linked to a device or account; 30 days after it ends otherwise |
 | Episodes you got words for | Chat with Monchik is allowed only about these episodes | Contract — Art. 6(1)(b) | Same as the device ID |
 | Token counts per request (no content) | To see costs and detect abuse | Legitimate interest — Art. 6(1)(f) | 90 days |
+| Cloud backup: compressed, encrypted copies of your learning database with date, word count and device name | To restore on a new phone | Contract — Art. 6(1)(b) | The last 7 copies; erased when you tap Delete all copies, delete your data or account, or together with the device or account under the periods above |
 | Request counters keyed by device ID or a keyed hash of the IP address | To stop abuse (rate limits, promo-code guessing) | Legitimate interest — Art. 6(1)(f) | Until the counter's window ends (at most 24 hours) |
 
 The text of your requests, subtitles, retellings and chat lines is never stored on
-the server or in its logs.
+the server or in its logs. Cloud backup is the only exception, and only if you turned
+it on.
 
 ## Who processes data for us
 
@@ -81,7 +83,7 @@ object to processing based on legitimate interest.
   in with Apple is revoked.
 - **Delete everything:** Profile → Privacy and data deletion → **Delete all data**
   removes everything on the phone, your account and device record on the server,
-  and, if you choose, the backup copies in your Neon database. Deleting the app also
+  and, if you choose, the cloud backup copies on the Recap server. Deleting the app also
   deletes all local data. A subscription belongs to your Apple ID and is cancelled in
   Apple's settings.
 - **Anything else:** write to CONTACT_EMAIL and include the support code from

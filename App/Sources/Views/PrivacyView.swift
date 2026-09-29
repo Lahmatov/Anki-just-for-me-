@@ -78,12 +78,15 @@ struct PrivacyView: View {
                                            + "episode number, language, level, known words and chat "
                                            + "lines. The server passes them to Anthropic and doesn't "
                                            + "keep them; it stores only a random device ID and usage."))
-                point("icloud.and.arrow.up", tr("Neon — копия базы раз в сутки, если ты сам "
-                                                   + "подключил свою базу данных.",
-                                                "Neon — uma cópia da base por dia, se ligaste a "
-                                                   + "tua própria base de dados.",
-                                                "Neon — a daily copy of the database, only if you "
-                                                   + "connected your own database."))
+                point("icloud.and.arrow.up", tr("Облачный бэкап — только если включишь: сжатая копия "
+                                                   + "слов и прогресса раз в сутки на сервер Recap, там "
+                                                   + "шифруется. Хранятся последние 7.",
+                                                "Cópia na nuvem — só se a ligares: uma cópia comprimida "
+                                                   + "das palavras e do progresso por dia no servidor "
+                                                   + "Recap, cifrada lá. Ficam as últimas 7.",
+                                                "Cloud backup — only if you turn it on: a compressed "
+                                                   + "copy of your words and progress once a day on the "
+                                                   + "Recap server, encrypted there. The last 7 are kept."))
                 point("tv", tr("TVMaze — название сериала, чтобы найти постер и название серии.",
                                "TVMaze — o nome da série, para encontrar o cartaz e o episódio.",
                                "TVMaze — the show name, to find its poster and episode title."))
@@ -131,7 +134,7 @@ struct PrivacyView: View {
                     }
                 }
                 .disabled(erasing)
-                if CloudBackupService.isConfigured {
+                if RecapBackend.isConfigured {
                     Toggle(tr("И копии в облаке", "E as cópias na nuvem", "And the cloud copies"),
                            isOn: $eraseCloud)
                 }
@@ -182,8 +185,8 @@ struct PrivacyView: View {
     private func erase() async {
         erasing = true
         defer { erasing = false }
-        // Облако — первым: после удаления ключей до него уже не достучаться.
-        if eraseCloud, CloudBackupService.isConfigured {
+        // Облако — первым: после удаления токена устройства снимки на сервере не найти.
+        if eraseCloud, RecapBackend.isConfigured {
             do {
                 try await CloudBackupService(context: context).eraseAll()
             } catch {

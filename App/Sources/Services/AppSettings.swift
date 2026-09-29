@@ -18,6 +18,7 @@ enum SettingsKey {
     static let weeklyTarget = "weeklyTarget"
     static let lastBackupDate = "lastBackupDate"
     static let lastCloudBackupDate = "lastCloudBackupDate"
+    static let cloudBackupEnabled = "cloudBackupEnabled"
     static let deviceID = "deviceID"
     static let leechThreshold = "leechThreshold"
     /// Устаревший флаг «знакомство пройдено» — читается только для перехода

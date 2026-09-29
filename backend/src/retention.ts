@@ -31,6 +31,7 @@ export interface PurgeReport {
   reservations: number;
   episodeCache: number;
   deckRequests: number;
+  backups: number;
 }
 
 /**
@@ -41,6 +42,9 @@ export interface PurgeReport {
 export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
   const deviceCutoff = now - RETENTION.inactiveDeviceDays * DAY;
   const stale = "SELECT id FROM devices WHERE last_seen_at < ?";
+  const orphanBackups = `SELECT id FROM backups
+    WHERE NOT EXISTS (SELECT 1 FROM devices WHERE devices.id = backups.owner)
+      AND NOT EXISTS (SELECT 1 FROM accounts WHERE accounts.id = backups.owner)`;
   const results = await db.batch([
     db.prepare(`DELETE FROM device_episodes WHERE device_id IN (${stale})`).bind(deviceCutoff),
     db.prepare(`DELETE FROM usage_log WHERE created_at < ? OR device_id IN (${stale})`)
@@ -71,6 +75,10 @@ export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
       .bind(now - RETENTION.episodeCacheDays * DAY),
     db.prepare("DELETE FROM deck_requests WHERE created_at < ?")
       .bind(now - RETENTION.deckRequestDays * DAY),
+    // Снимки уходят вместе с владельцем: забытым устройством или аккаунтом.
+    // Порядок важен — после удаления устройств и аккаунтов выше.
+    db.prepare(`DELETE FROM backup_chunks WHERE backup_id IN (${orphanBackups})`),
+    db.prepare(`DELETE FROM backups WHERE id IN (${orphanBackups})`),
   ]);
   const changes = (index: number) => results[index]?.meta?.changes ?? 0;
   return {
@@ -82,5 +90,6 @@ export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
     reservations: changes(7),
     episodeCache: changes(8),
     deckRequests: changes(9),
+    backups: changes(11),
   };
 }
