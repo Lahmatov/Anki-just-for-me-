@@ -20,7 +20,7 @@ jobs:
     name: Статические проверки
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: python3 tools/lint.py
 
   backend:
@@ -30,8 +30,8 @@ jobs:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -44,7 +44,7 @@ jobs:
     name: Ядро (swift test)
     runs-on: macos-26
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Версии
         run: xcodebuild -version && swift --version
       - name: Тесты ядра
@@ -64,7 +64,7 @@ jobs:
     name: Приложение (сборка и тесты на симуляторе)
     runs-on: macos-26
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: XcodeGen
         run: |
           brew install xcodegen || true

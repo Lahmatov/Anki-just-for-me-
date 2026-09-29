@@ -72,7 +72,7 @@ final class ProfileStore {
 
     /// Application Support/Profile — не «Документы»: фото не должно
     /// появляться в приложении «Файлы» рядом с бэкапами наборов.
-    static var defaultDirectory: URL? {
+    nonisolated static var defaultDirectory: URL? {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?
             .appending(path: "Profile", directoryHint: .isDirectory)
     }
