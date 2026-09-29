@@ -104,8 +104,8 @@ final class ScreenshotUITests: XCTestCase {
 
         let frames = app.staticTexts.allElementsBoundByIndex
             .filter { $0.exists }
-            .map { ($0.label, $0.frame) }
-            .filter { _, frame in
+            .map { ($0.label, $0.frame, $0) }
+            .filter { _, frame, _ in
                 frame.height >= 8 && frame.width >= 8
                     && frame.minY >= navBottom && frame.maxY <= tabBarTop
                     && window.contains(frame)
@@ -113,8 +113,8 @@ final class ScreenshotUITests: XCTestCase {
 
         for i in frames.indices {
             for j in frames.indices where j > i {
-                let (labelA, a) = frames[i]
-                let (labelB, b) = frames[j]
+                let (labelA, a, elementA) = frames[i]
+                let (labelB, b, elementB) = frames[j]
                 // Контейнер и его части: «Мончик, Карточки ждут…» целиком и
                 // «Карточки ждут…» внутри, «Новые: 5» и «5». Это один и тот же
                 // текст, а не наложение.
@@ -126,6 +126,11 @@ final class ScreenshotUITests: XCTestCase {
                 guard !overlap.isNull else { continue }
                 let smaller = min(a.width * a.height, b.width * b.height)
                 let share = overlap.width * overlap.height / max(smaller, 1)
+                // Рамка элемента не обрезается краем прокрутки: текст, уехавший
+                // вниз за край, «лежит» под кнопками под прокруткой, хотя его не
+                // видно. Наложение считается, только если видны оба — дорогую
+                // проверку делаем лишь для пересекающихся пар.
+                if share >= 0.3, !(elementA.isHittable && elementB.isHittable) { continue }
                 XCTAssertLessThan(share, 0.3,
                                   "\(screen): «\(labelA)» наезжает на «\(labelB)» (\(Int(share * 100))%)")
             }
