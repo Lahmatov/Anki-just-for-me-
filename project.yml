@@ -41,6 +41,11 @@ targets:
     dependencies:
       - package: AJFMCore
         product: AJFMCore
+    # Схема с тестами: иначе `xcodebuild test` (и ⌘U) не знает, что гонять.
+    scheme:
+      testTargets:
+        - AJFMTests
+      gatherCoverageData: true
     settings:
       base:
         # Bundle ID менять нельзя: на бесплатном аккаунте лимит ~10 новых App ID

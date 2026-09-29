@@ -1,0 +1,104 @@
+# Проверка всего проекта на каждый пуш: линтер, сервер, ядро и приложение.
+#
+# Зачем: код приложения пишется без Mac под рукой. Раньше первая сборка
+# случалась только у владельца в Xcode — теперь её делает GitHub на своей
+# macOS-машине, и ошибка компиляции видна через минуты после пуша.
+# Для публичного репозитория macOS-минуты бесплатны.
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Статические проверки
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/lint.py
+
+  backend:
+    name: Сервер (Workers + D1)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+  core:
+    name: Ядро (swift test)
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - name: Версии
+        run: xcodebuild -version && swift --version
+      - name: Тесты ядра
+        working-directory: Core
+        run: |
+          set +e
+          swift test > ../core.log 2>&1
+          STATUS=$?
+          grep -E "error:|failed|Executed [0-9]+ test|Fatal error" ../core.log | tail -200
+          exit $STATUS
+      - name: Ошибки коротко
+        if: failure()
+        run: |
+          grep -E "error:|failed|Fatal error" core.log | sort -u | head -150 || true
+
+  app:
+    name: Приложение (сборка и тесты на симуляторе)
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - name: XcodeGen
+        run: |
+          brew install xcodegen || true
+          xcodegen generate
+      - name: Симулятор
+        id: sim
+        run: |
+          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          devices = json.load(sys.stdin)["devices"]
+          found = [(runtime, d) for runtime, items in devices.items() if "iOS" in runtime
+                   for d in items if d["name"].startswith("iPhone")]
+          found.sort(key=lambda item: item[0])
+          print(found[-1][1]["udid"] if found else "")')
+          echo "Симулятор: $UDID"
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+      - name: Сборка и тесты
+        run: |
+          set +e
+          xcodebuild test \
+            -project AJFM.xcodeproj \
+            -scheme AJFM \
+            -destination "id=${{ steps.sim.outputs.udid }}" \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            > app.log 2>&1
+          STATUS=$?
+          # Полный вывод xcodebuild — десятки тысяч строк; в журнал — только суть.
+          grep -E "error:|Test Case .* failed|Executed [0-9]+ test|\*\* (BUILD|TEST)" app.log | tail -200
+          exit $STATUS
+      - name: Ошибки коротко
+        if: failure()
+        run: |
+          echo "=== ошибки компиляции ==="
+          grep -E "error:" app.log | sed "s|$GITHUB_WORKSPACE/||" | sort -u | head -150 || true
+          echo "=== проваленные тесты ==="
+          grep -E "error: -\[|Test Case .* failed|XCTAssert" app.log | head -80 || true
