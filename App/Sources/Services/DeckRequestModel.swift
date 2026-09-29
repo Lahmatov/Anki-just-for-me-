@@ -60,6 +60,7 @@ final class DeckRequestModel {
     /// Оценка до отправки, чтобы цена не была сюрпризом.
     var estimatedCost: Double {
         let request = self.request
+        guard budget.tracksCost else { return 0 }
         return budget.deckModel.cost(
             inputTokens: request.estimatedInputTokens,
             outputTokens: request.estimatedOutputTokens)
@@ -178,7 +179,7 @@ final class DeckRequestModel {
         let estimate = model.cost(
             inputTokens: request.estimatedInputTokens,
             outputTokens: request.estimatedOutputTokens)
-        guard budget.usage.monthCost + estimate <= budget.monthlyLimit else {
+        guard !budget.tracksCost || budget.usage.monthCost + estimate <= budget.monthlyLimit else {
             let summary = budget.usage
             step = .failed(ClaudeClientError
                 .budgetExceeded(spent: summary.monthCost, limit: summary.limit)
@@ -188,7 +189,7 @@ final class DeckRequestModel {
 
         step = .working
         do {
-            let completion = try await ClaudeClient(apiKey: apiKey, model: model.id)
+            let completion = try await AIClient(provider: AIKeys.active, apiKey: apiKey)
                 .complete(ClaudeRequest(
                     model: model,
                     system: request.system,

@@ -26,6 +26,8 @@ export interface Env {
   PROMO_UNITS: string;
   MAX_DEVICES_PER_SUBSCRIPTION: string;
   SUBSCRIPTION_PRODUCTS: string;
+  /** Потолок бесплатных вопросов помощнику на весь сервер за сутки. */
+  HELP_DAILY_CAP?: string;
 }
 
 /** Внешний мир, подменяемый в тестах: модель, сеть, часы и случайность. */

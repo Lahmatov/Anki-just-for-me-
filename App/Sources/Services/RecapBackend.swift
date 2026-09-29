@@ -69,6 +69,11 @@ final class RecapBackend {
         return response.shows
     }
 
+    /// Вопрос помощнику Monchik Help — бесплатно, с лимитами на сервере.
+    func help(_ body: BackendAPI.HelpBody) async throws -> BackendAPI.HelpResponse {
+        try await send("POST", "/v1/help", body: encode(body), timeout: 45)
+    }
+
     // MARK: - Аккаунт
 
     func signIn(_ body: BackendAPI.SignInBody) async throws -> BackendAPI.PlanStatus {

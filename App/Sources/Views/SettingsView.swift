@@ -21,7 +21,6 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.claudeModel) private var claudeModel = ClaudeModel.opus5.id
     @AppStorage(SettingsKey.deckModel) private var deckModel = ClaudeModel.haiku45.id
     @AppStorage(SettingsKey.monthlyBudget) private var monthlyBudget = 10.0
-    @State private var apiKey = ""
     @AppStorage(SettingsKey.reminderEnabled) private var reminderEnabled = false
     @AppStorage(SettingsKey.reminderHour) private var reminderHour = 20
     @AppStorage(SettingsKey.reminderMinute) private var reminderMinute = 0
@@ -49,7 +48,6 @@ struct SettingsView: View {
             }
             .themedScreen()
             .navigationTitle(tr("Настройки", "Definições", "Settings"))
-            .onAppear { apiKey = Keychain.get(Keychain.claudeAPIKey) ?? "" }
             .fullScreenCover(item: $onboarding) { plan in
                 OnboardingView(plan: plan)
             }
@@ -343,13 +341,12 @@ struct SettingsView: View {
 
     private var claudeSection: some View {
         Section {
-            SecureField(tr("Ключ API", "Chave da API", "API key"), text: $apiKey)
-                .autocorrectionDisabled()
-                .textInputAutocapitalization(.never)
-                .onChange(of: apiKey) { _, value in
-                    Keychain.set(value.trimmingCharacters(in: .whitespaces),
-                                 for: Keychain.claudeAPIKey)
-                }
+            // Ключи — в Профиле: там же выбор провайдера (Gemini, ChatGPT, Kimi…).
+            NavigationLink {
+                AIKeysView()
+            } label: {
+                Label(tr("Ключи ИИ", "Chaves de IA", "AI keys"), systemImage: "key.fill")
+            }
             Picker(tr("Наборы слов", "Baralhos", "Word decks"), selection: $deckModel) {
                 ForEach(ClaudeModel.all, id: \.id) { pricing in
                     Text(pricing.title + " — " + ClaudeModel.summary(for: pricing))
@@ -370,16 +367,16 @@ struct SettingsView: View {
             Text("Claude")
         } footer: {
             Text(tr("Для наборов хватает Haiku: быстро и около цента за набор. Для разбора "
-                        + "пересказов лучше Opus — там важна точность. Ключ хранится в Keychain и "
-                        + "никуда, кроме Anthropic, не уходит. Лимит нужен не ради экономии, "
+                        + "пересказов лучше Opus — там важна точность. Модели и лимит — только для "
+                        + "Claude. Лимит нужен не ради экономии, "
                         + "а чтобы ошибка в коде не съела бюджет молча.",
                     "Para baralhos chega o Haiku: rápido e cerca de um cêntimo por baralho. Para "
-                        + "analisar recontos é melhor o Opus — aí a precisão conta. A chave fica no Keychain e "
-                        + "só vai para a Anthropic. O limite não é para poupar — é para que "
+                        + "analisar recontos é melhor o Opus — aí a precisão conta. Modelos e limite "
+                        + "são só para o Claude. O limite não é para poupar — é para que "
                         + "um erro no código não gaste o orçamento às escondidas.",
                     "Haiku is enough for decks: fast and about a cent per deck. For retelling "
-                        + "reviews Opus is better — accuracy matters there. The key lives in the Keychain "
-                        + "and goes nowhere but Anthropic. The limit isn't about saving — "
+                        + "reviews Opus is better — accuracy matters there. Models and the limit "
+                        + "apply to Claude only. The limit isn't about saving — "
                         + "it's so a bug can't quietly eat the budget."))
         }
     }

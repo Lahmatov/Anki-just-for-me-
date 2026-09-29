@@ -39,6 +39,7 @@ struct AccountView: View {
                 signInSection
                 plusSection
             }
+            aiKeysSection
             dataSection
             documentsSection
             supportSection
@@ -343,6 +344,35 @@ struct AccountView: View {
             + tr("", "", " left")
     }
 
+    // MARK: - Ключи ИИ
+
+    private var aiKeysSection: some View {
+        Section {
+            NavigationLink {
+                AIKeysView()
+            } label: {
+                HStack(spacing: 14) {
+                    IconBadge(systemName: "key.fill", color: Theme.blue)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(tr("Ключи ИИ", "Chaves de IA", "AI keys")).font(.app(.body, weight: .bold))
+                        Text(AIKeys.hasActiveKey
+                             ? tr("Работает: ", "Em uso: ", "In use: ") + AIKeys.active.shortName
+                             : tr("Claude, Gemini, ChatGPT, Kimi и другие",
+                                  "Claude, Gemini, ChatGPT, Kimi e outros",
+                                  "Claude, Gemini, ChatGPT, Kimi and more"))
+                            .font(.app(.caption))
+                            .foregroundStyle(Theme.muted)
+                    }
+                }
+            }
+            .accessibilityIdentifier("profile.aikeys")
+        } footer: {
+            Text(tr("Свой ключ — если не хочешь подписку: платишь провайдеру напрямую.",
+                    "Chave própria — se não queres subscrição: pagas diretamente ao fornecedor.",
+                    "Your own key — if you'd rather skip the subscription and pay the provider directly."))
+        }
+    }
+
     // MARK: - Данные
 
     private var dataSection: some View {
@@ -404,7 +434,13 @@ struct AccountView: View {
 
     private var supportSection: some View {
         Section {
-            if let url = supportMailURL {
+            NavigationLink {
+                MonchikHelpView()
+            } label: {
+                Label("Monchik Help", systemImage: "questionmark.bubble")
+            }
+            .accessibilityIdentifier("profile.help")
+            if let url = SupportContact.mailURL {
                 Button {
                     openURL(url)
                 } label: {
@@ -429,13 +465,6 @@ struct AccountView: View {
                           " — mention it in your e-mail; it's how we find your record on the server."))
             }
         }
-    }
-
-    private var supportMailURL: URL? {
-        guard let email = LegalInfo.seller.contactEmail else { return nil }
-        let body = SupportMail.body(appVersion: Self.version, systemVersion: UIDevice.current.systemVersion,
-                                    supportCode: account.supportCode, language: Loc.language)
-        return SupportMail.url(to: email, subject: "Recap", body: body)
     }
 
     static var version: String {

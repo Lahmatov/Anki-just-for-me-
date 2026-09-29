@@ -263,24 +263,26 @@ struct DeckRequestView: View {
     }
 
     private var apiKeySection: some View {
-        Section {
-            SecureField(tr("Ключ API Anthropic", "Chave da API da Anthropic", "Anthropic API key"),
+        let provider = AIKeys.active
+        return Section {
+            SecureField(tr("Ключ API ", "Chave da API ", "API key: ") + provider.shortName,
                         text: $apiKey)
                 .autocorrectionDisabled()
                 .textInputAutocapitalization(.never)
                 .onChange(of: apiKey) { _, value in
-                    Keychain.set(value.trimmingCharacters(in: .whitespaces),
-                                 for: Keychain.claudeAPIKey)
+                    AIKeys.setKey(value, for: provider)
                 }
+            Link(tr("Где взять ключ", "Onde obter a chave", "Where to get a key"),
+                 destination: provider.consoleURL)
         } header: {
             Text(tr("Нужен ключ", "É precisa uma chave", "A key is needed"))
         } footer: {
-            Text(tr("Один раз: console.anthropic.com → API Keys → Create Key. "
-                        + "Ключ хранится в Keychain телефона и уходит только в Anthropic.",
-                    "Uma vez: console.anthropic.com → API Keys → Create Key. "
-                        + "A chave fica no Keychain do telemóvel e só vai para a Anthropic.",
-                    "Once: console.anthropic.com → API Keys → Create Key. "
-                        + "The key stays in the phone's Keychain and only goes to Anthropic."))
+            Text(tr("Ключ хранится в Keychain телефона и уходит только провайдеру. Другой ИИ "
+                        + "(Gemini, ChatGPT, Kimi…) — Профиль → Ключи ИИ.",
+                    "A chave fica no Keychain do telemóvel e só vai para o fornecedor. Outra IA "
+                        + "(Gemini, ChatGPT, Kimi…) — Perfil → Chaves de IA.",
+                    "The key stays in the phone's Keychain and only goes to the provider. Another AI "
+                        + "(Gemini, ChatGPT, Kimi…) — Profile → AI keys."))
         }
     }
 

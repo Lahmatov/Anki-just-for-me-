@@ -40,4 +40,25 @@ enum NotificationService {
         UNUserNotificationCenter.current()
             .removePendingNotificationRequests(withIdentifiers: [dailyReminderID])
     }
+
+    /// Ответ Monchik Help пришёл, пока приложение свёрнуто.
+    static func notifyHelpReply(_ text: String) async {
+        let content = UNMutableNotificationContent()
+        content.title = tr("Мончик ответил", "O Monchik respondeu", "Monchik replied")
+        content.body = String(text.prefix(180))
+        content.sound = .default
+        content.threadIdentifier = "monchik-help"
+        try? await UNUserNotificationCenter.current().add(
+            UNNotificationRequest(identifier: "monchik-help-\(UUID().uuidString)",
+                                  content: content, trigger: nil))
+    }
+
+    /// Разрешение спрашиваем, только если его ещё не спрашивали: второй раз
+    /// iOS окно не покажет, а отказ человека надо уважать.
+    static func requestIfUndetermined() async {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        if settings.authorizationStatus == .notDetermined {
+            _ = await requestAuthorization()
+        }
+    }
 }

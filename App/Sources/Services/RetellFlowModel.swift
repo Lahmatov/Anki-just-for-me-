@@ -142,7 +142,7 @@ final class RetellFlowModel {
 
     func analyze() async {
         guard let reference else { return }
-        guard let apiKey = Keychain.get(Keychain.claudeAPIKey), !apiKey.isEmpty else {
+        guard let client = AIClient.current() else {
             // Разбор пересказа в Recap Plus не входит: подписка — только на слова
             // к сериям и разговор о них. Там и проверяется понимание серии.
             step = .failed(RecapAccount.shared.usesBackend
@@ -160,7 +160,7 @@ final class RetellFlowModel {
         let pricing = ClaudeModel.pricing(for: selectedModel)
         let inputEstimate = RetellPrompt.estimateTokens(reference.text)
             + RetellPrompt.estimateTokens(transcript)
-        guard UsageTracker.canAfford(
+        guard !client.provider.tracksCost || UsageTracker.canAfford(
             estimatedInputTokens: inputEstimate,
             estimatedOutputTokens: RetellPrompt.estimatedOutputTokens,
             pricing: pricing, summary: summary) else {
@@ -172,11 +172,11 @@ final class RetellFlowModel {
 
         step = .analyzing
         do {
-            let client = ClaudeClient(apiKey: apiKey, model: selectedModel)
             let outcome = try await client.analyze(
                 reference: reference,
                 retell: transcript,
                 episodeTitle: episodeTitle.isEmpty ? nil : episodeTitle,
+                modelID: selectedModel,
                 watchedUpTo: watchedSeconds)
 
             // Расход записываем в любом случае: запрос оплачен независимо

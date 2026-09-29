@@ -173,6 +173,28 @@ public enum BackendAPI {
         public var shows: [CatalogShow]
     }
 
+    // MARK: - Monchik Help
+
+    public struct HelpBody: Encodable, Equatable, Sendable {
+        public var question: String
+        public var language: String
+
+        public init(question: String, language: AppLanguage) {
+            self.question = question
+            self.language = language.rawValue
+        }
+    }
+
+    public struct HelpResponse: Decodable, Equatable, Sendable {
+        public var answer: String
+        public var onTopic: Bool
+        public var suggestEmail: Bool
+
+        public var asReply: HelpChat.Reply {
+            HelpChat.Reply(answer: answer, onTopic: onTopic, suggestEmail: suggestEmail)
+        }
+    }
+
     // MARK: - Аккаунт
 
     /// Вход через Apple: сервер сам проверит токен у Apple и обменяет код.

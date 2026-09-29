@@ -43,6 +43,11 @@ enum SettingsKey {
     /// отметки (`Celebration`): праздник — один раз, а не на каждом открытии.
     static let goalCelebratedDay = "goalCelebratedDay"
     static let celebratedStreak = "celebratedStreak"
+    /// Выбранный провайдер ИИ и модель у каждого (`AIKeys`).
+    static let aiProvider = "aiProvider"
+    static let aiModelPrefix = "aiModel."
+    /// Переписка с Monchik Help (`HelpService`), только на телефоне.
+    static let helpHistory = "helpHistory"
 }
 
 extension AppSettings {

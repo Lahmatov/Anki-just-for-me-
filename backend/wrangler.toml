@@ -27,3 +27,5 @@ PROMO_UNITS = "2000000"
 MAX_DEVICES_PER_SUBSCRIPTION = "3"
 # Идентификаторы товаров подписки в App Store Connect, через запятую.
 SUBSCRIPTION_PRODUCTS = "com.lahmatov.ajfm.plus.monthly,com.lahmatov.ajfm.plus.yearly"
+# Бесплатный помощник Monchik Help: не больше стольких вопросов в сутки на весь сервер.
+HELP_DAILY_CAP = "2000"

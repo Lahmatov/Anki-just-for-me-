@@ -38,7 +38,7 @@ struct DataEraseService {
 
     /// Ключи API и строка подключения к облаку.
     static func eraseSecrets() {
-        Keychain.remove(Keychain.claudeAPIKey)
+        AIKeys.eraseAll()
         Keychain.remove(Keychain.neonConnection)
         Keychain.remove(Keychain.recapDeviceToken)
     }
@@ -69,6 +69,7 @@ struct DataEraseService {
         ProfileStore.eraseLocal()
         Self.eraseSettings()
         ProfileStore.shared.reload()
+        HelpService.shared.reload()
         RecapAccount.shared.forgetLocalState()
         // Журнал на экране хранит названия наборов и слова из ошибок.
         EventLog.shared.clear()

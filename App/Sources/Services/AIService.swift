@@ -57,14 +57,14 @@ enum AIService {
         let input = RetellPrompt.estimateTokens(system)
             + messages.reduce(0) { $0 + RetellPrompt.estimateTokens($1.text) }
         let summary = budget.usage
-        guard UsageTracker.canAfford(
+        guard !budget.tracksCost || UsageTracker.canAfford(
             estimatedInputTokens: input,
             estimatedOutputTokens: EpisodeDiscussion.estimatedOutputTokens,
             pricing: model, summary: summary) else {
             throw ClaudeClientError.budgetExceeded(spent: summary.monthCost, limit: summary.limit)
         }
 
-        let completion = try await ClaudeClient(apiKey: apiKey, model: model.id)
+        let completion = try await AIClient(provider: AIKeys.active, apiKey: apiKey)
             .complete(ClaudeRequest(
                 model: model, system: system, conversation: messages,
                 maxTokens: EpisodeDiscussion.maxTokens, effort: .low,

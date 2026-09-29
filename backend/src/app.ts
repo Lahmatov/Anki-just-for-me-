@@ -10,7 +10,8 @@ import { verifySubscription } from "./appstore";
 import { episodeFacts } from "./tvmaze";
 import { catalogNotes, listShows, localizeNotes, showDecks } from "./catalog";
 import {
-  DECK_MAX_TOKENS, DECK_SCHEMA, DISCUSSION_MAX_TOKENS, DISCUSSION_SCHEMA, KNOWN_TERMS_LIMIT,
+  DECK_MAX_TOKENS, DECK_SCHEMA, DISCUSSION_MAX_TOKENS, DISCUSSION_SCHEMA, HELP_MAX_TOKENS,
+  HELP_QUESTION_LIMIT, HELP_SCHEMA, KNOWN_TERMS_LIMIT, helpSystem, helpUserMessage, parseHelpReply,
   LANGUAGES, LEVELS, MAX_LEARNER_TURNS, deckFile, deckSystem, deckUserMessage,
   discussionMessages, discussionSystem, estimateTokens, parseDeckNotes, parseDiscussionReply,
   type Turn,
@@ -45,6 +46,7 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
       case "POST /v1/subscription/verify": return await verify(request, env, deps);
       case "POST /v1/deck": return await deck(request, env, deps);
       case "POST /v1/discuss": return await discuss(request, env, deps);
+      case "POST /v1/help": return await help(request, env, deps);
       case "GET /v1/catalog": return await catalog(request, env, deps);
     }
     const show = /^\/v1\/catalog\/(\d{1,8})$/.exec(url.pathname);
@@ -434,6 +436,43 @@ function parseTurns(value: unknown): Turn[] {
     throw new ApiError(400, "conversation_over");
   }
   return turns;
+}
+
+// MARK: - Monchik Help
+
+/**
+ * Помощник по приложению — бесплатно, без подписки: вопрос «как отменить
+ * подписку» не должен требовать подписки. Поэтому лимиты строже всего
+ * остального: несколько вопросов в минуту и полтора десятка в день на
+ * устройство, плюс общий дневной потолок на весь сервер — чтобы тысяча
+ * фальшивых устройств не превратила помощника в дыру в бюджете.
+ */
+async function help(request: Request, env: Env, deps: Deps): Promise<Response> {
+  const { device } = await context(request, env, deps);
+  const now = deps.now();
+  const body = await readJson(request, 4_000);
+  const question = str(body, "question", HELP_QUESTION_LIMIT);
+  const language = oneOf(body, "language", LANGUAGES)!;
+
+  await hit(env.DB, "help-min:" + device.id, 3, 60, now);
+  await hit(env.DB, "help-day:" + device.id, 15, 86_400, now);
+  await hit(env.DB, "help-all", intVar(env.HELP_DAILY_CAP, 2_000), 86_400, now);
+
+  const result = await deps.claude.complete({
+    system: helpSystem(language),
+    messages: [{ role: "user", content: helpUserMessage(question) }],
+    maxTokens: HELP_MAX_TOKENS,
+    schema: HELP_SCHEMA as unknown as Record<string, unknown>,
+  });
+  await env.DB.prepare(
+    `INSERT INTO usage_log (entitlement_id, device_id, kind, input_tokens, output_tokens, units, created_at)
+     VALUES ('free', ?, 'help', ?, ?, ?, ?)`,
+  ).bind(device.id, result.inputTokens, result.outputTokens,
+    units(result.inputTokens, result.outputTokens), now).run();
+
+  const reply = parseHelpReply(result.text, language);
+  if (!reply) throw new ApiError(502, "model_error");
+  return json(reply);
 }
 
 // MARK: - Каталог

@@ -38,10 +38,12 @@ struct ClaudeBudget {
         return UsageTracker.summary(records: records, limit: monthlyLimit)
     }
 
-    var apiKey: String? {
-        guard let key = Keychain.get(Keychain.claudeAPIKey), !key.isEmpty else { return nil }
-        return key
-    }
+    /// Ключ выбранного провайдера ИИ (см. `AIKeys`).
+    var apiKey: String? { AIKeys.key(for: AIKeys.active) }
+
+    /// Месячный лимит в долларах считается только для Claude: цены других
+    /// провайдеров приложение не знает, их лимит ставится в их консоли.
+    var tracksCost: Bool { AIKeys.active.tracksCost }
 
     func canAfford(inputTokens: Int, outputTokens: Int) -> Bool {
         UsageTracker.canAfford(
