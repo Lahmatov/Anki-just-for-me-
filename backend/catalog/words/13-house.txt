@@ -1,0 +1,377 @@
+# show: House
+# year: 2004
+# accent: US
+
+## 1 · Pilot
+diagnostician | /ˌdaɪəɡnɑːˈstɪʃn/ | noun | диагност | especialista em diagnóstico | a doctor who finds the cause of illnesses | House is a brilliant [diagnostician]. | Хаус — блестящий диагност. | O House é um especialista em diagnóstico brilhante.
+cane | /keɪn/ | noun | трость | bengala | a stick that helps you walk | House walks with a [cane]. | Хаус ходит с тростью. | O House anda de bengala.
+everybody lies | /ˈevribɑːdi laɪz/ | idiom | все врут | toda a gente mente | House's belief that patients never tell the truth | His motto is: [everybody lies]. | Его девиз: «Все врут». | O lema dele é: toda a gente mente.
+symptom | /ˈsɪmptəm/ | noun | симптом | sintoma | a sign that you are ill | What are her [symptoms]? | Какие у неё симптомы? | Quais são os sintomas dela?
+misdiagnose | /ˌmɪsdaɪəɡˈnoʊs/ | verb | поставить неверный диагноз | diagnosticar mal | to identify an illness wrongly | Other doctors [misdiagnosed] her. | Другие врачи поставили ей неверный диагноз. | Os outros médicos diagnosticaram-na mal.
+tapeworm | /ˈteɪpwɜːrm/ | noun | ленточный червь | ténia | a long worm that lives in the intestines | It turned out to be a [tapeworm]. | Оказалось, что это ленточный червь. | Afinal era uma ténia.
+clinic duty | /ˈklɪnɪk ˈduːti/ | noun | дежурство в поликлинике | serviço na clínica | seeing ordinary patients at a clinic | House hates [clinic duty]. | Хаус ненавидит дежурства в поликлинике. | O House odeia o serviço na clínica.
+painkiller | /ˈpeɪnkɪlər/ | noun | обезболивающее | analgésico | medicine that stops pain | He's addicted to [painkillers]. | Он подсел на обезболивающие. | Está viciado em analgésicos.
+team | /tiːm/ | noun | команда | equipa | a group working together | His [team] has three young doctors. | В его команде три молодых врача. | A equipa dele tem três médicos jovens.
+dean | /diːn/ | noun | главврач, декан | diretora | the head of a hospital or school | Cuddy is the [dean] of medicine. | Кадди — главврач больницы. | A Cuddy é a diretora clínica.
+arrogant | /ˈærəɡənt/ | adjective | высокомерный | arrogante | thinking you are better than others | House is rude and [arrogant]. | Хаус груб и высокомерен. | O House é mal-educado e arrogante.
+MRI | /ˌem ɑːr ˈaɪ/ | noun | МРТ | ressonância magnética | a scan that shows inside the body | Let's do an [MRI]. | Давайте сделаем МРТ. | Vamos fazer uma ressonância magnética.
+break into | /breɪk ˈɪntuː/ | phrasal verb | влезть в (чужой дом) | entrar à força em | to enter a place illegally | The team [broke into] her house for clues. | Команда влезла к ней в дом за уликами. | A equipa entrou à força em casa dela à procura de pistas.
+treat | /triːt/ | verb | лечить | tratar | to give medical care | We have to [treat] her now. | Надо лечить её прямо сейчас. | Temos de a tratar já.
+rude | /ruːd/ | adjective | грубый | mal-educado | not polite | He's [rude] to every patient. | Он груб со всеми пациентами. | É mal-educado com todos os doentes.
+
+## 2 · Paternity
+paternity | /pəˈtɜːrnəti/ | noun | отцовство | paternidade | being someone's biological father | The case involves [paternity]. | Дело касается отцовства. | O caso envolve paternidade.
+biological father | /ˌbaɪəˈlɑːdʒɪkl ˈfɑːðər/ | noun | биологический отец | pai biológico | the man whose genes you have | He isn't his [biological father]. | Он не его биологический отец. | Ele não é o pai biológico dele.
+DNA test | /ˌdiː en ˈeɪ test/ | noun | тест ДНК | teste de ADN | a test comparing genes | House secretly ran a [DNA test]. | Хаус тайком сделал тест ДНК. | O House fez um teste de ADN às escondidas.
+double vision | /ˈdʌbl ˈvɪʒn/ | noun | двоение в глазах | visão dupla | seeing two images of one thing | The boy had [double vision]. | У мальчика двоилось в глазах. | O rapaz tinha visão dupla.
+lacrosse | /ləˈkrɔːs/ | noun | лакросс | lacrosse | a sport played with sticks and nets | He got hit during [lacrosse]. | Он получил удар во время игры в лакросс. | Levou uma pancada no lacrosse.
+concussion | /kənˈkʌʃn/ | noun | сотрясение мозга | concussão | a brain injury from a hit on the head | Everyone thought it was a [concussion]. | Все думали, что это сотрясение. | Toda a gente achou que era uma concussão.
+night terrors | /naɪt ˈterərz/ | noun | ночные кошмары (приступы страха) | terrores noturnos | waking up screaming in fear | The kid suffers from [night terrors]. | Мальчика мучают ночные приступы страха. | O miúdo sofre de terrores noturnos.
+virus | /ˈvaɪrəs/ | noun | вирус | vírus | a tiny thing that causes disease | The cause was an old [virus]. | Причиной оказался старый вирус. | A causa era um vírus antigo.
+adopted | /əˈdɑːptɪd/ | adjective | приёмный | adotado | legally raised by non-birth parents | The boy was [adopted]. | Мальчик был приёмным. | O rapaz era adotado.
+sample | /ˈsæmpl/ | noun | образец | amostra | a small amount taken for testing | He stole a [sample] from a cup. | Он стащил образец с чашки. | Roubou uma amostra de uma chávena.
+ethical | /ˈeθɪkl/ | adjective | этичный | ético | morally right | That wasn't very [ethical]. | Это было не очень этично. | Isso não foi muito ético.
+bet | /bet/ | noun | пари | aposta | an agreement to risk money | House made a [bet] with Wilson. | Хаус поспорил с Уилсоном. | O House fez uma aposta com o Wilson.
+spinal tap | /ˈspaɪnl tæp/ | noun | спинномозговая пункция | punção lombar | taking fluid from the spine | They did a [spinal tap]. | Они сделали пункцию. | Fizeram uma punção lombar.
+brain damage | /breɪn ˈdæmɪdʒ/ | noun | повреждение мозга | lesão cerebral | harm to the brain | It could cause [brain damage]. | Это может повредить мозг. | Pode causar lesão cerebral.
+parents | /ˈperənts/ | noun | родители | pais | mother and father | His [parents] were terrified. | Его родители были в ужасе. | Os pais dele estavam aterrorizados.
+
+## 3 · Occam's Razor
+Occam's razor | /ˌɑːkəmz ˈreɪzər/ | noun | бритва Оккама | navalha de Occam | the idea that the simplest explanation is best | Foreman believes in [Occam's razor]. | Форман верит в бритву Оккама. | O Foreman acredita na navalha de Occam.
+simple explanation | /ˈsɪmpl ˌekspləˈneɪʃn/ | noun | простое объяснение | explicação simples | the easiest answer | There's always a [simple explanation]. | Всегда есть простое объяснение. | Há sempre uma explicação simples.
+collapse | /kəˈlæps/ | verb | упасть без сознания | desmaiar | to suddenly fall down ill | He [collapsed] after sex. | Он потерял сознание после секса. | Desmaiou depois do sexo.
+cough | /kɔːf/ | noun | кашель | tosse | pushing air out of your lungs noisily | It started with a [cough]. | Всё началось с кашля. | Começou com uma tosse.
+pharmacist | /ˈfɑːrməsɪst/ | noun | фармацевт | farmacêutico | a person who prepares medicine | The [pharmacist] made a mistake. | Фармацевт ошибся. | O farmacêutico enganou-se.
+prescription | /prɪˈskrɪpʃn/ | noun | рецепт | receita | a doctor's written order for medicine | The [prescription] was wrong. | Рецепт был выписан неверно. | A receita estava errada.
+pill | /pɪl/ | noun | таблетка | comprimido | a small tablet of medicine | He took the wrong [pill]. | Он принял не ту таблетку. | Tomou o comprimido errado.
+overdose | /ˈoʊvərdoʊs/ | noun | передозировка | sobredosagem | too much of a drug | It was an accidental [overdose]. | Это была случайная передозировка. | Foi uma sobredosagem acidental.
+fever | /ˈfiːvər/ | noun | жар, температура | febre | a high body temperature | He had a high [fever]. | У него был сильный жар. | Tinha febre alta.
+coincidence | /koʊˈɪnsɪdəns/ | noun | совпадение | coincidência | when things happen by chance at the same time | House doesn't believe in [coincidence]. | Хаус не верит в совпадения. | O House não acredita em coincidências.
+colchicine | /ˈkɑːltʃəsiːn/ | noun | колхицин | colchicina | a medicine for gout | He took [colchicine] by mistake. | Он по ошибке принял колхицин. | Tomou colchicina por engano.
+cough syrup | /ˈkɔːf ˌsɪrəp/ | noun | сироп от кашля | xarope para a tosse | liquid medicine for coughs | He was given [cough syrup]. | Ему дали сироп от кашля. | Deram-lhe xarope para a tosse.
+girlfriend | /ˈɡɜːrlfrend/ | noun | девушка | namorada | a female partner | His [girlfriend] called 911. | Его девушка вызвала скорую. | A namorada dele ligou para o 112.
+white blood cells | /waɪt blʌd selz/ | noun | лейкоциты | glóbulos brancos | blood cells that fight infection | His [white blood cells] were low. | У него были низкие лейкоциты. | Tinha os glóbulos brancos baixos.
+solve | /sɑːlv/ | verb | разгадать | resolver | to find the answer | House loves to [solve] puzzles. | Хаус обожает разгадывать загадки. | O House adora resolver enigmas.
+
+## 4 · Maternity
+maternity ward | /məˈtɜːrnəti wɔːrd/ | noun | родильное отделение | maternidade | the part of a hospital for births | Babies in the [maternity ward] are sick. | Младенцы в роддоме заболели. | Os bebés da maternidade estão doentes.
+newborn | /ˈnuːbɔːrn/ | noun | новорождённый | recém-nascido | a baby just born | Several [newborns] have infections. | У нескольких новорождённых инфекция. | Vários recém-nascidos têm infeções.
+infection | /ɪnˈfekʃn/ | noun | инфекция | infeção | a disease caused by germs | An [infection] is spreading. | Инфекция распространяется. | Uma infeção está a espalhar-se.
+epidemic | /ˌepɪˈdemɪk/ | noun | эпидемия | epidemia | a disease that spreads fast | It could become an [epidemic]. | Это может перерасти в эпидемию. | Pode tornar-se uma epidemia.
+antibiotics | /ˌæntibaɪˈɑːtɪks/ | noun | антибиотики | antibióticos | medicine that kills bacteria | They tried different [antibiotics]. | Они пробовали разные антибиотики. | Experimentaram vários antibióticos.
+bacteria | /bækˈtɪriə/ | noun | бактерии | bactérias | tiny living things that can cause disease | Which [bacteria] is it? | Что это за бактерия? | Que bactéria é?
+quarantine | /ˈkwɔːrəntiːn/ | noun | карантин | quarentena | keeping sick people apart | The ward is under [quarantine]. | В отделении карантин. | A ala está em quarentena.
+experiment | /ɪkˈsperɪmənt/ | noun | эксперимент | experiência | a test to find out something | House ran a risky [experiment]. | Хаус провёл рискованный эксперимент. | O House fez uma experiência arriscada.
+hand washing | /ˈhænd ˌwɑːʃɪŋ/ | noun | мытьё рук | lavagem das mãos | cleaning your hands | Poor [hand washing] spreads germs. | Плохое мытьё рук разносит микробы. | Uma má lavagem das mãos espalha micróbios.
+tough call | /tʌf kɔːl/ | idiom | трудное решение | decisão difícil | a hard decision | It was a [tough call]. | Это было трудное решение. | Foi uma decisão difícil.
+mothers | /ˈmʌðərz/ | noun | матери | mães | women who have children | The [mothers] were desperate. | Матери были в отчаянии. | As mães estavam desesperadas.
+source | /sɔːrs/ | noun | источник | origem | where something comes from | We must find the [source]. | Надо найти источник. | Temos de encontrar a origem.
+risk | /rɪsk/ | noun | риск | risco | possible danger | Every choice carries a [risk]. | Любой выбор связан с риском. | Todas as escolhas têm risco.
+consent form | /kənˈsent fɔːrm/ | noun | форма согласия | formulário de consentimento | a paper giving permission for treatment | They signed a [consent form]. | Они подписали согласие. | Assinaram um formulário de consentimento.
+cure | /kjʊr/ | noun | лечение, средство от болезни | cura | something that makes an illness go away | They found a [cure] in time. | Они вовремя нашли лекарство. | Encontraram uma cura a tempo.
+
+## 5 · Damned If You Do
+nun | /nʌn/ | noun | монахиня | freira | a woman in a religious community | The patient is a [nun]. | Пациентка — монахиня. | A doente é uma freira.
+stigmata | /stɪɡˈmɑːtə/ | noun | стигматы | estigmas | wounds like Christ's on the hands | Her hands showed [stigmata]. | На её руках появились стигматы. | As mãos dela mostravam estigmas.
+allergy | /ˈælərdʒi/ | noun | аллергия | alergia | a bad reaction to something | She has a metal [allergy]. | У неё аллергия на металл. | Tem alergia a metal.
+rash | /ræʃ/ | noun | сыпь | erupção cutânea | red spots on the skin | She has a strange [rash]. | У неё странная сыпь. | Tem uma erupção cutânea estranha.
+wound | /wuːnd/ | noun | рана | ferida | an injury to the skin | The [wound] wouldn't heal. | Рана не заживала. | A ferida não sarava.
+belief | /bɪˈliːf/ | noun | вера, убеждение | crença | something you believe | House mocks religious [belief]. | Хаус насмехается над религией. | O House goza com as crenças religiosas.
+allergic reaction | /əˈlɜːrdʒɪk riˈækʃn/ | noun | аллергическая реакция | reação alérgica | the body reacting badly | She had an [allergic reaction]. | У неё была аллергическая реакция. | Teve uma reação alérgica.
+Christmas | /ˈkrɪsməs/ | noun | Рождество | Natal | the December holiday | It happened at [Christmas]. | Это случилось на Рождество. | Aconteceu no Natal.
+convent | /ˈkɑːnvent/ | noun | монастырь (женский) | convento | a building where nuns live | She lives in a [convent]. | Она живёт в монастыре. | Vive num convento.
+copper | /ˈkɑːpər/ | noun | медь | cobre | a reddish-brown metal | She was allergic to [copper]. | У неё была аллергия на медь. | Era alérgica ao cobre.
+IUD | /ˌaɪ juː ˈdiː/ | noun | внутриматочная спираль | DIU | a small birth control device | They found an old [IUD]. | У неё нашли старую спираль. | Encontraram um DIU antigo.
+secret past | /ˈsiːkrət pæst/ | noun | тайное прошлое | passado secreto | hidden history | The nun had a [secret past]. | У монахини было тайное прошлое. | A freira tinha um passado secreto.
+blasphemy | /ˈblæsfəmi/ | noun | богохульство | blasfémia | disrespect for God | Some called his comments [blasphemy]. | Некоторые называли его слова богохульством. | Alguns chamaram blasfémia aos comentários dele.
+damned if you do | /dæmd ɪf juː duː/ | idiom | куда ни кинь — всюду клин | preso por ter cão, preso por não ter | in trouble whatever you choose | It's [damned if you do], damned if you don't. | Куда ни кинь — всюду клин. | É preso por ter cão e preso por não ter.
+miracle | /ˈmɪrəkl/ | noun | чудо | milagre | an unexplained wonderful event | The nuns saw a [miracle]. | Монахини увидели чудо. | As freiras viram um milagre.
+
+## 6 · The Socratic Method
+Socratic method | /səˌkrætɪk ˈmeθəd/ | noun | метод Сократа | método socrático | teaching by asking questions | House teaches with the [Socratic method]. | Хаус учит методом Сократа. | O House ensina com o método socrático.
+schizophrenia | /ˌskɪtsəˈfriːniə/ | noun | шизофрения | esquizofrenia | a serious mental illness | The patient has [schizophrenia]. | У пациентки шизофрения. | A doente tem esquizofrenia.
+blood clot | /ˈblʌd klɑːt/ | noun | тромб | coágulo | a solid lump of blood | She had a [blood clot] in her leg. | У неё был тромб в ноге. | Tinha um coágulo na perna.
+guardian | /ˈɡɑːrdiən/ | noun | опекун | tutor | a person legally responsible for someone | Her son is her [guardian]. | Её сын — её опекун. | O filho é o tutor dela.
+social services | /ˌsoʊʃl ˈsɜːrvɪsɪz/ | noun | социальные службы | serviços sociais | government help for families | [Social services] got involved. | Вмешались социальные службы. | Os serviços sociais envolveram-se.
+vitamin | /ˈvaɪtəmɪn/ | noun | витамин | vitamina | a substance your body needs | She lacked a [vitamin]. | Ей не хватало витамина. | Faltava-lhe uma vitamina.
+deficiency | /dɪˈfɪʃnsi/ | noun | нехватка, дефицит | deficiência | a lack of something | It was a vitamin K [deficiency]. | Это был дефицит витамина К. | Era uma deficiência de vitamina K.
+liver | /ˈlɪvər/ | noun | печень | fígado | an organ that cleans the blood | Her [liver] was failing. | У неё отказывала печень. | O fígado dela estava a falhar.
+cancer | /ˈkænsər/ | noun | рак | cancro | a serious disease | They found [cancer] in her liver. | В печени нашли рак. | Encontraram cancro no fígado.
+teenager | /ˈtiːneɪdʒər/ | noun | подросток | adolescente | a young person 13-19 | Her son is a [teenager]. | Её сын — подросток. | O filho dela é adolescente.
+take care of | /teɪk ker ʌv/ | phrase | заботиться о | cuidar de | to look after | He [takes care of] his mother. | Он заботится о матери. | Ele cuida da mãe.
+transplant | /ˈtrænsplænt/ | noun | пересадка | transplante | moving an organ from one body to another | She needs a liver [transplant]. | Ей нужна пересадка печени. | Precisa de um transplante de fígado.
+eat | /iːt/ | verb | есть | comer | to take food in | She wasn't [eating] properly. | Она неправильно питалась. | Ela não estava a comer bem.
+lie | /laɪ/ | verb | лгать | mentir | to say something untrue | Her son [lied] to protect her. | Сын лгал, чтобы защитить её. | O filho mentiu para a proteger.
+mental illness | /ˈmentl ˈɪlnəs/ | noun | психическое заболевание | doença mental | an illness of the mind | [Mental illness] can hide other diseases. | Психическое заболевание может скрывать другие болезни. | A doença mental pode esconder outras doenças.
+
+## 7 · Fidelity
+fidelity | /fɪˈdeləti/ | noun | верность | fidelidade | being faithful to a partner | The episode is about [fidelity]. | Серия о верности. | O episódio é sobre fidelidade.
+sleeping sickness | /ˈsliːpɪŋ ˈsɪknəs/ | noun | сонная болезнь | doença do sono | a disease that makes you sleep all the time | She had African [sleeping sickness]. | У неё была африканская сонная болезнь. | Ela tinha a doença do sono africana.
+sleepy | /ˈsliːpi/ | adjective | сонный | sonolento | wanting to sleep | She's always [sleepy]. | Она всё время сонная. | Está sempre sonolenta.
+Africa | /ˈæfrɪkə/ | noun | Африка | África | a continent | Her husband never went to [Africa]. | Её муж никогда не был в Африке. | O marido dela nunca foi a África.
+affair | /əˈfer/ | noun | измена, роман | caso | a secret romantic relationship | She had an [affair]. | У неё был роман на стороне. | Ela teve um caso.
+husband | /ˈhʌzbənd/ | noun | муж | marido | the man you're married to | Her [husband] was heartbroken. | Её муж был убит горем. | O marido dela ficou desfeito.
+unfaithful | /ʌnˈfeɪθfl/ | adjective | неверный | infiel | having an affair | She was [unfaithful]. | Она изменила. | Foi infiel.
+trust | /trʌst/ | noun | доверие | confiança | belief that someone is honest | Their [trust] was broken. | Их доверие было подорвано. | A confiança deles foi quebrada.
+fly | /flaɪ/ | noun | муха | mosca | a small flying insect | A tsetse [fly] spreads the disease. | Болезнь переносит муха цеце. | A mosca tsé-tsé transmite a doença.
+confession | /kənˈfeʃn/ | noun | признание | confissão | admitting the truth | Her [confession] hurt him. | Её признание ранило его. | A confissão dela magoou-o.
+treatable | /ˈtriːtəbl/ | adjective | излечимый | tratável | able to be cured | Luckily it's [treatable]. | К счастью, это лечится. | Felizmente é tratável.
+marriage | /ˈmærɪdʒ/ | noun | брак | casamento | the relationship of husband and wife | Their [marriage] was over. | Их браку пришёл конец. | O casamento deles acabou.
+truth | /truːθ/ | noun | правда | verdade | what really happened | The [truth] came out. | Правда вышла наружу. | A verdade veio ao de cima.
+coma | /ˈkoʊmə/ | noun | кома | coma | a long, deep unconscious state | She fell into a [coma]. | Она впала в кому. | Entrou em coma.
+forgive | /fərˈɡɪv/ | verb | простить | perdoar | to stop being angry | Could he [forgive] her? | Сможет ли он её простить? | Conseguiria perdoá-la?
+
+## 8 · Poison
+poison | /ˈpɔɪzn/ | noun | яд | veneno | a substance that can kill | Two teenagers were exposed to [poison]. | Двое подростков отравились ядом. | Dois adolescentes foram expostos a veneno.
+pesticide | /ˈpestɪsaɪd/ | noun | пестицид | pesticida | a chemical that kills insects | It was a [pesticide]. | Это был пестицид. | Era um pesticida.
+exposure | /ɪkˈspoʊʒər/ | noun | воздействие | exposição | being in contact with something harmful | They look for the source of [exposure]. | Ищут источник отравления. | Procuram a origem da exposição.
+pants | /pænts/ | noun | брюки | calças | trousers | The poison was on his new [pants]. | Яд был на его новых брюках. | O veneno estava nas calças novas.
+wash | /wɑːʃ/ | verb | стирать | lavar | to clean with water | You should [wash] new clothes first. | Новую одежду нужно сначала постирать. | Deves lavar a roupa nova primeiro.
+bus | /bʌs/ | noun | автобус | autocarro | a large vehicle for passengers | He collapsed on the school [bus]. | Он потерял сознание в школьном автобусе. | Desmaiou no autocarro da escola.
+antidote | /ˈæntidoʊt/ | noun | противоядие | antídoto | medicine that stops poison | They need an [antidote]. | Им нужно противоядие. | Precisam de um antídoto.
+single mother | /ˈsɪŋɡl ˈmʌðər/ | noun | мать-одиночка | mãe solteira | a mother raising a child alone | His [single mother] worked two jobs. | Его мать-одиночка работала на двух работах. | A mãe solteira dele tinha dois empregos.
+farm | /fɑːrm/ | noun | ферма | quinta | land for crops and animals | Pesticides are used on a [farm]. | Пестициды используют на фермах. | Os pesticidas usam-se nas quintas.
+suspicious | /səˈspɪʃəs/ | adjective | подозрительный | desconfiado | thinking something is wrong | The police were [suspicious] of the mother. | Полиция подозревала мать. | A polícia desconfiava da mãe.
+race against time | /reɪs əˈɡenst taɪm/ | idiom | гонка со временем | corrida contra o tempo | a situation where you must act fast | It was a [race against time]. | Это была гонка со временем. | Foi uma corrida contra o tempo.
+second patient | /ˈsekənd ˈpeɪʃnt/ | noun | второй пациент | segundo doente | another person with the same illness | A [second patient] arrived. | Поступил второй пациент. | Chegou um segundo doente.
+store | /stɔːr/ | noun | магазин | loja | a shop | Both boys bought pants at the same [store]. | Оба мальчика купили брюки в одном магазине. | Os dois rapazes compraram calças na mesma loja.
+pattern | /ˈpætərn/ | noun | закономерность | padrão | a repeated way something happens | House looked for a [pattern]. | Хаус искал закономерность. | O House procurou um padrão.
+connection | /kəˈnekʃn/ | noun | связь | ligação | a link between things | They found the [connection]. | Они нашли связь. | Encontraram a ligação.
+
+## 9 · DNR
+DNR order | /ˌdiː en ˈɑːr ˈɔːrdər/ | noun | распоряжение «не реанимировать» | ordem de não reanimar | a legal note saying not to revive a patient | The patient signed a [DNR order]. | Пациент подписал отказ от реанимации. | O doente assinou uma ordem de não reanimar.
+musician | /mjuˈzɪʃn/ | noun | музыкант | músico | a person who plays music | The patient is a jazz [musician]. | Пациент — джазовый музыкант. | O doente é um músico de jazz.
+ALS | /ˌeɪ el ˈes/ | noun | БАС (боковой амиотрофический склероз) | ELA | a disease that destroys muscle control | Doctors said he had [ALS]. | Врачи сказали, что у него БАС. | Os médicos disseram que ele tinha ELA.
+paralyzed | /ˈpærəlaɪzd/ | adjective | парализованный | paralisado | unable to move | His legs were [paralyzed]. | Его ноги были парализованы. | Tinha as pernas paralisadas.
+lawsuit | /ˈlɔːsuːt/ | noun | иск | processo | a legal case | House was hit with a [lawsuit]. | На Хауса подали иск. | O House foi alvo de um processo.
+intubate | /ˈɪntuːbeɪt/ | verb | интубировать | intubar | to put a breathing tube in | House [intubated] him anyway. | Хаус всё равно его интубировал. | O House entubou-o mesmo assim.
+defy | /dɪˈfaɪ/ | verb | не подчиниться | desafiar | to refuse to obey | House [defied] the patient's wishes. | Хаус пошёл против воли пациента. | O House desafiou a vontade do doente.
+right to die | /raɪt tuː daɪ/ | noun | право на смерть | direito a morrer | a person's right to refuse treatment | It's about the [right to die]. | Речь о праве на смерть. | Trata-se do direito a morrer.
+recover | /rɪˈkʌvər/ | verb | выздороветь | recuperar | to get better | Against all odds he [recovered]. | Вопреки всему он выздоровел. | Contra todas as probabilidades, recuperou.
+trumpet | /ˈtrʌmpɪt/ | noun | труба | trompete | a brass instrument | He played the [trumpet]. | Он играл на трубе. | Tocava trompete.
+misdiagnosis | /ˌmɪsdaɪəɡˈnoʊsɪs/ | noun | ошибочный диагноз | diagnóstico errado | a wrong diagnosis | It was a [misdiagnosis]. | Это был ошибочный диагноз. | Foi um diagnóstico errado.
+suspend | /səˈspend/ | verb | отстранить | suspender | to stop someone working for a time | They might [suspend] House. | Хауса могут отстранить. | Podem suspender o House.
+arrogance | /ˈærəɡəns/ | noun | высокомерие | arrogância | too much pride | His [arrogance] saved the patient. | Его высокомерие спасло пациента. | A arrogância dele salvou o doente.
+tumor | /ˈtuːmər/ | noun | опухоль | tumor | an abnormal growth | They found a small [tumor]. | Они нашли небольшую опухоль. | Encontraram um pequeno tumor.
+second chance | /ˈsekənd tʃæns/ | noun | второй шанс | segunda oportunidade | another opportunity | He got a [second chance]. | Он получил второй шанс. | Teve uma segunda oportunidade.
+
+## 10 · Histories
+homeless | /ˈhoʊmləs/ | adjective | бездомный | sem-abrigo | having no home | The patient is [homeless]. | Пациентка бездомная. | A doente é sem-abrigo.
+medical history | /ˈmedɪkl ˈhɪstəri/ | noun | история болезни | historial clínico | a record of past illnesses | She has no [medical history]. | У неё нет истории болезни. | Ela não tem historial clínico.
+identity | /aɪˈdentəti/ | noun | личность | identidade | who someone is | Nobody knew her [identity]. | Никто не знал, кто она. | Ninguém sabia a identidade dela.
+hallucinate | /həˈluːsɪneɪt/ | verb | галлюцинировать | alucinar | to see things that aren't there | She started to [hallucinate]. | У неё начались галлюцинации. | Começou a alucinar.
+rats | /ræts/ | noun | крысы | ratos | large rodents | She was bitten by [rats]. | Её покусали крысы. | Foi mordida por ratos.
+plague | /pleɪɡ/ | noun | чума | peste | a deadly infectious disease | Could it be the [plague]? | Может, это чума? | Será a peste?
+background | /ˈbækɡraʊnd/ | noun | прошлое, происхождение | passado | a person's past life | Her [background] was a mystery. | Её прошлое было загадкой. | O passado dela era um mistério.
+compassion | /kəmˈpæʃn/ | noun | сострадание | compaixão | care for people who suffer | Foreman showed little [compassion]. | Форман не проявил особого сострадания. | O Foreman mostrou pouca compaixão.
+judge | /dʒʌdʒ/ | verb | судить | julgar | to form an opinion about someone | Don't [judge] her. | Не суди её. | Não a julgues.
+lost everything | /lɔːst ˈevriθɪŋ/ | phrase | потерять всё | perder tudo | to have nothing left | She [lost everything] after her daughter died. | Она потеряла всё после смерти дочери. | Perdeu tudo depois de a filha morrer.
+grief | /ɡriːf/ | noun | горе | luto | deep sadness | [Grief] destroyed her life. | Горе разрушило её жизнь. | O luto destruiu-lhe a vida.
+shelter | /ˈʃeltər/ | noun | приют | abrigo | a place for homeless people | She stayed at a [shelter]. | Она жила в приюте. | Ficou num abrigo.
+survive | /sərˈvaɪv/ | verb | выжить | sobreviver | to stay alive | She didn't [survive]. | Она не выжила. | Não sobreviveu.
+untold story | /ʌnˈtoʊld ˈstɔːri/ | noun | нерассказанная история | história por contar | a story no one knows | Everyone has an [untold story]. | У каждого есть нерассказанная история. | Toda a gente tem uma história por contar.
+bite | /baɪt/ | noun | укус | mordedura | a wound from teeth | The rat [bite] got infected. | Крысиный укус воспалился. | A mordedura de rato infetou.
+
+## 11 · Detox
+detox | /ˈdiːtɑːks/ | noun | детокс, отказ от зависимости | desintoxicação | stopping an addictive drug | Cuddy dared House to go through [detox]. | Кадди бросила Хаусу вызов пройти детокс. | A Cuddy desafiou o House a fazer desintoxicação.
+withdrawal | /wɪðˈdrɔːəl/ | noun | ломка | abstinência | illness when you stop a drug | His [withdrawal] was painful. | Ломка была мучительной. | A abstinência dele foi dolorosa.
+addict | /ˈædɪkt/ | noun | наркоман, зависимый | viciado | a person who can't stop using something | Is House an [addict]? | Хаус — зависимый? | O House é viciado?
+dare | /der/ | noun | вызов на спор | desafio | a challenge to do something | He took the [dare]. | Он принял вызов. | Aceitou o desafio.
+irritable | /ˈɪrɪtəbl/ | adjective | раздражительный | irritável | easily annoyed | He became very [irritable]. | Он стал очень раздражительным. | Ficou muito irritável.
+car accident | /kɑːr ˈæksɪdənt/ | noun | автокатастрофа | acidente de carro | a crash involving cars | The teen was hurt in a [car accident]. | Подросток пострадал в аварии. | O adolescente ficou ferido num acidente de carro.
+rat poison | /ræt ˈpɔɪzn/ | noun | крысиный яд | veneno para ratos | poison used to kill rats | The house had [rat poison]. | В доме был крысиный яд. | A casa tinha veneno para ratos.
+bleed | /bliːd/ | verb | кровоточить | sangrar | to lose blood | He kept [bleeding]. | У него не останавливалась кровь. | Continuava a sangrar.
+admit | /ədˈmɪt/ | verb | признать | admitir | to agree something is true | He won't [admit] he's addicted. | Он не признаёт зависимость. | Não admite que é viciado.
+sleepless | /ˈsliːpləs/ | adjective | бессонный | sem dormir | without sleep | He spent a [sleepless] week. | Он провёл неделю без сна. | Passou uma semana sem dormir.
+wager | /ˈweɪdʒər/ | noun | пари | aposta | a bet | Cuddy won the [wager]. | Кадди выиграла пари. | A Cuddy ganhou a aposta.
+clarity | /ˈklærəti/ | noun | ясность | clareza | clear thinking | Pain gave him [clarity]. | Боль дала ему ясность мыслей. | A dor deu-lhe clareza.
+bleeding disorder | /ˈbliːdɪŋ dɪsˈɔːrdər/ | noun | нарушение свёртываемости | distúrbio hemorrágico | a condition where blood doesn't clot | Tests showed a [bleeding disorder]. | Анализы показали нарушение свёртываемости. | As análises mostraram um distúrbio hemorrágico.
+tough it out | /tʌf ɪt aʊt/ | idiom | выдержать, стиснув зубы | aguentar firme | to endure something hard | He decided to [tough it out]. | Он решил выдержать. | Decidiu aguentar firme.
+relapse | /rɪˈlæps/ | noun | срыв, рецидив | recaída | going back to a bad habit | Everyone expected a [relapse]. | Все ждали срыва. | Toda a gente esperava uma recaída.
+
+## 12 · Sports Medicine
+baseball player | /ˈbeɪsbɔːl ˈpleɪər/ | noun | бейсболист | jogador de basebol | a person who plays baseball | The patient is a famous [baseball player]. | Пациент — известный бейсболист. | O doente é um jogador de basebol famoso.
+broken arm | /ˈbroʊkən ɑːrm/ | noun | сломанная рука | braço partido | an arm with a broken bone | He had a [broken arm] from pitching. | Он сломал руку во время подачи. | Partiu o braço a lançar.
+comeback | /ˈkʌmbæk/ | noun | возвращение | regresso | returning to success | He was making a [comeback]. | Он возвращался в спорт. | Estava a fazer um regresso.
+steroid use | /ˈsterɔɪd juːs/ | noun | приём стероидов | uso de esteroides | taking drugs to build muscle | Everyone suspected [steroid use]. | Все подозревали приём стероидов. | Toda a gente suspeitava de uso de esteroides.
+bone | /boʊn/ | noun | кость | osso | hard parts inside your body | His [bones] were weak. | У него были слабые кости. | Tinha os ossos fracos.
+marijuana | /ˌmærəˈwɑːnə/ | noun | марихуана | marijuana | a drug from a plant | He smoked [marijuana] for pain. | Он курил марихуану от боли. | Fumava marijuana para as dores.
+kidney | /ˈkɪdni/ | noun | почка | rim | an organ that cleans blood | His [kidneys] were failing. | У него отказывали почки. | Os rins dele estavam a falhar.
+pregnant | /ˈpreɡnənt/ | adjective | беременная | grávida | expecting a baby | His wife got [pregnant]. | Его жена забеременела. | A mulher dele engravidou.
+sponsor | /ˈspɑːnsər/ | noun | спонсор | patrocinador | a company paying for advertising | A drug company was his [sponsor]. | Фармацевтическая компания была его спонсором. | Uma farmacêutica era o patrocinador dele.
+commercial | /kəˈmɜːrʃl/ | noun | реклама (ролик) | anúncio | an advertisement on TV | Wilson filmed a [commercial]. | Уилсон снялся в рекламе. | O Wilson gravou um anúncio.
+cover story | /ˈkʌvər ˈstɔːri/ | noun | легенда, прикрытие | história de fachada | a false story hiding the truth | His career had a [cover story]. | У его карьеры была своя легенда. | A carreira dele tinha uma história de fachada.
+career | /kəˈrɪr/ | noun | карьера | carreira | a person's working life | His [career] was on the line. | Его карьера была под угрозой. | A carreira dele estava em risco.
+fame | /feɪm/ | noun | слава | fama | being famous | [Fame] comes with pressure. | Слава приносит давление. | A fama traz pressão.
+toxin | /ˈtɑːksɪn/ | noun | токсин | toxina | a poisonous substance | A [toxin] damaged his bones. | Токсин повредил его кости. | Uma toxina danificou-lhe os ossos.
+determined | /dɪˈtɜːrmɪnd/ | adjective | решительный | determinado | not giving up | He was [determined] to play again. | Он был полон решимости снова играть. | Estava determinado a voltar a jogar.
+
+## 13 · Cursed
+Ouija board | /ˈwiːdʒə bɔːrd/ | noun | спиритическая доска | tabuleiro Ouija | a board used to "talk to spirits" | The kid played with a [Ouija board]. | Мальчик играл со спиритической доской. | O miúdo brincou com um tabuleiro Ouija.
+cursed | /kɜːrst/ | adjective | проклятый | amaldiçoado | under a magic spell of bad luck | The boy thinks he's [cursed]. | Мальчик думает, что он проклят. | O rapaz acha que está amaldiçoado.
+superstition | /ˌsuːpərˈstɪʃn/ | noun | суеверие | superstição | belief in magic and luck | House doesn't believe in [superstition]. | Хаус не верит в суеверия. | O House não acredita em superstições.
+anthrax | /ˈænθræks/ | noun | сибирская язва | antraz | a dangerous bacterial disease | The illness was [anthrax]. | Это оказалась сибирская язва. | A doença era antraz.
+leather | /ˈleðər/ | noun | кожа (материал) | couro | animal skin used for clothes | The germs came from [leather]. | Микробы попали с кожаного изделия. | Os micróbios vieram do couro.
+spirit | /ˈspɪrɪt/ | noun | дух | espírito | a ghost | He believes a [spirit] cursed him. | Он верит, что его проклял дух. | Acredita que um espírito o amaldiçoou.
+scared | /skerd/ | adjective | напуганный | assustado | afraid | The boy was [scared] to death. | Мальчик был напуган до смерти. | O rapaz estava morto de medo.
+drum | /drʌm/ | noun | барабан | tambor | a musical instrument you hit | The germs were on a [drum] from Africa. | Микробы были на барабане из Африки. | Os micróbios estavam num tambor de África.
+Chase's father | /ˈtʃeɪsɪz ˈfɑːðər/ | noun | отец Чейза | o pai do Chase | the father of Dr. Chase | [Chase's father] visited the hospital. | Отец Чейза приехал в больницу. | O pai do Chase visitou o hospital.
+estranged | /ɪˈstreɪndʒd/ | adjective | отдалившийся, в ссоре | afastado | no longer close to a family member | Chase is [estranged] from his dad. | Чейз в ссоре с отцом. | O Chase está afastado do pai.
+spooky | /ˈspuːki/ | adjective | жуткий | assustador | strange and a little scary | The whole case felt [spooky]. | Всё дело казалось жутким. | O caso todo parecia assustador.
+rational | /ˈræʃənl/ | adjective | рациональный | racional | based on reason | There's a [rational] explanation. | Есть рациональное объяснение. | Há uma explicação racional.
+tragic | /ˈtrædʒɪk/ | adjective | трагический | trágico | very sad | His father's story is [tragic]. | История его отца трагична. | A história do pai dele é trágica.
+secret illness | /ˈsiːkrət ˈɪlnəs/ | noun | тайная болезнь | doença secreta | a disease someone hides | His dad hid a [secret illness]. | Его отец скрывал болезнь. | O pai dele escondia uma doença secreta.
+spell | /spel/ | noun | заклинание | feitiço | magic words | Is it a [spell] or a germ? | Это заклинание или микроб? | É um feitiço ou um micróbio?
+
+## 14 · Control
+CEO | /ˌsiː iː ˈoʊ/ | noun | генеральный директор | CEO, diretora-executiva | the head of a company | The patient is a young [CEO]. | Пациентка — молодой гендиректор. | A doente é uma CEO jovem.
+billionaire | /ˌbɪljəˈner/ | noun | миллиардер | bilionário | a person with a billion dollars | A [billionaire] bought the hospital board. | Миллиардер купил место в совете больницы. | Um bilionário comprou o conselho do hospital.
+chairman | /ˈtʃermən/ | noun | председатель | presidente | the leader of a board | Vogler became [chairman]. | Воглер стал председателем. | O Vogler tornou-se presidente.
+fire | /ˈfaɪər/ | verb | уволить | despedir | to end someone's job | Vogler wants to [fire] House. | Воглер хочет уволить Хауса. | O Vogler quer despedir o House.
+bulimia | /buˈliːmiə/ | noun | булимия | bulimia | an eating disorder with vomiting | She secretly had [bulimia]. | У неё была скрытая булимия. | Ela tinha bulimia às escondidas.
+heart transplant | /hɑːrt ˈtrænsplænt/ | noun | пересадка сердца | transplante de coração | replacing a heart with a donor's | She needs a [heart transplant]. | Ей нужна пересадка сердца. | Precisa de um transplante de coração.
+waiting list | /ˈweɪtɪŋ lɪst/ | noun | лист ожидания | lista de espera | a list of people waiting for something | She's on the transplant [waiting list]. | Она в листе ожидания на пересадку. | Está na lista de espera para transplante.
+power | /ˈpaʊər/ | noun | власть | poder | control over others | Vogler loves [power]. | Воглер обожает власть. | O Vogler adora o poder.
+budget | /ˈbʌdʒɪt/ | noun | бюджет | orçamento | planned money | He threatened to cut the [budget]. | Он пригрозил урезать бюджет. | Ameaçou cortar o orçamento.
+donation | /doʊˈneɪʃn/ | noun | пожертвование | doação | money given to help | His [donation] came with conditions. | Его пожертвование было с условиями. | A doação dele tinha condições.
+lie on a form | /laɪ ɑːn ə fɔːrm/ | phrase | солгать в анкете | mentir num formulário | to give false information on paper | House [lied on a form] to get her a heart. | Хаус соврал в документах, чтобы ей дали сердце. | O House mentiu num formulário para lhe arranjar um coração.
+ethics committee | /ˈeθɪks kəˈmɪti/ | noun | этический комитет | comissão de ética | a group checking moral decisions | The [ethics committee] got involved. | Подключился этический комитет. | A comissão de ética envolveu-se.
+eating disorder | /ˈiːtɪŋ dɪsˈɔːrdər/ | noun | расстройство пищевого поведения | distúrbio alimentar | an illness related to eating | [Eating disorders] are often hidden. | Расстройства пищевого поведения часто скрывают. | Os distúrbios alimentares são muitas vezes escondidos.
+in control | /ɪn kənˈtroʊl/ | phrase | под контролем | no controlo | having power over a situation | She needs to be [in control]. | Ей нужно всё контролировать. | Ela precisa de estar no controlo.
+threat | /θret/ | noun | угроза | ameaça | a warning of harm | Vogler is a [threat] to House. | Воглер — угроза для Хауса. | O Vogler é uma ameaça para o House.
+
+## 15 · Mob Rules
+mobster | /ˈmɑːbstər/ | noun | мафиози | mafioso | a member of a criminal gang | The patient is a [mobster]. | Пациент — мафиози. | O doente é um mafioso.
+witness protection | /ˈwɪtnəs prəˈtekʃn/ | noun | программа защиты свидетелей | proteção de testemunhas | a program hiding people who testify | He's in [witness protection]. | Он в программе защиты свидетелей. | Está no programa de proteção de testemunhas.
+testify | /ˈtestɪfaɪ/ | verb | давать показания | testemunhar | to tell the truth in court | He will [testify] against his boss. | Он даст показания против своего босса. | Vai testemunhar contra o chefe.
+FBI agent | /ˌef biː ˈaɪ ˈeɪdʒənt/ | noun | агент ФБР | agente do FBI | an officer of the US federal police | An [FBI agent] guards his room. | Его палату охраняет агент ФБР. | Um agente do FBI guarda o quarto dele.
+cocaine | /koʊˈkeɪn/ | noun | кокаин | cocaína | an illegal drug | Tests showed [cocaine]. | Анализы показали кокаин. | As análises mostraram cocaína.
+hepatitis | /ˌhepəˈtaɪtɪs/ | noun | гепатит | hepatite | a liver disease | Could it be [hepatitis]? | Может, это гепатит? | Pode ser hepatite?
+brother | /ˈbrʌðər/ | noun | брат | irmão | a son of the same parents | His [brother] was also involved. | Его брат тоже был замешан. | O irmão dele também estava envolvido.
+secret | /ˈsiːkrət/ | adjective | тайный | secreto | hidden | He's hiding a [secret] life. | Он ведёт тайную жизнь. | Esconde uma vida secreta.
+gay | /ɡeɪ/ | adjective | гей | gay | attracted to the same sex | The mobster was secretly [gay]. | Мафиози оказался тайным геем. | O mafioso era gay às escondidas.
+court order | /kɔːrt ˈɔːrdər/ | noun | судебное распоряжение | ordem judicial | an official order from a judge | They got a [court order] to treat him. | Они получили судебное распоряжение на лечение. | Obtiveram uma ordem judicial para o tratar.
+threaten | /ˈθretn/ | verb | угрожать | ameaçar | to say you'll hurt someone | The mob [threatened] the doctors. | Мафия угрожала врачам. | A máfia ameaçou os médicos.
+loyalty | /ˈlɔɪəlti/ | noun | верность | lealdade | faithful support | [Loyalty] means everything in the mob. | В мафии верность — это всё. | Na máfia, a lealdade é tudo.
+deal | /diːl/ | noun | сделка | acordo | an agreement | He made a [deal] with the FBI. | Он заключил сделку с ФБР. | Fez um acordo com o FBI.
+guard | /ɡɑːrd/ | noun | охранник | guarda | a person who protects | A [guard] stood outside the door. | Снаружи у двери стоял охранник. | Havia um guarda à porta.
+mob | /mɑːb/ | noun | мафия | máfia | organized crime | The [mob] wants him dead. | Мафия хочет его смерти. | A máfia quer vê-lo morto.
+
+## 16 · Heavy
+obese | /oʊˈbiːs/ | adjective | страдающий ожирением | obeso | very overweight | The patient is an [obese] 10-year-old. | Пациентка — десятилетняя девочка с ожирением. | A doente é uma criança obesa de 10 anos.
+heart attack | /hɑːrt əˈtæk/ | noun | сердечный приступ | ataque cardíaco | when the heart suddenly stops working properly | She had a [heart attack] at ten. | В десять лет у неё случился сердечный приступ. | Teve um ataque cardíaco aos dez anos.
+diet | /ˈdaɪət/ | noun | диета | dieta | a plan for eating less | Her mom put her on a [diet]. | Мама посадила её на диету. | A mãe pô-la de dieta.
+exercise | /ˈeksərsaɪz/ | noun | физические упражнения | exercício | physical activity | She gets no [exercise]. | Она совсем не занимается спортом. | Não faz exercício.
+blame | /bleɪm/ | verb | винить | culpar | to say someone is at fault | The doctors [blamed] the parents. | Врачи обвинили родителей. | Os médicos culparam os pais.
+self-esteem | /ˌself ɪˈstiːm/ | noun | самооценка | autoestima | how you feel about yourself | Her [self-esteem] was very low. | У неё была очень низкая самооценка. | Tinha a autoestima muito baixa.
+tease | /tiːz/ | verb | дразнить | gozar | to make fun of | Kids at school [teased] her. | Дети в школе её дразнили. | Os miúdos na escola gozavam com ela.
+hormone | /ˈhɔːrmoʊn/ | noun | гормон | hormona | a chemical controlling body functions | A [hormone] problem caused the weight. | Причиной веса была гормональная проблема. | Um problema de hormonas causou o peso.
+pituitary gland | /pɪˈtuːɪteri ɡlænd/ | noun | гипофиз | hipófise | a small gland in the brain controlling hormones | The problem was in her [pituitary gland]. | Проблема была в гипофизе. | O problema estava na hipófise.
+weight loss | /weɪt lɔːs/ | noun | похудение | perda de peso | becoming lighter | [Weight loss] alone wouldn't fix it. | Одно лишь похудение не помогло бы. | A perda de peso sozinha não resolvia.
+junk food | /ˈdʒʌŋk fuːd/ | noun | вредная еда | comida de plástico | unhealthy food like chips and candy | She eats a lot of [junk food]. | Она ест много вредной еды. | Come muita comida de plástico.
+prejudice | /ˈpredʒudɪs/ | noun | предубеждение | preconceito | an unfair opinion | Doctors can have [prejudice] too. | У врачей тоже бывают предубеждения. | Os médicos também podem ter preconceitos.
+cravings | /ˈkreɪvɪŋz/ | noun | сильная тяга | desejos | strong desires for food | She had constant [cravings]. | У неё постоянно была тяга к еде. | Tinha desejos constantes.
+healthy | /ˈhelθi/ | adjective | здоровый | saudável | in good health | Being thin doesn't mean [healthy]. | Худоба не значит здоровье. | Ser magro não quer dizer saudável.
+guilty | /ˈɡɪlti/ | adjective | виноватый | culpada | feeling responsible | Her mother felt [guilty]. | Её мать чувствовала себя виноватой. | A mãe dela sentiu-se culpada.
+
+## 17 · Role Model
+senator | /ˈsenətər/ | noun | сенатор | senador | a member of the US Senate | The patient is a [senator]. | Пациент — сенатор. | O doente é um senador.
+presidential candidate | /ˌprezɪˈdenʃl ˈkændɪdət/ | noun | кандидат в президенты | candidato presidencial | someone running for president | He's a [presidential candidate]. | Он кандидат в президенты. | É candidato presidencial.
+campaign | /kæmˈpeɪn/ | noun | предвыборная кампания | campanha | activities to win an election | His [campaign] depends on his health. | Его кампания зависит от его здоровья. | A campanha dele depende da saúde.
+HIV | /ˌeɪtʃ aɪ ˈviː/ | noun | ВИЧ | VIH | the virus that causes AIDS | Tests showed he had [HIV]. | Анализы показали, что у него ВИЧ. | As análises mostraram que tinha VIH.
+role model | /ˈroʊl ˌmɑːdl/ | noun | пример для подражания | exemplo | a person others look up to | He's a [role model] for Foreman. | Для Формана он пример для подражания. | É um exemplo para o Foreman.
+scandal | /ˈskændl/ | noun | скандал | escândalo | shocking news | It could become a [scandal]. | Это может превратиться в скандал. | Pode tornar-se um escândalo.
+privacy | /ˈpraɪvəsi/ | noun | конфиденциальность | privacidade | keeping personal information secret | Patient [privacy] is important. | Конфиденциальность пациента важна. | A privacidade do doente é importante.
+press conference | /ˈpres ˌkɑːnfərəns/ | noun | пресс-конференция | conferência de imprensa | a meeting where officials answer journalists | He held a [press conference]. | Он провёл пресс-конференцию. | Deu uma conferência de imprensa.
+virgin birth | /ˈvɜːrdʒɪn bɜːrθ/ | noun | непорочное зачатие | nascimento virginal | a baby born to a virgin | She claimed a [virgin birth]. | Она утверждала, что это непорочное зачатие. | Ela alegava um nascimento virginal.
+virgin | /ˈvɜːrdʒɪn/ | noun | девственница | virgem | a person who hasn't had sex | She claimed she was a [virgin]. | Она утверждала, что девственница. | Dizia que era virgem.
+admire | /ədˈmaɪər/ | verb | восхищаться | admirar | to respect and like | Foreman [admires] the senator. | Форман восхищается сенатором. | O Foreman admira o senador.
+politics | /ˈpɑːlətɪks/ | noun | политика | política | activities of government | House hates [politics]. | Хаус ненавидит политику. | O House odeia política.
+honest | /ˈɑːnɪst/ | adjective | честный | honesto | truthful | Is any politician [honest]? | Бывают ли честные политики? | Há algum político honesto?
+fungus | /ˈfʌŋɡəs/ | noun | грибок | fungo | a living thing like mold | The real problem was a [fungus]. | Настоящей проблемой оказался грибок. | O verdadeiro problema era um fungo.
+disappointed | /ˌdɪsəˈpɔɪntɪd/ | adjective | разочарованный | desiludido | let down | Foreman was [disappointed] in him. | Форман в нём разочаровался. | O Foreman ficou desiludido com ele.
+
+## 18 · Babies & Bathwater
+throw the baby out with the bathwater | /θroʊ ðə ˈbeɪbi aʊt wɪð ðə ˈbæθwɔːtər/ | idiom | выплеснуть ребёнка вместе с водой | deitar fora o bebé com a água do banho | to lose something good while removing something bad | Don't [throw the baby out with the bathwater]. | Не выплёскивай ребёнка вместе с водой. | Não deites fora o bebé com a água do banho.
+expecting | /ɪkˈspektɪŋ/ | adjective | в положении | à espera de bebé | pregnant | The patient is [expecting]. | Пациентка в положении. | A doente está à espera de bebé.
+lung cancer | /lʌŋ ˈkænsər/ | noun | рак лёгких | cancro do pulmão | cancer in the lungs | She has [lung cancer]. | У неё рак лёгких. | Tem cancro do pulmão.
+choose | /tʃuːz/ | verb | выбирать | escolher | to decide between options | She had to [choose] between herself and the baby. | Ей пришлось выбирать между собой и ребёнком. | Teve de escolher entre ela e o bebé.
+premature | /ˌpriːməˈtʃʊr/ | adjective | недоношенный | prematuro | born too early | The baby was born [premature]. | Ребёнок родился недоношенным. | O bebé nasceu prematuro.
+C-section | /ˈsiː ˌsekʃn/ | noun | кесарево сечение | cesariana | an operation to deliver a baby | They did an emergency [C-section]. | Сделали экстренное кесарево. | Fizeram uma cesariana de emergência.
+sacrifice | /ˈsækrɪfaɪs/ | noun | жертва | sacrifício | giving up something for others | A mother's [sacrifice] is huge. | Жертва матери огромна. | O sacrifício de uma mãe é enorme.
+board vote | /bɔːrd voʊt/ | noun | голосование совета | votação do conselho | a decision by a group of directors | A [board vote] will decide House's future. | Голосование совета решит будущее Хауса. | Uma votação do conselho vai decidir o futuro do House.
+vote | /voʊt/ | verb | голосовать | votar | to choose officially | The board [voted] against Vogler. | Совет проголосовал против Воглера. | O conselho votou contra o Vogler.
+odds | /ɑːdz/ | noun | шансы | probabilidades | the chance something will happen | The [odds] were against them. | Шансы были против них. | As probabilidades estavam contra eles.
+chemotherapy | /ˌkiːmoʊˈθerəpi/ | noun | химиотерапия | quimioterapia | strong medicine for cancer | [Chemotherapy] could hurt the baby. | Химиотерапия может навредить ребёнку. | A quimioterapia pode fazer mal ao bebé.
+father-to-be | /ˌfɑːðər tə ˈbiː/ | noun | будущий отец | futuro pai | a man whose baby will be born soon | The [father-to-be] had to decide. | Решать пришлось будущему отцу. | O futuro pai teve de decidir.
+ethical dilemma | /ˈeθɪkl dɪˈlemə/ | noun | этическая дилемма | dilema ético | a hard moral choice | It's a terrible [ethical dilemma]. | Это ужасная этическая дилемма. | É um dilema ético terrível.
+unborn | /ˌʌnˈbɔːrn/ | adjective | нерождённый | por nascer | not yet born | She fought for her [unborn] child. | Она боролась за своего нерождённого ребёнка. | Lutou pelo filho por nascer.
+ousted | /ˈaʊstɪd/ | adjective | смещённый | afastado | forced out of a position | Vogler was finally [ousted]. | Воглера в итоге сместили. | O Vogler acabou por ser afastado.
+
+## 19 · Kids
+swimming meet | /ˈswɪmɪŋ miːt/ | noun | соревнования по плаванию | prova de natação | a competition for swimmers | A girl collapsed at a [swimming meet]. | Девочка потеряла сознание на соревнованиях по плаванию. | Uma rapariga desmaiou numa prova de natação.
+meningitis | /ˌmenɪnˈdʒaɪtɪs/ | noun | менингит | meningite | a dangerous infection of the brain lining | There's a [meningitis] outbreak. | Вспышка менингита. | Há um surto de meningite.
+vaccinate | /ˈvæksɪneɪt/ | verb | вакцинировать | vacinar | to give protection against disease | They must [vaccinate] everyone. | Нужно привить всех. | Têm de vacinar toda a gente.
+crowded | /ˈkraʊdɪd/ | adjective | переполненный | cheio | full of people | The ER was [crowded]. | Приёмный покой был переполнен. | As urgências estavam cheias.
+spread | /spred/ | verb | распространяться | espalhar-se | to move to more people | The disease [spread] quickly. | Болезнь быстро распространилась. | A doença espalhou-se depressa.
+lab results | /læb rɪˈzʌlts/ | noun | результаты анализов | resultados das análises | test results from a lab | We're waiting for [lab results]. | Ждём результатов анализов. | Estamos à espera dos resultados das análises.
+fellowship | /ˈfeloʊʃɪp/ | noun | стажировка (в медицине) | bolsa de especialização | advanced training for doctors | Cameron considered a [fellowship]. | Кэмерон подумывала о стажировке. | A Cameron pensou numa bolsa de especialização.
+rash decision | /ræʃ dɪˈsɪʒn/ | noun | поспешное решение | decisão precipitada | a choice made too quickly | Don't make a [rash decision]. | Не принимай поспешных решений. | Não tomes uma decisão precipitada.
+brain | /breɪn/ | noun | мозг | cérebro | the organ you think with | The infection reached her [brain]. | Инфекция дошла до мозга. | A infeção chegou ao cérebro.
+panic | /ˈpænɪk/ | noun | паника | pânico | sudden strong fear | There was [panic] in the hospital. | В больнице поднялась паника. | Houve pânico no hospital.
+overworked | /ˌoʊvərˈwɜːrkt/ | adjective | перегруженный работой | sobrecarregado | working too much | The staff were [overworked]. | Персонал был перегружен. | O pessoal estava sobrecarregado.
+athlete | /ˈæθliːt/ | noun | спортсмен | atleta | a person good at sports | The girl is a young [athlete]. | Девочка — юная спортсменка. | A rapariga é uma jovem atleta.
+bleeding | /ˈbliːdɪŋ/ | adjective | кровоточащий | a sangrar | losing blood | Her gums were [bleeding]. | У неё кровоточили дёсны. | As gengivas dela sangravam.
+rare | /rer/ | adjective | редкий | raro | not common | It's a very [rare] disease. | Это очень редкая болезнь. | É uma doença muito rara.
+save a life | /seɪv ə laɪf/ | phrase | спасти жизнь | salvar uma vida | to stop someone from dying | Every day they [save a life]. | Каждый день они спасают жизни. | Todos os dias salvam uma vida.
+
+## 20 · Love Hurts
+love hurts | /lʌv hɜːrts/ | idiom | любовь причиняет боль | o amor dói | love can make you suffer | [Love hurts], literally in this case. | Любовь ранит — в этот раз буквально. | O amor dói, literalmente neste caso.
+stroke | /stroʊk/ | noun | инсульт | AVC | a sudden brain injury from blocked blood | The young man had a [stroke]. | У молодого человека случился инсульт. | O jovem teve um AVC.
+dominatrix | /ˌdɑːmɪˈneɪtrɪks/ | noun | госпожа (доминатрикс) | dominadora | a woman who dominates partners sexually | His girlfriend was a [dominatrix]. | Его девушка была госпожой в садо-мазо. | A namorada dele era uma dominadora.
+choke | /tʃoʊk/ | verb | душить | estrangular | to press someone's throat | She [choked] him during sex. | Она душила его во время секса. | Ela estrangulava-o durante o sexo.
+hidden | /ˈhɪdn/ | adjective | скрытый | escondido | not visible | The cause was [hidden]. | Причина была скрыта. | A causa estava escondida.
+date | /deɪt/ | noun | свидание | encontro | a romantic meeting | Cameron asked House on a [date]. | Кэмерон пригласила Хауса на свидание. | A Cameron convidou o House para um encontro.
+corsage | /kɔːrˈsɑːʒ/ | noun | цветок на запястье | corsage | a small flower worn on a dress | House brought her a [corsage]. | Хаус принёс ей цветок на запястье. | O House trouxe-lhe um corsage.
+blunt | /blʌnt/ | adjective | прямой, резкий | direto | saying things directly | House was [blunt] with her. | Хаус был с ней прямолинеен. | O House foi direto com ela.
+crush | /krʌʃ/ | noun | влюблённость | paixão | a romantic feeling | Cameron has a [crush] on House. | Кэмерон влюблена в Хауса. | A Cameron tem uma paixão pelo House.
+rejection | /rɪˈdʒekʃn/ | noun | отказ | rejeição | being refused | She feared [rejection]. | Она боялась отказа. | Tinha medo da rejeição.
+honest answer | /ˈɑːnɪst ˈænsər/ | noun | честный ответ | resposta honesta | a truthful reply | She wanted an [honest answer]. | Она хотела честного ответа. | Queria uma resposta honesta.
+aneurysm | /ˈænjərɪzəm/ | noun | аневризма | aneurisma | a weak, bulging blood vessel | An [aneurysm] could burst. | Аневризма может разорваться. | Um aneurisma pode rebentar.
+kinky | /ˈkɪŋki/ | adjective | с причудами (в сексе) | picante | unusual in sexual preferences | Their relationship was a bit [kinky]. | Их отношения были с причудами. | A relação deles era um bocado picante.
+damaged | /ˈdæmɪdʒd/ | adjective | надломленный | danificado | hurt emotionally | House says he's too [damaged]. | Хаус говорит, что он слишком надломлен. | O House diz que está demasiado danificado.
+walk away | /wɔːk əˈweɪ/ | phrasal verb | уйти | ir-se embora | to leave a situation | She decided to [walk away]. | Она решила уйти. | Decidiu ir-se embora.
+
+## 21 · Three Stories
+lecture | /ˈlektʃər/ | noun | лекция | aula | a talk to students | House gave a [lecture] to students. | Хаус прочитал лекцию студентам. | O House deu uma aula aos alunos.
+med students | /med ˈstuːdnts/ | noun | студенты-медики | estudantes de medicina | people studying to be doctors | The [med students] listened carefully. | Студенты-медики внимательно слушали. | Os estudantes de medicina ouviram com atenção.
+leg pain | /leɡ peɪn/ | noun | боль в ноге | dor na perna | pain in the leg | Three patients came in with [leg pain]. | Три пациента поступили с болью в ноге. | Três doentes chegaram com dores na perna.
+infarction | /ɪnˈfɑːrkʃn/ | noun | инфаркт (тканей) | enfarte | tissue death from lack of blood | It was a muscle [infarction]. | Это был инфаркт мышцы. | Foi um enfarte muscular.
+amputation | /ˌæmpjuˈteɪʃn/ | noun | ампутация | amputação | cutting off a limb | Doctors wanted an [amputation]. | Врачи хотели ампутировать. | Os médicos queriam uma amputação.
+refuse | /rɪˈfjuːz/ | verb | отказаться | recusar | to say no | The patient [refused] the operation. | Пациент отказался от операции. | O doente recusou a operação.
+chronic pain | /ˈkrɑːnɪk peɪn/ | noun | хроническая боль | dor crónica | pain that lasts a long time | He lives with [chronic pain]. | Он живёт с хронической болью. | Vive com dor crónica.
+ex-girlfriend | /ˌeks ˈɡɜːrlfrend/ | noun | бывшая девушка | ex-namorada | a woman you used to date | His [ex-girlfriend] made the decision. | Решение приняла его бывшая девушка. | Foi a ex-namorada que tomou a decisão.
+medical proxy | /ˈmedɪkl ˈprɑːksi/ | noun | доверенное лицо по медицинским вопросам | procurador de cuidados de saúde | someone allowed to decide for a patient | She was his [medical proxy]. | Она была его доверенным лицом. | Ela era a procuradora de cuidados de saúde dele.
+muscle | /ˈmʌsl/ | noun | мышца | músculo | tissue that moves your body | They removed dead [muscle]. | Удалили отмершую мышцу. | Removeram músculo morto.
+limp | /lɪmp/ | noun | хромота | coxear | walking unevenly because of pain | That's why he has a [limp]. | Вот почему он хромает. | É por isso que coxeia.
+backstory | /ˈbækstɔːri/ | noun | предыстория | história passada | a character's past history | We finally learn House's [backstory]. | Мы наконец узнаём предысторию Хауса. | Finalmente ficamos a saber a história passada do House.
+teach | /tiːtʃ/ | verb | обучать | ensinar | to help people learn | He hates to [teach]. | Он терпеть не может преподавать. | Ele odeia ensinar.
+trick question | /trɪk ˈkwestʃən/ | noun | вопрос с подвохом | pergunta com rasteira | a question meant to confuse you | That was a [trick question]. | Это был вопрос с подвохом. | Foi uma pergunta com rasteira.
+bitterness | /ˈbɪtərnəs/ | noun | горечь, озлобленность | amargura | anger about unfair treatment | His [bitterness] makes sense now. | Теперь его озлобленность понятна. | A amargura dele agora faz sentido.
+
+## 22 · Honeymoon
+honeymoon | /ˈhʌnimuːn/ | noun | медовый месяц | lua de mel | a trip after the wedding | Stacy and her husband had a [honeymoon]... long ago. | У Стейси с мужем был медовый месяц... давно. | A Stacy e o marido tiveram uma lua de mel... há muito tempo.
+ex | /eks/ | noun | бывшая | ex | a former partner | House's [ex] came back. | Бывшая Хауса вернулась. | A ex do House voltou.
+stomach pain | /ˈstʌmək peɪn/ | noun | боль в животе | dor de estômago | pain in the belly | Her husband has [stomach pain]. | У её мужа боли в животе. | O marido dela tem dores de estômago.
+complicated | /ˈkɑːmplɪkeɪtɪd/ | adjective | сложный | complicado | not simple | Their history is [complicated]. | Их история сложна. | A história deles é complicada.
+feelings | /ˈfiːlɪŋz/ | noun | чувства | sentimentos | emotions of love | Old [feelings] came back. | Вернулись старые чувства. | Os velhos sentimentos voltaram.
+porphyria | /pɔːrˈfɪriə/ | noun | порфирия | porfíria | a rare blood disorder | The answer was [porphyria]. | Ответом оказалась порфирия. | A resposta era porfíria.
+job offer | /dʒɑːb ˈɔːfər/ | noun | предложение о работе | proposta de trabalho | an offer of employment | Stacy got a [job offer] at the hospital. | Стейси предложили работу в больнице. | A Stacy recebeu uma proposta de trabalho no hospital.
+lawyer | /ˈlɔɪər/ | noun | юрист | advogada | a legal professional | Stacy is a [lawyer]. | Стейси — юрист. | A Stacy é advogada.
+save | /seɪv/ | verb | спасти | salvar | to rescue | House [saved] her husband. | Хаус спас её мужа. | O House salvou o marido dela.
+old flame | /oʊld fleɪm/ | noun | бывшая любовь | antiga paixão | a past lover | An [old flame] is back. | Вернулась бывшая любовь. | Uma antiga paixão está de volta.
+test | /test/ | noun | анализ, тест | exame | a medical check | The last [test] confirmed it. | Последний анализ всё подтвердил. | O último exame confirmou-o.
+unfinished business | /ʌnˈfɪnɪʃt ˈbɪznəs/ | idiom | незаконченные дела | assuntos pendentes | problems not yet resolved | They have [unfinished business]. | У них остались незавершённые дела. | Têm assuntos pendentes.
+hopeful | /ˈhoʊpfl/ | adjective | полный надежды | esperançado | expecting something good | House looked almost [hopeful]. | Хаус выглядел почти обнадёженным. | O House parecia quase esperançado.
+finale | /fɪˈnæli/ | noun | финал | final | the last episode | The [finale] set up season two. | Финал подготовил второй сезон. | O final preparou a segunda temporada.
+misery | /ˈmɪzəri/ | noun | страдание | infelicidade | great unhappiness | House is used to [misery]. | Хаус привык к страданиям. | O House está habituado à infelicidade.
