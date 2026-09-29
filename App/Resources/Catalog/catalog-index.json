@@ -1,1 +1,1 @@
-{"format":"recap-catalog","version":1,"shows":[{"resource":"catalog-show-01","name":"Friends","year":1994,"accent":"US","rank":1,"episodes":24,"words":360}]}
+{"format":"recap-catalog","version":1,"shows":[{"resource":"catalog-show-01","name":"Friends","year":1994,"accent":"US","rank":1,"episodes":24,"words":360},{"resource":"catalog-show-02","name":"The Office","year":2005,"accent":"US","rank":2,"episodes":6,"words":90},{"resource":"catalog-show-03","name":"How I Met Your Mother","year":2005,"accent":"US","rank":3,"episodes":22,"words":330}]}

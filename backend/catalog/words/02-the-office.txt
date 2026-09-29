@@ -1,0 +1,105 @@
+# show: The Office
+# year: 2005
+# accent: US
+
+## 1 · Pilot
+regional manager | /ˈriːdʒənl ˈmænɪdʒər/ | noun | региональный менеджер | gerente regional | the person in charge of a company's local office | Michael is the [regional manager] of the Scranton branch. | Майкл — региональный менеджер филиала в Скрэнтоне. | O Michael é o gerente regional da filial de Scranton.
+branch | /bræntʃ/ | noun | филиал, отделение | filial, sucursal | one local office of a larger company | Our [branch] might be closed. | Наш филиал могут закрыть. | A nossa filial pode fechar.
+downsizing | /ˈdaʊnsaɪzɪŋ/ | noun | сокращение штата | redução de pessoal | cutting the number of employees | Everyone is scared of [downsizing]. | Все боятся сокращений. | Toda a gente tem medo da redução de pessoal.
+paper company | /ˈpeɪpər ˈkʌmpəni/ | noun | бумажная компания | empresa de papel | a business that sells paper | Dunder Mifflin is a [paper company]. | «Дандер Миффлин» торгует бумагой. | A Dunder Mifflin é uma empresa de papel.
+salesman | /ˈseɪlzmən/ | noun | продавец, менеджер по продажам | vendedor | a man whose job is selling | Jim is a [salesman] who hates sales. | Джим — продажник, который ненавидит продажи. | O Jim é um vendedor que odeia vendas.
+receptionist | /rɪˈsepʃənɪst/ | noun | секретарь на ресепшене | rececionista | the person who answers phones at the front desk | Pam is the [receptionist]. | Пэм сидит на ресепшене. | A Pam é a rececionista.
+prank | /præŋk/ | noun | розыгрыш, прикол | partida | a trick played on someone for fun | Jim put his stapler in jelly as a [prank]. | Джим ради прикола засунул его степлер в желе. | O Jim pôs-lhe o agrafador em gelatina como partida.
+stapler | /ˈsteɪplər/ | noun | степлер | agrafador | a tool that joins papers with metal pins | Why is my [stapler] in Jell-O? | Почему мой степлер в желе? | Porque é que o meu agrafador está na gelatina?
+cubicle | /ˈkjuːbɪkl/ | noun | офисная кабинка | cubículo | a small work area with low walls | He sits in the [cubicle] next to mine. | Он сидит в соседней кабинке. | Ele senta-se no cubículo ao lado do meu.
+corporate | /ˈkɔːrpərət/ | noun | головной офис, руководство | sede, administração | the main head office of a company | [Corporate] is sending someone today. | Из головного офиса сегодня кого-то пришлют. | A sede vai mandar alguém hoje.
+fire | /ˈfaɪər/ | verb | увольнять | despedir | to end someone's job | He pretended to [fire] Pam as a joke. | Он в шутку сделал вид, что увольняет Пэм. | Fingiu despedir a Pam a brincar.
+fiancé | /ˌfiːɑːnˈseɪ/ | noun | жених | noivo | the man you are engaged to | Her [fiancé] works in the warehouse. | Её жених работает на складе. | O noivo dela trabalha no armazém.
+warehouse | /ˈwerhaʊs/ | noun | склад | armazém | a big building for storing goods | The boxes are down in the [warehouse]. | Коробки внизу, на складе. | As caixas estão lá em baixo no armazém.
+that's what she said | /ðæts wʌt ʃiː sed/ | idiom | «как сказала она» (пошлая шутка) | foi o que ela disse | a joke that makes a normal sentence sound sexual | "It's too hard!" "[That's what she said]!" | «Слишком твёрдо!» — «Так она и сказала!» | "É demasiado duro!" "Foi o que ela disse!"
+inappropriate | /ˌɪnəˈproʊpriət/ | adjective | неуместный | inapropriado | not suitable for the situation | His jokes are totally [inappropriate]. | Его шутки совершенно неуместны. | As piadas dele são completamente inapropriadas.
+
+## 2 · Diversity Day
+diversity | /daɪˈvɜːrsəti/ | noun | разнообразие, многообразие | diversidade | the presence of people from many backgrounds | The company holds a [diversity] training. | Компания проводит тренинг по многообразию. | A empresa faz uma formação sobre diversidade.
+training | /ˈtreɪnɪŋ/ | noun | обучение, тренинг | formação | a session to teach work skills | Attendance at the [training] is mandatory. | Посещение тренинга обязательно. | A presença na formação é obrigatória.
+offensive | /əˈfensɪv/ | adjective | оскорбительный | ofensivo | rude in a way that upsets people | That joke was really [offensive]. | Эта шутка была очень оскорбительной. | Aquela piada foi mesmo ofensiva.
+stereotype | /ˈsteriətaɪp/ | noun | стереотип | estereótipo | a fixed, unfair idea about a group of people | Don't use [stereotypes] about people. | Не пользуйся стереотипами о людях. | Não uses estereótipos sobre as pessoas.
+seminar | /ˈsemɪnɑːr/ | noun | семинар | seminário | a meeting for learning and discussion | Michael ruined the [seminar]. | Майкл сорвал семинар. | O Michael estragou o seminário.
+sensitive | /ˈsensətɪv/ | adjective | деликатный, чувствительный | delicado, sensível | needing to be handled carefully | Race is a [sensitive] topic. | Раса — деликатная тема. | A raça é um tema delicado.
+sign | /saɪn/ | verb | подписать | assinar | to write your name on a document | Everyone has to [sign] the pledge. | Все должны подписать обязательство. | Toda a gente tem de assinar o compromisso.
+consultant | /kənˈsʌltənt/ | noun | консультант | consultor | an expert hired to give advice | A [consultant] came to run the class. | Для занятия пришёл консультант. | Veio um consultor dar a aula.
+sale | /seɪl/ | noun | сделка, продажа | venda | an act of selling something | Jim is about to close a big [sale]. | Джим вот-вот закроет крупную сделку. | O Jim está quase a fechar uma grande venda.
+close a deal | /kloʊz ə diːl/ | phrase | заключить сделку | fechar um negócio | to finish an agreement to sell | I need this call to [close a deal]. | Мне нужен этот звонок, чтобы закрыть сделку. | Preciso desta chamada para fechar o negócio.
+index card | /ˈɪndeks kɑːrd/ | noun | карточка | cartão | a small card for writing notes | Put this [index card] on your forehead. | Приклей эту карточку на лоб. | Põe este cartão na testa.
+hurtful | /ˈhɜːrtfl/ | adjective | обидный | que magoa | making someone feel upset | That's a very [hurtful] thing to say. | Это очень обидно слышать. | Isso é uma coisa que magoa muito.
+apologize | /əˈpɑːlədʒaɪz/ | verb | извиняться | pedir desculpa | to say you are sorry | You need to [apologize] to her. | Тебе надо перед ней извиниться. | Tens de lhe pedir desculpa.
+tolerance | /ˈtɑːlərəns/ | noun | терпимость | tolerância | accepting people who are different | This day is about [tolerance]. | Этот день — о терпимости. | Este dia é sobre tolerância.
+steal | /stiːl/ | verb | украсть, увести | roubar | to take something that is not yours | Dwight [stole] Jim's client. | Дуайт увёл клиента у Джима. | O Dwight roubou o cliente do Jim.
+
+## 3 · Health Care
+health care | /helθ ker/ | noun | медицинская страховка, здравоохранение | seguro de saúde | medical services and insurance | They have to choose a [health care] plan. | Им надо выбрать медицинскую страховку. | Têm de escolher um plano de saúde.
+benefits | /ˈbenɪfɪts/ | noun | льготы, соцпакет | regalias | extra things a job gives you, like insurance | The company is cutting [benefits]. | Компания урезает соцпакет. | A empresa está a cortar regalias.
+delegate | /ˈdelɪɡeɪt/ | verb | поручить, делегировать | delegar | to give a task to someone else | Michael [delegated] the task to Dwight. | Майкл поручил задачу Дуайту. | O Michael delegou a tarefa no Dwight.
+coverage | /ˈkʌvərɪdʒ/ | noun | покрытие (страховки) | cobertura | what an insurance plan pays for | The new plan has worse [coverage]. | У нового плана хуже покрытие. | O novo plano tem pior cobertura.
+disease | /dɪˈziːz/ | noun | болезнь | doença | an illness | People invented fake [diseases]. | Люди придумывали несуществующие болезни. | As pessoas inventaram doenças falsas.
+make up | /meɪk ʌp/ | phrasal verb | выдумать | inventar | to invent a story or excuse | Jim [made up] a disease called "spontaneous dento-hydroplosion". | Джим выдумал болезнь «спонтанный дентогидроплозион». | O Jim inventou uma doença chamada "dento-hidroplosão espontânea".
+announcement | /əˈnaʊnsmənt/ | noun | объявление | anúncio | an official statement | Michael promised a surprise [announcement]. | Майкл пообещал сделать неожиданное объявление. | O Michael prometeu um anúncio surpresa.
+confidential | /ˌkɑːnfɪˈdenʃl/ | adjective | конфиденциальный | confidencial | meant to be kept secret | Medical information is [confidential]. | Медицинские данные конфиденциальны. | A informação médica é confidencial.
+unpopular | /ʌnˈpɑːpjələr/ | adjective | непопулярный | impopular | not liked by many people | Nobody wants to make an [unpopular] decision. | Никто не хочет принимать непопулярных решений. | Ninguém quer tomar uma decisão impopular.
+avoid | /əˈvɔɪd/ | verb | избегать | evitar | to stay away from something | Michael hid in his office to [avoid] everyone. | Майкл спрятался в кабинете, чтобы ни с кем не встречаться. | O Michael escondeu-se no escritório para evitar toda a gente.
+cut costs | /kʌt kɔːsts/ | phrase | сокращать расходы | cortar custos | to spend less money | Corporate wants to [cut costs]. | Руководство хочет сократить расходы. | A administração quer cortar custos.
+nerd | /nɜːrd/ | noun | ботаник, зануда | totó, cromo | a person who is too serious about boring things | Dwight is kind of a [nerd]. | Дуайт тот ещё ботаник. | O Dwight é um bocado cromo.
+power trip | /ˈpaʊər trɪp/ | noun | упоение властью | deslumbramento com o poder | enjoying control over others too much | Dwight is on a total [power trip]. | Дуайт совсем упивается властью. | O Dwight está completamente deslumbrado com o poder.
+generous | /ˈdʒenərəs/ | adjective | щедрый | generoso | happy to give more than expected | Michael wanted to look [generous]. | Майкл хотел казаться щедрым. | O Michael queria parecer generoso.
+ice cream sandwich | /aɪs kriːm ˈsænwɪtʃ/ | noun | мороженое-сэндвич | sanduíche de gelado | ice cream between two soft cookies | He gave everyone an [ice cream sandwich]. | Он раздал всем по мороженому-сэндвичу. | Deu a toda a gente uma sanduíche de gelado.
+
+## 4 · The Alliance
+alliance | /əˈlaɪəns/ | noun | союз, альянс | aliança | an agreement to work together | Dwight wants to form an [alliance]. | Дуайт хочет заключить союз. | O Dwight quer fazer uma aliança.
+rumor | /ˈruːmər/ | noun | слух | boato | a story that may not be true | There's a [rumor] about layoffs. | Ходит слух о сокращениях. | Há um boato sobre despedimentos.
+layoffs | /ˈleɪɔːfs/ | noun | сокращения, увольнения | despedimentos | when a company ends many jobs | Nobody knows who's getting [layoffs]. | Никто не знает, кого сократят. | Ninguém sabe quem vai ter despedimentos.
+paranoid | /ˈpærənɔɪd/ | adjective | параноидальный | paranoico | too worried that people are against you | Dwight is so [paranoid]. | Дуайт такой параноик. | O Dwight é tão paranoico.
+spy | /spaɪ/ | noun | шпион | espião | someone who secretly collects information | Jim pretends to be his [spy]. | Джим притворяется его шпионом. | O Jim finge ser o espião dele.
+birthday card | /ˈbɜːrθdeɪ kɑːrd/ | noun | открытка на день рождения | cartão de aniversário | a card with a message for someone's birthday | Everyone signs the [birthday card]. | Все подписывают открытку на день рождения. | Toda a gente assina o cartão de aniversário.
+morale | /məˈræl/ | noun | боевой дух | moral | how confident and happy a group feels | Office [morale] is very low. | Моральный дух в офисе на нуле. | A moral no escritório está muito em baixo.
+trust | /trʌst/ | verb | доверять | confiar | to believe someone is honest | Can I [trust] you? | Тебе можно доверять? | Posso confiar em ti?
+secret | /ˈsiːkrət/ | adjective | секретный, тайный | secreto | kept hidden from others | They have a [secret] meeting in the box. | У них тайная встреча в коробке. | Têm uma reunião secreta na caixa.
+box | /bɑːks/ | noun | коробка | caixa | a container with flat sides | Dwight is hiding in a [box]. | Дуайт прячется в коробке. | O Dwight está escondido numa caixa.
+party planning | /ˈpɑːrti ˈplænɪŋ/ | noun | организация праздника | organização de festas | organizing a party | Angela runs the [party planning] committee. | Анджела руководит комитетом по праздникам. | A Angela dirige a comissão de festas.
+committee | /kəˈmɪti/ | noun | комитет | comissão | a small group that makes decisions | Pam is on the party [committee]. | Пэм в праздничном комитете. | A Pam está na comissão da festa.
+funny | /ˈfʌni/ | adjective | смешной | engraçado | making you laugh | Michael tries too hard to be [funny]. | Майкл слишком старается быть смешным. | O Michael esforça-se demasiado por ter piada.
+trap | /træp/ | noun | ловушка | armadilha | a trick to catch someone | This is obviously a [trap]. | Это явно ловушка. | Isto é obviamente uma armadilha.
+betray | /bɪˈtreɪ/ | verb | предать | trair | to hurt someone who trusted you | I'd never [betray] you. | Я бы никогда тебя не предал. | Eu nunca te trairia.
+
+## 5 · Basketball
+basketball | /ˈbæskɪtbɔːl/ | noun | баскетбол | basquetebol | a game where you throw a ball through a hoop | Michael challenges the warehouse to [basketball]. | Майкл вызывает склад на баскетбол. | O Michael desafia o armazém para basquetebol.
+challenge | /ˈtʃælɪndʒ/ | verb | бросить вызов | desafiar | to invite someone to compete | They [challenged] the warehouse guys. | Они бросили вызов парням со склада. | Desafiaram os rapazes do armazém.
+team | /tiːm/ | noun | команда | equipa | a group playing together | Who's on your [team]? | Кто в твоей команде? | Quem está na tua equipa?
+pick | /pɪk/ | verb | выбирать | escolher | to choose | Michael didn't [pick] Stanley. | Майкл не выбрал Стэнли. | O Michael não escolheu o Stanley.
+foul | /faʊl/ | noun | фол | falta | an action against the rules in sports | That was a [foul]! | Это был фол! | Isso foi falta!
+trash talk | /ˈtræʃ tɔːk/ | noun | трёп, подначки соперникам | provocações | insulting opponents to make them nervous | There was a lot of [trash talk] before the game. | Перед игрой было много подначек. | Houve muitas provocações antes do jogo.
+warm up | /wɔːrm ʌp/ | phrasal verb | разминаться | aquecer | to do light exercise before sport | Let's [warm up] first. | Сначала разомнёмся. | Vamos aquecer primeiro.
+score | /skɔːr/ | verb | забить (очко) | marcar | to get a point in a game | Jim [scored] the first basket. | Джим забил первый мяч. | O Jim marcou o primeiro cesto.
+stakes | /steɪks/ | noun | ставки, что на кону | o que está em jogo | what you can win or lose | The [stakes] are high: Saturday work. | На кону многое — работа в субботу. | Há muito em jogo: trabalhar ao sábado.
+cheat | /tʃiːt/ | verb | жульничать | fazer batota | to break rules to win | The office team tried to [cheat]. | Офисная команда пыталась смухлевать. | A equipa do escritório tentou fazer batota.
+injury | /ˈɪndʒəri/ | noun | травма | lesão | physical harm to the body | He faked an [injury] to stop the game. | Он симулировал травму, чтобы остановить игру. | Fingiu uma lesão para parar o jogo.
+sore loser | /sɔːr ˈluːzər/ | noun | тот, кто не умеет проигрывать | mau perdedor | someone who gets angry after losing | Michael is a [sore loser]. | Майкл не умеет проигрывать. | O Michael é um mau perdedor.
+underestimate | /ˌʌndərˈestɪmeɪt/ | verb | недооценивать | subestimar | to think someone is weaker than they are | Don't [underestimate] Stanley. | Не недооценивай Стэнли. | Não subestimes o Stanley.
+athletic | /æθˈletɪk/ | adjective | спортивный | atlético | strong and good at sports | Roy is very [athletic]. | Рой очень спортивный. | O Roy é muito atlético.
+forfeit | /ˈfɔːrfɪt/ | verb | сдаться, засчитать поражение | desistir, perder por falta de comparência | to lose a game by stopping playing | They basically [forfeited] the game. | По сути, они сдали игру. | Basicamente perderam o jogo por desistência.
+
+## 6 · Hot Girl
+purse | /pɜːrs/ | noun | сумочка | mala (de senhora) | a small bag women carry | She's selling designer [purses]. | Она продаёт дизайнерские сумочки. | Ela vende malas de marca.
+saleswoman | /ˈseɪlzwʊmən/ | noun | продавщица | vendedora | a woman whose job is selling | A pretty [saleswoman] came into the office. | В офис пришла симпатичная продавщица. | Entrou no escritório uma vendedora bonita.
+attractive | /əˈtræktɪv/ | adjective | привлекательный | atraente | pleasant to look at | Every guy found her [attractive]. | Всем парням она понравилась. | Todos os rapazes a acharam atraente.
+ask out | /æsk aʊt/ | phrasal verb | пригласить на свидание | convidar para sair | to invite someone on a date | Michael tried to [ask her out]. | Майкл пытался пригласить её на свидание. | O Michael tentou convidá-la para sair.
+flirt with | /flɜːrt wɪð/ | phrasal verb | флиртовать с | namoriscar com | to act as if attracted to someone | Everyone was trying to [flirt with] her. | Все пытались с ней флиртовать. | Todos tentavam namoriscar com ela.
+conference room | /ˈkɑːnfərəns ruːm/ | noun | переговорная | sala de reuniões | a room for meetings | She set up in the [conference room]. | Она расположилась в переговорной. | Instalou-se na sala de reuniões.
+commission | /kəˈmɪʃn/ | noun | комиссионные, процент | comissão | money earned from each sale | Salespeople work on [commission]. | Продажники работают за процент. | Os vendedores trabalham à comissão.
+discount | /ˈdɪskaʊnt/ | noun | скидка | desconto | a lower price than usual | Can I get a [discount]? | Можно мне скидку? | Posso ter desconto?
+awkward | /ˈɔːkwərd/ | adjective | неуклюжий, неловкий | desajeitado | not smooth or relaxed | His attempt was so [awkward]. | Его попытка была такой неловкой. | A tentativa dele foi tão desajeitada.
+give someone a ride | /ɡɪv ˈsʌmwʌn ə raɪd/ | phrase | подвезти | dar boleia | to drive someone somewhere | Can you [give me a ride] home? | Подбросишь меня домой? | Dás-me boleia para casa?
+brand | /brænd/ | noun | бренд, марка | marca | a company's name on a product | That's a fake [brand]. | Это поддельный бренд. | Essa é uma marca falsa.
+competition | /ˌkɑːmpəˈtɪʃn/ | noun | соперничество, конкуренция | concorrência | trying to be better than others | There was a lot of [competition] for her attention. | За её внимание была настоящая конкуренция. | Houve muita concorrência pela atenção dela.
+jealous | /ˈdʒeləs/ | adjective | ревнующий | com ciúmes | upset that someone likes someone else | Pam isn't [jealous], is she? | Пэм ведь не ревнует? | A Pam não está com ciúmes, pois não?
+shot | /ʃɑːt/ | noun | попытка, шанс | tentativa | an attempt to do something | Jim decided to take his [shot]. | Джим решил попытать счастья. | O Jim decidiu fazer a sua tentativa.
+set up shop | /set ʌp ʃɑːp/ | idiom | обосноваться, развернуть торговлю | montar a banca | to start working in a place | She [set up shop] right by the kitchen. | Она развернула торговлю прямо у кухни. | Ela montou a banca mesmo ao lado da cozinha.
