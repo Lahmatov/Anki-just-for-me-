@@ -58,6 +58,7 @@ struct AppTabBar: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(item.title)
+        .accessibilityIdentifier("tab.\(item)")
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 }

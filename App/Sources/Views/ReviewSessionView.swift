@@ -47,6 +47,7 @@ struct ReviewSessionView: View {
         VStack(spacing: 0) {
             VStack(spacing: 6) {
                 ChunkyProgressBar(value: model.progress)
+                    .accessibilityIdentifier("session.progress")
                 sessionCaption(model)
             }
             .padding(.horizontal)

@@ -18,6 +18,11 @@ CORE_TESTS = sorted(glob.glob(os.path.join(ROOT, 'Core/Tests/**/*.swift'), recur
 APP = sorted(glob.glob(os.path.join(ROOT, 'App/**/*.swift'), recursive=True))
 ALL = CORE + CORE_TESTS + APP
 
+
+def is_test(path):
+    """Тесты — и модульные (Tests/), и UI (UITests/): их сообщения не интерфейс."""
+    return '/Tests/' in path or '/UITests/' in path
+
 problems = []
 
 
@@ -218,7 +223,7 @@ def check_untranslated():
     кириллицей. Журнал событий не переводится — это диагностика.
     """
     for path in CORE + APP:
-        if '/Tests/' in path or path.endswith(UNTRANSLATED_OK):
+        if is_test(path) or path.endswith(UNTRANSLATED_OK):
             continue
         src = read(path)
         literals, code = scan_literals(src)
@@ -247,7 +252,7 @@ def check_untranslated():
 def report():
     tests = sum(
         len(re.findall(r'func test\w+', read(p)))
-        for p in ALL if '/Tests/' in p)
+        for p in ALL if is_test(p))
     print(f"Файлов: {len(ALL)}, тестов: {tests}")
     if problems:
         print(f"\nНайдено проблем: {len(problems)}")

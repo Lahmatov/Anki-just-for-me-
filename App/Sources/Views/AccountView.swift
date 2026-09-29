@@ -381,6 +381,7 @@ struct AccountView: View {
                 } label: {
                     Label(kind.title, systemImage: symbol(for: kind))
                 }
+                .accessibilityIdentifier("docs.\(kind.rawValue)")
             }
             NavigationLink {
                 SellerInfoView()

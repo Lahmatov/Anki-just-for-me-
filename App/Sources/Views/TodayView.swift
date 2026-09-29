@@ -141,6 +141,7 @@ struct TodayView: View {
             }
             .buttonStyle(.chunky)
             .controlSize(.large)
+            .accessibilityIdentifier("today.study")
 
             if summary.heldBack > 0 {
                 Label(
@@ -298,6 +299,7 @@ struct TodayView: View {
             }
             .buttonStyle(.chunkySecondary)
             .controlSize(.large)
+            .accessibilityIdentifier("today.starter")
 
             if starterFailed {
                 Label(tr("Стартовый набор не установился — загляни в журнал событий.",

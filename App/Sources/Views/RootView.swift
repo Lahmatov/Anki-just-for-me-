@@ -21,7 +21,7 @@ struct RootView: View {
     @State private var pendingRestore: PendingRestore?
     @State private var restoreResult: RestoreService.Result?
     /// Заставка видна с первого кадра: иначе содержимое мелькнуло бы до неё.
-    @State private var showIntro = true
+    @State private var showIntro = !UITesting.isActive
     /// Вкладка хранится снаружи пересоздаваемого дерева: смена шрифта
     /// перестраивает экраны, но не выкидывает из настроек на «Сегодня».
     @State private var tab: AppTab = .today
@@ -351,6 +351,7 @@ extension RootView {
     /// новая его версия; в остальное время — только по своей воле из настроек.
     @MainActor
     func showOnboardingIfNeeded() {
+        guard !UITesting.isActive else { return }
         let defaults = UserDefaults.standard
         let seen = OnboardingPlan.seenVersion(
             stored: defaults.integer(forKey: SettingsKey.onboardingVersion),
