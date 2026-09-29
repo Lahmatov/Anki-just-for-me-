@@ -126,7 +126,7 @@ struct PrivacyView: View {
                               systemImage: "trash")
                         if erasing {
                             Spacer()
-                            ProgressView()
+                            MonchikLoader()
                         }
                     }
                 }

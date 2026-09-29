@@ -134,7 +134,7 @@ struct PlusView: View {
         Section {
             if account.products.isEmpty {
                 HStack {
-                    ProgressView()
+                    MonchikLoader()
                     Text(tr("Загружаю цены…", "A carregar preços…", "Loading prices…"))
                         .foregroundStyle(Theme.muted)
                 }

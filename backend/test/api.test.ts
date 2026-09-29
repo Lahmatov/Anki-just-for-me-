@@ -435,3 +435,71 @@ describe("HTTP", () => {
     expect(response.headers.get("x-content-type-options")).toBe("nosniff");
   });
 });
+
+describe("повтор оборванного запроса набора", () => {
+  const ID = "req-0123456789";
+
+  it("повтор с тем же номером отдаёт готовый набор без второго вызова и списания", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    const first = await world.call("POST", "/v1/deck", { ...DECK_REQUEST, requestId: ID }, token);
+    const again = await world.call("POST", "/v1/deck", { ...DECK_REQUEST, requestId: ID }, token);
+    expect(again.status).toBe(200);
+    expect(again.body.deck).toEqual(first.body.deck);
+    expect(world.claude.calls).toHaveLength(1);
+    expect(world.db.raw.prepare("SELECT used FROM entitlements").get()).toEqual({ used: 3_500 });
+  });
+
+  it("другой номер — новый набор", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    await world.call("POST", "/v1/deck", { ...DECK_REQUEST, requestId: ID }, token);
+    await world.call("POST", "/v1/deck", { ...DECK_REQUEST, requestId: "req-another-id" }, token);
+    expect(world.claude.calls).toHaveLength(2);
+  });
+
+  it("номер чужого устройства не отдаёт чужой набор", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    await world.call("POST", "/v1/deck", { ...DECK_REQUEST, requestId: ID }, token);
+    const other = await world.device();
+    const response = await world.call("POST", "/v1/deck", { ...DECK_REQUEST, requestId: ID }, other);
+    expect(response.status).toBe(402);
+  });
+
+  it("брошенный запрос «в работе» можно начать заново", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    const deviceId = (world.db.raw.prepare("SELECT id FROM devices").get() as { id: string }).id;
+    world.db.raw.prepare("INSERT INTO deck_requests (device_id, request_id, status, created_at) VALUES (?, ?, 'pending', ?)")
+      .run(deviceId, ID, world.now() - 600);
+    const response = await world.call("POST", "/v1/deck", { ...DECK_REQUEST, requestId: ID }, token);
+    expect(response.status).toBe(200);
+    expect(world.claude.calls).toHaveLength(1);
+  });
+
+  it("упавший запрос повторяется заново", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    const deviceId = (world.db.raw.prepare("SELECT id FROM devices").get() as { id: string }).id;
+    world.db.raw.prepare("INSERT INTO deck_requests (device_id, request_id, status, created_at) VALUES (?, ?, 'failed', ?)")
+      .run(deviceId, ID, world.now());
+    expect((await world.call("POST", "/v1/deck", { ...DECK_REQUEST, requestId: ID }, token)).status).toBe(200);
+  });
+
+  it("мусор в номере — 400", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    for (const requestId of ["short", "has space here", "x".repeat(65), 42]) {
+      const response = await world.call("POST", "/v1/deck", { ...DECK_REQUEST, requestId }, token);
+      expect(response.status, String(requestId)).toBe(400);
+    }
+  });
+
+  it("набор без номера по-прежнему работает", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    expect((await world.call("POST", "/v1/deck", DECK_REQUEST, token)).status).toBe(200);
+    expect(world.db.raw.prepare("SELECT COUNT(*) AS n FROM deck_requests").get()).toEqual({ n: 0 });
+  });
+});

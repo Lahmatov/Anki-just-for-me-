@@ -43,7 +43,7 @@ struct ShowSearchView: View {
                             }
                             Spacer()
                             if adding == show.id {
-                                ProgressView()
+                                MonchikLoader()
                             } else if ShowService(context: context).tracked(id: show.id) != nil {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(Theme.green)
@@ -62,7 +62,7 @@ struct ShowSearchView: View {
             }
             .themedScreen()
             .overlay {
-                if searching { ProgressView() }
+                if searching { MonchikLoader(large: true) }
             }
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always),
                         prompt: tr("Friends, The Office…", "Friends, The Office…",

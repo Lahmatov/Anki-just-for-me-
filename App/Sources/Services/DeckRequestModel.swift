@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 import SwiftData
 import Observation
 import AJFMCore
@@ -12,6 +13,9 @@ final class DeckRequestModel {
         case editing
         case working
         case failed(String)
+        /// Запрос оборвался, потому что приложение свернули. Экран продолжит
+        /// его сам, когда человек вернётся.
+        case interrupted
     }
 
     var topic = ""
@@ -21,6 +25,11 @@ final class DeckRequestModel {
     private(set) var subtitlesName: String?
     private(set) var step: Step = .editing
     private(set) var lastCost: Double = 0
+    /// Номер запроса для сервера: повтор после обрыва получает готовый набор
+    /// без второго списания. Новый — только после успеха.
+    private var requestID = UUID().uuidString
+    /// Уходило ли приложение в фон, пока шёл запрос.
+    private var backgrounded = false
 
     /// Серия, если набор просят с её экрана: номер уже известен, искать не нужно.
     var episode: EpisodeContext?
@@ -118,7 +127,7 @@ final class DeckRequestModel {
             let response = try await RecapBackend.shared.deck(BackendAPI.DeckBody(
                 showId: target.showID, season: target.season, episode: target.episode,
                 language: AppSettings.language, level: level, wordCount: wordCount,
-                knownTerms: knownTerms, subtitles: subtitles))
+                knownTerms: knownTerms, subtitles: subtitles, requestId: requestID))
             RecapAccount.shared.update(response.plan)
             var file = response.deck
             if file.deck.cover == nil, let episode {
@@ -131,6 +140,12 @@ final class DeckRequestModel {
             step = .editing
             return plan
         } catch let failure as BackendAPI.Failure {
+            // Набор ещё собирается на сервере или связь оборвалась в фоне —
+            // это не ошибка: продолжим с тем же номером запроса.
+            if failure.code == "deck_pending" || (failure == .network && backgrounded) {
+                step = .interrupted
+                return nil
+            }
             // Нет подписки, но есть свой ключ — делаем по-старому, напрямую.
             if failure.needsPlan, hasAPIKey, !RecapAccount.shared.usesBackend {
                 step = .editing
@@ -140,6 +155,10 @@ final class DeckRequestModel {
             step = .failed(failure.localizedDescription)
             return nil
         } catch {
+            if NetworkInterruption.shouldResume(after: error, wasBackgrounded: backgrounded) {
+                step = .interrupted
+                return nil
+            }
             step = .failed(error.localizedDescription)
             return nil
         }
@@ -156,10 +175,22 @@ final class DeckRequestModel {
         // Кнопка гаснет только после перерисовки, а два быстрых нажатия
         // успевают запустить две задачи — и два платных запроса.
         guard step != .working else { return nil }
-        if usesBackend {
-            return await generateOnServer()
+        // Свернули приложение — у запроса есть ещё полминуты дожить в фоне;
+        // обычно этого хватает, чтобы набор пришёл целиком.
+        let background = BackgroundTask(name: "deck-request")
+        backgrounded = false
+        let observer = NotificationCenter.default.addObserver(
+            forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated { self?.backgrounded = true }
         }
-        return await generateDirectly()
+        defer {
+            NotificationCenter.default.removeObserver(observer)
+            background.end()
+        }
+        let plan = usesBackend ? await generateOnServer() : await generateDirectly()
+        if plan != nil { requestID = UUID().uuidString }
+        return plan
     }
 
     /// Напрямую в Anthropic по своему ключу.
@@ -223,6 +254,11 @@ final class DeckRequestModel {
             step = .editing
             return plan
         } catch {
+            if NetworkInterruption.shouldResume(after: error, wasBackgrounded: backgrounded) {
+                Log.info(.network, "Набор прервался: приложение свернули, продолжу при возвращении")
+                step = .interrupted
+                return nil
+            }
             Log.failure(.network, "Набор по запросу не получился", error)
             step = .failed(error.localizedDescription)
             return nil

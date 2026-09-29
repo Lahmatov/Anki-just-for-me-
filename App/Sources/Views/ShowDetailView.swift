@@ -70,7 +70,7 @@ struct ShowDetailView: View {
                         confirmRemove = true
                     }
                 } label: {
-                    if refreshing { ProgressView() } else { Image(systemName: "ellipsis.circle") }
+                    if refreshing { MonchikLoader() } else { Image(systemName: "ellipsis.circle") }
                 }
             }
         }

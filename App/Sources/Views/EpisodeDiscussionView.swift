@@ -19,7 +19,7 @@ struct EpisodeDiscussionView: View {
             if let model {
                 content(model)
             } else {
-                ProgressView()
+                MonchikLoader(large: true)
             }
         }
         .navigationTitle(tr("Разговор о серии", "Conversa sobre o episódio", "Episode chat"))
@@ -156,7 +156,7 @@ struct EpisodeDiscussionView: View {
         switch model.step {
         case .notStarted, .thinking:
             HStack(spacing: 8) {
-                ProgressView()
+                MonchikLoader()
                 Text(tr("Мончик думает…", "O Monchik está a pensar…", "Monchik is thinking…"))
                     .font(.app(.callout))
                     .foregroundStyle(Theme.muted)

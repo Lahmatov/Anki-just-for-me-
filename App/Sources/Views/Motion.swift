@@ -300,3 +300,60 @@ struct CelebrationOverlay: View {
         }
     }
 }
+
+// MARK: - Загрузка
+
+/// Свой индикатор загрузки вместо системного колёсика: три «копытца»
+/// разных цветов прыгают по очереди, с приплющиванием при приземлении.
+/// Живёт, только пока виден, — загрузка короткая, телефон не греет.
+struct MonchikLoader: View {
+    var label: String?
+    /// Крупный вариант — для экранов, где кроме загрузки ничего нет: с лосем.
+    var large = false
+    /// Один цвет для всех копытец — на цветной кнопке разноцветные теряются.
+    var tint: Color?
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var colors: [Color] { [Theme.primary, Theme.orange, Theme.blue] }
+
+    var body: some View {
+        VStack(spacing: 12) {
+            if large {
+                MascotView(mood: .thinking, size: 84)
+            }
+            TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { context in
+                let t = reduceMotion ? 0 : context.date.timeIntervalSinceReferenceDate
+                HStack(spacing: large ? 10 : 7) {
+                    ForEach(0..<3, id: \.self) { index in
+                        hoof(index: index, time: t)
+                    }
+                }
+                .frame(height: dot * 2.4, alignment: .bottom)
+            }
+            if let label {
+                Text(label)
+                    .font(.app(.footnote, weight: .semibold))
+                    .foregroundStyle(Theme.muted)
+                    .multilineTextAlignment(.center)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label ?? tr("Загрузка", "A carregar", "Loading"))
+    }
+
+    private var dot: CGFloat { large ? 14 : 9 }
+
+    private func hoof(index: Int, time: Double) -> some View {
+        // Прыжок — полусинус с периодом 0.9 с, копытца сдвинуты по фазе.
+        let phase = (time / 0.9 + Double(index) * 0.18).truncatingRemainder(dividingBy: 1)
+        let lift = max(0, sin(phase * 2 * .pi))
+        // У земли копытце приплющено, в воздухе вытянуто.
+        let squash = 1 - 0.25 * (1 - lift)
+        return Capsule()
+            .fill((tint ?? colors[index]).gradient)
+            .frame(width: dot, height: dot * (0.8 + 0.4 * lift))
+            .scaleEffect(x: 1 / squash, y: squash, anchor: .bottom)
+            .offset(y: -CGFloat(lift) * dot * 1.2)
+    }
+}

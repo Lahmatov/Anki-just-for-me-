@@ -77,9 +77,14 @@ public enum BackendAPI {
         public var wordCount: Int
         public var knownTerms: [String]
         public var subtitles: String?
+        /// Номер запроса: повтор с тем же номером после обрыва связи получает
+        /// уже готовый набор и не тратит лимит второй раз.
+        public var requestId: String?
 
         public init(showId: Int, season: Int, episode: Int, language: AppLanguage,
-                    level: CEFRLevel?, wordCount: Int, knownTerms: [String], subtitles: String?) {
+                    level: CEFRLevel?, wordCount: Int, knownTerms: [String], subtitles: String?,
+                    requestId: String? = nil) {
+            self.requestId = requestId
             self.showId = showId
             self.season = season
             self.episode = episode
@@ -316,6 +321,10 @@ public enum BackendAPI {
                 return tr("Такой серии нет в TVMaze. Проверь сезон и номер.",
                           "Este episódio não existe no TVMaze. Verifica a temporada e o número.",
                           "This episode isn't on TVMaze. Check the season and number.")
+            case "deck_pending":
+                return tr("Набор ещё собирается — продолжу через пару секунд.",
+                          "O baralho ainda está a ser feito — continuo daqui a uns segundos.",
+                          "The deck is still being made — I'll carry on in a few seconds.")
             case "rate_limited":
                 return tr("Слишком часто. Подожди минуту и попробуй снова.",
                           "Demasiados pedidos. Espera um minuto e tenta de novo.",

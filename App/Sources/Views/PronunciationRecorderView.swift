@@ -28,7 +28,7 @@ struct PronunciationRecorderView: View {
                     .font(.app(.callout))
                     .foregroundStyle(.orange)
             case .processing:
-                ProgressView(tr("Разбираю…", "A analisar…", "Analyzing…"))
+                MonchikLoader(label: tr("Разбираю…", "A analisar…", "Analyzing…"))
             default:
                 EmptyView()
             }

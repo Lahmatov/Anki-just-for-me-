@@ -28,7 +28,7 @@ struct ReviewSessionView: View {
                     sessionBody(model)
                 }
             } else {
-                ProgressView()
+                MonchikLoader(large: true)
             }
         }
         .navigationTitle(deck?.name ?? tr("Повторение", "Revisão", "Review"))

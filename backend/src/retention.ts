@@ -16,6 +16,8 @@ export const RETENTION = {
   lapsedSubscriptionDays: 30,
   /** Кеш описаний серий из TVMaze: он и так обновляется через неделю. */
   episodeCacheDays: 30,
+  /** Готовые наборы для повтора оборванного запроса: повтор бывает в течение минут. */
+  deckRequestDays: 1,
 } as const;
 
 const DAY = 86_400;
@@ -28,6 +30,7 @@ export interface PurgeReport {
   rateLimits: number;
   reservations: number;
   episodeCache: number;
+  deckRequests: number;
 }
 
 /**
@@ -66,6 +69,8 @@ export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
     db.prepare("DELETE FROM reservations WHERE created_at < ?").bind(now - RESERVATION_TTL),
     db.prepare("DELETE FROM episode_cache WHERE fetched_at < ?")
       .bind(now - RETENTION.episodeCacheDays * DAY),
+    db.prepare("DELETE FROM deck_requests WHERE created_at < ?")
+      .bind(now - RETENTION.deckRequestDays * DAY),
   ]);
   const changes = (index: number) => results[index]?.meta?.changes ?? 0;
   return {
@@ -76,5 +81,6 @@ export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
     rateLimits: changes(6),
     reservations: changes(7),
     episodeCache: changes(8),
+    deckRequests: changes(9),
   };
 }

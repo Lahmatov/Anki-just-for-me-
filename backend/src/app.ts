@@ -319,20 +319,82 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
     }
   }
 
+  const requestId = optionalStr(body, "requestId", 64);
+  if (requestId !== undefined && !/^[A-Za-z0-9-]{8,64}$/.test(requestId)) {
+    throw new ApiError(400, "invalid_field", "requestId");
+  }
+  if (requestId) {
+    const ready = await finishedDeck(env, deps, device.id, requestId);
+    if (ready) return json(ready);
+  }
+
   const active = requireActive(entitlement, now);
   await limitAI(env, device, now);
   const input = { facts, language, level, wordCount, knownTerms, subtitles };
-  const result = await callWithQuota(env, deps, device, active, "deck", {
-    system: deckSystem(input),
-    messages: [{ role: "user", content: deckUserMessage(input) }],
-    maxTokens: DECK_MAX_TOKENS,
-    schema: DECK_SCHEMA as unknown as Record<string, unknown>,
-  });
-  const notes = parseDeckNotes(result.text, wordCount);
-  if (notes.length === 0) throw new ApiError(502, "model_error");
-  await rememberEpisode(env, deps, device, showId, season, episode);
-  return json({ deck: deckFile(facts, language, notes), source: "model",
-                plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) });
+  const work = (async () => {
+    const result = await callWithQuota(env, deps, device, active, "deck", {
+      system: deckSystem(input),
+      messages: [{ role: "user", content: deckUserMessage(input) }],
+      maxTokens: DECK_MAX_TOKENS,
+      schema: DECK_SCHEMA as unknown as Record<string, unknown>,
+    });
+    const notes = parseDeckNotes(result.text, wordCount);
+    if (notes.length === 0) throw new ApiError(502, "model_error");
+    await rememberEpisode(env, deps, device, showId, season, episode);
+    return { deck: deckFile(facts, language, notes), source: "model",
+             plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) };
+  })();
+  if (!requestId) return json(await work);
+
+  // Работа доживает и после обрыва связи: телефон, вернувшись, спросит
+  // тот же номер и получит готовый набор без второго списания.
+  const tracked = work.then(
+    (response) => env.DB.prepare(
+      "UPDATE deck_requests SET status = 'done', response = ? WHERE device_id = ? AND request_id = ?",
+    ).bind(JSON.stringify(response), device.id, requestId).run().then(() => response),
+    async (error) => {
+      await env.DB.prepare(
+        "UPDATE deck_requests SET status = 'failed' WHERE device_id = ? AND request_id = ?",
+      ).bind(device.id, requestId).run();
+      throw error;
+    },
+  );
+  deps.waitUntil?.(tracked.catch(() => undefined));
+  return json(await tracked);
+}
+
+/** Сколько ждать уже идущий запрос с тем же номером, прежде чем попросить повторить позже. */
+const DECK_WAIT_SECONDS = 20;
+/** Запрос «в работе» дольше этого считается брошенным — его можно начать заново. */
+const DECK_PENDING_STALE = 180;
+
+/**
+ * Готовый ответ на запрос с этим номером, если он уже был. Идущий запрос
+ * ждём до 20 секунд; не дождались — 409, телефон спросит ещё раз. Если
+ * записи нет, создаёт её «в работе» и возвращает null — считать набор нам.
+ */
+async function finishedDeck(env: Env, deps: Deps, deviceId: string, requestId: string) {
+  const select = env.DB.prepare(
+    "SELECT status, response, created_at AS createdAt FROM deck_requests WHERE device_id = ? AND request_id = ?",
+  ).bind(deviceId, requestId);
+  for (let waited = 0; ; waited += 1) {
+    const row = await select.first<{ status: string; response: string | null; createdAt: number }>();
+    if (!row) break;
+    if (row.status === "done" && row.response) return JSON.parse(row.response) as Record<string, unknown>;
+    if (row.status === "pending" && deps.now() - row.createdAt < DECK_PENDING_STALE) {
+      if (waited >= DECK_WAIT_SECONDS) throw new ApiError(409, "deck_pending");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      continue;
+    }
+    // Упавший или брошенный запрос — начинаем заново.
+    await env.DB.prepare("DELETE FROM deck_requests WHERE device_id = ? AND request_id = ?")
+      .bind(deviceId, requestId).run();
+    break;
+  }
+  await env.DB.prepare(
+    "INSERT INTO deck_requests (device_id, request_id, status, created_at) VALUES (?, ?, 'pending', ?)",
+  ).bind(deviceId, requestId, deps.now()).run();
+  return null;
 }
 
 async function discuss(request: Request, env: Env, deps: Deps): Promise<Response> {

@@ -73,7 +73,7 @@ struct CloudBackupView: View {
         }
         .themedScreen()
         .navigationTitle(tr("Облако Neon", "Nuvem Neon", "Neon cloud"))
-        .overlay { if busy { ProgressView() } }
+        .overlay { if busy { MonchikLoader() } }
         .disabled(busy)
         .task { await refresh() }
         .refreshable { await refresh() }

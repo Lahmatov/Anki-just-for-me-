@@ -101,6 +101,18 @@ describe("ночная чистка", () => {
     expect(count(world, "usage_log")).toBe(1);
   });
 
+  it("удаляет готовые наборы для повтора старше суток, но не свежие", async () => {
+    const world = makeWorld();
+    const insert = world.db.raw.prepare(
+      "INSERT INTO deck_requests (device_id, request_id, status, response, created_at) VALUES ('d', ?, 'done', '{}', ?)",
+    );
+    insert.run("old-request", world.now() - (RETENTION.deckRequestDays + 1) * DAY);
+    insert.run("new-request", world.now() - 60);
+    const report = await purge(world.db, world.now());
+    expect(report.deckRequests).toBe(1);
+    expect(count(world, "deck_requests")).toBe(1);
+  });
+
   it("удаляет счётчики частоты с закончившимся окном и оставляет текущие", async () => {
     const world = makeWorld();
     await world.device();                         // счётчик регистраций: окно — час

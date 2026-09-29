@@ -20,7 +20,7 @@ struct RetellView: View {
             if let model {
                 content(model)
             } else {
-                ProgressView()
+                MonchikLoader(large: true)
             }
         }
         .navigationTitle(tr("Пересказ", "Reconto", "Retelling"))
@@ -73,7 +73,7 @@ struct RetellView: View {
                 transcriptSection(model)
             case .analyzing:
                 Section {
-                    ProgressView(tr("Разбираю пересказ…", "A analisar o reconto…",
+                    MonchikLoader(label: tr("Разбираю пересказ…", "A analisar o reconto…",
                                     "Reviewing your retelling…"))
                 }
             case .done:

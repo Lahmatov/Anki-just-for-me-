@@ -19,7 +19,7 @@ struct ServerDataView: View {
             if let export {
                 content(export)
             } else if loading {
-                Section { HStack { ProgressView(); Text(tr("Спрашиваю сервер…", "A perguntar ao servidor…",
+                Section { HStack { MonchikLoader(); Text(tr("Спрашиваю сервер…", "A perguntar ao servidor…",
                                                            "Asking the server…")) } }
             }
         }

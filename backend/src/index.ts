@@ -5,8 +5,9 @@ import type { Env } from "./env";
 import { purge } from "./retention";
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     return handle(request, env, {
+      waitUntil: (promise) => ctx.waitUntil(promise),
       claude: anthropicClaude(env.ANTHROPIC_API_KEY, env.MODEL),
       fetch: (input, init) => fetch(input, init),
       now: () => Math.floor(Date.now() / 1000),

@@ -126,7 +126,7 @@ struct AIProviderKeyView: View {
                               systemImage: "checkmark.shield")
                         if checking {
                             Spacer()
-                            ProgressView()
+                            MonchikLoader()
                         }
                     }
                 }

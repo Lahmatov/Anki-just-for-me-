@@ -15,6 +15,7 @@ struct DeckRequestView: View {
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
 
     @State private var model: DeckRequestModel?
     @State private var plan: PendingImport?
@@ -34,7 +35,7 @@ struct DeckRequestView: View {
                 } else if let model {
                     form(model)
                 } else {
-                    ProgressView()
+                    MonchikLoader(large: true)
                 }
             }
             .navigationTitle(tr("Набор через Claude", "Baralho com o Claude", "Deck with Claude"))
@@ -54,7 +55,11 @@ struct DeckRequestView: View {
             }
             topicFocused = true
         }
-        .interactiveDismissDisabled(model?.step == .working)
+        .interactiveDismissDisabled(model?.step == .working || model?.step == .interrupted)
+        // Вернулись в приложение — продолжаем оборванный запрос с тем же номером.
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active, let model, model.step == .interrupted { run(model) }
+        }
         .aiConsentAlert(pending: $pendingAI)
         .alert(
             tr("Не записалось", "Não foi guardado", "Couldn't save"),
@@ -286,25 +291,35 @@ struct DeckRequestView: View {
         }
     }
 
+    /// Запуск и продолжение одного и того же запроса. Обрыв из-за
+    /// свёрнутого приложения — не ошибка: ни вибрации, ни красного текста.
+    private func run(_ model: DeckRequestModel) {
+        Task {
+            if let generated = await model.generate() {
+                Haptics.success()
+                plan = PendingImport(plan: generated)
+            } else if model.step == .interrupted {
+                // Сервер ещё собирает — спросим снова чуть позже, если экран активен.
+                if scenePhase == .active {
+                    try? await Task.sleep(for: .seconds(3))
+                    if model.step == .interrupted { run(model) }
+                }
+            } else {
+                Haptics.failure()
+            }
+        }
+    }
+
     @ViewBuilder
     private func submitButton(_ model: DeckRequestModel) -> some View {
         Button {
             Haptics.tap()
             topicFocused = false
-            AIConsent.run({
-                Task {
-                    if let generated = await model.generate() {
-                        Haptics.success()
-                        plan = PendingImport(plan: generated)
-                    } else {
-                        Haptics.failure()
-                    }
-                }
-            }, pending: $pendingAI)
+            AIConsent.run({ run(model) }, pending: $pendingAI)
         } label: {
             HStack(spacing: 10) {
-                if model.step == .working {
-                    ProgressView()
+                if model.step == .working || model.step == .interrupted {
+                    MonchikLoader(tint: Theme.onPrimary)
                     Text(tr("Подбираю слова…", "A escolher palavras…", "Picking words…"))
                 } else {
                     Image(systemName: "sparkles")

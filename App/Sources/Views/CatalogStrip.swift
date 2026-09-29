@@ -99,7 +99,7 @@ struct CatalogShowView: View {
                                     "The show file is damaged. Reinstall the app.")) { EmptyView() }
                         .cardSurface()
                 } else {
-                    ProgressView().padding(40)
+                    MonchikLoader(large: true).padding(40)
                 }
             }
             .padding(.horizontal)

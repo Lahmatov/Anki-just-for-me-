@@ -118,8 +118,8 @@ extension View {
 
 // MARK: - Кнопки
 
-/// Толстая кнопка: заливка и тёмная «губа» снизу. При нажатии кнопка
-/// опускается на высоту губы — нажатие видно и чувствуется без анимаций.
+/// Толстая кнопка: заливка, блик и одна мягкая тень. При нажатии кнопка
+/// пружинисто сжимается — нажатие видно и чувствуется.
 struct ChunkyButtonStyle: ButtonStyle {
     enum Kind { case primary, secondary, destructive }
     var kind: Kind = .primary
@@ -163,30 +163,31 @@ struct ChunkyButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         let pressed = configuration.isPressed
         let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
-        // Губа на месте всегда, при нажатии на неё опускается только лицо
-        // кнопки. Раньше губа на время нажатия убиралась, и с анимацией это
-        // читалось как мигание кнопки.
+        // Одна мягкая тень вместо «губы» под кнопкой: губа плюс тень читались
+        // как двойная тень. Нажатие — кнопка пружинисто сжимается, тень
+        // прижимается к ней.
         return configuration.label
             .fontWeight(.bold)
             .foregroundStyle(isEnabled ? foreground : Theme.muted)
             .padding(.horizontal, horizontalPadding)
-            .padding(.vertical, 11)
-            .frame(minHeight: 46)
+            .padding(.vertical, 12)
+            .frame(minHeight: 48)
             .background {
                 ZStack {
                     shape.fill(isEnabled ? fill : Theme.border.opacity(0.6))
+                    // Лёгкий блик сверху — кнопка выглядит выпуклой без второй тени.
+                    shape.fill(LinearGradient(colors: [.white.opacity(0.18), .clear],
+                                              startPoint: .top, endPoint: .center))
                     if kind == .secondary {
                         shape.strokeBorder(Theme.border, lineWidth: Theme.stroke)
                     }
                 }
+                .shadow(color: isEnabled && kind != .secondary ? lip.opacity(pressed ? 0.15 : 0.35) : .clear,
+                        radius: pressed ? 2 : 8, y: pressed ? 1 : 4)
             }
-            .offset(y: pressed ? Theme.lip : 0)
-            .background {
-                shape.fill(isEnabled ? lip : Theme.border).offset(y: Theme.lip)
-            }
-            .padding(.bottom, Theme.lip)
+            .scaleEffect(pressed ? 0.96 : 1)
             .contentShape(Rectangle())
-            .animation(.snappy(duration: 0.08), value: pressed)
+            .animation(.spring(response: 0.28, dampingFraction: 0.62), value: pressed)
     }
 }
 

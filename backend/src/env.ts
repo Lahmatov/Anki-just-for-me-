@@ -37,6 +37,11 @@ export interface Deps {
   /** Секунды Unix. */
   now: () => number;
   randomBytes: (count: number) => Uint8Array;
+  /**
+   * Дать работе дожить после ответа или обрыва связи (ExecutionContext.waitUntil).
+   * Без неё свёрнутый телефон рвал соединение — и оплаченный вызов модели пропадал.
+   */
+  waitUntil?: (promise: Promise<unknown>) => void;
 }
 
 export function intVar(value: string | undefined, fallback: number): number {

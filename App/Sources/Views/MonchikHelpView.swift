@@ -97,7 +97,7 @@ struct MonchikHelpView: View {
             }
             if help.waiting {
                 HStack(spacing: 8) {
-                    ProgressView()
+                    MonchikLoader()
                     Text(tr("Мончик думает… Можно свернуть приложение — ответ придёт уведомлением.",
                             "O Monchik está a pensar… Podes sair da aplicação — a resposta chega "
                                 + "numa notificação.",
