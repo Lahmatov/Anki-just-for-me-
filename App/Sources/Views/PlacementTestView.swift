@@ -60,7 +60,7 @@ struct PlacementTestView: View {
     }
 
     private func goBack() {
-        withAnimation(.snappy) {
+        withAnimation(.app) {
             if session.canGoBack {
                 session.goBack()
             } else {
@@ -108,7 +108,7 @@ struct PlacementTestView: View {
             .cardSurface()
             Spacer(minLength: 0)
             primaryButton(tr("Начать", "Começar", "Start")) {
-                withAnimation(.snappy) { started = true }
+                withAnimation(.app) { started = true }
             }
         }
     }
@@ -223,7 +223,7 @@ struct PlacementTestView: View {
     ) -> some View {
         Button {
             Haptics.tap()
-            withAnimation(.snappy) { action() }
+            withAnimation(.app) { action() }
         } label: {
             Text(title)
                 .font(.app(.headline))
@@ -277,7 +277,7 @@ struct PlacementTestView: View {
                 Spacer(minLength: 0)
 
                 Button(tr("Пропустить грамматику", "Saltar a gramática", "Skip grammar")) {
-                    withAnimation(.snappy) { session.skipGrammar() }
+                    withAnimation(.app) { session.skipGrammar() }
                 }
                 .font(.app(.callout, weight: .bold))
                 .foregroundStyle(Theme.muted)
@@ -300,7 +300,7 @@ struct PlacementTestView: View {
             // Короткая подсветка — видно, где ошибся, — и дальше.
             Task { @MainActor in
                 try? await Task.sleep(for: .milliseconds(700))
-                withAnimation(.snappy) {
+                withAnimation(.app) {
                     session.answer(option)
                     picked = nil
                 }
@@ -413,7 +413,7 @@ struct PlacementTestView: View {
     }
 
     private func restart() {
-        withAnimation(.snappy) {
+        withAnimation(.app) {
             session = PlacementSession(seed: UInt64.random(in: 1...UInt64.max))
             picked = nil
             started = true

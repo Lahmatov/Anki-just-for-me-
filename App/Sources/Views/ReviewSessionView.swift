@@ -70,7 +70,7 @@ struct ReviewSessionView: View {
                     }
                 }
                 .padding()
-                .animation(reduceMotion ? .easeInOut(duration: 0.2) : .snappy(duration: 0.3),
+                .animation(reduceMotion ? .easeInOut(duration: 0.2) : .app,
                            value: model.index)
             }
             .onChange(of: model.isRevealed) { _, revealed in
@@ -156,7 +156,7 @@ struct ReviewSessionView: View {
         .font(.app(.caption))
         .foregroundStyle(Theme.muted)
         .monospacedDigit()
-        .animation(.snappy, value: model.index)
+        .animation(.app, value: model.index)
     }
 
     private var cardTransition: AnyTransition {

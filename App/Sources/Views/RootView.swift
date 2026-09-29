@@ -26,6 +26,7 @@ struct RootView: View {
     /// перестраивает экраны, но не выкидывает из настроек на «Сегодня».
     @State private var tab: AppTab = .today
     @State private var keyboard = KeyboardObserver()
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private var tabBarVisibility: TabBarVisibility { .shared }
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
     /// Пустая строка — язык не выбран явно, действует системный.
@@ -44,16 +45,26 @@ struct RootView: View {
         // safeAreaInset снаружи NavigationStack) экраны не всегда получали
         // нижний отступ, и последние кнопки уезжали под панель.
         VStack(spacing: 0) {
-            Group {
-                switch tab {
-                case .today: TodayView()
-                case .decks: decksTab
-                case .rewards: RewardsView()
-                case .shows: ShowsView()
-                case .settings: SettingsView()
+            // Вкладки сменяются растворением с лёгким подъёмом, а не
+            // подменой кадра: мгновенная подмена читалась как рывок.
+            ZStack {
+                Group {
+                    switch tab {
+                    case .today: TodayView()
+                    case .decks: decksTab
+                    case .rewards: RewardsView()
+                    case .shows: ShowsView()
+                    case .settings: SettingsView()
+                    }
                 }
+                .id(tab)
+                .transition(reduceMotion
+                            ? .opacity
+                            : .asymmetric(insertion: .opacity.combined(with: .offset(y: 8)),
+                                          removal: .opacity))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .animation(.tabSwitch, value: tab)
 
             // Пока открыта клавиатура, панель прячется: иначе она висела бы
             // над клавиатурой и отъедала место у поля ввода.
@@ -232,7 +243,7 @@ struct RootView: View {
     private var decksTab: some View {
         NavigationStack {
             FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
-                .navigationTitle(AppTab.decks.title)
+                .tabRootTitle(AppTab.decks.title)
                 .toolbar { toolbar }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {

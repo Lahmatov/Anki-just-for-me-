@@ -26,6 +26,13 @@ struct FolderContentsView: View {
 
     var body: some View {
         List {
+            if folder == nil {
+                // Корень вкладки: заголовок в содержимом, как на других вкладках.
+                ScreenTitle(AppTab.decks.title)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+                    .listRowSeparator(.hidden)
+            }
             if childFolders.isEmpty && decks.isEmpty {
                 ContentUnavailableView {
                     VStack(spacing: 8) {

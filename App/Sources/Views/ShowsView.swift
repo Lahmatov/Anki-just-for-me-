@@ -15,6 +15,7 @@ struct ShowsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
+                    ScreenTitle(tr("Сериалы и фильмы", "Séries e filmes", "Shows & movies"))
                     if shows.isEmpty {
                         MascotEmptyState(
                             mood: .hello,
@@ -58,7 +59,7 @@ struct ShowsView: View {
                 .padding(.bottom, 24)
             }
             .background(Theme.background.ignoresSafeArea())
-            .navigationTitle(tr("Сериалы", "Séries", "TV shows"))
+            .tabRootTitle(tr("Сериалы и фильмы", "Séries e filmes", "Shows & movies"))
             .navigationDestination(for: TrackedShow.self) { show in
                 ShowDetailView(show: show)
             }

@@ -210,7 +210,7 @@ struct OnboardingView: View {
                 ForEach(AppLanguage.allCases, id: \.self) { option in
                     Button {
                         Haptics.tap()
-                        withAnimation(.snappy) { AppSettings.setLanguage(option) }
+                        withAnimation(.appQuick) { AppSettings.setLanguage(option) }
                     } label: {
                         let selected = option == currentLanguage
                         HStack {
@@ -233,7 +233,7 @@ struct OnboardingView: View {
                     .buttonStyle(.plain)
                 }
             }
-            .animation(.snappy, value: currentLanguage)
+            .animation(.appQuick, value: currentLanguage)
         }
         .cardSurface()
     }

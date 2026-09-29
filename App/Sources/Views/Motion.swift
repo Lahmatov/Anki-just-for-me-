@@ -208,7 +208,7 @@ struct MascotReactionView: View {
                     }
                 }
             }
-            .animation(.snappy, value: mood)
+            .animation(.appQuick, value: mood)
             .accessibilityHidden(true)
     }
 
@@ -356,4 +356,17 @@ struct MonchikLoader: View {
             .scaleEffect(x: 1 / squash, y: squash, anchor: .bottom)
             .offset(y: -CGFloat(lift) * dot * 1.2)
     }
+}
+
+/// Общие кривые движения. Раньше экраны брали `.app` — короткую пружину,
+/// которая на смене карточек и шагов теста выглядела рывком. Плавная
+/// пружина без отскока чуть длиннее и гаснет мягко: глаз успевает увидеть,
+/// откуда и куда ушло.
+extension Animation {
+    /// Смена состояния экрана: шаг теста, новая карточка, обновление цифр.
+    static var app: Animation { .smooth(duration: 0.38) }
+    /// Мелочи: переключатели, выбор языка, отметки.
+    static var appQuick: Animation { .smooth(duration: 0.26) }
+    /// Смена вкладки: быстрее остального — это навигация, а не событие.
+    static var tabSwitch: Animation { .smooth(duration: 0.24) }
 }

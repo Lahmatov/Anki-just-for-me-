@@ -41,6 +41,7 @@ struct TodayView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
+                    ScreenTitle(tr("Сегодня", "Hoje", "Today"))
                     MascotSays(mood: mood, text: greeting)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -88,10 +89,12 @@ struct TodayView: View {
                     CelebrationOverlay(title: celebration.title, subtitle: celebration.subtitle) {
                         self.celebration = nil
                     }
-                    .transition(.opacity)
+                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
                 }
             }
-            .navigationTitle(tr("Сегодня", "Hoje", "Today"))
+            // Без этого праздник появлялся и исчезал кадром — переход не проигрывался.
+            .animation(.app, value: celebration?.title)
+            .tabRootTitle(tr("Сегодня", "Hoje", "Today"))
             .navigationDestination(isPresented: $isSessionActive) {
                 ReviewSessionView(deck: nil)
             }
@@ -430,7 +433,7 @@ struct TodayView: View {
 
     private func refresh() {
         let goalBefore = DailyGoal.progress(studiedSeconds: studiedSeconds, goalMinutes: goalMinutes)
-        withAnimation(loaded ? .snappy : nil) {
+        withAnimation(loaded ? .app : nil) {
             noteCount = (try? context.fetchCount(FetchDescriptor<Note>())) ?? 0
             summary = (try? ReviewService(context: context).todayQueue())?.summary
             let progress = ProgressService(context: context)

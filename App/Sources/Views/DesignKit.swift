@@ -364,6 +364,45 @@ struct HintHeader: View {
 }
 
 /// Заголовок блока на экранах из карточек.
+/// Заголовок корневого экрана вкладки — частью содержимого, а не панели.
+///
+/// Системный большой заголовок при прокрутке сжимается и всплывает в панели
+/// маленьким «Сегодня» — посреди чтения это выглядело как появившийся из
+/// ниоткуда текст. Заголовок в содержимом просто уезжает вместе с экраном.
+struct ScreenTitle: View {
+    let title: String
+
+    init(_ title: String) {
+        self.title = title
+    }
+
+    var body: some View {
+        Text(title)
+            .font(.app(.largeTitle, weight: .heavy))
+            .foregroundStyle(Theme.ink)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 4)
+            .padding(.top, 4)
+            .accessibilityAddTraits(.isHeader)
+    }
+}
+
+extension View {
+    /// Корень вкладки: в панели заголовка нет (он в содержимом — `ScreenTitle`),
+    /// но `navigationTitle` остаётся — его читают VoiceOver и кнопка «Назад».
+    func tabRootTitle(_ title: String) -> some View {
+        navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Color.clear.frame(width: 1, height: 1).accessibilityHidden(true)
+                }
+            }
+    }
+}
+
 struct CardSectionHeader: View {
     let title: String
 

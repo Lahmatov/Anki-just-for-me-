@@ -38,6 +38,7 @@ struct DeckRequestView: View {
                     MonchikLoader(large: true)
                 }
             }
+            .animation(.app, value: result != nil)
             .navigationTitle(tr("Набор через Claude", "Baralho com o Claude", "Deck with Claude"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -249,6 +250,8 @@ struct DeckRequestView: View {
             }
         }
         .themedScreen()
+        // Подсказка «подбираю слова» и ошибка въезжают, а не выскакивают.
+        .animation(.app, value: model.step)
         .safeAreaInset(edge: .bottom) {
             submitButton(model)
                 .padding(.horizontal)

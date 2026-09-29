@@ -32,6 +32,7 @@ struct RewardsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
+                    ScreenTitle(tr("Награды", "Recompensas", "Rewards"))
                     if let journey { JourneyCard(position: journey) }
                     contractCard
                     if let week { weekCard(week) }
@@ -44,7 +45,7 @@ struct RewardsView: View {
                 .padding(.bottom, 24)
             }
             .background(Theme.background.ignoresSafeArea())
-            .navigationTitle(tr("Награды", "Recompensas", "Rewards"))
+            .tabRootTitle(tr("Награды", "Recompensas", "Rewards"))
             .sheet(isPresented: $showNewContract, onDismiss: refresh) {
                 NewContractView(currentMature: matureWords) { goal, reward, deadline in
                     service.createContract(goal: goal, reward: reward, deadline: deadline)
@@ -79,7 +80,7 @@ struct RewardsView: View {
 
     private func refresh() {
         let service = self.service
-        withAnimation(loaded ? .snappy : nil) {
+        withAnimation(loaded ? .app : nil) {
             matureWords = service.matureWordCount()
             stats = service.stats()
             week = service.weekProgress(target: weeklyTarget)
