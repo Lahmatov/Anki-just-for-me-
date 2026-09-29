@@ -103,6 +103,13 @@ final class ScreenshotUITests: XCTestCase {
             for j in frames.indices where j > i {
                 let (labelA, a) = frames[i]
                 let (labelB, b) = frames[j]
+                // Контейнер и его части: «Мончик, Карточки ждут…» целиком и
+                // «Карточки ждут…» внутри, «Новые: 5» и «5». Это один и тот же
+                // текст, а не наложение.
+                if labelA.contains(labelB) || labelB.contains(labelA)
+                    || a.contains(b) || b.contains(a) {
+                    continue
+                }
                 let overlap = a.intersection(b)
                 guard !overlap.isNull else { continue }
                 let smaller = min(a.width * a.height, b.width * b.height)

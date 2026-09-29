@@ -68,8 +68,8 @@ final class SmokeUITests: XCTestCase {
         profile.tap()
 
         let terms = app.buttons["docs.terms"]
-        XCTAssertTrue(terms.waitForExistence(timeout: 15))
         scrollTo(terms, in: app)
+        XCTAssertTrue(terms.waitForExistence(timeout: 15))
         terms.tap()
 
         XCTAssertTrue(app.staticTexts["Recap — Terms of Use"].waitForExistence(timeout: 15),
@@ -84,8 +84,10 @@ final class SmokeUITests: XCTestCase {
         for (identifier, title) in [("docs.privacy", "Recap — Privacy Policy"),
                                     ("docs.licenses", "Recap — Licenses")] {
             let row = app.buttons[identifier]
-            XCTAssertTrue(row.waitForExistence(timeout: 15), identifier)
+            // Список ленивый: строки ниже экрана нет в иерархии, пока до
+            // неё не прокрутили, — поэтому сначала прокрутка, потом проверка.
             scrollTo(row, in: app)
+            XCTAssertTrue(row.waitForExistence(timeout: 15), identifier)
             row.tap()
             XCTAssertTrue(app.staticTexts[title].waitForExistence(timeout: 15), title)
             app.navigationBars.buttons.element(boundBy: 0).tap()
