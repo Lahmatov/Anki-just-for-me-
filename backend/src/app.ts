@@ -491,7 +491,10 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
   const language = oneOf(body, "language", LANGUAGES)!;
   const level = oneOf(body, "level", LEVELS, true);
   const retelling = optionalStr(body, "retelling", 4_000);
-  const turns = parseTurns(body.turns);
+  // Короткий разговор («Recap после серии») — меньше вопросов, не больше.
+  const questions = body.questions === undefined
+    ? MAX_LEARNER_TURNS : int(body, "questions", 1, MAX_LEARNER_TURNS);
+  const turns = parseTurns(body.turns, questions);
   await verifyTurns(env, device.id, showId, season, episode, turns);
 
   // Разговор — только о серии, к которой уже взяты слова: так подписка
@@ -510,7 +513,7 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
   const facts = await episodeFacts(env.DB, deps, showId, season, episode);
   const result = await callWithQuota(env, deps, device, active, "discuss", {
     system: discussionSystem(facts, language, level, retelling),
-    messages: discussionMessages(turns),
+    messages: discussionMessages(turns, questions),
     maxTokens: DISCUSSION_MAX_TOKENS,
     schema: DISCUSSION_SCHEMA as unknown as Record<string, unknown>,
   });
@@ -557,8 +560,8 @@ function constantTimeEqual(a: string, b: string): boolean {
   return difference === 0;
 }
 
-/** Реплики разговора: не больше шести ответов ученика, короткие тексты. */
-function parseTurns(value: unknown): Turn[] {
+/** Реплики разговора: не больше `limit` ответов ученика, короткие тексты. */
+function parseTurns(value: unknown, limit: number): Turn[] {
   if (!Array.isArray(value) || value.length > MAX_LEARNER_TURNS * 2 + 1) {
     throw new ApiError(400, "invalid_field", "turns");
   }
@@ -577,7 +580,7 @@ function parseTurns(value: unknown): Turn[] {
     }
     return { speaker, text, ...(typeof sig === "string" ? { sig } : {}) };
   });
-  if (turns.filter((turn) => turn.speaker === "learner").length > MAX_LEARNER_TURNS) {
+  if (turns.filter((turn) => turn.speaker === "learner").length > limit) {
     throw new ApiError(400, "conversation_over");
   }
   return turns;

@@ -7,6 +7,8 @@ import AJFMCore
 struct RetellView: View {
     /// Серия, если пересказ начат с её экрана.
     var episode: EpisodeContext?
+    /// Разбор готов — для шагов Recap.
+    var onFinish: (() -> Void)?
 
     @Environment(\.modelContext) private var context
     @State private var model: RetellFlowModel?
@@ -27,6 +29,9 @@ struct RetellView: View {
         .aiConsentAlert(pending: $pendingAI)
         .onAppear {
             if model == nil { model = RetellFlowModel(context: context, episode: episode) }
+        }
+        .onChange(of: model?.step) { _, step in
+            if step == .done { onFinish?() }
         }
         // Запись без экрана — это включённый микрофон и распознавание в фоне.
         .onDisappear {

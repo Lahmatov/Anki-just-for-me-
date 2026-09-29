@@ -280,6 +280,7 @@ struct CelebrationOverlay: View {
         .onTapGesture { close() }
         .onAppear {
             Haptics.success()
+            Sounds.play(.fanfare)
             withAnimation(.spring(response: 0.45, dampingFraction: 0.7)) { appeared = true }
         }
         .task {

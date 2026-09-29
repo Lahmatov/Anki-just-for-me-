@@ -19,6 +19,7 @@ enum SettingsKey {
     static let lastBackupDate = "lastBackupDate"
     static let lastCloudBackupDate = "lastCloudBackupDate"
     static let cloudBackupEnabled = "cloudBackupEnabled"
+    static let soundsEnabled = "soundsEnabled"
     static let deviceID = "deviceID"
     static let leechThreshold = "leechThreshold"
     /// Устаревший флаг «знакомство пройдено» — читается только для перехода

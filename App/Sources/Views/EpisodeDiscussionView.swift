@@ -7,6 +7,10 @@ import AJFMCore
 struct EpisodeDiscussionView: View {
     let episode: EpisodeContext
     var retelling: String?
+    /// Длина разговора: в Recap — три вопроса вместо шести.
+    var questions: Int = EpisodeDiscussion.maxLearnerTurns
+    /// Разговор закончен — для шагов Recap.
+    var onFinish: (() -> Void)?
 
     @Environment(\.modelContext) private var context
     @State private var model: EpisodeDiscussionModel?
@@ -29,9 +33,12 @@ struct EpisodeDiscussionView: View {
         .onAppear {
             guard model == nil else { return }
             let created = EpisodeDiscussionModel(
-                context: context, episode: episode, retelling: retelling)
+                context: context, episode: episode, retelling: retelling, questions: questions)
             model = created
             AIConsent.run({ Task { await created.start() } }, pending: $pendingAI)
+        }
+        .onChange(of: model?.step) { _, step in
+            if step == .finished { onFinish?() }
         }
         .onDisappear {
             if model?.step == .recording { model?.stopRecording() }
@@ -191,7 +198,7 @@ struct EpisodeDiscussionView: View {
             }
         case .waitingForAnswer, .recording:
             Text(tr("Вопрос ", "Pergunta ", "Question ")
-                 + "\(model.questionNumber)/\(EpisodeDiscussion.maxLearnerTurns)")
+                 + "\(model.questionNumber)/\(model.questions)")
                 .font(.app(.caption, weight: .bold))
                 .foregroundStyle(Theme.muted)
                 .frame(maxWidth: .infinity)

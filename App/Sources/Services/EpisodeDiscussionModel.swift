@@ -28,17 +28,21 @@ final class EpisodeDiscussionModel {
 
     let episode: EpisodeContext
     let retelling: String?
+    /// Сколько вопросов задаст Мончик: шесть в обычном разговоре, три в Recap.
+    let questions: Int
     let recorder = RetellRecorder()
     private let context: ModelContext
 
-    init(context: ModelContext, episode: EpisodeContext, retelling: String?) {
+    init(context: ModelContext, episode: EpisodeContext, retelling: String?,
+         questions: Int = EpisodeDiscussion.maxLearnerTurns) {
         self.context = context
         self.episode = episode
         self.retelling = retelling
+        self.questions = EpisodeDiscussion.clampedLimit(questions)
     }
 
     var questionNumber: Int {
-        min(EpisodeDiscussion.learnerTurnCount(turns) + 1, EpisodeDiscussion.maxLearnerTurns)
+        min(EpisodeDiscussion.learnerTurnCount(turns) + 1, questions)
     }
 
     var canSend: Bool {
@@ -75,7 +79,8 @@ final class EpisodeDiscussionModel {
         step = .thinking
         do {
             let result = try await AIService.discuss(
-                context: context, episode: episode, turns: turns, retelling: retelling)
+                context: context, episode: episode, turns: turns, retelling: retelling,
+                questions: questions)
             turns.append(EpisodeDiscussion.Turn(
                 speaker: .monchik, text: result.reply.text, tip: result.reply.tip,
                 signature: result.reply.signature))
@@ -83,7 +88,7 @@ final class EpisodeDiscussionModel {
             if UserDefaults.standard.object(forKey: SettingsKey.autoSpeak) as? Bool ?? true {
                 SpeechService.shared.speak(result.reply.text)
             }
-            step = result.reply.finished || EpisodeDiscussion.isLastTurn(turns)
+            step = result.reply.finished || EpisodeDiscussion.isLastTurn(turns, limit: questions)
                 ? .finished : .waitingForAnswer
         } catch {
             Log.failure(.network, "Реплика Мончика не пришла", error)

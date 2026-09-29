@@ -298,7 +298,13 @@ const KICKOFF = "(The learner opened the chat. Greet them in one short line and 
 const LAST_TURN_NOTE = "\n\n(This was the learner's last answer. React to it, give the tip if "
   + "there is one, thank them for the chat and say goodbye. Set finished to true.)";
 
-export function discussionMessages(turns: Turn[]): { role: "user" | "assistant"; content: string }[] {
+/**
+ * `limit` — сколько ответов ученика в разговоре: шесть в обычном разговоре,
+ * три в «Recap после серии», где разговор — один шаг из трёх.
+ */
+export function discussionMessages(
+  turns: Turn[], limit: number = MAX_LEARNER_TURNS,
+): { role: "user" | "assistant"; content: string }[] {
   const messages: { role: "user" | "assistant"; content: string }[] = [
     { role: "user", content: KICKOFF },
   ];
@@ -312,7 +318,7 @@ export function discussionMessages(turns: Turn[]): { role: "user" | "assistant";
   }
   const learnerTurns = turns.filter((turn) => turn.speaker === "learner").length;
   const last = messages[messages.length - 1];
-  if (learnerTurns >= MAX_LEARNER_TURNS && last?.role === "user") last.content += LAST_TURN_NOTE;
+  if (learnerTurns >= limit && last?.role === "user") last.content += LAST_TURN_NOTE;
   return messages;
 }
 

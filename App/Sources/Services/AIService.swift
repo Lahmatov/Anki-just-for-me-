@@ -24,7 +24,8 @@ enum AIService {
     /// Следующая реплика Мончика.
     static func discuss(
         context: ModelContext, episode: EpisodeContext,
-        turns: [EpisodeDiscussion.Turn], retelling: String?
+        turns: [EpisodeDiscussion.Turn], retelling: String?,
+        questions: Int = EpisodeDiscussion.maxLearnerTurns
     ) async throws -> DiscussionResult {
         // С подпиской — через сервер Recap: ключа в приложении нет, а сервер
         // пускает разговор только о сериях, к которым взяты слова.
@@ -32,17 +33,19 @@ enum AIService {
             let response = try await RecapBackend.shared.discuss(BackendAPI.DiscussBody(
                 showId: episode.showID, season: episode.episode.season,
                 episode: episode.episode.number, language: Loc.language,
-                level: AppSettings.englishLevel, turns: turns, retelling: retelling))
+                level: AppSettings.englishLevel, turns: turns, retelling: retelling,
+                questions: questions == EpisodeDiscussion.maxLearnerTurns ? nil : questions))
             RecapAccount.shared.update(response.plan)
             return DiscussionResult(reply: response.asReply, cost: 0)
         }
         return try await discussDirectly(
-            context: context, episode: episode, turns: turns, retelling: retelling)
+            context: context, episode: episode, turns: turns, retelling: retelling,
+            questions: questions)
     }
 
     private static func discussDirectly(
         context: ModelContext, episode: EpisodeContext,
-        turns: [EpisodeDiscussion.Turn], retelling: String?
+        turns: [EpisodeDiscussion.Turn], retelling: String?, questions: Int
     ) async throws -> DiscussionResult {
         let budget = ClaudeBudget(context: context)
         guard let apiKey = budget.apiKey else { throw ClaudeClientError.noAPIKey }
@@ -52,7 +55,7 @@ enum AIService {
             language: Loc.language, level: AppSettings.englishLevel,
             episodeTitle: episode.title,
             reference: episode.synopsis.map { .synopsis($0) }, retelling: retelling)
-        let messages = EpisodeDiscussion.messages(for: turns)
+        let messages = EpisodeDiscussion.messages(for: turns, limit: questions)
 
         let input = RetellPrompt.estimateTokens(system)
             + messages.reduce(0) { $0 + RetellPrompt.estimateTokens($1.text) }

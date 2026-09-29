@@ -506,6 +506,51 @@ describe("разговор о серии", () => {
     expect(last).toBe(429);
   });
 
+  /** Разговор до `answers` ответов ученика — с настоящими подписями сервера. */
+  async function talk(world: ReturnType<typeof makeWorld>, token: string, answers: number,
+                      extra: Record<string, unknown> = {}) {
+    const turns: Record<string, unknown>[] = [];
+    let response = await world.call("POST", "/v1/discuss", { ...discussion(turns), ...extra }, token);
+    for (let i = 0; i < answers; i++) {
+      turns.push({ speaker: "monchik", text: response.body.reply, sig: response.body.turnSig });
+      turns.push({ speaker: "learner", text: `answer ${i}` });
+      response = await world.call("POST", "/v1/discuss", { ...discussion(turns), ...extra }, token);
+    }
+    return { response, turns };
+  }
+
+  it("короткий разговор на три вопроса прощается после третьего ответа", async () => {
+    const { world, token } = await unlocked();
+    world.claude.reply = monchik("Next question?");
+    const { response } = await talk(world, token, 3, { questions: 3 });
+    expect(response.status).toBe(200);
+    const last = world.claude.calls.at(-1)!.messages.at(-1)!;
+    expect(last.content).toContain("This was the learner's last answer");
+    // Без предела третий ответ — ещё не конец.
+    const full = await unlocked();
+    full.world.claude.reply = monchik("Next question?");
+    await talk(full.world, full.token, 3);
+    expect(full.world.claude.calls.at(-1)!.messages.at(-1)!.content).not.toContain("last answer");
+  });
+
+  it("четвёртый ответ в коротком разговоре не принимается", async () => {
+    const { world, token } = await unlocked();
+    world.claude.reply = monchik("Next question?");
+    const { response, turns } = await talk(world, token, 3, { questions: 3 });
+    turns.push({ speaker: "monchik", text: response.body.reply, sig: response.body.turnSig });
+    turns.push({ speaker: "learner", text: "one more" });
+    const over = await world.call("POST", "/v1/discuss", { ...discussion(turns), questions: 3 }, token);
+    expect(over.body.error).toBe("conversation_over");
+  });
+
+  it("длина разговора — от одного до шести вопросов", async () => {
+    const { world, token } = await unlocked();
+    for (const questions of [0, 7, 2.5, "3"]) {
+      const response = await world.call("POST", "/v1/discuss", { ...discussion(), questions }, token);
+      expect(response.status, String(questions)).toBe(400);
+    }
+  });
+
   it("не больше шести ответов и коротких реплик", async () => {
     const world = makeWorld();
     const token = await withPromo(world);

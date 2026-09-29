@@ -13,6 +13,7 @@ struct EpisodeView: View {
     @Environment(\.modelContext) private var context
     @State private var revealSummary = false
     @State private var showDeckRequest = false
+    @State private var recap = RecapProgress()
 
     private var info: EpisodeInfo { episode.episode }
     private var watched: Bool { show.watched.contains(info.key) }
@@ -31,6 +32,7 @@ struct EpisodeView: View {
         .background(Theme.background.ignoresSafeArea())
         .navigationTitle(info.code)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear { recap = RecapService(context: context).progress(for: episode) }
         .sheet(isPresented: $showDeckRequest) {
             DeckRequestView(initialTopic: "\(episode.showName) \(info.code)", episode: episode)
         }
@@ -111,8 +113,44 @@ struct EpisodeView: View {
         }
     }
 
+    /// Главная кнопка после просмотра: весь разбор серии в одном месте.
+    private var recapButton: some View {
+        NavigationLink {
+            EpisodeRecapView(show: show, episode: episode)
+        } label: {
+            HStack(spacing: 14) {
+                MascotView(mood: recap.isComplete ? .cheer : .hello, size: 54)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Recap")
+                        .font(.app(.title3, weight: .heavy))
+                        .foregroundStyle(Theme.onPrimary)
+                    Text(recap.isComplete
+                         ? tr("Серия разобрана", "Episódio arrumado", "Episode wrapped up")
+                         : tr("5 слов · 3 вопроса · пересказ", "5 palavras · 3 perguntas · reconto",
+                              "5 words · 3 questions · retelling"))
+                        .font(.app(.subheadline, weight: .semibold))
+                        .foregroundStyle(Theme.onPrimary.opacity(0.9))
+                    if recap.fraction > 0, !recap.isComplete {
+                        ChunkyProgressBar(value: recap.fraction, tint: Theme.gold, height: 8)
+                    }
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 15, weight: .heavy))
+                    .foregroundStyle(Theme.onPrimary)
+            }
+            .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .panel(fill: Theme.primary, border: Theme.primaryLip)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("episode.recap")
+    }
+
     private var actions: some View {
         VStack(spacing: 12) {
+            if watched { recapButton }
             CardSectionHeader(title: tr("С этой серией", "Com este episódio", "With this episode"))
             Button {
                 showDeckRequest = true

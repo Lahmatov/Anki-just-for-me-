@@ -174,15 +174,24 @@ public enum EpisodeDiscussion {
         turns.filter { $0.speaker == .learner }.count
     }
 
+    /// Вопросов в коротком разговоре — шаге «Recap после серии».
+    public static let recapQuestions = 3
+
     /// Пора ли прощаться: ответов ученика набралось на весь разговор.
-    public static func isLastTurn(_ turns: [Turn]) -> Bool {
-        learnerTurnCount(turns) >= maxLearnerTurns
+    /// `limit` — длина разговора; больше обычной он не бывает.
+    public static func isLastTurn(_ turns: [Turn], limit: Int = maxLearnerTurns) -> Bool {
+        learnerTurnCount(turns) >= clampedLimit(limit)
+    }
+
+    /// Длина разговора в разумных пределах: от одного вопроса до обычных шести.
+    public static func clampedLimit(_ limit: Int) -> Int {
+        min(max(limit, 1), maxLearnerTurns)
     }
 
     /// История для Messages API. Первым всегда идёт служебное сообщение
     /// от ученика, реплики строго чередуются: подряд идущие ответы одной
     /// стороны склеиваются, пустые пропускаются.
-    public static func messages(for turns: [Turn]) -> [ClaudeRequest.Turn] {
+    public static func messages(for turns: [Turn], limit: Int = maxLearnerTurns) -> [ClaudeRequest.Turn] {
         var result = [ClaudeRequest.Turn(.user, kickoff)]
         for turn in turns {
             let text = turn.text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -194,7 +203,7 @@ public enum EpisodeDiscussion {
                 result.append(ClaudeRequest.Turn(role, text))
             }
         }
-        if isLastTurn(turns), result.last?.role == .user {
+        if isLastTurn(turns, limit: limit), result.last?.role == .user {
             result[result.count - 1].text += lastTurnNote
         }
         return result

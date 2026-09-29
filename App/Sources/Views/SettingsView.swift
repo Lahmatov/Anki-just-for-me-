@@ -14,6 +14,7 @@ struct SettingsView: View {
         AppSettings.default.desiredRetention
 
     @AppStorage(SettingsKey.autoSpeak) private var autoSpeak = true
+    @AppStorage(SettingsKey.soundsEnabled) private var soundsEnabled = true
     @AppStorage(SettingsKey.dailyMinutesGoal) private var goalMinutes = DailyGoal.defaultMinutes
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
     @AppStorage(SettingsKey.appearance) private var appearance = AppAppearance.system.rawValue
@@ -332,6 +333,14 @@ struct SettingsView: View {
             Toggle(tr("Озвучивать автоматически", "Ler em voz alta automaticamente",
                       "Speak automatically"),
                    isOn: $autoSpeak)
+            Toggle(tr("Звуки ответов и праздников", "Sons de respostas e celebrações",
+                      "Answer and celebration sounds"),
+                   isOn: $soundsEnabled)
+                .onChange(of: soundsEnabled) { _, on in
+                    // Включил — сразу слышно, как звучит.
+                    if on { Sounds.play(.correct) }
+                }
+                .accessibilityIdentifier("settings.sounds")
             if let voice = speech.voiceName {
                 LabeledContent(tr("Голос", "Voz", "Voice"), value: voice)
             }
@@ -348,7 +357,10 @@ struct SettingsView: View {
                     "O cartão de audição é lido logo ao aparecer, e a palavra é "
                         + "dita depois da resposta.",
                     "Listening cards play as soon as they appear, and the word "
-                        + "is spoken after you answer."))
+                        + "is spoken after you answer.")
+                 + " " + tr("Звуки молчат, когда телефон на беззвучном.",
+                            "Os sons calam-se com o telemóvel em silêncio.",
+                            "Sounds stay quiet when the phone is on silent."))
         }
     }
 

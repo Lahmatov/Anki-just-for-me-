@@ -151,9 +151,13 @@ public enum BackendAPI {
         public var level: String?
         public var turns: [Turn]
         public var retelling: String?
+        /// Длина разговора; nil — обычная (шесть вопросов), сервер решит сам.
+        public var questions: Int?
 
         public init(showId: Int, season: Int, episode: Int, language: AppLanguage,
-                    level: CEFRLevel?, turns: [EpisodeDiscussion.Turn], retelling: String?) {
+                    level: CEFRLevel?, turns: [EpisodeDiscussion.Turn], retelling: String?,
+                    questions: Int? = nil) {
+            self.questions = questions.map(EpisodeDiscussion.clampedLimit)
             self.showId = showId
             self.season = season
             self.episode = episode

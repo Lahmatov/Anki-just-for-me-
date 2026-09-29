@@ -5,6 +5,10 @@ import AJFMCore
 struct ReviewSessionView: View {
     /// nil — повторяем всё, что подошло по сроку, из всех наборов.
     let deck: Deck?
+    /// Сколько карточек взять: в Recap — пять слов из серии, а не весь набор.
+    var limit: Int?
+    /// Сессия пройдена — для шагов Recap.
+    var onFinish: (() -> Void)?
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -23,6 +27,7 @@ struct ReviewSessionView: View {
                         .onAppear {
                             ProgressService.recordSessionResult(
                                 accurate: model.stats.answered > 0 && model.stats.wrong == 0)
+                            onFinish?()
                         }
                 } else {
                     sessionBody(model)
@@ -40,7 +45,7 @@ struct ReviewSessionView: View {
         .onAppear {
             if model == nil {
                 let created = ReviewSessionModel(context: context)
-                created.load(deck: deck)
+                created.load(deck: deck, limit: limit)
                 model = created
             }
         }
@@ -76,6 +81,11 @@ struct ReviewSessionView: View {
             .onChange(of: model.isRevealed) { _, revealed in
                 guard revealed else { return }
                 reactions += 1
+                switch model.check?.verdict {
+                case .wrong: Sounds.play(.wrong)
+                case .none: break
+                default: Sounds.play(.correct)
+                }
                 if model.check?.verdict == .wrong, !reduceMotion {
                     withAnimation(.linear(duration: 0.45)) { shakes += 1 }
                 }
@@ -441,7 +451,10 @@ struct SessionSummaryView: View {
                 if level == .big { ConfettiView(origin: (0.5, 0.25)) }
             }
             .onAppear {
-                if level == .big { Haptics.success() }
+                if level == .big {
+                    Haptics.success()
+                    Sounds.play(.fanfare)
+                }
             }
     }
 

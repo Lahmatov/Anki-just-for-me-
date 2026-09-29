@@ -50,7 +50,7 @@ final class ReviewSessionModel {
 
     // MARK: - Загрузка
 
-    func load(deck: Deck? = nil, now: Date = Date()) {
+    func load(deck: Deck? = nil, limit: Int? = nil, now: Date = Date()) {
         let queue: ReviewQueue
         if let deck {
             queue = service.queue(for: deck, now: now)
@@ -64,7 +64,7 @@ final class ReviewSessionModel {
             all.map { (ReviewService.queueCard(from: $0).id, $0) },
             uniquingKeysWith: { first, _ in first })
 
-        cards = queue.cards.compactMap { byID[$0.id] }
+        cards = RecapPlan.limitCards(queue.cards, to: limit).compactMap { byID[$0.id] }
         distractorPool = ((try? context.fetch(FetchDescriptor<Note>())) ?? [])
             .map(\.translation)
             .filter { !$0.isEmpty }
