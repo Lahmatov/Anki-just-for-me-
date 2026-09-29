@@ -159,18 +159,25 @@ struct OnboardingView: View {
                 .font(.app(.largeTitle))
                 .foregroundStyle(Theme.ink)
                 .multilineTextAlignment(.center)
-            Text(tr("Лось из Мончегорска — это за Полярным кругом, между озером Имандра "
-                        + "и Мончетундрой. Зимы там длинные, так что я смотрю сериалы "
-                        + "и учу по ним американский английский. Давай вместе!",
-                    "Sou um alce de Monchegorsk, para lá do Círculo Polar, entre o lago "
-                        + "Imandra e a Monchetundra. Os invernos lá são longos, por isso "
-                        + "vejo séries e aprendo inglês americano com elas. Vamos juntos!",
-                    "I'm a moose from Monchegorsk, above the Arctic Circle, between Lake "
-                        + "Imandra and the Monchetundra hills. Winters there are long, so I "
-                        + "watch TV shows and learn American English from them. Let's do it together!"))
+            Text(tr("Сериалы — отличный учебник английского: живая речь, настоящие интонации "
+                        + "и сюжет, который хочется понять. Я превращу каждую серию в слова, "
+                        + "которые останутся с тобой. Давай вместе!",
+                    "As séries são um ótimo manual de inglês: fala real, entoação verdadeira "
+                        + "e uma história que dá vontade de perceber. Transformo cada episódio "
+                        + "em palavras que ficam contigo. Vamos juntos!",
+                    "TV shows make a great English textbook: real speech, real intonation "
+                        + "and a story you actually want to follow. I'll turn every episode "
+                        + "into words that stay with you. Let's do it together!"))
                 .font(.app(.body))
                 .foregroundStyle(Theme.muted)
                 .multilineTextAlignment(.center)
+            NavigationLink {
+                WhySeriesView()
+            } label: {
+                Label(tr("Почему это работает", "Porque é que funciona", "Why it works"),
+                      systemImage: "book.pages")
+                    .font(.app(.callout, weight: .bold))
+            }
             Text(tr("Пара минут настройки — и начнём.", "Uns minutos de configuração e começamos.",
                     "A couple of minutes of setup and we're off."))
                 .font(.app(.callout, weight: .bold))

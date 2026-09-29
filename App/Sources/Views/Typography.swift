@@ -104,6 +104,14 @@ enum AppFont: String, CaseIterable, Identifiable {
         return .system(style, design: design, weight: weight)
     }
 
+    /// Произвольный кегль, который всё равно растёт с Dynamic Type.
+    func font(size: CGFloat, relativeTo style: Font.TextStyle, weight: Font.Weight) -> Font {
+        if let name = customName(weight) {
+            return .custom(name, size: size, relativeTo: style)
+        }
+        return .system(size: size, weight: weight, design: design)
+    }
+
     // MARK: - UIKit
 
     /// Заголовки навигации рисует UIKit, и `.font` из SwiftUI до них не
@@ -151,6 +159,13 @@ extension Font {
     /// как на табло в играх.
     static func display(_ style: Font.TextStyle) -> Font {
         .app(style, weight: .black)
+    }
+
+    /// Самая крупная цифра экрана («11 карточек», «92%»). Настоящий кегль,
+    /// а не `scaleEffect`: увеличение эффектом не меняет место в раскладке,
+    /// и цифра наезжала на подпись рядом.
+    static func hero(_ size: CGFloat = 52) -> Font {
+        AppFont.current.font(size: size, relativeTo: .largeTitle, weight: .black)
     }
 
     /// Транскрипция всегда системным шрифтом: ни в Nunito, ни в Rubik

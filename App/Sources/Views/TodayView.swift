@@ -110,11 +110,10 @@ struct TodayView: View {
                 // Цифра — главное на экране, её видно с вытянутой руки.
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text("\(summary.total)")
-                        .font(.display(.largeTitle))
-                        .scaleEffect(1.4, anchor: .bottomLeading)
-                        .padding(.top, 8)
+                        .font(.hero(48))
                         .monospacedDigit()
                         .contentTransition(.numericText())
+                        .lineLimit(1)
                     Text(trForm(summary.total, ru: ("карточка", "карточки", "карточек"),
                                 pt: ("cartão", "cartões"), en: ("card", "cards")))
                         .font(.app(.title3, weight: .semibold))

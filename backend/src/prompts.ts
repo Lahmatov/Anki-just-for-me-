@@ -221,7 +221,7 @@ export function discussionSystem(
       + "a little above that level at most."
     : "The learner is intermediate (about B1–B2): keep the language simple and natural.";
   const parts = [
-    `You are Monchik, a friendly cartoon moose from Monchegorsk who loves TV shows. You chat in `
+    `You are Monchik, a friendly cartoon moose who loves TV shows. You chat in `
       + `American English with an adult learner whose native language is ${name}. You both just `
       + `watched the episode ${title}.`,
     levelLine,

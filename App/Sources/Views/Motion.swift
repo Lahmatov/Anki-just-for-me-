@@ -85,9 +85,12 @@ struct AuroraBackground: View {
     var intensity: Double = 0.55
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// Через несколько секунд сияние застывает: переливаться, пока экран
+    /// открыт, — это 30 кадров в секунду впустую и тёплый телефон.
+    @State private var settled = false
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { context in
+        TimelineView(.animation(minimumInterval: 1 / 24, paused: reduceMotion || settled)) { context in
             let t = reduceMotion ? 0 : context.date.timeIntervalSinceReferenceDate
             MeshGradient(
                 width: 3, height: 3,
@@ -101,6 +104,10 @@ struct AuroraBackground: View {
         }
         .ignoresSafeArea()
         .accessibilityHidden(true)
+        .task {
+            try? await Task.sleep(for: .seconds(8))
+            settled = true
+        }
     }
 
     /// Края сетки неподвижны, внутренние узлы плавают по синусам с разными
@@ -262,7 +269,9 @@ struct CelebrationOverlay: View {
                         .foregroundStyle(Theme.muted)
                 }
             }
-            .padding(32)
+            .padding(28)
+            .glassEffect(.regular, in: .rect(cornerRadius: 32))
+            .padding(24)
             .scaleEffect(appeared ? 1 : 0.7)
             .opacity(appeared ? 1 : 0)
             ConfettiView()

@@ -89,8 +89,13 @@ struct ReviewSessionView: View {
     /// сама карточка — содержимое и остаётся плотной.
     @ViewBuilder
     private func footer(_ model: ReviewSessionModel) -> some View {
-        Group {
+        let hasControls = model.isRevealed
+            || model.current?.type.requiresTyping == true
+            || model.current?.type == .pronunciation
+        if hasControls {
             footerContent(model)
+                .padding(8)
+                .glassEffect(.regular, in: .rect(cornerRadius: 26))
         }
     }
 
@@ -372,23 +377,28 @@ struct GradeButtons: View {
             model.grade(grade)
         } label: {
             VStack(spacing: 2) {
-                Text(grade.title).font(.app(.callout, weight: .medium))
+                // Одной строкой всегда: слово, разорванное на «Хорош/о»,
+                // читается хуже, чем чуть уменьшенное.
+                Text(grade.title)
+                    .font(.app(.callout, weight: .medium))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                 // Интервал прямо на кнопке: выбор оценки должен быть
                 // осознанным, а не гаданием.
                 Text(model.interval(for: grade))
                     .font(.app(.caption2))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                     .opacity(0.8)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 4)
         }
         .controlSize(.large)
+        .buttonStyle(ChunkyButtonStyle(kind: model.suggestedGrade == grade ? .primary : .secondary,
+                                       horizontalPadding: 4))
 
-        if model.suggestedGrade == grade {
-            button.buttonStyle(.chunky)
-        } else {
-            button.buttonStyle(.chunkySecondary)
-        }
+        button
     }
 
     var body: some View {
@@ -482,9 +492,7 @@ struct SessionSummaryView: View {
         VStack(spacing: 14) {
             // Цифра набегает вместе с полосой: «0 → 92%» читается как итог работы.
             CountingText(value: shownAccuracy * 100, suffix: "%")
-                .font(.display(.largeTitle))
-                .scaleEffect(1.6)
-                .padding(.vertical, 12)
+                .font(.hero(56))
                 .monospacedDigit()
             ChunkyProgressBar(value: shownAccuracy, tint: ringColor)
             Text(tr("точность", "precisão", "accuracy"))

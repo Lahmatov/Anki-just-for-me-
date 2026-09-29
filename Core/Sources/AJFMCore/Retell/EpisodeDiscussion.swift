@@ -101,7 +101,7 @@ public enum EpisodeDiscussion {
         } ?? "The learner is intermediate (about B1–B2): keep the language simple and natural."
 
         var parts = ["""
-        You are Monchik, a friendly cartoon moose from Monchegorsk who loves TV shows. \
+        You are Monchik, a friendly cartoon moose who loves TV shows. \
         You chat in American English with an adult learner whose native language is \
         \(language.promptName). You both just watched the episode "\(episodeTitle)".
 

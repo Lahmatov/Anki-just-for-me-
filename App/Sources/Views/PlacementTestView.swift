@@ -336,10 +336,8 @@ struct PlacementTestView: View {
             VStack(spacing: 18) {
                 MascotView(mood: .cheer, size: 150)
                 Text(outcome.level.rawValue)
-                    .font(.display(.largeTitle))
-                    .scaleEffect(1.6)
+                    .font(.hero(56))
                     .foregroundStyle(Theme.primary)
-                    .padding(.vertical, 10)
 
                 VStack(spacing: 12) {
                     resultRow(

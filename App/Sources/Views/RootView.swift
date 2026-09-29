@@ -31,28 +31,25 @@ struct RootView: View {
     @AppStorage(SettingsKey.appLanguage) private var language = ""
 
     var body: some View {
-        // Свои вкладки вместо системного TabView: стеклянный таб-бар iOS 26
-        // не перекрасить в пиксельный стиль. Все вкладки живут одновременно —
-        // так каждая помнит, куда в ней перешли, как и в системном TabView.
-        // Панель вкладок — под содержимым, а не поверх него: иначе нижние
-        // кнопки экранов уезжали под панель.
-        //
-        // Живёт только открытая вкладка. Когда жили все пять сразу, каждое
+        // Свои вкладки вместо системного TabView — стекло то же, что в iOS 26,
+        // но живёт только открытая вкладка. Когда жили все пять сразу, каждое
         // сохранение в базе перерисовывало и скрытые — с полными выборками
         // карточек и повторов, — и телефон грелся. Цена — при переключении
         // вкладка открывается с начала.
-        VStack(spacing: 0) {
-            Group {
-                switch tab {
-                case .today: TodayView()
-                case .decks: decksTab
-                case .rewards: RewardsView()
-                case .shows: ShowsView()
-                case .settings: SettingsView()
-                }
+        Group {
+            switch tab {
+            case .today: TodayView()
+            case .decks: decksTab
+            case .rewards: RewardsView()
+            case .shows: ShowsView()
+            case .settings: SettingsView()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        // Стеклянная панель плавает над содержимым: списки прокручиваются
+        // под ней и просвечивают, а отступ снизу у экранов выставляется
+        // сам — нижние кнопки под панель не уезжают.
+        .safeAreaInset(edge: .bottom, spacing: 0) {
             // Пока открыта клавиатура, панель прячется: иначе она висела бы
             // над клавиатурой и отъедала место у поля ввода.
             if !keyboard.isVisible {

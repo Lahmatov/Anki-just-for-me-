@@ -91,13 +91,13 @@ final class ReviewSessionModel {
         }
     }
 
-    /// Варианты для карточки на узнавание: правильный перевод плюс три чужих.
+    /// Варианты для карточки на узнавание: правильный перевод плюс до трёх
+    /// чужих — на том же языке (см. `Distractors`).
     private func makeChoices(for card: Card) -> [String] {
         guard let correct = card.note?.translation else { return [] }
-        var pool = Set(distractorPool)
-        pool.remove(correct)
-        let wrong = pool.shuffled().prefix(3)
-        // Меньше четырёх слов в базе — покажем сколько есть, это не повод падать.
+        var generator = SystemRandomNumberGenerator()
+        let wrong = Distractors.pick(correct: correct, pool: distractorPool, using: &generator)
+        // Меньше четырёх подходящих слов — покажем сколько есть, это не повод падать.
         return ([correct] + wrong).shuffled()
     }
 

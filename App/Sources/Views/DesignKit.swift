@@ -122,13 +122,17 @@ extension View {
 struct ChunkyButtonStyle: ButtonStyle {
     enum Kind { case primary, secondary, destructive }
     var kind: Kind = .primary
+    /// Поля по бокам. Для четырёх кнопок в ряд (оценки) — узкие, иначе
+    /// на телефоне поменьше «Хорошо» не влезает и рвётся на «Хорош/о».
+    var horizontalPadding: CGFloat = 16
 
     @Environment(\.isEnabled) private var isEnabled
 
     /// Явный инициализатор: из-за приватного `isEnabled` поэлементный
     /// был бы недоступен за пределами файла.
-    init(kind: Kind = .primary) {
+    init(kind: Kind = .primary, horizontalPadding: CGFloat = 16) {
         self.kind = kind
+        self.horizontalPadding = horizontalPadding
     }
 
     private var fill: Color {
@@ -161,7 +165,7 @@ struct ChunkyButtonStyle: ButtonStyle {
         return configuration.label
             .fontWeight(.bold)
             .foregroundStyle(isEnabled ? foreground : Theme.muted)
-            .padding(.horizontal, 16)
+            .padding(.horizontal, horizontalPadding)
             .padding(.vertical, 11)
             .frame(minHeight: 46)
             .background {
