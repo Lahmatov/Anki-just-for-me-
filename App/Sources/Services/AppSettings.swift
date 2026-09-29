@@ -47,11 +47,13 @@ enum SettingsKey {
     static let goalCelebratedDay = "goalCelebratedDay"
     static let celebratedStreak = "celebratedStreak"
     /// Сквозной номер последней отпразднованной остановки на карте; -1 — ещё не начинали.
-    static let journeyCelebratedStop = "journeyCelebratedStop"
+    /// Новый ключ, а не старый `journeyCelebratedStop`: номера остановок
+    /// поменялись со сменой карты (P-57), и старая отметка праздновала бы
+    /// давно пройденное.
+    static let journeyCelebratedStop = "journeyCelebratedMilestone"
     /// Где фишку видели на карте в прошлый раз: остановка и сквозной номер
     /// старта её круга. Отсюда фишка шагает при следующем открытии.
     static let journeyLastSeenStop = "journeyLastSeenStop"
-    static let journeyLastSeenLap = "journeyLastSeenLap"
     /// Выбранный провайдер ИИ и модель у каждого (`AIKeys`).
     static let aiProvider = "aiProvider"
     static let aiModelPrefix = "aiModel."

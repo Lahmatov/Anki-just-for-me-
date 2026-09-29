@@ -1,188 +1,143 @@
 import Foundation
 
-/// Остановка на карте путешествия.
+/// Остановка на карте путешествия — круглое число слов.
 public struct JourneyStop: Equatable, Sendable, Identifiable {
     public enum Kind: Equatable, Sendable {
         case start
         case step
-        /// Каждая пятая остановка — сундук: заметная веха и праздник.
+        /// Веха: круглое число слов, которое стоит отпраздновать.
         case chest
         case finish
     }
 
     public var index: Int
-    /// Сколько очков пути нужно, чтобы дойти сюда с начала круга.
+    /// Сколько слов нужно начать, чтобы дойти сюда.
     public var threshold: Int
     public var kind: Kind
-    /// Место из сериала и сам сериал — названия собственные, не переводятся.
-    public var place: String
-    public var show: String
 
     public var id: Int { index }
 
-    public init(index: Int, threshold: Int, kind: Kind, place: String, show: String) {
+    public init(index: Int, threshold: Int, kind: Kind) {
         self.index = index
         self.threshold = threshold
         self.kind = kind
-        self.place = place
-        self.show = show
+    }
+
+    /// Название остановки: «Старт» или «100 слов».
+    public var title: String {
+        kind == .start ? tr("Старт", "Partida", "Start") : Counted.words(threshold)
+    }
+
+    /// Во что это число слов переводится в сериях: у готовых наборов каталога
+    /// в серии около 15 слов. Это мерило понятнее голого числа — «100 слов»
+    /// ничего не говорит, а «≈ 7 серий» можно представить.
+    public var episodesEquivalent: Int {
+        Journey.episodes(forWords: threshold)
     }
 }
 
-/// Где сейчас фишка.
+/// Где фишка.
 public struct JourneyPosition: Equatable, Sendable {
-    /// Сколько кругов пройдено целиком (0 — первый круг).
-    public var lap: Int
-    /// Остановка на текущем круге, до которой уже дошли.
+    /// Остановка, до которой уже дошли.
     public var stopIndex: Int
-    /// Очки, набранные после этой остановки, и длина пути до следующей.
-    public var pointsIntoLeg: Int
+    /// Сколько всего слов начато.
+    public var words: Int
+    /// Слов после этой остановки и длина пути до следующей (0 — финиш).
+    public var wordsIntoLeg: Int
     public var legLength: Int
-    /// Сколько остановок пройдено за всё время, считая все круги. По этому
-    /// числу решается, что праздновать.
-    public var reachedStops: Int
 
-    public var pointsToNext: Int { max(legLength - pointsIntoLeg, 0) }
+    public var wordsToNext: Int { max(legLength - wordsIntoLeg, 0) }
+
+    public var isFinished: Bool { legLength == 0 }
 
     public var fraction: Double {
-        legLength > 0 ? min(max(Double(pointsIntoLeg) / Double(legLength), 0), 1) : 0
+        guard legLength > 0 else { return 1 }
+        return min(max(Double(wordsIntoLeg) / Double(legLength), 0), 1)
     }
 
-    public init(lap: Int, stopIndex: Int, pointsIntoLeg: Int, legLength: Int, reachedStops: Int) {
-        self.lap = lap
+    public init(stopIndex: Int, words: Int, wordsIntoLeg: Int, legLength: Int) {
         self.stopIndex = stopIndex
-        self.pointsIntoLeg = pointsIntoLeg
+        self.words = words
+        self.wordsIntoLeg = wordsIntoLeg
         self.legLength = legLength
-        self.reachedStops = reachedStops
     }
 }
 
-/// Карта-путешествие по Америке из сериалов: фишка с Мончиком идёт от
-/// остановки к остановке, как в настольной игре.
+/// Карта-путешествие: фишка с Мончиком идёт от остановки к остановке, как в
+/// настольной игре, а остановки — это число начатых слов: 10, 25, 50, 100…
 ///
-/// Ходит фишка не за время в приложении, а за слова: очко — за каждое
-/// начатое слово и ещё одно, когда слово выучено (дожило до долгосрочной
-/// памяти). Так карта растёт от учёбы, а не от того, сколько раз открыли
-/// экран, и начинающий видит движение с первого дня, а не через три недели,
-/// когда созреют первые слова. Решение P-53 в docs/decisions.md.
+/// Раньше остановки были городами из сериалов, а ход — «шагами» (слово
+/// начато — шаг, выучено — ещё шаг). Ни то, ни другое нельзя было проверить:
+/// сколько это — «до Scranton 12 шагов»? Теперь каждая остановка — число,
+/// которое видно и в статистике. Считаются начатые слова, а не выученные:
+/// выученные зреют недели, и начинающий три недели стоял бы на старте.
+/// Сколько из них уже выучено, карта показывает рядом. Решение P-57.
 public enum Journey {
 
-    /// Места по порядку. Первое — старт, последнее — финиш круга.
-    static let places: [(place: String, show: String)] = [
-        ("Monchik's Den", "Recap"),
-        ("Scranton", "The Office"),
-        ("Stars Hollow", "Gilmore Girls"),
-        ("Hawkins", "Stranger Things"),
-        ("Pawnee", "Parks and Recreation"),
-        ("Central Perk", "Friends"),
-        ("Greendale", "Community"),
-        ("Twin Peaks", "Twin Peaks"),
-        ("Riverdale", "Riverdale"),
-        ("The Nine-Nine", "Brooklyn Nine-Nine"),
-        ("Albuquerque", "Breaking Bad"),
-        ("Springfield", "The Simpsons"),
-        ("Sunnydale", "Buffy the Vampire Slayer"),
-        ("Quahog", "Family Guy"),
-        ("Mystic Falls", "The Vampire Diaries"),
-        ("Seattle Grace", "Grey's Anatomy"),
-        ("Dillon", "Friday Night Lights"),
-        ("Bluebell", "Hart of Dixie"),
-        ("Newport Beach", "The O.C."),
-        ("Rosewood", "Pretty Little Liars"),
-        ("Madison Avenue", "Mad Men"),
-        ("Tree Hill", "One Tree Hill"),
-        ("Wisteria Lane", "Desperate Housewives"),
-        ("Bon Temps", "True Blood"),
-        ("Capeside", "Dawson's Creek"),
-        ("Litchfield", "Orange Is the New Black"),
-        ("Mayberry", "The Andy Griffith Show"),
-        ("Cicely", "Northern Exposure"),
-        ("Palo Alto", "Silicon Valley"),
-        ("Hollywood", "Entourage"),
+    /// Пороги остановок. Шаг растёт с числом слов: 10 → 25 в начале — та же
+    /// доля пути, что 5000 → 6000 в конце, и первая же сессия сдвигает фишку.
+    public static let thresholds: [Int] = [
+        0, 10, 25, 50, 75, 100, 150, 200, 250, 300,
+        400, 500, 600, 700, 850, 1000, 1200, 1400, 1600, 1800,
+        2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000, 8500, 10000,
     ]
 
-    /// Шаг до остановки `index`. Первые пять — по 5 очков, чтобы первая
-    /// же сессия сдвинула фишку; дальше каждые пять остановок шаг растёт
-    /// на 5: без роста середина пути пролеталась бы, а конец тянулся бы
-    /// так же быстро, и вехи перестали бы что-то значить.
-    public static func legLength(to index: Int) -> Int {
-        guard index > 0 else { return 0 }
-        return 5 * ((index - 1) / 5 + 1)
+    /// Вехи, на которых сундук и праздник: круглые числа, которые приятно
+    /// назвать вслух. Праздник на каждой остановке быстро приелся бы.
+    public static let chestThresholds: Set<Int> = [100, 250, 500, 1000, 2000, 3000, 5000, 7000]
+
+    /// Слов в серии у готовых наборов каталога — для «≈ N серий».
+    public static let wordsPerEpisode = 15
+
+    public static let stops: [JourneyStop] = thresholds.enumerated().map { index, threshold in
+        let kind: JourneyStop.Kind
+        if index == 0 {
+            kind = .start
+        } else if index == thresholds.count - 1 {
+            kind = .finish
+        } else if chestThresholds.contains(threshold) {
+            kind = .chest
+        } else {
+            kind = .step
+        }
+        return JourneyStop(index: index, threshold: threshold, kind: kind)
     }
 
-    public static let stops: [JourneyStop] = {
-        var threshold = 0
-        return places.enumerated().map { index, entry in
-            threshold += legLength(to: index)
-            let kind: JourneyStop.Kind
-            if index == 0 {
-                kind = .start
-            } else if index == places.count - 1 {
-                kind = .finish
-            } else if index % 5 == 0 {
-                kind = .chest
-            } else {
-                kind = .step
-            }
-            return JourneyStop(index: index, threshold: threshold, kind: kind,
-                               place: entry.place, show: entry.show)
-        }
-    }()
-
-    /// Очков на один круг — порог финиша.
-    public static var lapLength: Int { stops.last?.threshold ?? 0 }
-
-    /// Очки пути. Выученных не может быть больше начатых — если база
-    /// говорит иначе, лишнее не засчитывается, а отрицательное считается нулём.
-    public static func points(startedWords: Int, matureWords: Int) -> Int {
-        let started = max(startedWords, 0)
-        return started + min(max(matureWords, 0), started)
+    /// Серий, в которых примерно столько слов. Хотя бы одна — иначе
+    /// «10 слов ≈ 0 серий» звучало бы как насмешка.
+    public static func episodes(forWords words: Int) -> Int {
+        guard words > 0 else { return 0 }
+        return max(1, Int((Double(words) / Double(wordsPerEpisode)).rounded()))
     }
 
-    /// Положение фишки. После финиша начинается новый круг с того же старта.
-    public static func position(points rawPoints: Int) -> JourneyPosition {
-        let points = max(rawPoints, 0)
-        let perLap = lapLength
-        let stopsPerLap = stops.count - 1
-        guard perLap > 0, stopsPerLap > 0 else {
-            return JourneyPosition(lap: 0, stopIndex: 0, pointsIntoLeg: 0, legLength: 0, reachedStops: 0)
+    /// Положение фишки. Отрицательное число слов — ноль. После финиша фишка
+    /// стоит на нём: дальше 10 000 слов карта не ведёт, и это честно.
+    public static func position(words rawWords: Int) -> JourneyPosition {
+        let words = max(rawWords, 0)
+        let index = stops.lastIndex { $0.threshold <= words } ?? 0
+        let here = stops[index].threshold
+        guard index + 1 < stops.count else {
+            return JourneyPosition(stopIndex: index, words: words, wordsIntoLeg: 0, legLength: 0)
         }
-        let lap = points / perLap
-        let within = points % perLap
-        let index = stops.lastIndex { $0.threshold <= within } ?? 0
-        let next = index + 1 < stops.count ? stops[index + 1].threshold : perLap
-        return JourneyPosition(
-            lap: lap, stopIndex: index,
-            pointsIntoLeg: within - stops[index].threshold,
-            legLength: next - stops[index].threshold,
-            reachedStops: lap * stopsPerLap + index)
+        return JourneyPosition(stopIndex: index, words: words, wordsIntoLeg: words - here,
+                               legLength: stops[index + 1].threshold - here)
     }
 
     /// Веха, которую стоит отпраздновать: последний сундук или финиш,
     /// пройденный с прошлого праздника, или nil.
     ///
-    /// Праздник на каждой клетке перестал бы быть праздником уже на
-    /// второй день — поэтому только сундуки и финиш; обычные клетки видны
-    /// на карте ходом фишки. `celebrated` меньше нуля — праздновать ещё не
-    /// начинали (первый запуск после обновления): иначе человек с полугодом
-    /// учёбы получил бы салют за сундук, открытый давно. Откат (слова
-    /// забылись) праздника не даёт, и повторного за ту же веху тоже.
+    /// `celebrated` меньше нуля — праздновать ещё не начинали (первый запуск
+    /// после обновления): иначе человек с полугодом учёбы получил бы салют
+    /// за веху, пройденную давно. Откат (слова удалены) праздника не даёт,
+    /// и повторного за ту же веху тоже.
     public static func stopToCelebrate(celebrated: Int, reached: Int) -> Int? {
         guard celebrated >= 0, reached > celebrated else { return nil }
-        return ((celebrated + 1)...reached).last { isMilestone(stop(reached: $0)) }
+        let last = min(reached, stops.count - 1)
+        guard last > celebrated else { return nil }
+        return ((celebrated + 1)...last).last { isMilestone(stops[$0]) }
     }
 
     public static func isMilestone(_ stop: JourneyStop) -> Bool {
         stop.kind == .chest || stop.kind == .finish
-    }
-
-    /// Остановка по сквозному номеру (с учётом кругов).
-    public static func stop(reached: Int) -> JourneyStop {
-        let stopsPerLap = max(stops.count - 1, 1)
-        let index = max(reached, 0) % stopsPerLap
-        // Сквозной номер, кратный длине круга, — это финиш, а не старт
-        // следующего круга: праздновать нужно именно его.
-        if reached > 0, index == 0 { return stops[stops.count - 1] }
-        return stops[index]
     }
 }

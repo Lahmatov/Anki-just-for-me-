@@ -26,15 +26,18 @@ final class LocalizationTests: XCTestCase {
         XCTAssertEqual(Counted.times(2), "2 раза")
     }
 
-    func testJourneyStepsInAllLanguages() {
+    func testEpisodesInAllLanguages() {
         Loc.language = .russian
-        XCTAssertEqual(Counted.steps(1), "1 шаг")
-        XCTAssertEqual(Counted.steps(4), "4 шага")
-        XCTAssertEqual(Counted.steps(12), "12 шагов")
+        XCTAssertEqual(Counted.episodes(1), "1 серия")
+        XCTAssertEqual(Counted.episodes(3), "3 серии")
+        XCTAssertEqual(Counted.episodes(7), "7 серий")
+        XCTAssertEqual(Counted.episodes(21), "21 серия")
         Loc.language = .portuguese
-        XCTAssertEqual(Counted.steps(0), "0 passos")
+        XCTAssertEqual(Counted.episodes(1), "1 episódio")
+        XCTAssertEqual(Counted.episodes(0), "0 episódios")
         Loc.language = .english
-        XCTAssertEqual(Counted.steps(1), "1 step")
+        XCTAssertEqual(Counted.episodes(1), "1 episode")
+        XCTAssertEqual(Counted.episodes(2), "2 episodes")
     }
 
     func testPortugueseSingularOnlyForOne() {

@@ -71,24 +71,36 @@ final class ProgressServiceTests: XCTestCase {
         XCTAssertEqual(service.startedWordCount(), 1)
     }
 
-    func testMatureWordsMoveTokenTwice() throws {
+    func testTokenMovesByStartedWords() throws {
         let (context, importer, service) = try makeEnvironment()
-        try importWords(importer, count: 5, types: [.recognition])
+        try importWords(importer, count: 12, types: [.recognition])
         let cards = try context.fetch(FetchDescriptor<Card>())
-        // Пять начатых, из них три выученных — 8 очков: первая остановка
-        // (5) пройдена, до второй (10) — 2 очка.
+        // Двенадцать начатых: остановка «10 слов» пройдена, до «25» — 13.
         for card in cards { card.state = .learning }
-        makeMature(Array(cards.prefix(3)))
         try context.save()
 
         let position = service.journeyPosition()
         XCTAssertEqual(position.stopIndex, 1)
-        XCTAssertEqual(position.pointsToNext, 2)
+        XCTAssertEqual(position.words, 12)
+        XCTAssertEqual(position.wordsToNext, 13)
+    }
+
+    func testMatureWordsDoNotCountTwice() throws {
+        let (context, importer, service) = try makeEnvironment()
+        try importWords(importer, count: 8, types: [.recognition])
+        let cards = try context.fetch(FetchDescriptor<Card>())
+        // Остановка — число слов: выученное слово остаётся одним словом.
+        for card in cards { card.state = .learning }
+        makeMature(Array(cards.prefix(5)))
+        try context.save()
+
+        XCTAssertEqual(service.journeyPosition().words, 8)
+        XCTAssertEqual(service.journeyPosition().stopIndex, 0)
     }
 
     func testEmptyDatabaseStandsAtStart() throws {
         let (_, _, service) = try makeEnvironment()
-        XCTAssertEqual(service.journeyPosition(), Journey.position(points: 0))
+        XCTAssertEqual(service.journeyPosition(), Journey.position(words: 0))
     }
 
     // MARK: - Контракты

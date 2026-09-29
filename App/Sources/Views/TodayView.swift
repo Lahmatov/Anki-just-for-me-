@@ -460,14 +460,19 @@ struct TodayView: View {
             return
         }
         if let chest {
-            let stop = Journey.stop(reached: chest)
+            let stop = Journey.stops[chest]
+            let episodes = Counted.episodes(stop.episodesEquivalent)
             celebration = CelebrationMoment(
                 title: stop.kind == .finish
-                    ? tr("Финиш! Круг пройден", "Meta! Volta completa", "Finish! Lap complete")
-                    : tr("Сундук в \(stop.place)!", "Baú em \(stop.place)!", "Chest in \(stop.place)!"),
-                subtitle: tr("Мончик дошёл до новой вехи на карте. Дальше — ещё интереснее.",
-                             "O Monchik chegou a um novo marco no mapa. O resto é ainda melhor.",
-                             "Monchik reached a new milestone on the map. It only gets better."))
+                    ? tr("\(stop.title)! Карта пройдена", "\(stop.title)! Mapa completo",
+                         "\(stop.title)! Map complete")
+                    : stop.title + "!",
+                subtitle: tr("Это примерно \(episodes) — столько слов в готовых наборах. "
+                                 + "Мончик открыл сундук на карте.",
+                             "É mais ou menos \(episodes) de baralhos prontos. "
+                                 + "O Monchik abriu um baú no mapa.",
+                             "That's about \(episodes) worth of ready decks. "
+                                 + "Monchik opened a chest on the map."))
             return
         }
         let today = Celebration.dayKey(cutoffHour: dayCutoffHour)
@@ -487,7 +492,7 @@ struct TodayView: View {
     /// двигаем всегда, даже если праздник уступил серии: иначе тот же
     /// сундук отпраздновали бы на следующем открытии экрана.
     private func journeyMilestone() -> Int? {
-        guard let reached = journey?.reachedStops else { return nil }
+        guard let reached = journey?.stopIndex else { return nil }
         let milestone = Journey.stopToCelebrate(celebrated: journeyCelebratedStop, reached: reached)
         journeyCelebratedStop = max(journeyCelebratedStop, reached)
         return milestone

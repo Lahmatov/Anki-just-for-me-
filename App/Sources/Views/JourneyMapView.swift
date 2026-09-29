@@ -3,8 +3,8 @@ import SwiftData
 import AJFMCore
 
 /// Карта путешествия — как поле настольной игры: извилистая дорожка снизу
-/// вверх, остановки в местах из сериалов, сундук на каждой пятой, фишка с
-/// Мончиком. Правила хода — `Journey` в ядре.
+/// вверх, остановки — число начатых слов, сундуки — на круглых вехах, фишка
+/// с Мончиком. Правила хода — `Journey` в ядре.
 ///
 /// Дорожка идёт вверх, а не вниз: подъём читается как лесенка — чем выше,
 /// тем больше выучено, и следующая остановка всегда над фишкой.
@@ -16,8 +16,9 @@ struct JourneyMapView: View {
     /// и шагает до нынешней остановки.
     @AppStorage(SettingsKey.journeyLastSeenStop) private var lastSeenStop = 0
 
-    @State private var position = Journey.position(points: 0)
-    /// Остановка, на которой сейчас нарисована фишка (в пределах круга).
+    @State private var position = Journey.position(words: 0)
+    @State private var matureWords = 0
+    /// Остановка, на которой сейчас нарисована фишка.
     @State private var tokenIndex = 0
     @State private var selected: JourneyStop?
 
@@ -46,35 +47,49 @@ struct JourneyMapView: View {
     // MARK: - Заголовок
 
     private var header: some View {
-        let current = Journey.stops[position.stopIndex]
         let next = Journey.stops[min(position.stopIndex + 1, Journey.stops.count - 1)]
         return VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
-                Text(current.place)
+                Text(Counted.words(position.words))
                     .font(.app(.title2, weight: .heavy))
                     .foregroundStyle(Theme.ink)
+                    .contentTransition(.numericText())
                 Spacer(minLength: 8)
-                if position.lap > 0 {
-                    Text(tr("Круг \(position.lap + 1)", "Volta \(position.lap + 1)",
-                            "Lap \(position.lap + 1)"))
-                        .font(.app(.caption, weight: .heavy))
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background(Theme.gold.opacity(0.25), in: Capsule())
-                }
+                Text(tr("выучено \(matureWords)", "aprendidas \(matureWords)", "\(matureWords) learned"))
+                    .font(.app(.caption, weight: .heavy))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(Theme.green.opacity(0.2), in: Capsule())
             }
             ChunkyProgressBar(value: position.fraction, tint: Theme.green)
-            Text(tr("До \(next.place) — \(Counted.steps(position.pointsToNext))",
-                    "Até \(next.place) — \(Counted.steps(position.pointsToNext))",
-                    "\(Counted.steps(position.pointsToNext)) to \(next.place)"))
+            Text(position.isFinished
+                 ? tr("Карта пройдена целиком. Дальше — только сериалы без субтитров.",
+                      "Mapa completo. Agora é ver séries sem legendas.",
+                      "Map complete. Next up: shows without subtitles.")
+                 : tr("До отметки «\(next.title)» — ещё \(Counted.words(position.wordsToNext))",
+                      "Até «\(next.title)» — faltam \(Counted.words(position.wordsToNext))",
+                      "\(Counted.words(position.wordsToNext)) to go until \(next.title)"))
                 .font(.app(.subheadline, weight: .bold))
                 .foregroundStyle(Theme.ink)
-            Text(tr("Шаг — за каждое начатое слово и ещё один, когда слово выучено.",
-                    "Um passo por cada palavra começada e outro quando a palavra fica aprendida.",
-                    "One step for every word you start, and another once it's learned."))
-                .font(.app(.caption))
-                .foregroundStyle(Theme.muted)
                 .fixedSize(horizontal: false, vertical: true)
+            HintHeader(
+                title: tr("≈ \(Counted.episodes(Journey.episodes(forWords: position.words))) из каталога",
+                          "≈ \(Counted.episodes(Journey.episodes(forWords: position.words))) do catálogo",
+                          "≈ \(Counted.episodes(Journey.episodes(forWords: position.words))) of the catalog"),
+                hint: tr("Остановки — число начатых слов: слово считается, как только его первая "
+                             + "карточка вышла из новых. В готовом наборе к серии около "
+                             + "\(Journey.wordsPerEpisode) слов — отсюда «≈ серий». Выученные — "
+                             + "те, что дожили до долгосрочной памяти.",
+                         "As paragens são o número de palavras começadas: a palavra conta assim que "
+                             + "o primeiro cartão sai dos novos. Um baralho pronto de um episódio tem "
+                             + "cerca de \(Journey.wordsPerEpisode) palavras — daí o «≈ episódios». "
+                             + "Aprendidas são as que chegaram à memória de longo prazo.",
+                         "Stops are the number of words you've started: a word counts once its first "
+                             + "card leaves New. A ready deck for an episode has about "
+                             + "\(Journey.wordsPerEpisode) words — hence \"≈ episodes\". Learned "
+                             + "words are the ones that reached long-term memory."))
+                .font(.app(.caption, weight: .semibold))
+                .foregroundStyle(Theme.muted)
         }
         .cardSurface()
         .padding(.top, 8)
@@ -114,12 +129,14 @@ struct JourneyMapView: View {
         let labelWidth = max(width / 2 - 52, 60)
         return ZStack {
             VStack(alignment: labelOnLeft ? .trailing : .leading, spacing: 1) {
-                Text(stop.place)
+                Text(stop.title)
                     .font(.app(.subheadline, weight: .heavy))
                     .foregroundStyle(isReached(stop) ? Theme.ink : Theme.muted)
-                Text(stop.show)
-                    .font(.app(.caption2, weight: .semibold))
-                    .foregroundStyle(Theme.muted)
+                if stop.threshold > 0 {
+                    Text("≈ " + Counted.episodes(stop.episodesEquivalent))
+                        .font(.app(.caption2, weight: .semibold))
+                        .foregroundStyle(Theme.muted)
+                }
             }
             .lineLimit(2)
             .minimumScaleFactor(0.8)
@@ -192,8 +209,13 @@ struct JourneyMapView: View {
 
     private func stopDetails(_ stop: JourneyStop) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(stop.place).font(.app(.headline, weight: .heavy))
-            Text(stop.show).font(.app(.subheadline)).foregroundStyle(Theme.muted)
+            Text(stop.title).font(.app(.headline, weight: .heavy))
+            if stop.threshold > 0 {
+                Text(tr("≈ \(Counted.episodes(stop.episodesEquivalent)) готовых наборов",
+                        "≈ \(Counted.episodes(stop.episodesEquivalent)) de baralhos prontos",
+                        "≈ \(Counted.episodes(stop.episodesEquivalent)) of ready decks"))
+                    .font(.app(.subheadline)).foregroundStyle(Theme.muted)
+            }
             Divider()
             Text(detailText(for: stop))
                 .font(.app(.footnote, weight: .semibold))
@@ -210,16 +232,16 @@ struct JourneyMapView: View {
                      "Chest opened — you've been here.")
                 : tr("Пройдено.", "Concluído.", "Done.")
         }
-        let left = stop.threshold - (Journey.stops[position.stopIndex].threshold + position.pointsIntoLeg)
-        return tr("Осталось \(Counted.steps(left)).", "Faltam \(Counted.steps(left)).",
-                  "\(Counted.steps(left)) to go.")
+        let left = stop.threshold - position.words
+        return tr("Осталось \(Counted.words(left)).", "Faltam \(Counted.words(left)).",
+                  "\(Counted.words(left)) to go.")
     }
 
     private func accessibilityLabel(for stop: JourneyStop) -> String {
         let state = isReached(stop)
             ? tr("пройдено", "concluído", "done")
             : tr("впереди", "à frente", "ahead")
-        return "\(stop.place), \(stop.show), \(state)"
+        return "\(stop.title), \(state)"
     }
 
     private func isReached(_ stop: JourneyStop) -> Bool {
@@ -277,17 +299,17 @@ struct JourneyMapView: View {
     // MARK: - Ход фишки
 
     private func start(_ proxy: ScrollViewProxy) {
-        position = ProgressService(context: context).journeyPosition()
+        let progress = ProgressService(context: context)
+        position = progress.journeyPosition()
+        matureWords = progress.matureWordCount()
         let target = position.stopIndex
-        // С прошлого раза фишка могла пройти несколько клеток. Если новый
-        // круг или откат — прошлое место на этом круге ничего не значит.
-        let from = (lastSeenStop <= target && position.reachedStops - target == lastSeenStopLapBase)
-            ? lastSeenStop : target
+        // С прошлого раза фишка могла пройти несколько клеток. Откат (слова
+        // удалены) не проигрывается — фишка просто стоит, где должна.
+        let from = lastSeenStop <= target ? lastSeenStop : target
         tokenIndex = from
         // Сразу в onAppear прокрутка теряется: поле ещё не разложено.
         DispatchQueue.main.async { proxy.scrollTo(from, anchor: .center) }
         lastSeenStop = target
-        lastSeenStopLapBase = position.reachedStops - target
         guard from < target, !reduceMotion else {
             tokenIndex = target
             return
@@ -307,9 +329,6 @@ struct JourneyMapView: View {
             }
         }
     }
-
-    /// Сквозной номер старта круга, на котором фишку видели в прошлый раз.
-    @AppStorage(SettingsKey.journeyLastSeenLap) private var lastSeenStopLapBase = 0
 }
 
 /// Карточка карты для экранов «Сегодня» и «Награды»: мини-лесенка из
@@ -318,7 +337,6 @@ struct JourneyCard: View {
     let position: JourneyPosition
 
     var body: some View {
-        let current = Journey.stops[position.stopIndex]
         let next = Journey.stops[min(position.stopIndex + 1, Journey.stops.count - 1)]
         NavigationLink {
             JourneyMapView()
@@ -330,15 +348,18 @@ struct JourneyCard: View {
                         .font(.app(.caption, weight: .heavy))
                         .foregroundStyle(Theme.muted)
                         .textCase(.uppercase)
-                    Text(current.place)
+                    Text(Counted.words(position.words))
                         .font(.app(.headline, weight: .heavy))
                         .foregroundStyle(Theme.ink)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
+                        .contentTransition(.numericText())
                     ChunkyProgressBar(value: position.fraction, tint: Theme.green, height: 12)
-                    Text(tr("До \(next.place) — \(Counted.steps(position.pointsToNext))",
-                            "Até \(next.place) — \(Counted.steps(position.pointsToNext))",
-                            "\(Counted.steps(position.pointsToNext)) to \(next.place)"))
+                    Text(position.isFinished
+                         ? tr("Карта пройдена", "Mapa completo", "Map complete")
+                         : tr("До «\(next.title)» — ещё \(position.wordsToNext)",
+                              "Até «\(next.title)» — faltam \(position.wordsToNext)",
+                              "\(position.wordsToNext) more to \(next.title)"))
                         .font(.app(.caption, weight: .semibold))
                         .foregroundStyle(Theme.muted)
                         .lineLimit(2)
