@@ -18,7 +18,6 @@ struct EpisodeRecapView: View {
     @State private var hasCatalogWords = false
     @State private var showDeckRequest = false
     @State private var installError: String?
-    @State private var celebrate = false
 
     private var service: RecapService { RecapService(context: context) }
 
@@ -39,18 +38,6 @@ struct EpisodeRecapView: View {
         .sheet(isPresented: $showDeckRequest, onDismiss: refresh) {
             DeckRequestView(initialTopic: "\(episode.showName) \(episode.episode.code)", episode: episode)
         }
-        .overlay {
-            if celebrate {
-                CelebrationOverlay(
-                    title: tr("Серия разобрана!", "Episódio arrumado!", "Episode wrapped up!"),
-                    subtitle: tr("Слова, вопросы и пересказ — всё. Теперь эта серия и правда твоя.",
-                                 "Palavras, perguntas e reconto — feito. Agora este episódio é mesmo teu.",
-                                 "Words, questions and a retelling — done. This episode is really yours now.")
-                ) { celebrate = false }
-                .transition(.opacity.combined(with: .scale(scale: 0.96)))
-            }
-        }
-        .animation(.app, value: celebrate)
         .animation(.app, value: progress)
         .alert(CommonText.failedTitle,
                isPresented: Binding(get: { installError != nil }, set: { if !$0 { installError = nil } }),
@@ -213,7 +200,13 @@ struct EpisodeRecapView: View {
         if progress.isComplete, !wasComplete {
             Haptics.success()
             // Праздник (и его фанфары) — когда человек вернётся на этот экран, а не поверх шага.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { celebrate = true }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                Celebrations.shared.show(
+                    tr("Серия разобрана!", "Episódio arrumado!", "Episode wrapped up!"),
+                    subtitle: tr("Слова, вопросы и пересказ — всё. Теперь эта серия и правда твоя.",
+                                 "Palavras, perguntas e reconto — feito. Agora este episódio é mesmo teu.",
+                                 "Words, questions and a retelling — done. This episode is really yours now."))
+            }
         }
     }
 }

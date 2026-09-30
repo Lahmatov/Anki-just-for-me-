@@ -28,15 +28,9 @@ struct TodayView: View {
     @AppStorage(SettingsKey.goalCelebratedDay) private var goalCelebratedDay = ""
     @AppStorage(SettingsKey.celebratedStreak) private var celebratedStreak = 0
     @AppStorage(SettingsKey.journeyCelebratedStop) private var journeyCelebratedStop = -1
-    @State private var celebration: CelebrationMoment?
     /// Первая загрузка — без анимации. Экран вкладки создаётся заново при
     /// каждом переходе, и анимированное «пусто → данные» мигало карточками.
     @State private var loaded = false
-
-    struct CelebrationMoment: Equatable {
-        var title: String
-        var subtitle: String
-    }
 
     var body: some View {
         NavigationStack {
@@ -93,16 +87,6 @@ struct TodayView: View {
                 .padding(.bottom, 24)
             }
             .background(Theme.background.ignoresSafeArea())
-            .overlay {
-                if let celebration {
-                    CelebrationOverlay(title: celebration.title, subtitle: celebration.subtitle) {
-                        self.celebration = nil
-                    }
-                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
-                }
-            }
-            // Без этого праздник появлялся и исчезал кадром — переход не проигрывался.
-            .animation(.app, value: celebration?.title)
             .tabRootTitle(tr("Сегодня", "Hoje", "Today"))
             .navigationDestination(isPresented: $isSessionActive) {
                 ReviewSessionView(deck: nil)
@@ -481,8 +465,8 @@ struct TodayView: View {
         defer { celebratedStreak = days }
         let chest = journeyMilestone()
         if let milestone = Celebration.streakMilestone(previous: celebratedStreak, current: days) {
-            celebration = CelebrationMoment(
-                title: Counted.days(milestone) + tr(" подряд!", " seguidos!", " in a row!"),
+            Celebrations.shared.show(
+                Counted.days(milestone) + tr(" подряд!", " seguidos!", " in a row!"),
                 subtitle: tr("Мончик гордится. Так слова и остаются в голове — понемногу каждый день.",
                              "O Monchik está orgulhoso. É assim que as palavras ficam — um pouco todos os dias.",
                              "Monchik is proud. That's how words stick — a little every day."))
@@ -494,8 +478,8 @@ struct TodayView: View {
             if let gift = MonchikGifts.gift(at: stop) {
                 // Новый подарок сразу надет: вручили — значит носит.
                 UserDefaults.standard.set(gift.id, forKey: SettingsKey.monchikGift)
-                celebration = CelebrationMoment(
-                    title: stop.title + "! " + gift.emoji,
+                Celebrations.shared.show(
+                    stop.title + "! " + gift.emoji,
                     subtitle: tr("В сундуке — \(gift.name). Мончик уже примерил. Это примерно \(episodes) "
                                      + "из готовых наборов.",
                                  "No baú: \(gift.name). O Monchik já experimentou. É mais ou menos \(episodes) "
@@ -504,8 +488,8 @@ struct TodayView: View {
                                      + "\(episodes) worth of ready decks."))
                 return
             }
-            celebration = CelebrationMoment(
-                title: stop.kind == .finish
+            Celebrations.shared.show(
+                stop.kind == .finish
                     ? tr("\(stop.title)! Карта пройдена", "\(stop.title)! Mapa completo",
                          "\(stop.title)! Map complete")
                     : stop.title + "!",
@@ -522,8 +506,8 @@ struct TodayView: View {
         if Celebration.goalReached(progressBefore: goalBefore, progressAfter: goalAfter,
                                    celebratedDay: goalCelebratedDay, day: today) {
             goalCelebratedDay = today
-            celebration = CelebrationMoment(
-                title: tr("Цель дня выполнена!", "Objetivo do dia cumprido!", "Daily goal done!"),
+            Celebrations.shared.show(
+                tr("Цель дня выполнена!", "Objetivo do dia cumprido!", "Daily goal done!"),
                 subtitle: DailyGoal.format(minutes: goalMinutes)
                     + tr(" английского сегодня. До завтра!", " de inglês hoje. Até amanhã!",
                          " of English today. See you tomorrow!"))

@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Translation
 import AJFMCore
 
 /// Серия: отметка «посмотрел», слова, пересказ и разговор с Мончиком.
@@ -12,6 +13,7 @@ struct EpisodeView: View {
 
     @Environment(\.modelContext) private var context
     @State private var revealSummary = false
+    @State private var translateSummary = false
     @State private var showDeckRequest = false
     @State private var recap = RecapProgress()
 
@@ -95,6 +97,19 @@ struct EpisodeView: View {
                         .font(.app(.body))
                         .foregroundStyle(Theme.ink)
                         .textSelection(.enabled)
+                    // TVMaze пишет описания только по-английски. Для учебного
+                    // приложения это плюс, но новичку нужен выход — системный
+                    // переводчик: бесплатно, на телефоне, без лимита Claude.
+                    if Loc.language != .english {
+                        Button {
+                            translateSummary = true
+                        } label: {
+                            Label(tr("Перевести", "Traduzir", "Translate"), systemImage: "translate")
+                                .font(.app(.callout, weight: .bold))
+                        }
+                        .buttonStyle(.borderless)
+                        .translationPresentation(isPresented: $translateSummary, text: info.summary)
+                    }
                 } else {
                     Text(info.summary)
                         .font(.app(.body))

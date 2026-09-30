@@ -78,6 +78,16 @@ struct RootView: View {
         // и то и другое в момент отрисовки.
         .id(fontStyle + language)
         .overlay {
+            if let moment = Celebrations.shared.current {
+                CelebrationOverlay(title: moment.title, subtitle: moment.subtitle) {
+                    Celebrations.shared.dismiss()
+                }
+                .id(moment.id)
+                .transition(.opacity.combined(with: .scale(scale: 0.96)))
+            }
+        }
+        .animation(.app, value: Celebrations.shared.current)
+        .overlay {
             if showIntro {
                 LaunchIntroView {
                     showIntro = false

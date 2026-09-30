@@ -1,8 +1,8 @@
 {
   "images": [
     {
-      "idiom": "universal",
-      "filename": "WidgetMascotSleepy.png"
+      "filename": "WidgetMascotSleepy.png",
+      "idiom": "universal"
     }
   ],
   "info": {

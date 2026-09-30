@@ -65,9 +65,35 @@ def cut(image: Image.Image) -> Image.Image:
     safe = np.where(a > 0.02, a, 1)
     color = np.clip((rgb - (1 - a) * bg) / safe, 0, 255)
 
+    alpha, color = clean_edge(alpha, color)
     out = np.dstack([color, alpha * 255]).astype(np.uint8)
     result = Image.fromarray(out, "RGBA")
     return result.crop(result.getbbox())
+
+
+# На сколько пикселей срезать край фигуры и какой ширины сделать сглаживание.
+TRIM, SOFT = 2, 0.9
+
+
+def clean_edge(alpha: np.ndarray, color: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Край фигуры без светлой каймы и лесенки.
+
+    Сжатый JPEG оставляет вдоль контура светлые пиксели фона — отмывка их
+    не берёт: они почти непрозрачные. На тёмной теме это «пыль» вокруг лося.
+    Край срезается на TRIM пикселей (контур у лося толще), а новая граница
+    сглаживается размытием маски. Цвет в полосе края берётся у ближайшего
+    пикселя изнутри — это тёмный контур, а не фон.
+    """
+    mask = ndimage.binary_erosion(alpha > 0.5, iterations=TRIM)
+    soft = ndimage.gaussian_filter(mask.astype(float), SOFT)
+    new_alpha = np.clip((soft - 0.25) / 0.5, 0, 1)
+
+    core = ndimage.binary_erosion(mask, iterations=2)
+    _, (iy, ix) = ndimage.distance_transform_edt(~core, return_indices=True)
+    band = ~core
+    color = color.copy()
+    color[band] = color[iy[band], ix[band]]
+    return new_alpha, color
 
 
 def square(figure: Image.Image, margin: float = 0.04) -> Image.Image:
@@ -81,8 +107,8 @@ def square(figure: Image.Image, margin: float = 0.04) -> Image.Image:
     return canvas
 
 
-def imageset(name: str, image: Image.Image) -> None:
-    folder = ASSETS / f"{name}.imageset"
+def imageset(name: str, image: Image.Image, assets: pathlib.Path = ASSETS) -> None:
+    folder = assets / f"{name}.imageset"
     folder.mkdir(exist_ok=True)
     for old in folder.iterdir():
         old.unlink()
@@ -93,12 +119,22 @@ def imageset(name: str, image: Image.Image) -> None:
     }, indent=2) + "\n")
 
 
+# Позы виджета — уменьшенные копии: виджету запрещено много памяти.
+WIDGET_ASSETS = ROOT / "Widget" / "Assets.xcassets"
+WIDGET_POSES = {"MascotHello": "WidgetMascotHello", "MascotCheer": "WidgetMascotCheer",
+                "MascotSleepy": "WidgetMascotSleepy"}
+WIDGET_SIDE = 240
+
+
 def main() -> None:
     for name, (sheet, box) in POSES.items():
         figure = cut(Image.open(SOURCE / sheet).crop(box))
         result = square(figure)
         imageset(name, result)
         print(f"{name}: {result.size[0]}×{result.size[1]}")
+        if name in WIDGET_POSES:
+            small = result.resize((WIDGET_SIDE, WIDGET_SIDE), Image.LANCZOS)
+            imageset(WIDGET_POSES[name], small, WIDGET_ASSETS)
 
 
 if __name__ == "__main__":

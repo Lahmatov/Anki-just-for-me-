@@ -1,4 +1,5 @@
 import SwiftUI
+import Observation
 import AJFMCore
 
 // Анимации праздников и реакций. Физика и правила «когда» — в Core
@@ -245,6 +246,30 @@ struct CountingText: View, Animatable {
 
 /// Праздник на весь экран: сияние, конфетти, прыгающий Мончик и фраза.
 /// Закрывается касанием или сам через несколько секунд.
+/// Праздник поверх всего приложения. Экраны только просят показать его, а
+/// рисует корень (RootView) — над навигацией и панелью вкладок. Когда он
+/// висел на самом экране, то начинался под навигационной панелью и
+/// заканчивался над вкладками — выглядел вставкой, а не праздником.
+@Observable
+@MainActor
+final class Celebrations {
+    static let shared = Celebrations()
+
+    struct Moment: Equatable, Identifiable {
+        let id = UUID()
+        var title: String
+        var subtitle: String?
+    }
+
+    private(set) var current: Moment?
+
+    func show(_ title: String, subtitle: String? = nil) {
+        current = Moment(title: title, subtitle: subtitle)
+    }
+
+    func dismiss() { current = nil }
+}
+
 struct CelebrationOverlay: View {
     let title: String
     var subtitle: String?
@@ -275,6 +300,7 @@ struct CelebrationOverlay: View {
             .scaleEffect(appeared ? 1 : 0.7)
             .opacity(appeared ? 1 : 0)
             ConfettiView()
+                .ignoresSafeArea()
         }
         .contentShape(Rectangle())
         .onTapGesture { close() }

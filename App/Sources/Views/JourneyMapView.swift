@@ -27,7 +27,6 @@ struct JourneyMapView: View {
     @State private var destination: MapDestination?
     @State private var deckRequest: EpisodeRequest?
     @State private var showPicker = false
-    @State private var celebratedSeason: Int?
     @State private var loaded = false
     /// Узел, на котором нарисован Мончик: при открытии он допрыгивает
     /// от прошлой серии до текущей, а не появляется сразу на месте.
@@ -84,18 +83,6 @@ struct JourneyMapView: View {
             case .episode(let show, let episode): EpisodeView(show: show, episode: episode)
             }
         }
-        .overlay {
-            if let season = celebratedSeason {
-                CelebrationOverlay(
-                    title: tr("Сезон \(season) пройден!", "Temporada \(season) concluída!", "Season \(season) done!"),
-                    subtitle: tr("Все слова сезона в работе. Мончик гордится — дальше новый сезон.",
-                                 "Todas as palavras da temporada em curso. O Monchik está orgulhoso.",
-                                 "Every word of the season is in play. Monchik is proud — on to the next.")
-                ) { celebratedSeason = nil }
-                .transition(.opacity)
-            }
-        }
-        .animation(.app, value: celebratedSeason)
     }
 
     // MARK: - Заголовок
@@ -324,7 +311,13 @@ struct JourneyMapView: View {
         let stored = UserDefaults.standard.array(forKey: key) as? [Int]
         defer { UserDefaults.standard.set(path.completedSeasons, forKey: key) }
         guard let season = path.seasonToCelebrate(celebrated: stored.map(Set.init)) else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { celebratedSeason = season }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            Celebrations.shared.show(
+                tr("Сезон \(season) пройден!", "Temporada \(season) concluída!", "Season \(season) done!"),
+                subtitle: tr("Все слова сезона в работе. Мончик гордится — дальше новый сезон.",
+                             "Todas as palavras da temporada em curso. O Monchik está orgulhoso.",
+                             "Every word of the season is in play. Monchik is proud — on to the next."))
+        }
     }
 
     private func runPendingAction() {
