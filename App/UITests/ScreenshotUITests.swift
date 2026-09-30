@@ -102,11 +102,25 @@ final class ScreenshotUITests: XCTestCase {
         let tabBarTop = app.buttons["tab.today"].exists ? app.buttons["tab.today"].frame.minY - 8 : window.maxY
         let navBottom = app.navigationBars.firstMatch.exists ? app.navigationBars.firstMatch.frame.maxY : window.minY
 
+        // Видимая часть текста — рамка, обрезанная своей прокруткой. Иначе
+        // пример, уехавший за нижний край прокрутки, «лежит» под кнопками
+        // оценок ниже неё, хотя его там не видно (крупный шрифт).
+        let scrolls = app.scrollViews.allElementsBoundByIndex
+            .filter { $0.exists }
+            .map(\.frame)
+        func visible(_ frame: CGRect) -> CGRect {
+            let origin = CGPoint(x: frame.midX, y: frame.minY)
+            guard let scroll = scrolls.filter({ $0.contains(origin) })
+                .min(by: { $0.width * $0.height < $1.width * $1.height }) else { return frame }
+            return frame.intersection(scroll)
+        }
+
         let frames = app.staticTexts.allElementsBoundByIndex
             .filter { $0.exists }
-            .map { ($0.label, $0.frame, $0) }
+            .map { ($0.label, visible($0.frame), $0) }
             .filter { _, frame, _ in
-                frame.height >= 8 && frame.width >= 8
+                !frame.isNull
+                    && frame.height >= 8 && frame.width >= 8
                     && frame.minY >= navBottom && frame.maxY <= tabBarTop
                     && window.contains(frame)
             }

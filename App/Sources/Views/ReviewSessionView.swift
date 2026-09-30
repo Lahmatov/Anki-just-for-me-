@@ -565,23 +565,28 @@ struct SessionSummaryView: View {
     }
 }
 
-/// Переворот карточки при показе ответа — как в тесте уровня: ребро к
-/// зрителю, мгновенная смена стороны и пружинка обратно. Только в сторону
-/// ответа: возврат к новой карточке — это уже въезд следующей.
+/// Переворот карточки при показе ответа: карточка сжимается в ребро и
+/// раскрывается уже ответом. Только в сторону ответа: возврат к новой
+/// карточке — это уже въезд следующей.
+///
+/// Плоское сжатие по ширине, а не `rotation3DEffect`: с перспективой
+/// рамки текстов для VoiceOver и UI-тестов съезжали и пример «наезжал»
+/// на перевод на всех iPhone. Сжатие — обычное аффинное преобразование,
+/// в покое ровно единица.
 private struct FlipOnReveal: ViewModifier {
     let revealed: Bool
     let enabled: Bool
 
     func body(content: Content) -> some View {
         if enabled {
-            content.keyframeAnimator(initialValue: 0.0, trigger: revealed) { view, angle in
-                view.rotation3DEffect(.degrees(angle), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
+            content.keyframeAnimator(initialValue: 1.0, trigger: revealed) { view, width in
+                view.scaleEffect(x: width, y: 1)
             } keyframes: { _ in
-                // Скрытие ответа (новая карточка) — все ключи в нуле: без движения.
+                // Скрытие ответа (новая карточка) — все ключи в единице: без движения.
+                // Не ноль в ребре: вырожденное преобразование ломает отрисовку.
                 KeyframeTrack {
-                    CubicKeyframe(revealed ? 90 : 0, duration: 0.14)
-                    LinearKeyframe(revealed ? -90 : 0, duration: 0.001)
-                    SpringKeyframe(0, duration: 0.32, spring: .snappy)
+                    CubicKeyframe(revealed ? 0.02 : 1, duration: 0.14)
+                    SpringKeyframe(1, duration: 0.4, spring: .snappy(duration: 0.3))
                 }
             }
         } else {
