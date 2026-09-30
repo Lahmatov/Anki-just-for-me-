@@ -64,6 +64,8 @@
   трёх языках из `docs/legal` (читаются без сети), «О продавце» для DSA.
 - 🟡 **Данные продавца** — вписать в `project.yml` `RecapSellerName`,
   `RecapSellerAddress`, `RecapContactEmail` (те же, что в App Store Connect → DSA).
+  Перед архивом — `python3 tools/release_check.py`: перечислит все оставшиеся
+  заглушки (адрес сервера, продавец, почта, Team ID) и вернёт ошибку, пока они есть.
 - 🟡 **Политика по публичной ссылке** — нужна в App Store Connect. Тексты —
   `docs/legal/privacy.*.md`. Если репозиторий приватный, ссылка не откроется:
   опубликовать через GitHub Pages или отдельный публичный gist, вписать данные
@@ -75,11 +77,16 @@
   к Claude приложение говорит, что именно уходит в Anthropic, и спрашивает
   разрешение (`AIConsent`). Отозвать — в экране «Конфиденциальность».
 - ✅ **Манифест** `App/Resources/PrivacyInfo.xcprivacy`: трекинга нет; API
-  с обязательной причиной — UserDefaults (CA92.1) и даты файлов бэкапа (C617.1).
+  с обязательной причиной — UserDefaults (CA92.1, и 1C8F.1 для общей с виджетом
+  группы) и даты файлов бэкапа (C617.1). У виджета свой манифест
+  (`Widget/PrivacyInfo.xcprivacy`): ничего не собирает, читает только группу.
 - 🟡 **«Этикетки» в App Store Connect** (App Privacy) — ответить так же, как в манифесте:
   - **User Content → Other User Content** — текст запросов, пересказов и реплик разговора,
-    уходящий в Anthropic (напрямую или через сервер Recap). Purpose: App Functionality;
-    Linked: **No** (сервер его не хранит); Tracking: **No**.
+    уходящий в Anthropic (напрямую или через сервер Recap), и **облачный бэкап**: копия
+    слов и прогресса на сервере Recap, если человек его включил. Purpose: App
+    Functionality; Linked: **Yes** (бэкап привязан к устройству или аккаунту); Tracking: **No**.
+  - Поиск фильма уходит в каталог Apple (iTunes Search API) и обрабатывается на лету —
+    в анкете не указывается: это не сбор данных ни нами, ни для нас.
   - **Identifiers → Device ID** — случайный номер устройства на сервере Recap.
     Purpose: App Functionality; Linked: **Yes**; Tracking: **No**.
   - **Identifiers → User ID** — HMAC от номера пользователя Apple при входе через Apple.

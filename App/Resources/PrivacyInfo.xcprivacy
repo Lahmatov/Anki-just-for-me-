@@ -8,6 +8,12 @@
   объявлен как «прочий пользовательский контент» для работы приложения,
   не связанный с личностью. С подпиской сервер Recap хранит случайный номер
   устройства и номер транзакции покупки — они связаны с устройством.
+  Облачный бэкап (если включён) хранит на сервере Recap копию слов и
+  прогресса, привязанную к устройству или аккаунту, — поэтому «прочий
+  пользовательский контент» объявлен как связанный с человеком: запись на
+  тип данных одна, и честнее взять более строгий из двух случаев.
+  Поиск фильма уходит в каталог Apple и обрабатывается на лету — это не
+  сбор данных ни нами, ни для нас.
   Пояснения — docs/app-store.md и docs/backend.md.
 -->
 <plist version="1.0">
@@ -61,7 +67,7 @@
 			<key>NSPrivacyCollectedDataType</key>
 			<string>NSPrivacyCollectedDataTypeOtherUserContent</string>
 			<key>NSPrivacyCollectedDataTypeLinked</key>
-			<false/>
+			<true/>
 			<key>NSPrivacyCollectedDataTypeTracking</key>
 			<false/>
 			<key>NSPrivacyCollectedDataTypePurposes</key>
@@ -77,7 +83,10 @@
 			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
+				<!-- Настройки самого приложения. -->
 				<string>CA92.1</string>
+				<!-- Общие с виджетом настройки в группе приложений (снимок для виджета). -->
+				<string>1C8F.1</string>
 			</array>
 		</dict>
 		<dict>
