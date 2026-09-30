@@ -619,6 +619,7 @@ private struct EpisodeStepSheet: View {
                     Button(tr("Учить слова серии", "Estudar as palavras", "Study the words")) { act(.study(episode)) }
                         .buttonStyle(.chunky)
                         .frame(maxWidth: .infinity)
+                        .accessibilityIdentifier("step.study")
                 } else if !episode.aired {
                     Text(tr("Серия ещё не вышла.", "O episódio ainda não saiu.", "This episode hasn't aired yet."))
                         .foregroundStyle(Theme.muted)
@@ -627,16 +628,19 @@ private struct EpisodeStepSheet: View {
                         act(.addCatalogWords(episode))
                     }
                     .buttonStyle(.chunky)
+                    .accessibilityIdentifier("step.addWords")
                 } else {
                     Button(tr("Подобрать слова к серии", "Escolher palavras", "Pick words for it")) {
                         act(.requestWords(episode))
                     }
                     .buttonStyle(.chunky)
+                    .accessibilityIdentifier("step.requestWords")
                 }
                 if canOpenEpisode, episode.aired {
                     Button(tr("Открыть серию: Recap, пересказ", "Abrir o episódio: Recap, reconto",
                               "Open the episode: Recap, retelling")) { act(.open(episode)) }
                         .buttonStyle(.chunkySecondary)
+                        .accessibilityIdentifier("step.open")
                 }
             }
             .padding(20)

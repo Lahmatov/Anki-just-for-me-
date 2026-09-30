@@ -37,6 +37,9 @@ struct AJFMApp: App {
         if UITesting.wantsDemoData {
             _ = StarterDeck.install(into: container.mainContext)
         }
+        if UITesting.wantsDemoShow {
+            UITesting.installDemoShow(into: container.mainContext)
+        }
     }
 
     var body: some Scene {

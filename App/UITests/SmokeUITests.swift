@@ -20,7 +20,18 @@ final class SmokeUITests: XCTestCase {
         // чтобы проверять заголовки документов одной строкой.
         app.launchArguments = ["-ui-testing", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launch()
+        // Нажатие по вкладке до того, как приложение дорисовало первый экран,
+        // иногда терялось: на iPhone SE профиль потом не появлялся 15 секунд.
+        XCTAssertTrue(app.buttons["tab.today"].waitForExistence(timeout: 20), "приложение не открылось")
         return app
+    }
+
+    /// Открыть вкладку, дождавшись, что кнопка на месте и нажимается.
+    private func open(tab: String, in app: XCUIApplication) {
+        let button = app.buttons["tab.\(tab)"]
+        XCTAssertTrue(button.waitForExistence(timeout: 15), "нет вкладки \(tab)")
+        XCTAssertTrue(button.isHittable, "вкладка \(tab) не нажимается")
+        button.tap()
     }
 
     private func element(_ app: XCUIApplication, _ identifier: String) -> XCUIElement {
@@ -92,7 +103,7 @@ final class SmokeUITests: XCTestCase {
 
     func testTermsOpenFromProfile() {
         let app = launch()
-        app.buttons["tab.settings"].tap()
+        open(tab: "settings", in: app)
 
         let profile = app.buttons["settings.profile"]
         XCTAssertTrue(profile.waitForExistence(timeout: 15))
@@ -111,7 +122,7 @@ final class SmokeUITests: XCTestCase {
     /// сразу. Раньше выбор фото шёл через меню и на телефоне не открывался.
     func testAvatarSheetOffersPhotoPicker() {
         let app = launch()
-        app.buttons["tab.settings"].tap()
+        open(tab: "settings", in: app)
         let profile = app.buttons["settings.profile"]
         XCTAssertTrue(profile.waitForExistence(timeout: 15))
         profile.tap()
@@ -126,8 +137,10 @@ final class SmokeUITests: XCTestCase {
 
     func testPrivacyAndLicensesOpenFromProfile() {
         let app = launch()
-        app.buttons["tab.settings"].tap()
-        app.buttons["settings.profile"].tap()
+        open(tab: "settings", in: app)
+        let profile = app.buttons["settings.profile"]
+        XCTAssertTrue(profile.waitForExistence(timeout: 15))
+        profile.tap()
 
         for (identifier, title) in [("docs.privacy", "Recap — Privacy Policy"),
                                     ("docs.licenses", "Recap — Licenses")] {
