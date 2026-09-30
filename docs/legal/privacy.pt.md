@@ -35,7 +35,7 @@ o áudio é processado pelo serviço da Apple, segundo a
 | **Apple** (só se iniciares sessão) | Tocas em «Iniciar sessão com a Apple» | A Apple confirma ao servidor Recap quem és. Pedimos apenas o nome, que fica no telemóvel. Nunca pedimos o e-mail. |
 | **Servidor Recap: cópia na nuvem** (opcional) | Uma vez por dia, só se ligaste a «Cópia na nuvem» | Uma cópia comprimida da base de dados de estudo: baralhos, palavras, progresso. Cifrada no servidor. |
 | **Apple (catálogo de filmes iTunes)** | Procuras um filme ou crias um baralho para ele | O título do filme que procuras; o servidor Recap pede à Apple os dados do filme escolhido pelo número. |
-| **TVmaze** | Procuras uma série ou crias um baralho para ela | O nome da série, a temporada e o episódio — para encontrar o cartaz e o título do episódio. |
+| **TVmaze** | Procuras uma série, crias um baralho para ela ou abres os baralhos prontos | O nome da série, a temporada e o episódio — para encontrar o cartaz e o título do episódio. Nos baralhos prontos, só o nome da série do catálogo. |
 
 Nada é vendido nem partilhado para publicidade.
 

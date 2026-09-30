@@ -35,7 +35,7 @@ it; otherwise Apple's speech service processes the audio under
 | **Apple** (only if you sign in) | You tap “Sign in with Apple” | Apple confirms who you are to the Recap server. We ask only for your name, and it stays on your phone. We never ask for your e-mail. |
 | **Recap server: cloud backup** (optional) | Once a day, only if you turned on Cloud backup | A compressed copy of your learning database: decks, words, progress. Encrypted on the server. |
 | **Apple (iTunes movie catalog)** | You search for a movie or make a deck for it | The movie title you search for; the Recap server asks Apple for the chosen movie's details by its number. |
-| **TVmaze** | You look up a show or make a deck for it | The show name, season and episode number — to find the poster and episode title. |
+| **TVmaze** | You look up a show, make a deck for it or open the ready decks | The show name, season and episode number — to find the poster and episode title. For ready decks, only the catalog show name. |
 
 Nothing is sold or shared for advertising.
 

@@ -37,13 +37,16 @@ struct CatalogStrip: View {
     }
 }
 
-/// Плитка сериала: постеров без сети нет, поэтому — цветная обложка с
-/// названием. Цвет от ранга: у соседей разный, у сериала всегда один.
+/// Плитка сериала: постер TVMaze, пока его нет (или нет сети) — цветная
+/// обложка с названием. Название поверх постера — на затемнении снизу:
+/// по одной картинке сериал узнают не все, а высота плитки не меняется.
 struct CatalogTile: View {
     let entry: CatalogIndexEntry
 
     private static let palette: [Color] = [Theme.blue, Theme.orange, Theme.purple, Theme.green,
                                            Theme.red, Theme.moose, Theme.primary]
+
+    private var posters: CatalogPosters { .shared }
 
     var body: some View {
         let color = Self.palette[entry.rank % Self.palette.count]
@@ -56,19 +59,36 @@ struct CatalogTile: View {
                     .foregroundStyle(.white.opacity(0.22))
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
                     .padding(8)
+                if let url = posters.url(for: entry) {
+                    AsyncImage(url: url, transaction: Transaction(animation: .appQuick)) { phase in
+                        if let image = phase.image {
+                            image.resizable().scaledToFill()
+                                .overlay(alignment: .bottom) {
+                                    LinearGradient(colors: [.clear, .black.opacity(0.75)],
+                                                   startPoint: .top, endPoint: .bottom)
+                                        .frame(height: 64)
+                                }
+                                .transition(.opacity)
+                        }
+                    }
+                    .frame(width: 96, height: 132)
+                }
                 Text(entry.name)
                     .font(.app(.subheadline, weight: .heavy))
                     .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.4), radius: 2, y: 1)
                     .lineLimit(3)
                     .minimumScaleFactor(0.7)
                     .padding(8)
             }
             .frame(width: 96, height: 132)
+            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
             Text(Counted.words(entry.words))
                 .font(.app(.caption2, weight: .semibold))
                 .foregroundStyle(Theme.muted)
         }
         .accessibilityElement(children: .combine)
+        .task { await posters.load(entry) }
     }
 }
 

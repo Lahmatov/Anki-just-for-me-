@@ -27,6 +27,8 @@ enum SettingsKey {
     static let journeyWords = "journeyWords"
     /// Сериал, который учим, — по нему карта (P-64).
     static let studyShow = "studyShow"
+    /// Найденные обложки готовых сериалов: ресурс каталога → адрес постера TVMaze.
+    static let catalogPosters = "catalogPosters"
     /// Префикс отпразднованных сезонов на карте: «…<название сериала>».
     static let showMapCelebratedSeasons = "showMapCelebratedSeasons"
     /// Префикс узла карты, где Мончика видели в прошлый раз: «…<сериал>».
