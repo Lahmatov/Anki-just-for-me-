@@ -26,6 +26,8 @@ struct OnboardingView: View {
     @State private var index = 0
     @State private var starterInstalled = false
     @State private var starterFailed = false
+    /// Сериал, выбранный на шаге «Сериал»: его первая серия уже дала слова.
+    @State private var pickedShow: String?
     @State private var goalWords = 150
     @State private var goalReward = ""
     @State private var showPlacementTest = false
@@ -105,6 +107,7 @@ struct OnboardingView: View {
         case .language: language
         case .howItWorks: howItWorks
         case .level: level
+        case .show: showStep
         case .starterDeck: starterDeck
         case .voice: voice
         case .goal: goal
@@ -116,7 +119,7 @@ struct OnboardingView: View {
     private func mood(for step: OnboardingStep) -> MascotMood {
         switch step {
         case .welcome, .language, .voice: return .hello
-        case .howItWorks, .starterDeck: return .cards
+        case .howItWorks, .starterDeck, .show: return .cards
         case .level: return .thinking
         case .goal: return .cheer
         case .reminder: return .sleepy
@@ -135,6 +138,9 @@ struct OnboardingView: View {
         case .level:
             return tr("Сначала пойму, что ты уже знаешь.", "Primeiro vou perceber o que já sabes.",
                       "First, let me see what you already know.")
+        case .show:
+            return tr("С какого сериала начнём?", "Por que série começamos?",
+                      "Which show shall we start with?")
         case .starterDeck:
             return tr("Держи слова на первое время!", "Toma palavras para começar!",
                       "Here are some words to get going!")
@@ -350,6 +356,33 @@ struct OnboardingView: View {
     }
 
     @ViewBuilder
+    /// Выбор сериала: по нему карта, и первые слова — из его первой серии.
+    private var showStep: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text(tr("Сериал для учёбы", "Série para estudar", "Your study show"))
+                .font(.app(.title2, weight: .semibold))
+            Text(tr("Карта пойдёт по его сериям: шаг — серия, большая остановка — финал сезона. "
+                        + "Слова первой серии добавлю сразу. Сменить можно в любой момент на карте.",
+                    "O mapa segue os episódios: cada passo é um episódio, cada paragem grande é o "
+                        + "final de uma temporada. Junto já as palavras do primeiro episódio. Podes "
+                        + "mudar quando quiseres no mapa.",
+                    "The map follows its episodes: each step is an episode, each big stop a season "
+                        + "finale. I'll add the first episode's words right away. You can switch any "
+                        + "time on the map."))
+                .font(.app(.callout))
+                .foregroundStyle(Theme.muted)
+            if let pickedShow {
+                Label(tr("«\(pickedShow)» — слова первой серии уже в «Наборах»",
+                         "«\(pickedShow)» — as palavras do primeiro episódio já estão em «Baralhos»",
+                         "“\(pickedShow)” — the first episode's words are in Decks"),
+                      systemImage: "checkmark.circle")
+                    .foregroundStyle(Theme.green)
+                    .font(.app(.callout))
+            }
+            StudyShowPicker(embedded: true) { name in pickedShow = name }
+        }
+    }
+
     private var starterDeck: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text(tr("Слова для начала", "Palavras para começar", "Words to start with"))

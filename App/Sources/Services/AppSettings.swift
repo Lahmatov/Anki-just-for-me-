@@ -25,6 +25,10 @@ enum SettingsKey {
     /// Сколько слов начато — последнее известное число. Мончик на любом
     /// экране знает по нему, какие подарки открыты, не считая базу заново.
     static let journeyWords = "journeyWords"
+    /// Сериал, который учим, — по нему карта (P-64).
+    static let studyShow = "studyShow"
+    /// Префикс отпразднованных сезонов на карте: «…<название сериала>».
+    static let showMapCelebratedSeasons = "showMapCelebratedSeasons"
     static let deviceID = "deviceID"
     static let leechThreshold = "leechThreshold"
     /// Устаревший флаг «знакомство пройдено» — читается только для перехода

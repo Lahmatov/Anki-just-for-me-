@@ -111,6 +111,7 @@ struct ShowDetailView: View {
                     }
                     .buttonStyle(.chunky)
                 }
+                StudyThisShowButton(name: show.name)
             }
         }
         .padding()

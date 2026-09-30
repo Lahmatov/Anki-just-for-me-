@@ -6,8 +6,31 @@ final class OnboardingPlanTests: XCTestCase {
     func testFirstLaunchShowsEverything() {
         let plan = OnboardingPlan.make(
             hasWords: false, needsBetterVoice: true, hasGoal: false, hasReminder: false,
-            hasChosenLanguage: false, hasLevel: false)
+            hasChosenLanguage: false, hasLevel: false, hasStudyShow: false)
         XCTAssertEqual(plan.steps, OnboardingStep.allCases)
+    }
+
+    func testShowIsChosenAfterLevelAndBeforeStarterDeck() {
+        let plan = OnboardingPlan.make(
+            hasWords: false, needsBetterVoice: false, hasGoal: true, hasReminder: true,
+            hasLevel: false, hasStudyShow: false)
+        XCTAssertEqual(plan.steps, [.welcome, .howItWorks, .level, .show, .starterDeck])
+    }
+
+    func testShowStepIsSkippedOnceChosen() {
+        let plan = OnboardingPlan.make(
+            hasWords: true, needsBetterVoice: false, hasGoal: true, hasReminder: true,
+            hasStudyShow: true)
+        XCTAssertFalse(plan.steps.contains(.show))
+    }
+
+    func testReturningUserWithWordsStillGetsToPickAShow() {
+        // Кто учил и до карты по сериалу, тоже должен выбрать сериал — без
+        // стартового набора: слова у него уже есть.
+        let plan = OnboardingPlan.make(
+            hasWords: true, needsBetterVoice: false, hasGoal: true, hasReminder: true,
+            hasStudyShow: false)
+        XCTAssertEqual(plan.steps, [.welcome, .howItWorks, .show])
     }
 
     func testLanguageComesFirstUntilChosen() {

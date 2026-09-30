@@ -15,6 +15,7 @@ enum OnboardingPlanBuilder {
             hasGoal: ProgressService(context: context).activeContract != nil,
             hasReminder: defaults.bool(forKey: SettingsKey.reminderEnabled),
             hasChosenLanguage: defaults.string(forKey: SettingsKey.appLanguage) != nil,
-            hasLevel: AppSettings.englishLevel != nil)
+            hasLevel: AppSettings.englishLevel != nil,
+            hasStudyShow: defaults.string(forKey: SettingsKey.studyShow) != nil)
     }
 }

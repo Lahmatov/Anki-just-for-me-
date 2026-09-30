@@ -136,6 +136,13 @@ struct CatalogShowView: View {
                  + "\(show.episodes.count)")
                 .font(.app(.subheadline))
                 .foregroundStyle(Theme.muted)
+            StudyThisShowButton(name: show.name) {
+                // Из каталога — сразу со словами первой серии, как в знакомстве.
+                if let entry = LocalCatalog.index()?.shows.first(where: { $0.name == show.name }) {
+                    try? StudyShow.start(catalog: entry, in: context)
+                    installed = LocalCatalog.installedSources(in: context)
+                }
+            }
             if missing.count > 1 {
                 Button {
                     add(missing, of: show)

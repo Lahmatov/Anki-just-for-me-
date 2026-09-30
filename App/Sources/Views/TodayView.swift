@@ -19,6 +19,7 @@ struct TodayView: View {
     @State private var contract: RewardContract?
     @State private var matureWords = 0
     @State private var journey: JourneyPosition?
+    @State private var showPath: ShowPath?
     @State private var isSessionActive = false
     @State private var showDeckRequest = false
     @State private var starterFailed = false
@@ -53,7 +54,7 @@ struct TodayView: View {
 
                     if noteCount > 0 {
                         goalCard
-                        if let journey { JourneyCard(position: journey) }
+                        if let journey { JourneyCard(position: journey, path: showPath) }
                     }
 
                     if let streak, streak.days > 0 {
@@ -442,6 +443,7 @@ struct TodayView: View {
             contract = progress.activeContract
             matureWords = progress.matureWordCount()
             journey = progress.journeyPosition()
+            showPath = StudyShow.path(in: context)
         }
         loaded = true
         celebrateIfDeserved(goalBefore: goalBefore)

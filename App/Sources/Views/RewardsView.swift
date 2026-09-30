@@ -23,6 +23,7 @@ struct RewardsView: View {
     @State private var stats: LearningStats?
     @State private var matureWords = 0
     @State private var journey: JourneyPosition?
+    @State private var showPath: ShowPath?
     @State private var contracts: [RewardContract] = []
 
     private var service: ProgressService { ProgressService(context: context) }
@@ -33,7 +34,7 @@ struct RewardsView: View {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
                     ScreenTitle(tr("Награды", "Recompensas", "Rewards"))
-                    if let journey { JourneyCard(position: journey) }
+                    if let journey { JourneyCard(position: journey, path: showPath) }
                     contractCard
                     if let week { weekCard(week) }
                     if let stats { achievementsCard(stats) }
@@ -86,6 +87,7 @@ struct RewardsView: View {
             week = service.weekProgress(target: weeklyTarget)
             contracts = service.contracts()
             journey = service.journeyPosition()
+            showPath = StudyShow.path(in: context)
         }
         loaded = true
         checkCompletion()
