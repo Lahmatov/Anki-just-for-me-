@@ -241,18 +241,25 @@ struct JourneyMapView: View {
         // Ротор VoiceOver «Сезоны»: по двумстам сериям без него не пройти —
         // прыжок сразу к финалу нужного сезона.
         .accessibilityRotor(tr("Сезоны", "Temporadas", "Seasons")) {
-            ForEach(finales(of: nodes), id: \.id) { finale in
+            ForEach(finales(of: nodes)) { finale in
                 AccessibilityRotorEntry(
-                    tr("Финал сезона \(finale.season)", "Final da temporada \(finale.season)",
-                       "Season \(finale.season) finale"),
+                    Text(tr("Финал сезона \(finale.season)", "Final da temporada \(finale.season)",
+                            "Season \(finale.season) finale")),
                     id: finale.id, in: rotorSpace)
             }
         }
     }
 
-    private func finales(of nodes: [ShowPathNode]) -> [(id: String, season: Int)] {
+    /// Отдельный тип и метка-`Text`: вариант с кортежем и строкой-меткой
+    /// не собрался («no exact matches in call to initializer»).
+    private struct FinaleMark: Identifiable {
+        let id: String
+        let season: Int
+    }
+
+    private func finales(of nodes: [ShowPathNode]) -> [FinaleMark] {
         nodes.compactMap { node in
-            if case .seasonFinale(let season, _, _) = node { return (node.id, season) }
+            if case .seasonFinale(let season, _, _) = node { return FinaleMark(id: node.id, season: season) }
             return nil
         }
     }
