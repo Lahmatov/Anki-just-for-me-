@@ -9,6 +9,7 @@ final class StudyShowTests: XCTestCase {
 
     override func setUp() {
         UserDefaults.standard.removeObject(forKey: SettingsKey.studyShow)
+        StudyShow.invalidate()
     }
 
     override func tearDown() {
@@ -107,5 +108,22 @@ final class StudyShowTests: XCTestCase {
     func testUnknownShowWithoutEpisodesHasNoPath() throws {
         StudyShow.choose("A Show Nobody Has")
         XCTAssertNil(StudyShow.path(in: try TestDB.makeContext()))
+    }
+
+    // MARK: - Кеш
+
+    func testCachedPathRefreshesAfterSave() throws {
+        let context = try TestDB.makeContext()
+        let entry = try XCTUnwrap(LocalCatalog.index()?.shows.first)
+        try StudyShow.start(catalog: entry, in: context)
+        let before = try XCTUnwrap(StudyShow.path(in: context))
+        XCTAssertEqual(before.episodes.first?.startedWords, 0)
+
+        // Слова первой серии начаты и сохранены — карта обязана это увидеть.
+        for card in try context.fetch(FetchDescriptor<Card>()) { card.state = .learning }
+        try context.save()
+
+        let after = try XCTUnwrap(StudyShow.path(in: context))
+        XCTAssertEqual(after.episodes.first?.isDone, true)
     }
 }

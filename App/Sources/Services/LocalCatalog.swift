@@ -11,6 +11,9 @@ import AJFMCore
 @MainActor
 enum LocalCatalog {
     private static var cachedIndex: CatalogIndex?
+    /// Разобранные файлы сериалов: карта и «Сегодня» спрашивают один и тот же
+    /// сериал при каждом обновлении, а файл — сотни килобайт JSON.
+    private static var cachedShows: [String: CatalogShowFile] = [:]
 
     static func index(bundle: Bundle = .main) -> CatalogIndex? {
         if let cachedIndex { return cachedIndex }
@@ -27,10 +30,13 @@ enum LocalCatalog {
     }
 
     static func show(_ entry: CatalogIndexEntry, bundle: Bundle = .main) -> CatalogShowFile? {
+        if let cached = cachedShows[entry.resource] { return cached }
         guard let url = bundle.url(forResource: entry.resource, withExtension: "json"),
               let data = try? Data(contentsOf: url) else { return nil }
         do {
-            return try BundledCatalog.decodeShow(data)
+            let show = try BundledCatalog.decodeShow(data)
+            cachedShows[entry.resource] = show
+            return show
         } catch {
             Log.failure(.app, "Сериал из каталога не читается: \(entry.name)", error)
             return nil

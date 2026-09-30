@@ -22,6 +22,8 @@ struct RecapService {
         var progress = progress(for: episode)
         progress.complete(step)
         defaults.set(progress.stored, forKey: key(episode))
+        // Звезда Recap видна на карте — её путь пересчитается.
+        StudyShow.invalidate()
         return progress
     }
 

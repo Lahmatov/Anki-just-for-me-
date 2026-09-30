@@ -15,6 +15,7 @@ enum StudyShow {
     }
 
     static func choose(_ name: String) {
+        invalidate()
         UserDefaults.standard.set(name, forKey: SettingsKey.studyShow)
         Log.info(.app, "Выбран сериал для учёбы", detail: name)
     }
@@ -46,12 +47,48 @@ enum StudyShow {
         return try LocalCatalog.install(episode: first, of: show, into: context)
     }
 
+    // MARK: - Кеш
+
+    /// Путь пересчитывается только когда что-то изменилось: «Сегодня»
+    /// обновляется часто, а пересчёт — это все серии, наборы и карточки
+    /// сериала. Кеш свой у каждой базы (в тестах их много) и сбрасывается
+    /// при любом сохранении базы и при отметках Recap.
+    private static var cache: [CacheKey: ShowPath] = [:]
+    private static var observer: NSObjectProtocol?
+
+    private struct CacheKey: Hashable {
+        let context: ObjectIdentifier
+        let name: String
+    }
+
+    static func invalidate() {
+        cache.removeAll()
+    }
+
+    private static func observeSaves() {
+        guard observer == nil else { return }
+        observer = NotificationCenter.default.addObserver(
+            forName: ModelContext.didSave, object: nil, queue: nil
+        ) { _ in
+            MainActor.assumeIsolated { invalidate() }
+        }
+    }
+
     // MARK: - Путь
 
     /// Карта выбранного сериала. Серии берутся у отслеживаемого сериала
     /// (все сезоны из TVMaze), иначе — из каталога (первый сезон).
     static func path(in context: ModelContext, name explicitName: String? = nil) -> ShowPath? {
         guard let name = explicitName ?? self.name else { return nil }
+        observeSaves()
+        let key = CacheKey(context: ObjectIdentifier(context), name: name.lowercased())
+        if let cached = cache[key] { return cached }
+        let built = buildPath(in: context, name: name)
+        if let built { cache[key] = built }
+        return built
+    }
+
+    private static func buildPath(in context: ModelContext, name: String) -> ShowPath? {
         let tracked = tracked(named: name, in: context)
         let catalog = catalogEntry(named: name).flatMap { LocalCatalog.show($0) }
         let catalogKeys = Set((catalog?.episodes ?? []).map { EpisodeKey(season: $0.season, number: $0.episode) })
@@ -59,10 +96,12 @@ enum StudyShow {
         let recap = RecapService(context: context)
 
         let episodes: [ShowPathEpisode]
-        if let tracked, !tracked.episodes.isEmpty {
+        // Список серий хранится JSON-строкой — разбираем один раз, а не на каждом шаге.
+        let trackedEpisodes = tracked?.episodes ?? []
+        if let tracked, !trackedEpisodes.isEmpty {
             let today = ShowProgress.today()
             let watched = tracked.watched
-            episodes = tracked.episodes.map { info in
+            episodes = trackedEpisodes.map { info in
                 let context = EpisodeContext(showID: tracked.tvmazeID, showName: tracked.name, episode: info)
                 let words = stats[info.key]
                 return ShowPathEpisode(

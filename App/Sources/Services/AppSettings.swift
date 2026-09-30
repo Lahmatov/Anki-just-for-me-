@@ -29,6 +29,8 @@ enum SettingsKey {
     static let studyShow = "studyShow"
     /// Префикс отпразднованных сезонов на карте: «…<название сериала>».
     static let showMapCelebratedSeasons = "showMapCelebratedSeasons"
+    /// Префикс узла карты, где Мончика видели в прошлый раз: «…<сериал>».
+    static let showMapLastSeenNode = "showMapLastSeenNode"
     static let deviceID = "deviceID"
     static let leechThreshold = "leechThreshold"
     /// Устаревший флаг «знакомство пройдено» — читается только для перехода

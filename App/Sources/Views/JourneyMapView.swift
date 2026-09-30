@@ -11,6 +11,9 @@ import AJFMCore
 /// подарки Мончику остались над картой.
 struct JourneyMapView: View {
     @Environment(\.modelContext) private var context
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Namespace private var tokenSpace
+    @Namespace private var rotorSpace
 
     @AppStorage(SettingsKey.studyShow) private var studyShow: String?
     @AppStorage(SettingsKey.monchikGift) private var chosenGift: String?
@@ -26,8 +29,13 @@ struct JourneyMapView: View {
     @State private var showPicker = false
     @State private var celebratedSeason: Int?
     @State private var loaded = false
+    /// Узел, на котором нарисован Мончик: при открытии он допрыгивает
+    /// от прошлой серии до текущей, а не появляется сразу на месте.
+    @State private var tokenIndex: Int?
 
-    private let rowHeight: CGFloat = 96
+    /// Строка растёт с размером шрифта: крупный текст не должен наезжать
+    /// на соседние серии.
+    @ScaledMetric(relativeTo: .subheadline) private var rowHeight: CGFloat = 96
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -61,7 +69,8 @@ struct JourneyMapView: View {
                 pendingAction = action
                 selected = nil
             }
-            .presentationDetents([.medium])
+            // Крупный текст не помещается в половину экрана — лист тянется выше.
+            .presentationDetents([.medium, .large])
         }
         .sheet(isPresented: $showPicker, onDismiss: { load(scrollWith: nil) }) {
             StudyShowPicker()
@@ -218,14 +227,33 @@ struct JourneyMapView: View {
         return LazyVStack(spacing: 0) {
             ForEach(Array(nodes.enumerated()), id: \.element.id) { index, node in
                 MapRow(node: node, index: index, count: nodes.count, reached: reached,
-                       isCurrent: index == reached && path.current != nil, rowHeight: rowHeight) {
+                       isCurrent: index == reached && path.current != nil,
+                       showsToken: index == tokenIndex, tokenSpace: tokenSpace, rowHeight: rowHeight) {
                     if case .episode(let episode) = node {
                         Haptics.tap()
                         selected = episode
                     }
                 }
                 .id(node.id)
+                .accessibilityRotorEntry(id: node.id, in: rotorSpace)
             }
+        }
+        // Ротор VoiceOver «Сезоны»: по двумстам сериям без него не пройти —
+        // прыжок сразу к финалу нужного сезона.
+        .accessibilityRotor(tr("Сезоны", "Temporadas", "Seasons")) {
+            ForEach(finales(of: nodes), id: \.id) { finale in
+                AccessibilityRotorEntry(
+                    tr("Финал сезона \(finale.season)", "Final da temporada \(finale.season)",
+                       "Season \(finale.season) finale"),
+                    id: finale.id, in: rotorSpace)
+            }
+        }
+    }
+
+    private func finales(of nodes: [ShowPathNode]) -> [(id: String, season: Int)] {
+        nodes.compactMap { node in
+            if case .seasonFinale(let season, _, _) = node { return (node.id, season) }
+            return nil
         }
     }
 
@@ -245,12 +273,43 @@ struct JourneyMapView: View {
         path = StudyShow.path(in: context)
         tracked = path.flatMap { StudyShow.tracked(named: $0.name, in: context) }
         loaded = true
-        guard let path else { return }
-        if let current = path.current, let proxy {
-            // Сразу в onAppear прокрутка теряется: поле ещё не разложено.
-            DispatchQueue.main.async { proxy.scrollTo("e" + current.id, anchor: .center) }
+        guard let path, !path.nodes.isEmpty else { return }
+        let nodes = path.nodes
+        let target = reachedIndex(in: nodes, path: path)
+        if let proxy {
+            hop(to: target, nodes: nodes, showName: path.name, proxy: proxy)
+        } else {
+            tokenIndex = target
         }
         celebrateSeasonIfNeeded(path)
+    }
+
+    /// Мончик допрыгивает от серии, где его видели в прошлый раз, до текущей:
+    /// «прошёл две серии» видно глазами. Длинный путь — пять последних шагов.
+    private func hop(to target: Int, nodes: [ShowPathNode], showName: String, proxy: ScrollViewProxy) {
+        let key = SettingsKey.showMapLastSeenNode + "." + showName.lowercased()
+        let lastID = UserDefaults.standard.string(forKey: key)
+        UserDefaults.standard.set(nodes[target].id, forKey: key)
+        let from = lastID.flatMap { id in nodes.firstIndex { $0.id == id } } ?? target
+        tokenIndex = min(from, target)
+        // Сразу в onAppear прокрутка теряется: поле ещё не разложено.
+        DispatchQueue.main.async { proxy.scrollTo(nodes[tokenIndex ?? target].id, anchor: .center) }
+        guard from < target, !reduceMotion else {
+            tokenIndex = target
+            return
+        }
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(500))
+            let hops = Array((from + 1)...target).suffix(5)
+            for index in hops {
+                withAnimation(.spring(response: 0.42, dampingFraction: 0.7)) {
+                    tokenIndex = index
+                    proxy.scrollTo(nodes[index].id, anchor: .center)
+                }
+                Haptics.tap()
+                try? await Task.sleep(for: .milliseconds(450))
+            }
+        }
     }
 
     private func celebrateSeasonIfNeeded(_ path: ShowPath) {
@@ -302,6 +361,8 @@ private struct MapRow: View {
     let count: Int
     let reached: Int
     let isCurrent: Bool
+    let showsToken: Bool
+    let tokenSpace: Namespace.ID
     let rowHeight: CGFloat
     let onTap: () -> Void
 
@@ -319,9 +380,12 @@ private struct MapRow: View {
                     .disabled(!isEpisode)
                     .offset(x: offset)
                     .overlay {
-                        if isCurrent {
+                        if showsToken {
+                            // Один и тот же Мончик во всех строках: при смене
+                            // строки он перелетает, а не исчезает и появляется.
                             MascotView(mood: .cheer, size: 50)
                                 .shadow(color: .black.opacity(0.18), radius: 4, y: 3)
+                                .matchedGeometryEffect(id: "token", in: tokenSpace)
                                 .offset(x: offset, y: -40)
                                 .allowsHitTesting(false)
                                 .accessibilityHidden(true)
@@ -405,8 +469,8 @@ private struct MapRow: View {
                     .foregroundStyle(Theme.muted)
             }
         }
-        .lineLimit(2)
-        .minimumScaleFactor(0.8)
+        .lineLimit(3)
+        .minimumScaleFactor(0.75)
         .multilineTextAlignment(onLeft ? .trailing : .leading)
         .frame(width: max(width / 2 - 48, 60), alignment: onLeft ? .trailing : .leading)
         .frame(maxWidth: .infinity, alignment: onLeft ? .leading : .trailing)
@@ -529,54 +593,55 @@ private struct EpisodeStepSheet: View {
     let act: (StepAction) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(showName + " · " + episode.code)
-                    .font(.app(.subheadline, weight: .bold))
-                    .foregroundStyle(Theme.muted)
-                Text(episode.title.isEmpty ? episode.code : episode.title)
-                    .font(.app(.title3, weight: .heavy))
-                    .foregroundStyle(Theme.ink)
-            }
-            if episode.hasDeck {
-                VStack(alignment: .leading, spacing: 6) {
-                    ChunkyProgressBar(value: episode.fraction, tint: Theme.green, height: 12)
-                    Text(episode.isDone
-                         ? tr("Все слова серии в работе — серия пройдена.",
-                              "Todas as palavras do episódio em curso — concluído.",
-                              "Every word of the episode is in play — done.")
-                         : tr("Начато \(episode.startedWords) из \(Counted.words(episode.totalWords))",
-                              "Começadas \(episode.startedWords) de \(Counted.words(episode.totalWords))",
-                              "Started \(episode.startedWords) of \(Counted.words(episode.totalWords))"))
-                        .font(.app(.callout, weight: .semibold))
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(showName + " · " + episode.code)
+                        .font(.app(.subheadline, weight: .bold))
+                        .foregroundStyle(Theme.muted)
+                    Text(episode.title.isEmpty ? episode.code : episode.title)
+                        .font(.app(.title3, weight: .heavy))
                         .foregroundStyle(Theme.ink)
                 }
-                Button(tr("Учить слова серии", "Estudar as palavras", "Study the words")) { act(.study(episode)) }
+                if episode.hasDeck {
+                    VStack(alignment: .leading, spacing: 6) {
+                        ChunkyProgressBar(value: episode.fraction, tint: Theme.green, height: 12)
+                        Text(episode.isDone
+                             ? tr("Все слова серии в работе — серия пройдена.",
+                                  "Todas as palavras do episódio em curso — concluído.",
+                                  "Every word of the episode is in play — done.")
+                             : tr("Начато \(episode.startedWords) из \(Counted.words(episode.totalWords))",
+                                  "Começadas \(episode.startedWords) de \(Counted.words(episode.totalWords))",
+                                  "Started \(episode.startedWords) of \(Counted.words(episode.totalWords))"))
+                            .font(.app(.callout, weight: .semibold))
+                            .foregroundStyle(Theme.ink)
+                    }
+                    Button(tr("Учить слова серии", "Estudar as palavras", "Study the words")) { act(.study(episode)) }
+                        .buttonStyle(.chunky)
+                        .frame(maxWidth: .infinity)
+                } else if !episode.aired {
+                    Text(tr("Серия ещё не вышла.", "O episódio ainda não saiu.", "This episode hasn't aired yet."))
+                        .foregroundStyle(Theme.muted)
+                } else if episode.catalogWords {
+                    Button(tr("Добавить готовые слова", "Juntar palavras prontas", "Add ready words")) {
+                        act(.addCatalogWords(episode))
+                    }
                     .buttonStyle(.chunky)
-                    .frame(maxWidth: .infinity)
-            } else if !episode.aired {
-                Text(tr("Серия ещё не вышла.", "O episódio ainda não saiu.", "This episode hasn't aired yet."))
-                    .foregroundStyle(Theme.muted)
-            } else if episode.catalogWords {
-                Button(tr("Добавить готовые слова", "Juntar palavras prontas", "Add ready words")) {
-                    act(.addCatalogWords(episode))
+                } else {
+                    Button(tr("Подобрать слова к серии", "Escolher palavras", "Pick words for it")) {
+                        act(.requestWords(episode))
+                    }
+                    .buttonStyle(.chunky)
                 }
-                .buttonStyle(.chunky)
-            } else {
-                Button(tr("Подобрать слова к серии", "Escolher palavras", "Pick words for it")) {
-                    act(.requestWords(episode))
+                if canOpenEpisode, episode.aired {
+                    Button(tr("Открыть серию: Recap, пересказ", "Abrir o episódio: Recap, reconto",
+                              "Open the episode: Recap, retelling")) { act(.open(episode)) }
+                        .buttonStyle(.chunkySecondary)
                 }
-                .buttonStyle(.chunky)
             }
-            if canOpenEpisode, episode.aired {
-                Button(tr("Открыть серию: Recap, пересказ", "Abrir o episódio: Recap, reconto",
-                          "Open the episode: Recap, retelling")) { act(.open(episode)) }
-                    .buttonStyle(.chunkySecondary)
-            }
-            Spacer(minLength: 0)
+            .padding(20)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
         .background(Theme.background.ignoresSafeArea())
     }
 }
