@@ -32,6 +32,8 @@ targets:
       Release: Config/Signing.xcconfig
     sources:
       - path: App/Sources
+      # Общее с виджетом: атрибуты Live Activity сессии.
+      - path: Shared
       - path: App/Resources
         buildPhase: resources
       # Условия, политика и лицензии — те же файлы, что публикуются на сайте:
@@ -81,6 +83,8 @@ targets:
         # Только HTTPS системными средствами — освобождено от экспортного
         # контроля. Без ключа App Store Connect спрашивает об этом при каждой сборке.
         ITSAppUsesNonExemptEncryption: false
+        # Live Activity во время сессии: сколько карточек осталось.
+        NSSupportsLiveActivities: true
         # Адрес сервера Recap (backend/) после `wrangler deploy`. Пока стоит
         # заглушка, подписка и промокоды в приложении не показываются.
         RecapBackendURL: https://recap-backend.CHANGE-ME.workers.dev
@@ -136,6 +140,7 @@ targets:
       - path: Widget
         excludes:
           - Info.plist
+      - path: Shared
     dependencies:
       - package: AJFMCore
         product: AJFMCore

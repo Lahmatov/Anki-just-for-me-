@@ -63,6 +63,14 @@ struct TodayView: View {
 
                     if noteCount > 0 {
                         progressCard
+                        CardLink(
+                            title: tr("Награды и цели", "Recompensas e objetivos", "Rewards and goals"),
+                            subtitle: tr("Цель с призом, неделя и достижения",
+                                         "Objetivo com prémio, semana e conquistas",
+                                         "A goal with a prize, the week and achievements"),
+                            systemImage: "trophy.fill", color: Theme.gold
+                        ) { RewardsView() }
+                        .accessibilityIdentifier("today.rewards")
                         CardSectionHeader(title: tr("Разбор", "Análise", "Insights"))
                         CardLink(
                             title: tr("Графики и прогноз нагрузки", "Gráficos e previsão",
@@ -327,16 +335,32 @@ struct TodayView: View {
     /// Серия дней. Ежедневная серия с заморозками — одна из сильнейших причин
     /// вернуться завтра. Заморозка убирает катастрофу «один пропуск — и сто
     /// дней в ноль», из-за которой бросают приложение целиком.
+    private func flameColors(_ days: Int) -> [Color] {
+        switch StreakFlame.stage(days: days) {
+        case .spark: return [.yellow, .orange]
+        case .flame: return [.yellow, .orange, .red]
+        case .blaze: return [.orange, .red, Color(red: 0.75, green: 0.1, blue: 0.2)]
+        case .blue: return [.cyan, .blue, .purple]
+        }
+    }
+
     private func streakCard(_ streak: StreakStatus) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 14) {
+                // Огонёк разгорается с каждым днём серии (StreakFlame): неделя,
+                // месяц и два месяца видны глазом, а не только цифрой.
                 Image(systemName: "flame.fill")
-                    .font(.system(size: 30))
+                    .font(.system(size: StreakFlame.size(days: streak.days)))
                     .foregroundStyle(streak.studiedToday
                                      ? AnyShapeStyle(LinearGradient(
-                                         colors: [.yellow, .orange, .red],
+                                         colors: flameColors(streak.days),
                                          startPoint: .top, endPoint: .bottom))
                                      : AnyShapeStyle(Color.secondary))
+                    .shadow(color: streak.studiedToday
+                            ? flameColors(streak.days).last!.opacity(0.5 * StreakFlame.intensity(days: streak.days))
+                            : .clear,
+                            radius: 10 * StreakFlame.intensity(days: streak.days))
+                    .frame(width: 56, height: 56)
                     .symbolEffect(.bounce, value: streak.days)
 
                 VStack(alignment: .leading, spacing: 2) {

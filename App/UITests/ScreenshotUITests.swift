@@ -47,7 +47,7 @@ final class ScreenshotUITests: XCTestCase {
             app.navigationBars.buttons.element(boundBy: 0).tap()
         }
 
-        for (index, tab) in ["decks", "shows", "rewards", "settings"].enumerated() {
+        for (index, tab) in ["decks", "shows", "settings"].enumerated() {
             let button = app.buttons["tab.\(tab)"]
             guard button.waitForExistence(timeout: 10) else { continue }
             button.tap()
@@ -66,7 +66,7 @@ final class ScreenshotUITests: XCTestCase {
             }
         }
 
-        app.buttons["tab.rewards"].tap()
+        app.buttons["tab.today"].tap()
         let journey = app.buttons["journey.card"]
         if journey.waitForExistence(timeout: 10) {
             journey.tap()

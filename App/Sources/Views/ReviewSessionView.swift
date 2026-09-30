@@ -18,6 +18,8 @@ struct ReviewSessionView: View {
     @State private var reactions = 0
     /// Растёт на единицу с каждым неверным ответом: одно покачивание карточки.
     @State private var shakes: CGFloat = 0
+    /// Сколько осталось — на экране блокировки и в Dynamic Island.
+    @State private var liveActivity = SessionActivityController()
 
     var body: some View {
         Group {
@@ -28,6 +30,7 @@ struct ReviewSessionView: View {
                             ProgressService.recordSessionResult(
                                 accurate: model.stats.answered > 0 && model.stats.wrong == 0)
                             onFinish?()
+                            liveActivity.end()
                             // Сегодня уже занимались — сегодняшнее напоминание не нужно.
                             Task { await NotificationService.reschedule(context: context) }
                             WidgetBridge.update(context: context)
@@ -44,13 +47,23 @@ struct ReviewSessionView: View {
         // В сессии панель вкладок не нужна, а на маленьком экране отъедает
         // место у карточки и кнопок оценок.
         .onAppear { TabBarVisibility.shared.hiddenBySession = true }
-        .onDisappear { TabBarVisibility.shared.hiddenBySession = false }
+        .onDisappear {
+            TabBarVisibility.shared.hiddenBySession = false
+            liveActivity.end()
+        }
         .onAppear {
             if model == nil {
                 let created = ReviewSessionModel(context: context)
                 created.load(deck: deck, limit: limit)
                 model = created
+                liveActivity.start(deckName: deck?.name ?? tr("Повторение", "Revisão", "Review"),
+                                   total: created.cards.count)
             }
+        }
+        .onChange(of: model?.index) { _, index in
+            guard let model, let index else { return }
+            liveActivity.update(remaining: model.cards.count - index, total: model.cards.count,
+                                answered: model.stats.answered)
         }
     }
 
@@ -72,6 +85,7 @@ struct ReviewSessionView: View {
                         // видно, что колода движется, а не текст подменился.
                         CardPromptView(card: card, model: model)
                             .cardSurface(emphasized: model.isRevealed)
+                            .modifier(FlipOnReveal(revealed: model.isRevealed, enabled: !reduceMotion))
                             .modifier(ShakeEffect(trigger: shakes))
                             .id(card.persistentModelID)
                             .transition(cardTransition)
@@ -548,5 +562,30 @@ struct SessionSummaryView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
         .panel()
+    }
+}
+
+/// Переворот карточки при показе ответа — как в тесте уровня: ребро к
+/// зрителю, мгновенная смена стороны и пружинка обратно. Только в сторону
+/// ответа: возврат к новой карточке — это уже въезд следующей.
+private struct FlipOnReveal: ViewModifier {
+    let revealed: Bool
+    let enabled: Bool
+
+    func body(content: Content) -> some View {
+        if enabled {
+            content.keyframeAnimator(initialValue: 0.0, trigger: revealed) { view, angle in
+                view.rotation3DEffect(.degrees(angle), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
+            } keyframes: { _ in
+                // Скрытие ответа (новая карточка) — все ключи в нуле: без движения.
+                KeyframeTrack {
+                    CubicKeyframe(revealed ? 90 : 0, duration: 0.14)
+                    LinearKeyframe(revealed ? -90 : 0, duration: 0.001)
+                    SpringKeyframe(0, duration: 0.32, spring: .snappy)
+                }
+            }
+        } else {
+            content
+        }
     }
 }

@@ -192,5 +192,6 @@ struct RecapWidget: Widget {
 struct RecapWidgetBundle: WidgetBundle {
     var body: some Widget {
         RecapWidget()
+        SessionLiveActivity()
     }
 }

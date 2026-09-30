@@ -22,19 +22,15 @@ struct RewardsView: View {
     @State private var week: WeekProgress?
     @State private var stats: LearningStats?
     @State private var matureWords = 0
-    @State private var journey: JourneyPosition?
-    @State private var showPath: ShowPath?
     @State private var contracts: [RewardContract] = []
 
     private var service: ProgressService { ProgressService(context: context) }
     private var active: RewardContract? { contracts.first { !$0.isCompleted } }
 
     var body: some View {
-        NavigationStack {
+        Group {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
-                    ScreenTitle(tr("Награды", "Recompensas", "Rewards"))
-                    if let journey { JourneyCard(position: journey, path: showPath) }
                     contractCard
                     if let week { weekCard(week) }
                     if let stats { achievementsCard(stats) }
@@ -46,7 +42,10 @@ struct RewardsView: View {
                 .padding(.bottom, 24)
             }
             .background(Theme.background.ignoresSafeArea())
-            .tabRootTitle(tr("Награды", "Recompensas", "Rewards"))
+            // Экран открывается с «Сегодня», а не отдельной вкладкой: карта уже
+            // там, и пятая вкладка теснила панель (docs/next-steps.md).
+            .navigationTitle(tr("Награды", "Recompensas", "Rewards"))
+            .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showNewContract, onDismiss: refresh) {
                 NewContractView(currentMature: matureWords) { goal, reward, deadline in
                     service.createContract(goal: goal, reward: reward, deadline: deadline)
@@ -86,8 +85,8 @@ struct RewardsView: View {
             stats = service.stats()
             week = service.weekProgress(target: weeklyTarget)
             contracts = service.contracts()
-            journey = service.journeyPosition()
-            showPath = StudyShow.path(in: context)
+            // Число слов для подарков Мончику обновляется и отсюда.
+            _ = service.journeyPosition()
         }
         loaded = true
         checkCompletion()

@@ -38,7 +38,7 @@ final class SmokeUITests: XCTestCase {
 
     func testEveryTabOpens() {
         let app = launch()
-        for tab in ["today", "decks", "shows", "rewards", "settings", "today"] {
+        for tab in ["today", "decks", "shows", "settings", "today"] {
             let button = app.buttons["tab.\(tab)"]
             XCTAssertTrue(button.waitForExistence(timeout: 15), "нет вкладки \(tab)")
             button.tap()
@@ -52,7 +52,7 @@ final class SmokeUITests: XCTestCase {
         // С демо-набором экраны длинные, и их есть куда долистывать.
         app.launchArguments = ["-ui-testing", "-ui-demo", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launch()
-        for tab in ["today", "decks", "shows", "rewards", "settings"] {
+        for tab in ["today", "decks", "shows", "settings"] {
             let button = app.buttons["tab.\(tab)"]
             XCTAssertTrue(button.waitForExistence(timeout: 15), "нет вкладки \(tab)")
             button.tap()
