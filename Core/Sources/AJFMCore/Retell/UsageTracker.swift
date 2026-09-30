@@ -47,6 +47,12 @@ public enum ClaudeModel {
 
     public static let all = [opus5, sonnet5, haiku45]
 
+    /// Модель разбора пересказа по умолчанию. Sonnet, а не Opus: разбор
+    /// выходит почти таким же, а стоит в два с половиной раза меньше — для
+    /// человека со своим ключом это разница между «попробую» и «дорого».
+    /// Opus остаётся выбором в настройках.
+    public static let defaultRetell = sonnet5
+
     /// Чем модель хороша — для выбора в настройках.
     public static func summary(for model: ModelPricing) -> String {
         switch model.id {

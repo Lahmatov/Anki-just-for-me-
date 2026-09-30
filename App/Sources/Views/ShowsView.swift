@@ -123,9 +123,18 @@ private struct ShowCard: View {
                         IconBadge(systemName: "tv", color: Theme.blue, size: 56)
                     }
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(show.name)
-                            .font(.app(.title3))
-                            .foregroundStyle(Theme.ink)
+                        HStack(spacing: 6) {
+                            Text(show.name)
+                                .font(.app(.title3))
+                                .foregroundStyle(Theme.ink)
+                            // Сериал, по которому идёт карта, — видно сразу в списке.
+                            if StudyShow.isCurrent(show.name) {
+                                Image(systemName: "map.fill")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundStyle(Theme.green)
+                                    .accessibilityLabel(tr("учу", "a estudar", "studying"))
+                            }
+                        }
                         Text("\(progress.watchedCount) / \(progress.airedCount) "
                              + tr("серий", "episódios", "episodes"))
                             .font(.app(.subheadline, weight: .bold))

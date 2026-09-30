@@ -15,7 +15,7 @@ struct ClaudeBudget {
     var model: ModelPricing {
         ClaudeModel.pricing(
             for: UserDefaults.standard.string(forKey: SettingsKey.claudeModel)
-                ?? ClaudeModel.opus5.id)
+                ?? ClaudeModel.defaultRetell.id)
     }
 
     /// Модель для наборов слов. Подбор слов — несложная задача: Haiku

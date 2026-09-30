@@ -20,7 +20,7 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.appearance) private var appearance = AppAppearance.system.rawValue
     @AppStorage(SettingsKey.englishLevel) private var storedLevel: String?
     @State private var showPlacementTest = false
-    @AppStorage(SettingsKey.claudeModel) private var claudeModel = ClaudeModel.opus5.id
+    @AppStorage(SettingsKey.claudeModel) private var claudeModel = ClaudeModel.defaultRetell.id
     @AppStorage(SettingsKey.deckModel) private var deckModel = ClaudeModel.haiku45.id
     @AppStorage(SettingsKey.monthlyBudget) private var monthlyBudget = 10.0
     @AppStorage(SettingsKey.reminderEnabled) private var reminderEnabled = false
@@ -393,15 +393,18 @@ struct SettingsView: View {
             Text("Claude")
         } footer: {
             Text(tr("Для наборов хватает Haiku: быстро и около цента за набор. Для разбора "
-                        + "пересказов лучше Opus — там важна точность. Модели и лимит — только для "
+                        + "пересказов по умолчанию Sonnet; Opus точнее, но в два с половиной раза дороже. "
+                        + "Модели и лимит — только для "
                         + "Claude. Лимит нужен не ради экономии, "
                         + "а чтобы ошибка в коде не съела бюджет молча.",
                     "Para baralhos chega o Haiku: rápido e cerca de um cêntimo por baralho. Para "
-                        + "analisar recontos é melhor o Opus — aí a precisão conta. Modelos e limite "
+                        + "analisar recontos, por omissão, o Sonnet; o Opus é mais preciso, mas custa duas "
+                        + "vezes e meia mais. Modelos e limite "
                         + "são só para o Claude. O limite não é para poupar — é para que "
                         + "um erro no código não gaste o orçamento às escondidas.",
                     "Haiku is enough for decks: fast and about a cent per deck. For retelling "
-                        + "reviews Opus is better — accuracy matters there. Models and the limit "
+                        + "reviews the default is Sonnet; Opus is more precise but costs 2.5× more. "
+                        + "Models and the limit "
                         + "apply to Claude only. The limit isn't about saving — "
                         + "it's so a bug can't quietly eat the budget."))
         }

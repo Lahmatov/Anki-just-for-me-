@@ -319,4 +319,11 @@ final class UsageTrackerTests: XCTestCase {
     func testUnknownModelFallsBackToOpus() {
         XCTAssertEqual(ClaudeModel.pricing(for: "что-то-новое").id, ClaudeModel.opus5.id)
     }
+
+    func testRetellDefaultsToTheCheaperGoodModel() {
+        // Умолчание — не самая дорогая модель: Opus остаётся выбором.
+        XCTAssertEqual(ClaudeModel.defaultRetell.id, ClaudeModel.sonnet5.id)
+        XCTAssertLessThan(ClaudeModel.defaultRetell.cost(inputTokens: 13_600, outputTokens: 1_500),
+                          ClaudeModel.opus5.cost(inputTokens: 13_600, outputTokens: 1_500))
+    }
 }
