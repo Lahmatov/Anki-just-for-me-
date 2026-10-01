@@ -10,7 +10,9 @@ struct CatalogStrip: View {
     @State private var shows: [CatalogIndexEntry] = []
 
     var body: some View {
-        Group {
+        // VStack, а не Group: у пустой Group модификатор `.onAppear` не на
+        // чем запустить — список не загружался, и лента не появлялась вовсе.
+        VStack(alignment: .leading, spacing: 0) {
             if !shows.isEmpty {
                 VStack(alignment: .leading, spacing: 10) {
                     CardSectionHeader(title: tr("Готовые наборы", "Baralhos prontos", "Ready decks"))
