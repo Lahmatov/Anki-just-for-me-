@@ -12,6 +12,17 @@ struct TodayView: View {
 
     /// Число слов, а не сами слова: @Query со всей базой перечитывался
     /// при каждом сохранении и грел телефон, а экрану нужна одна цифра.
+    /// Растёт, когда закрылось знакомство. Оно открывается поверх на весь
+    /// экран, и после него «Сегодня» заново не появляется — без этого
+    /// стартовый набор из знакомства не был виден до смены вкладки.
+    var refreshToken = 0
+
+    // Явный: у экрана приватные свойства, и сгенерированный инициализатор
+    // с этим параметром был бы закрыт для RootView.
+    init(refreshToken: Int = 0) {
+        self.refreshToken = refreshToken
+    }
+
     @State private var noteCount = 0
     @State private var studiedSeconds: TimeInterval = 0
     @State private var summary: QueueSummary?
@@ -98,6 +109,7 @@ struct TodayView: View {
             .onChange(of: isSessionActive) { _, active in
                 if !active { refresh() }
             }
+            .onChange(of: refreshToken) { _, _ in refresh() }
         }
     }
 

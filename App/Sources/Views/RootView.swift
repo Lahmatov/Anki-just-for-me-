@@ -18,6 +18,8 @@ struct RootView: View {
     @State private var showQuickAdd = false
     @State private var showDeckRequest = false
     @State private var onboarding: OnboardingPlan?
+    /// Сколько раз закрывалось знакомство — сигнал «Сегодня» перечитать базу.
+    @State private var onboardingFinished = 0
     @State private var pendingRestore: PendingRestore?
     @State private var restoreResult: RestoreService.Result?
     /// Заставка видна с первого кадра: иначе содержимое мелькнуло бы до неё.
@@ -51,7 +53,7 @@ struct RootView: View {
             ZStack {
                 Group {
                     switch tab {
-                    case .today: TodayView()
+                    case .today: TodayView(refreshToken: onboardingFinished)
                     case .decks: decksTab
                     case .shows: ShowsView()
                     case .settings: SettingsView()
@@ -211,7 +213,7 @@ struct RootView: View {
         }
         // На весь экран, а не листом: знакомство — первое, что видно
         // в приложении, и случайный свайп вниз не должен его сбрасывать.
-        .fullScreenCover(item: $onboarding) { plan in
+        .fullScreenCover(item: $onboarding, onDismiss: { onboardingFinished += 1 }) { plan in
             OnboardingView(plan: plan)
         }
         .sheet(isPresented: $showPasteImport) {
