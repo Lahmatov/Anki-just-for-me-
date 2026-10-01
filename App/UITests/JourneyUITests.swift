@@ -35,6 +35,22 @@ final class JourneyUITests: XCTestCase {
         }
     }
 
+    /// Нажать, когда элемент перестал двигаться. Карта при открытии сама
+    /// доезжает до текущей серии — нажатие по едущему шагу на iPhone 17
+    /// Pro Max уходило мимо, и шторка серии не открывалась.
+    private func tapWhenSettled(_ target: XCUIElement, timeout: TimeInterval = 5) {
+        XCTAssertTrue(target.waitForExistence(timeout: 15), "нет элемента \(target)")
+        var frame = target.frame
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            Thread.sleep(forTimeInterval: 0.3)
+            let now = target.frame
+            if now == frame && target.isHittable { break }
+            frame = now
+        }
+        target.tap()
+    }
+
     private func openMap(_ app: XCUIApplication) {
         let card = app.buttons["journey.card"]
         scrollTo(card, in: app)
@@ -66,8 +82,7 @@ final class JourneyUITests: XCTestCase {
         openMap(app)
 
         let step = element(app, "map.e1x1")
-        XCTAssertTrue(step.waitForExistence(timeout: 15), "нет шага первой серии")
-        step.tap()
+        tapWhenSettled(step)
 
         let study = app.buttons["step.study"]
         XCTAssertTrue(study.waitForExistence(timeout: 10), "в шаге серии нет кнопки «учить»")
@@ -81,15 +96,14 @@ final class JourneyUITests: XCTestCase {
         openMap(app)
 
         let step = element(app, "map.e1x2")
-        XCTAssertTrue(step.waitForExistence(timeout: 15), "нет шага второй серии")
-        step.tap()
+        tapWhenSettled(step)
 
         let add = app.buttons["step.addWords"]
         XCTAssertTrue(add.waitForExistence(timeout: 10), "в шаге серии нет готовых слов")
         add.tap()
         // Слова добавляются, когда шторка уже закрылась.
         XCTAssertTrue(add.waitForNonExistence(timeout: 10), "шторка шага не закрылась")
-        step.tap()
+        tapWhenSettled(step)
         XCTAssertTrue(app.buttons["step.study"].waitForExistence(timeout: 10),
                       "после добавления слов серию нельзя учить")
     }
@@ -100,8 +114,7 @@ final class JourneyUITests: XCTestCase {
         openMap(app)
 
         let step = element(app, "map.e1x1")
-        XCTAssertTrue(step.waitForExistence(timeout: 15))
-        step.tap()
+        tapWhenSettled(step)
         let openEpisode = app.buttons["step.open"]
         XCTAssertTrue(openEpisode.waitForExistence(timeout: 10), "из шага нельзя открыть серию")
         openEpisode.tap()
