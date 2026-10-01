@@ -22,10 +22,18 @@ final class FirstLaunchUITests: XCTestCase {
         // Шагов немного, но их число зависит от того, что уже настроено,
         // поэтому идём «Дальше», пока знакомство не закончится, — с запасом.
         var steps = 0
+        var addedStarter = false
         while next.exists && steps < 15 {
             let starter = app.buttons["onboarding.starter"]
-            if starter.exists && starter.isHittable {
+            if !addedStarter, starter.exists {
+                // На маленьком экране кнопка ниже края — докрутить до неё.
+                var swipes = 4
+                while !starter.isHittable && swipes > 0 {
+                    app.swipeUp()
+                    swipes -= 1
+                }
                 starter.tap()
+                addedStarter = true
             }
             next.tap()
             steps += 1
@@ -33,6 +41,7 @@ final class FirstLaunchUITests: XCTestCase {
             Thread.sleep(forTimeInterval: 0.5)
         }
         XCTAssertFalse(next.exists, "знакомство не закончилось за \(steps) шагов")
+        XCTAssertTrue(addedStarter, "в знакомстве на пустой базе не было шага со стартовым набором")
 
         let study = app.buttons["today.study"]
         XCTAssertTrue(study.waitForExistence(timeout: 15),
