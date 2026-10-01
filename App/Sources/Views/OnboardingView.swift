@@ -92,6 +92,7 @@ struct OnboardingView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(CommonText.skip) { finish(keepingGoal: false) }
                         .font(.app(.callout))
+                        .accessibilityIdentifier("onboarding.skip")
                 }
             }
         }
@@ -429,6 +430,7 @@ struct OnboardingView: View {
                 }
                 .buttonStyle(.chunky)
                 .controlSize(.large)
+                .accessibilityIdentifier("onboarding.starter")
 
                 if starterFailed {
                     // Молчаливый отказ оставил бы человека с пустой базой
@@ -575,6 +577,7 @@ struct OnboardingView: View {
         }
         .buttonStyle(.chunky)
         .controlSize(.large)
+        .accessibilityIdentifier("onboarding.next")
     }
 
     private var isLastStep: Bool { index >= plan.count - 1 }

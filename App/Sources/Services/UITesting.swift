@@ -25,6 +25,12 @@ enum UITesting {
         isActive && ProcessInfo.processInfo.arguments.contains("-ui-demo-show")
     }
 
+    /// `-ui-onboarding`: знакомство показывается, как на первой установке, —
+    /// для теста главного пути «запуск → знакомство → первое занятие».
+    static var wantsOnboarding: Bool {
+        isActive && ProcessInfo.processInfo.arguments.contains("-ui-onboarding")
+    }
+
     /// До первого экрана: прошлый прогон не должен оставить ни настроек, ни языка.
     static func prepare() {
         guard isActive, let domain = Bundle.main.bundleIdentifier else { return }

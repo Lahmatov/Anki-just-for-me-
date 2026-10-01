@@ -97,6 +97,10 @@ struct RootView: View {
                 .transition(.opacity)
             }
         }
+        .onAppear {
+            // В UI-тестах заставки нет, а знакомство запускается после неё.
+            if UITesting.wantsOnboarding { showOnboardingIfNeeded() }
+        }
         .task {
             // Раз в неделю база сама уезжает в файл — на случай, если
             // вспомнить про кнопку «Сохранить бэкап» не получится.
@@ -385,7 +389,7 @@ extension RootView {
     /// новая его версия; в остальное время — только по своей воле из настроек.
     @MainActor
     func showOnboardingIfNeeded() {
-        guard !UITesting.isActive else { return }
+        guard !UITesting.isActive || UITesting.wantsOnboarding else { return }
         let defaults = UserDefaults.standard
         let seen = OnboardingPlan.seenVersion(
             stored: defaults.integer(forKey: SettingsKey.onboardingVersion),

@@ -51,6 +51,10 @@ targets:
         - AJFMTests
         - AJFMUITests
       gatherCoverageData: true
+      # Покупки Recap Plus в симуляторе без App Store Connect (⌘R). Цены в
+      # файле условные — настоящие задаются в App Store Connect. Сервер такие
+      # покупки не подтвердит: это проверка экрана подписки, а не оплаты.
+      storeKitConfiguration: Config/RecapPlus.storekit
     settings:
       base:
         # Bundle ID менять нельзя: на бесплатном аккаунте лимит ~10 новых App ID
