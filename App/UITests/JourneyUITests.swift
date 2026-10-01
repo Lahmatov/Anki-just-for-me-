@@ -126,13 +126,15 @@ final class JourneyUITests: XCTestCase {
         XCTAssertTrue(shows.waitForExistence(timeout: 15))
         shows.tap()
 
-        let tile = app.buttons["catalog.1"]
+        // Плитка — ссылка с объединённым для VoiceOver содержимым: её тип в
+        // дереве не обязательно «кнопка», поэтому ищем по идентификатору.
+        let tile = element(app, "catalog.1")
         scrollTo(tile, in: app)
         XCTAssertTrue(tile.waitForExistence(timeout: 15), "нет плитки готового сериала")
         tile.tap()
 
-        XCTAssertTrue(app.buttons["catalog.add.1"].waitForExistence(timeout: 15), "у сериала нет серий")
-        let study = app.buttons["studyThisShow"]
+        XCTAssertTrue(element(app, "catalog.add.1").waitForExistence(timeout: 15), "у сериала нет серий")
+        let study = element(app, "studyThisShow")
         scrollTo(study, in: app)
         XCTAssertTrue(study.waitForExistence(timeout: 10), "нет кнопки «учить этот сериал»")
         study.tap()
