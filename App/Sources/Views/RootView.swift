@@ -147,6 +147,8 @@ struct RootView: View {
             Log.info(.app, "Приложение запущено")
             BackupService(context: context).backupIfNeeded()
             SnapshotService.recordIfNeeded(context: context)
+            // Страна магазина — до сервера: в России он не используется (P-78).
+            await RegionService.refresh()
             RecapAccount.shared.start()
             await NotificationService.reschedule(context: context)
             WidgetBridge.update(context: context)

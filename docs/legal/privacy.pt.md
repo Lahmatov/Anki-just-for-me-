@@ -46,6 +46,11 @@ o áudio é processado pelo serviço da Apple, segundo a
 
 Nada é vendido nem partilhado para publicidade.
 
+**Rússia.** Na App Store russa, a aplicação funciona sem o servidor Recap: as linhas
+sobre o servidor acima não se aplicam, e o programador não recebe nada do teu
+telemóvel. O que envias tu próprio — um e-mail ao suporte ou pedidos com a tua
+própria chave de IA — vai diretamente para o destinatário que escolheste.
+
 ## O que o servidor Recap guarda, porquê e durante quanto tempo
 
 O servidor só é usado por quem tem Recap Plus, um código promocional ou conta. Nunca

@@ -46,6 +46,8 @@ _Октябрь 2026. Отмечай `[x]` по мере выполнения. �
   - [ ] подписки «месяц» и «год» с идентификаторами из `backend/wrangler.toml`
         (`SUBSCRIPTION_PRODUCTS`);
   - [ ] данные продавца для DSA — те же, что в разделе 1;
+  - [ ] у подписок — территория «Россия» выключена (приложение там
+        продаётся, но без сервера, P-78);
   - [ ] ключ In-App Purchase и ключ Sign in with Apple → секретами на сервер.
 - [ ] Включить вход через Apple в `Config/Signing.xcconfig`.
 - [ ] Ключ App Store Connect API (Users and Access → Integrations → Keys,

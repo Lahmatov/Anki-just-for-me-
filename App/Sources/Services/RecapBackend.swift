@@ -19,7 +19,10 @@ final class RecapBackend {
     }
 
     /// Адрес из Info.plist; заглушка «CHANGE-ME» значит «сервер не подключён».
+    /// В магазинах без сервера (P-78, Россия) — тоже «не подключён»: все
+    /// экраны уже умеют жить без него.
     static var baseURL: URL? {
+        guard RegionService.allowsServer else { return nil }
         guard let raw = Bundle.main.object(forInfoDictionaryKey: "RecapBackendURL") as? String,
               !raw.contains("CHANGE-ME"),
               let url = URL(string: raw), url.scheme == "https" else { return nil }

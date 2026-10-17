@@ -46,6 +46,11 @@ it; otherwise Apple's speech service processes the audio under
 
 Nothing is sold or shared for advertising.
 
+**Russia.** In the Russian App Store the app works without the Recap server: the
+server rows above do not apply, and the developer receives nothing from your phone.
+What you send yourself — an e-mail to support, or requests with your own AI key —
+goes straight to the recipient you chose.
+
 ## What the Recap server keeps, why, and for how long
 
 The server is used only by people with Recap Plus, a promo code or an account. It
