@@ -13,18 +13,32 @@ import AJFMCore
 /// интерфейса это короткие толкования, как в учебном словаре.
 @MainActor
 enum StarterDeck {
-    static func resourceName(for language: AppLanguage = Loc.language) -> String {
-        "starter-deck-\(language.rawValue)"
+    /// Свой набор у каждого изучаемого языка (P-67): английский — прежние
+    /// файлы, у остальных в имени есть язык. Переводы — на языке интерфейса.
+    static func resourceName(for language: AppLanguage = Loc.language,
+                             target: StudyLanguage = StudyLanguageStore.storedCurrent) -> String {
+        target == .english
+            ? "starter-deck-\(language.rawValue)"
+            : "starter-deck-\(target.rawValue)-\(language.rawValue)"
     }
 
-    static func data(for language: AppLanguage = Loc.language) -> Data? {
-        guard let url = Bundle.main.url(
-            forResource: resourceName(for: language), withExtension: "json") else {
-            Log.warning(.app, "Стартовый набор не найден в ресурсах приложения")
+    static func data(for language: AppLanguage = Loc.language,
+                     target: StudyLanguage = StudyLanguageStore.storedCurrent) -> Data? {
+        // Нет перевода на язык интерфейса — берём русский: для изучаемых
+        // языков кроме английского он есть всегда.
+        let url = Bundle.main.url(forResource: resourceName(for: language, target: target),
+                                  withExtension: "json")
+            ?? Bundle.main.url(forResource: resourceName(for: .russian, target: target),
+                               withExtension: "json")
+        guard let url else {
+            Log.warning(.app, "Стартовый набор не найден в ресурсах приложения", detail: target.rawValue)
             return nil
         }
         return try? Data(contentsOf: url)
     }
+
+    /// Есть ли стартовый набор для изучаемого языка — иначе кнопку не показываем.
+    static var isAvailable: Bool { data() != nil }
 
     /// Сколько слов в наборе — показывается на экране знакомства.
     static func wordCount() -> Int {

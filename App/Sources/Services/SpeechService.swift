@@ -25,7 +25,9 @@ final class SpeechService {
         VoiceSelector.best(from: availableVoices, language: language)?.name
     }
 
-    private let language = "en-US"
+    /// Голос изучаемого языка: португальские слова английским голосом
+    /// звучали бы неузнаваемо (P-67).
+    private var language: String { StudyLanguageStore.storedCurrent.speechLocale }
 
     private var availableVoices: [VoiceDescriptor] {
         AVSpeechSynthesisVoice.speechVoices().map { voice in

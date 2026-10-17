@@ -45,7 +45,8 @@ struct ExportService {
                     tvmazeID: show.tvmazeID, name: show.name, posterURL: show.posterURL,
                     premieredYear: show.premieredYear, addedAt: show.addedAt,
                     episodes: show.episodes, watched: show.watchedRaw)
-            })
+            },
+            language: StudyLanguageStore.storedCurrent.rawValue)
     }
 
     /// Пишет бэкап во временный файл и возвращает путь — для кнопки «Поделиться».
@@ -53,7 +54,7 @@ struct ExportService {
         let data = try BackupCoder.encode(try makeBackup())
         let stamp = Self.fileStampFormatter.string(from: Date())
         let url = FileManager.default.temporaryDirectory
-            .appendingPathComponent("ajfm-backup-\(stamp).json")
+            .appendingPathComponent("ajfm-backup-\(StudyLanguageStore.storedCurrent.backupPrefix)\(stamp).json")
         try data.write(to: url, options: .atomic)
         return url
     }
@@ -64,7 +65,7 @@ struct ExportService {
             deck: DeckMeta(
                 name: deck.name,
                 folder: deck.folder?.path,
-                language: "en-US",
+                language: StudyLanguageStore.storedCurrent.speechLocale,
                 scheduler: deck.scheduler,
                 cardTypes: deck.cardTypes,
                 source: deck.source

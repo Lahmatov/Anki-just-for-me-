@@ -10,7 +10,8 @@ enum OnboardingPlanBuilder {
         let defaults = UserDefaults.standard
 
         return OnboardingPlan.make(
-            hasWords: !notes.isEmpty,
+            // Без стартового набора для языка шаг «с чего начать» не нужен.
+            hasWords: !notes.isEmpty || !StarterDeck.isAvailable,
             needsBetterVoice: SpeechService.shared.shouldSuggestBetterVoice,
             hasGoal: ProgressService(context: context).activeContract != nil,
             hasReminder: defaults.bool(forKey: SettingsKey.reminderEnabled),

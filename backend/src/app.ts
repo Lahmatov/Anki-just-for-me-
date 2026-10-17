@@ -15,7 +15,7 @@ import { catalogNotes, listShows, localizeNotes, showDecks } from "./catalog";
 import {
   DECK_MAX_TOKENS, DECK_SCHEMA, DISCUSSION_MAX_TOKENS, DISCUSSION_SCHEMA, HELP_MAX_TOKENS,
   HELP_QUESTION_LIMIT, HELP_SCHEMA, KNOWN_TERMS_LIMIT, helpSystem, helpUserMessage, parseHelpReply,
-  LANGUAGES, LEVELS, MAX_LEARNER_TURNS, deckFile, deckSystem, deckUserMessage, movieDeckFile,
+  LANGUAGES, LEVELS, MAX_LEARNER_TURNS, TARGETS, deckFile, deckSystem, deckUserMessage, movieDeckFile,
   discussionMessages, discussionSystem, estimateTokens, parseDeckNotes, parseDiscussionReply,
   type Turn,
 } from "./prompts";
@@ -377,6 +377,8 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
   const wordCount = int(body, "wordCount", 5, 40);
   const knownTerms = stringList(body, "knownTerms", KNOWN_TERMS_LIMIT, 80);
   const subtitles = optionalStr(body, "subtitles", SUBTITLES_LIMIT);
+  // Изучаемый язык (P-67); без поля — английский, как у старых версий.
+  const target = oneOf(body, "target", TARGETS, true) ?? "en";
 
   // Каталог открыт и без подписки — но каждый запрос ходит в TVMaze,
   // поэтому и бесплатные запросы ограничены.
@@ -388,7 +390,8 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
   // Готовый набор из каталога — бесплатно и без подписки: модель уже
   // отработала один раз за всех, а сервер только читает базу. Фильмов
   // в каталоге нет.
-  if (!subtitles && !movie) {
+  // Каталог — слова к американским сериалам, только для английского.
+  if (!subtitles && !movie && target === "en") {
     const catalog = await catalogNotes(env.DB, showId, season, episode);
     if (catalog) {
       await rememberEpisode(env, deps, device, showId, season, episode);
@@ -409,7 +412,7 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
 
   const active = requireActive(entitlement, now);
   await limitAI(env, device, now);
-  const input = { facts, language, level, wordCount, knownTerms, subtitles };
+  const input = { facts, language, level, wordCount, knownTerms, subtitles, target };
   const work = (async () => {
     const result = await callWithQuota(env, deps, device, active, "deck", {
       system: deckSystem(input),

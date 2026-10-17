@@ -49,24 +49,36 @@ struct StudyShowPicker: View {
                         poster: show.posterURL) { pick(show.name, catalog: nil) }
                 }
             }
-            CardSectionHeader(title: tr("С готовыми словами", "Com palavras prontas", "With ready words"))
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 96), spacing: 12)], spacing: 12) {
-                ForEach(catalog) { entry in
-                    Button {
-                        pick(entry.name, catalog: entry)
-                    } label: {
-                        CatalogTile(entry: entry)
-                            .overlay(alignment: .topTrailing) {
-                                if isCurrent(entry.name) { checkmark.offset(x: 6, y: -6) }
-                            }
+            if tracked.isEmpty && catalog.isEmpty {
+                MascotSays(mood: .hello,
+                           text: tr("Добавь сериал на вкладке «Сериалы» — и выбери его здесь.",
+                                    "Junta uma série no separador «Séries» — e escolhe-a aqui.",
+                                    "Add a show on the Shows tab — then pick it here."),
+                           size: 60)
+            }
+            if !catalog.isEmpty {
+                CardSectionHeader(title: tr("С готовыми словами", "Com palavras prontas", "With ready words"))
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 96), spacing: 12)], spacing: 12) {
+                    ForEach(catalog) { entry in
+                        Button {
+                            pick(entry.name, catalog: entry)
+                        } label: {
+                            CatalogTile(entry: entry)
+                                .overlay(alignment: .topTrailing) {
+                                    if isCurrent(entry.name) { checkmark.offset(x: 6, y: -6) }
+                                }
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier("studyShow.\(entry.rank)")
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier("studyShow.\(entry.rank)")
                 }
             }
         }
         .onAppear {
-            if catalog.isEmpty { catalog = LocalCatalog.index()?.shows ?? [] }
+            // Готовые слова — к американским сериалам: у других языков их нет.
+            if catalog.isEmpty, StudyLanguageStore.shared.current.hasShowCatalog {
+                catalog = LocalCatalog.index()?.shows ?? []
+            }
         }
     }
 

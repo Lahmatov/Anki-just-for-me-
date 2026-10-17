@@ -125,7 +125,10 @@ struct SettingsView: View {
 
     private var levelSection: some View {
         Section {
-            Picker(tr("Уровень английского", "Nível de inglês", "English level"),
+            // Свой у каждого языка: у английского может быть C1, у
+            // португальского — A2. Изучаемый язык выбирается здесь же.
+            StudyLanguagePicker()
+            Picker(tr("Мой уровень", "O meu nível", "My level"),
                    selection: Binding(
                     get: { storedLevel.flatMap(CEFRLevel.init(rawValue:)) },
                     set: { storedLevel = $0?.rawValue })
@@ -135,10 +138,13 @@ struct SettingsView: View {
                     Text(level.rawValue).tag(CEFRLevel?.some(level))
                 }
             }
-            Button(tr("Пройти тест словаря", "Fazer o teste de vocabulário",
-                      "Take the vocabulary test"),
-                   systemImage: "text.magnifyingglass") {
-                showPlacementTest = true
+            // Тест словаря — английский; для других языков уровень выбирается сам.
+            if StudyLanguageStore.shared.current.hasPlacementTest {
+                Button(tr("Пройти тест словаря", "Fazer o teste de vocabulário",
+                          "Take the vocabulary test"),
+                       systemImage: "text.magnifyingglass") {
+                    showPlacementTest = true
+                }
             }
         } footer: {
             Text(tr("По уровню подбираются слова в наборах от Claude — на ступень выше, "

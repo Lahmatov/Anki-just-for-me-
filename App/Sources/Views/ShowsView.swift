@@ -44,7 +44,10 @@ struct ShowsView: View {
                         movieButton
                     }
 
-                    CatalogStrip()
+                    // Готовые слова — к американским сериалам, только для английского.
+                    if StudyLanguageStore.shared.current.hasShowCatalog {
+                        CatalogStrip()
+                    }
 
                     CardSectionHeader(title: tr("Практика речи", "Prática de fala", "Speaking practice"))
                     CardLink(

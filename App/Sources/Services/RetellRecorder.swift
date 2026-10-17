@@ -51,7 +51,10 @@ final class RetellRecorder {
     private(set) var elapsed: TimeInterval = 0
 
     private let engine = AVAudioEngine()
-    private let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+    /// Распознаёт изучаемый язык. Сервис живёт в экране, а экраны при
+    /// смене языка пересоздаются — язык берётся при создании.
+    private let recognizer = SFSpeechRecognizer(
+        locale: Locale(identifier: StudyLanguageStore.storedCurrent.speechLocale))
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var task: SFSpeechRecognitionTask?
     private var audioFile: AVAudioFile?

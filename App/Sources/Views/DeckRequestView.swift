@@ -178,7 +178,7 @@ struct DeckRequestView: View {
                 }
                 // Без уровня слова подбираются вслепую — на средний B1–B2.
                 // Тест занимает три минуты и делает каждый следующий набор точнее.
-                if model.level == nil {
+                if model.level == nil, StudyLanguageStore.shared.current.hasPlacementTest {
                     VStack(alignment: .leading, spacing: 10) {
                         Label(tr("Без уровня подберу слова как для среднего — B1–B2. "
                                     + "Для новичка это будет трудно, для продвинутого — скучно.",

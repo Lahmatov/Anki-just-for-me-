@@ -80,11 +80,15 @@ public enum BackendAPI {
         /// Номер запроса: повтор с тем же номером после обрыва связи получает
         /// уже готовый набор и не тратит лимит второй раз.
         public var requestId: String?
+        /// Изучаемый язык (P-67). У английского поля нет — запрос тот же,
+        /// что у версий до появления языков.
+        public var target: String?
 
         public init(showId: Int, season: Int, episode: Int, language: AppLanguage,
                     level: CEFRLevel?, wordCount: Int, knownTerms: [String], subtitles: String?,
-                    requestId: String? = nil) {
+                    requestId: String? = nil, target: StudyLanguage = .english) {
             self.requestId = requestId
+            self.target = target == .english ? nil : target.rawValue
             self.showId = showId
             self.season = season
             self.episode = episode
@@ -110,13 +114,16 @@ public enum BackendAPI {
         public var knownTerms: [String]
         public var subtitles: String?
         public var requestId: String?
+        public var target: String?
 
         public init(movieId: Int, language: AppLanguage, level: CEFRLevel?, wordCount: Int,
-                    knownTerms: [String], subtitles: String?, requestId: String? = nil) {
+                    knownTerms: [String], subtitles: String?, requestId: String? = nil,
+                    target: StudyLanguage = .english) {
             // Поля те же, что у серии, и обрезаются по тем же правилам.
             let common = DeckBody(showId: 0, season: 0, episode: 0, language: language, level: level,
                                   wordCount: wordCount, knownTerms: knownTerms, subtitles: subtitles,
-                                  requestId: requestId)
+                                  requestId: requestId, target: target)
+            self.target = common.target
             self.movieId = movieId
             self.language = common.language
             self.level = common.level

@@ -25,9 +25,37 @@ struct RestoreService {
         var cards: Int
     }
 
+    /// Копия другого изучаемого языка: восстановление заменяет базу целиком,
+    /// и португальская копия в английской базе стёрла бы английские наборы.
+    enum LanguageMismatch: LocalizedError, Equatable {
+        case otherLanguage(StudyLanguage)
+
+        var errorDescription: String? {
+            switch self {
+            case .otherLanguage(let language):
+                return tr("Это копия для языка «\(language.nativeName)». Переключись на него в настройках "
+                              + "и восстанови копию там.",
+                          "Esta cópia é do idioma «\(language.nativeName)». Muda para ele nas definições "
+                              + "e restaura a cópia lá.",
+                          "This backup is for \(language.nativeName). Switch to it in Settings "
+                              + "and restore it there.")
+            }
+        }
+    }
+
+    /// Язык базы, в которую восстанавливаем.
+    var language: StudyLanguage = StudyLanguageStore.storedCurrent
+
+    private func checkLanguage(_ backup: BackupFile) throws {
+        guard backup.studyLanguage == language else {
+            throw LanguageMismatch.otherLanguage(backup.studyLanguage)
+        }
+    }
+
     /// Разбирает файл и описывает, что в нём, не трогая базу.
     func preview(from data: Data) throws -> (BackupFile, Preview) {
         let backup = try BackupCoder.decode(data)
+        try checkLanguage(backup)
         let cards = backup.decks.flatMap { $0.notes.flatMap(\.cards) }
         return (backup, Preview(
             decks: backup.decks.count,
@@ -44,6 +72,7 @@ struct RestoreService {
     /// карточек сливался бы непредсказуемо.
     @discardableResult
     func restore(_ backup: BackupFile) throws -> Result {
+        try checkLanguage(backup)
         var cardCount = 0
 
         // Чистка, наполнение и сохранение — одна транзакция под одним откатом.

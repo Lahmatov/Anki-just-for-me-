@@ -168,4 +168,33 @@ final class RestoreServiceTests: XCTestCase {
         XCTAssertThrowsError(try restorer.preview(from: TestDB.deckFile(
             notes: [NoteData(term: "a", translation: "б")])))
     }
+
+    // MARK: - Язык копии (P-67)
+
+    /// Копия знает свой язык: английская база пишет «en».
+    func testBackupRecordsTheStudyLanguage() throws {
+        let (_, importer, exporter, _) = try makeEnvironment()
+        try seed(importer)
+        XCTAssertEqual(try exporter.makeBackup().studyLanguage, .english)
+    }
+
+    /// Английская копия не ложится в португальскую базу — иначе заменила бы её.
+    func testBackupOfAnotherLanguageIsRefusedBeforeTouchingTheBase() throws {
+        let (context, importer, exporter, _) = try makeEnvironment()
+        try seed(importer)
+        let englishBackup = try exporter.makeBackup()
+        let portuguese = RestoreService(context: context, language: .portuguese)
+
+        XCTAssertThrowsError(try portuguese.restore(englishBackup)) { error in
+            XCTAssertEqual(error as? RestoreService.LanguageMismatch, .otherLanguage(.english))
+        }
+        XCTAssertEqual(try context.fetch(FetchDescriptor<Deck>()).count, 1, "база не тронута")
+    }
+
+    func testPreviewAlreadyNamesTheOtherLanguage() throws {
+        let (context, importer, exporter, _) = try makeEnvironment()
+        try seed(importer)
+        let data = try BackupCoder.encode(try exporter.makeBackup())
+        XCTAssertThrowsError(try RestoreService(context: context, language: .italian).preview(from: data))
+    }
 }

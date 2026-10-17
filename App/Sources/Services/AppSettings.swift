@@ -3,7 +3,21 @@ import SwiftUI
 import AJFMCore
 
 /// Настройки приложения. Живут в UserDefaults — их немного и они несложные.
+///
+/// Ключи прогресса (`static var`) у каждого изучаемого языка свои: серия,
+/// карта, подарки, уровень, бэкапы (P-67). Настройки интерфейса, профиль и
+/// напоминания (`static let`) — общие.
 enum SettingsKey {
+    /// Изучаемый язык (`StudyLanguage`). Общий — по нему выбираются остальные.
+    static let studyLanguage = "studyLanguage"
+
+    /// Ключ прогресса текущего изучаемого языка. Читается из UserDefaults
+    /// напрямую: ключи нужны и вне главного потока, а при смене языка
+    /// экраны пересоздаются и берут новые ключи.
+    private static func scoped(_ key: String) -> String {
+        StudyLanguage.stored(UserDefaults.standard.string(forKey: studyLanguage)).scopedKey(key)
+    }
+
     static let newPerDay = "newPerDay"
     static let reviewsPerDay = "reviewsPerDay"
     static let burySiblings = "burySiblings"
@@ -13,26 +27,26 @@ enum SettingsKey {
     static let claudeModel = "claudeModel"
     static let deckModel = "deckModel"
     static let monthlyBudget = "monthlyBudget"
-    static let bestPronunciationStreak = "bestPronunciationStreak"
-    static let perfectSessions = "perfectSessions"
-    static let weeklyTarget = "weeklyTarget"
-    static let lastBackupDate = "lastBackupDate"
-    static let lastCloudBackupDate = "lastCloudBackupDate"
+    static var bestPronunciationStreak: String { scoped("bestPronunciationStreak") }
+    static var perfectSessions: String { scoped("perfectSessions") }
+    static var weeklyTarget: String { scoped("weeklyTarget") }
+    static var lastBackupDate: String { scoped("lastBackupDate") }
+    static var lastCloudBackupDate: String { scoped("lastCloudBackupDate") }
     static let cloudBackupEnabled = "cloudBackupEnabled"
     static let soundsEnabled = "soundsEnabled"
     /// Подарок, надетый на Мончика (id или «none» — снят).
-    static let monchikGift = "monchikGift"
+    static var monchikGift: String { scoped("monchikGift") }
     /// Сколько слов начато — последнее известное число. Мончик на любом
     /// экране знает по нему, какие подарки открыты, не считая базу заново.
-    static let journeyWords = "journeyWords"
+    static var journeyWords: String { scoped("journeyWords") }
     /// Сериал, который учим, — по нему карта (P-64).
-    static let studyShow = "studyShow"
+    static var studyShow: String { scoped("studyShow") }
     /// Найденные обложки готовых сериалов: ресурс каталога → адрес постера TVMaze.
     static let catalogPosters = "catalogPosters"
     /// Префикс отпразднованных сезонов на карте: «…<название сериала>».
-    static let showMapCelebratedSeasons = "showMapCelebratedSeasons"
+    static var showMapCelebratedSeasons: String { scoped("showMapCelebratedSeasons") }
     /// Префикс узла карты, где Мончика видели в прошлый раз: «…<сериал>».
-    static let showMapLastSeenNode = "showMapLastSeenNode"
+    static var showMapLastSeenNode: String { scoped("showMapLastSeenNode") }
     static let deviceID = "deviceID"
     static let leechThreshold = "leechThreshold"
     /// Устаревший флаг «знакомство пройдено» — читается только для перехода
@@ -51,7 +65,7 @@ enum SettingsKey {
     /// Умное время напоминания — по привычке, а не по часам из настроек.
     static let reminderSmart = "reminderSmart"
     static let appLanguage = "appLanguage"
-    static let englishLevel = "englishLevel"
+    static var englishLevel: String { scoped("englishLevel") }
     static let fontStyle = "fontStyle"
     /// Тема: как в системе, светлая или тёмная (`AppAppearance`).
     static let appearance = "appearance"
@@ -60,16 +74,16 @@ enum SettingsKey {
     static let profileAvatar = "profileAvatar"
     /// День, когда уже праздновали цель дня, и серия, до которой праздновали
     /// отметки (`Celebration`): праздник — один раз, а не на каждом открытии.
-    static let goalCelebratedDay = "goalCelebratedDay"
-    static let celebratedStreak = "celebratedStreak"
+    static var goalCelebratedDay: String { scoped("goalCelebratedDay") }
+    static var celebratedStreak: String { scoped("celebratedStreak") }
     /// Сквозной номер последней отпразднованной остановки на карте; -1 — ещё не начинали.
     /// Новый ключ, а не старый `journeyCelebratedStop`: номера остановок
     /// поменялись со сменой карты (P-57), и старая отметка праздновала бы
     /// давно пройденное.
-    static let journeyCelebratedStop = "journeyCelebratedMilestone"
+    static var journeyCelebratedStop: String { scoped("journeyCelebratedMilestone") }
     /// Где фишку видели на карте в прошлый раз: остановка и сквозной номер
     /// старта её круга. Отсюда фишка шагает при следующем открытии.
-    static let journeyLastSeenStop = "journeyLastSeenStop"
+    static var journeyLastSeenStop: String { scoped("journeyLastSeenStop") }
     /// Выбранный провайдер ИИ и модель у каждого (`AIKeys`).
     static let aiProvider = "aiProvider"
     static let aiModelPrefix = "aiModel."

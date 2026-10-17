@@ -47,7 +47,10 @@ struct TodayView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
-                    ScreenTitle(tr("Сегодня", "Hoje", "Today"))
+                    HStack(alignment: .center) {
+                        ScreenTitle(tr("Сегодня", "Hoje", "Today"))
+                        StudyLanguageMenu()
+                    }
                     MascotSays(mood: mood, text: greeting)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -293,26 +296,28 @@ struct TodayView: View {
             .buttonStyle(.chunky)
             .controlSize(.large)
 
-            Button {
-                Haptics.tap()
-                if StarterDeck.install(into: context) != nil {
-                    Haptics.success()
-                    refresh()
-                } else {
-                    starterFailed = true
-                    Haptics.failure()
+            if StarterDeck.isAvailable {
+                Button {
+                    Haptics.tap()
+                    if StarterDeck.install(into: context) != nil {
+                        Haptics.success()
+                        refresh()
+                    } else {
+                        starterFailed = true
+                        Haptics.failure()
+                    }
+                } label: {
+                    Label(tr("Стартовый набор", "Baralho inicial", "Starter deck")
+                            + " — " + Counted.words(StarterDeck.wordCount()),
+                          systemImage: "text.book.closed")
+                        .font(.app(.headline))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
                 }
-            } label: {
-                Label(tr("Стартовый набор", "Baralho inicial", "Starter deck")
-                        + " — " + Counted.words(StarterDeck.wordCount()),
-                      systemImage: "text.book.closed")
-                    .font(.app(.headline))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 4)
+                .buttonStyle(.chunkySecondary)
+                .controlSize(.large)
+                .accessibilityIdentifier("today.starter")
             }
-            .buttonStyle(.chunkySecondary)
-            .controlSize(.large)
-            .accessibilityIdentifier("today.starter")
 
             if starterFailed {
                 Label(tr("Стартовый набор не установился — загляни в журнал событий.",

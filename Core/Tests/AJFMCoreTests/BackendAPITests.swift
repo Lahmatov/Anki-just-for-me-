@@ -30,6 +30,25 @@ final class BackendAPITests: XCTestCase {
         XCTAssertNil(body["subtitles"], "пустые субтитры не отправляются")
     }
 
+    /// Английский запрос — как до появления языков: поля target в нём нет.
+    func testEnglishDeckBodyHasNoTarget() throws {
+        let body = try json(BackendAPI.DeckBody(
+            showId: 431, season: 1, episode: 3, language: .russian, level: nil,
+            wordCount: 20, knownTerms: [], subtitles: nil))
+        XCTAssertNil(body["target"])
+    }
+
+    func testDeckBodyCarriesTheStudyLanguage() throws {
+        let episode = try json(BackendAPI.DeckBody(
+            showId: 431, season: 1, episode: 3, language: .russian, level: nil,
+            wordCount: 20, knownTerms: [], subtitles: nil, target: .portuguese))
+        XCTAssertEqual(episode["target"] as? String, "pt-PT")
+        let movie = try json(BackendAPI.MovieDeckBody(
+            movieId: 1, language: .russian, level: nil, wordCount: 20, knownTerms: [],
+            subtitles: nil, target: .italian))
+        XCTAssertEqual(movie["target"] as? String, "it")
+    }
+
     func testDeckBodyRespectsServerLimits() {
         let long = String(repeating: "x", count: 81)
         let many = (0..<500).map { "w\($0)" }

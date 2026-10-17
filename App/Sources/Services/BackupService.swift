@@ -46,7 +46,8 @@ struct BackupService {
         }
 
         let stamp = Self.stampFormatter.string(from: now)
-        let url = directory.appendingPathComponent("ajfm-\(stamp).json")
+        let url = directory.appendingPathComponent(
+            BackupFileName.make(stamp: stamp, language: StudyLanguageStore.storedCurrent))
         guard (try? data.write(to: url, options: .atomic)) != nil else { return nil }
 
         UserDefaults.standard.set(now, forKey: SettingsKey.lastBackupDate)
@@ -57,12 +58,14 @@ struct BackupService {
         return url
     }
 
-    /// Храним последние восемь файлов — примерно два месяца истории.
+    /// Храним последние восемь файлов — примерно два месяца истории. Свои
+    /// у каждого языка: чистка португальских не трогает английские.
     private func pruneOldBackups(in directory: URL, keep: Int = 8) {
         let files = (try? FileManager.default.contentsOfDirectory(
             at: directory, includingPropertiesForKeys: [.creationDateKey])) ?? []
+        let language = StudyLanguageStore.storedCurrent
         let sorted = files
-            .filter { $0.pathExtension == "json" }
+            .filter { BackupFileName.belongs($0.lastPathComponent, to: language) }
             .sorted { $0.lastPathComponent > $1.lastPathComponent }
         for file in sorted.dropFirst(keep) {
             try? FileManager.default.removeItem(at: file)
@@ -77,7 +80,7 @@ struct BackupService {
         guard let directory = Self.directory else { return 0 }
         let files = (try? FileManager.default.contentsOfDirectory(
             atPath: directory.path)) ?? []
-        return files.filter { $0.hasSuffix(".json") }.count
+        return files.filter { BackupFileName.belongs($0, to: StudyLanguageStore.storedCurrent) }.count
     }
 
     private static let stampFormatter: DateFormatter = {

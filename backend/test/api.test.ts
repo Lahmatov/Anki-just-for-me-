@@ -259,6 +259,31 @@ describe("набор слов", () => {
     expect(body.plan.unitsLeft).toBe(100_000);
   });
 
+  it("португальский: каталог американских сериалов не подставляется, промпт — европейский", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    world.db.raw.prepare(
+      "INSERT INTO catalog_decks (show_id, season, episode, title, deck_json) VALUES (431, 1, 3, 'x', ?)",
+    ).run(JSON.stringify({ notes: [{ term: "freak out", translation: { ru: "психануть", pt: "p", en: "e" } }] }));
+    const { status, body } = await world.call("POST", "/v1/deck", { ...DECK_REQUEST, target: "pt-PT" }, token);
+    expect(status).toBe(200);
+    expect(body.source).toBe("model");
+    const system = world.claude.calls[0]!.system;
+    expect(system).toContain("learner of European Portuguese (as spoken in Portugal, never Brazilian)");
+    expect(system).toContain("European Portuguese (Lisbon) transcription");
+    expect(system).not.toContain("General American");
+  });
+
+  it("без поля target — английский, как у старых версий; чужой язык отклоняется", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    await world.call("POST", "/v1/deck", DECK_REQUEST, token);
+    expect(world.claude.calls[0]!.system).toContain("learner of American English");
+    const bad = await world.call("POST", "/v1/deck", { ...DECK_REQUEST, target: "pt-BR" }, token);
+    expect(bad.status).toBe(400);
+    expect(bad.body.error).toBe("invalid_field");
+  });
+
   it("каталог доступен и без подписки, а разговор — нет", async () => {
     const world = makeWorld();
     const token = await world.device();

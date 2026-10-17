@@ -42,6 +42,20 @@ describe("промпты", () => {
     expect(message).not.toContain("<known>");
   });
 
+  it("набор для итальянского: свои правила, без американских", () => {
+    const system = deckSystem({ facts, language: "ru", wordCount: 10, knownTerms: [], target: "it" });
+    expect(system).toContain("learner of standard Italian");
+    expect(system).toContain("article that shows their gender");
+    expect(system).not.toContain("American");
+    expect(system).not.toContain(".. Otherwise");
+  });
+
+  it("португальский с английским интерфейсом — перевод, а не английское толкование", () => {
+    const system = deckSystem({ facts, language: "en", wordCount: 10, knownTerms: [], target: "pt-PT" });
+    expect(system).toContain("equivalents in English");
+    expect(system).not.toContain("plain-English definition");
+  });
+
   it("с субтитрами примеры — только из них", () => {
     const input = { facts, language: "ru" as const, wordCount: 10, knownTerms: ["x"], subtitles: "JACK: Hi." };
     expect(deckSystem(input)).toContain("exact line from the attached subtitles");

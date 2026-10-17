@@ -39,6 +39,8 @@ public struct DeckRequest: Equatable, Sendable {
     public var language: AppLanguage
     /// Слова, которые уже есть в базе, — чтобы модель не тратила на них место.
     public var knownTerms: [String]
+    /// Какой язык учим: из него и слова, и транскрипция (P-67).
+    public var target: StudyLanguage
 
     public static let wordCountRange = 5...40
     public static let defaultWordCount = 20
@@ -52,7 +54,8 @@ public struct DeckRequest: Equatable, Sendable {
 
     public init(
         topic: String, subtitles: String? = nil, wordCount: Int = DeckRequest.defaultWordCount,
-        level: CEFRLevel? = nil, language: AppLanguage, knownTerms: [String] = []
+        level: CEFRLevel? = nil, language: AppLanguage, knownTerms: [String] = [],
+        target: StudyLanguage = .english
     ) {
         self.topic = topic
         self.subtitles = subtitles
@@ -60,6 +63,7 @@ public struct DeckRequest: Equatable, Sendable {
         self.level = level
         self.language = language
         self.knownTerms = knownTerms
+        self.target = target
     }
 
     /// Проверка до отправки: ошибку лучше показать бесплатно.
@@ -85,7 +89,10 @@ public struct DeckRequest: Equatable, Sendable {
     // MARK: - Запрос
 
     public var system: String {
-        let translationRule = language.translatesIntoItself
+        // Определение вместо перевода — только когда и учим английский, и
+        // переводим на английский; португальский с английским интерфейсом
+        // переводится на английский как обычно.
+        let translationRule = language.translatesIntoItself && target == .english
             ? "translation: a short, plain-English definition a learner would understand " +
               "(not a synonym list)."
             : "translation: 1–3 short equivalents in \(language.promptName), " +
@@ -107,25 +114,23 @@ public struct DeckRequest: Equatable, Sendable {
             : "example: a natural sentence in the style of the topic. You have no " +
               "subtitles, so do not claim it is a quote from the episode."
 
+        let rules = TargetRules(target)
         return """
-        You build vocabulary flashcard decks for one adult learner of American English.
+        You build vocabulary flashcard decks for one adult learner of \(target.promptName).
 
         \(levelRule)
-        Prefer what actually makes speech sound natural: phrasal verbs, idioms, \
-        collocations and colloquial American expressions. Avoid proper names, \
-        rare slang and words that only matter for this one plot.
+        \(rules.prefer)
 
         Rules for every entry:
-        - term: the dictionary form (infinitive without "to"); keep phrasal verbs whole.
+        - term: \(rules.term)
         - \(translationRule)
-        - ipa: General American transcription between slashes.
+        - ipa: \(target.ipaStyle) between slashes.
         - partOfSpeech: one of the allowed values.
         - \(exampleRule)
         - exampleTranslation: the example translated into \(language.promptName).
-        - cloze: the example with the term replaced by ___ (every inflected form, \
-        and each part of a separated phrasal verb).
-        - note: in \(language.promptName), only when there is a real pitfall — a false \
-        friend, a separable phrasal verb, a British/American difference. Otherwise "".
+        - cloze: \(rules.cloze)
+        - note: in \(language.promptName), only when there is a real pitfall — \(rules.pitfalls) \
+        Otherwise "".
 
         name: a short deck title, e.g. "Friends S01E03" or "Job interview"; \
         write it in the learner's words, not a description.
@@ -260,5 +265,45 @@ public struct DeckRequest: Equatable, Sendable {
             file = Self.decorate(file, episode: episode, title: nil, poster: nil)
         }
         return file
+    }
+}
+
+/// Правила промпта, которые зависят от изучаемого языка. Английские — те же,
+/// что были до появления языков: наборы для английского не изменились.
+struct TargetRules {
+    let prefer: String
+    let term: String
+    let cloze: String
+    let pitfalls: String
+
+    init(_ target: StudyLanguage) {
+        switch target {
+        case .english:
+            prefer = "Prefer what actually makes speech sound natural: phrasal verbs, idioms, " +
+                "collocations and colloquial American expressions. Avoid proper names, " +
+                "rare slang and words that only matter for this one plot."
+            term = "the dictionary form (infinitive without \"to\"); keep phrasal verbs whole."
+            cloze = "the example with the term replaced by ___ (every inflected form, " +
+                "and each part of a separated phrasal verb)."
+            pitfalls = "a false friend, a separable phrasal verb, a British/American difference."
+        case .portuguese:
+            prefer = "Prefer what actually makes speech sound natural in Portugal: everyday " +
+                "verbs, collocations, idioms and fixed expressions. Use European Portuguese " +
+                "spelling and vocabulary only (autocarro, telemóvel, pequeno-almoço, estar a + " +
+                "infinitive), never Brazilian forms. Avoid proper names and rare slang."
+            term = "the dictionary form: the infinitive for verbs; nouns with the definite " +
+                "article that shows their gender (o comboio, a chávena)."
+            cloze = "the example with the term replaced by ___ (every conjugated or inflected form)."
+            pitfalls = "a false friend, an irregular verb form, an unexpected gender, " +
+                "a difference from Brazilian Portuguese."
+        case .italian:
+            prefer = "Prefer what actually makes speech sound natural: everyday verbs, " +
+                "collocations, idioms and fixed expressions of standard Italian. Avoid proper " +
+                "names, regional dialect and rare slang."
+            term = "the dictionary form: the infinitive for verbs; nouns with the definite " +
+                "article that shows their gender (il treno, la tazza)."
+            cloze = "the example with the term replaced by ___ (every conjugated or inflected form)."
+            pitfalls = "a false friend, an irregular verb form, an unexpected gender or plural."
+        }
     }
 }

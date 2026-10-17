@@ -269,20 +269,23 @@ struct OnboardingView: View {
                     .foregroundStyle(.green)
             }
 
-            Button {
-                Haptics.tap()
-                showPlacementTest = true
-            } label: {
-                Label(storedLevel == nil
-                      ? tr("Пройти тест", "Fazer o teste", "Take the test")
-                      : tr("Пройти ещё раз", "Repetir", "Take it again"),
-                      systemImage: "text.magnifyingglass")
-                    .font(.app(.headline))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 4)
+            // Тест словаря — английский; для других языков уровень выбирают сами.
+            if StudyLanguageStore.shared.current.hasPlacementTest {
+                Button {
+                    Haptics.tap()
+                    showPlacementTest = true
+                } label: {
+                    Label(storedLevel == nil
+                          ? tr("Пройти тест", "Fazer o teste", "Take the test")
+                          : tr("Пройти ещё раз", "Repetir", "Take it again"),
+                          systemImage: "text.magnifyingglass")
+                        .font(.app(.headline))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
+                }
+                .buttonStyle(.chunkySecondary)
+                .controlSize(.large)
             }
-            .buttonStyle(.chunkySecondary)
-            .controlSize(.large)
 
             Picker(tr("Или выбрать самому", "Ou escolher eu", "Or pick it myself"),
                    selection: Binding(

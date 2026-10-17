@@ -15,14 +15,23 @@ public struct BackupFile: Codable, Equatable, Sendable {
     /// Сериалы с отметками просмотра. nil — бэкап старше этой функции:
     /// при восстановлении из него сериалы на телефоне не трогаются.
     public var shows: [BackupShow]?
+    /// Изучаемый язык базы (`StudyLanguage.rawValue`). nil — бэкап старше
+    /// языков, то есть английский (P-67).
+    public var language: String?
 
-    public init(exportedAt: Date, decks: [BackupDeck], shows: [BackupShow]? = nil) {
+    public init(exportedAt: Date, decks: [BackupDeck], shows: [BackupShow]? = nil,
+                language: String? = nil) {
         self.format = Self.formatID
         self.version = Self.supportedVersion
         self.exportedAt = exportedAt
         self.decks = decks
         self.shows = shows
+        self.language = language
     }
+
+    /// Чья это копия. Восстановить португальскую копию в английскую базу
+    /// значило бы стереть английские наборы.
+    public var studyLanguage: StudyLanguage { StudyLanguage.stored(language) }
 
     public var noteCount: Int { decks.reduce(0) { $0 + $1.notes.count } }
 }

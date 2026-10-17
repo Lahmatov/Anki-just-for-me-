@@ -4,7 +4,7 @@ import AJFMCore
 
 @main
 struct AJFMApp: App {
-    private let container: ModelContainer
+    @State private var languages = StudyLanguageStore.shared
 
     init() {
         UITesting.prepare()
@@ -19,21 +19,8 @@ struct AJFMApp: App {
         // и потом шрифт уже не подхватывают.
         AppFont.current.applyToNavigationBars()
 
-        let schema = Schema([
-            Folder.self, Deck.self, Note.self, Card.self, Review.self,
-            RetellSession.self, UsageEntry.self, RewardContractEntity.self,
-            ProgressSnapshot.self, TrackedShow.self,
-        ])
-        // В UI-тестах база в памяти: каждый прогон — как первая установка.
-        let configuration = ModelConfiguration(schema: schema,
-                                               isStoredInMemoryOnly: UITesting.isActive)
-        do {
-            container = try ModelContainer(for: schema, configurations: configuration)
-        } catch {
-            // Без базы приложению делать нечего; так же вёл себя и
-            // `.modelContainer(for:)`, только молча.
-            fatalError("Model container failed to open: \(error)")
-        }
+        // База открывается для изучаемого языка; у каждого языка своя (P-67).
+        let container = StudyLanguageStore.shared.currentContainer
         if UITesting.wantsDemoData {
             _ = StarterDeck.install(into: container.mainContext)
         }
@@ -44,8 +31,11 @@ struct AJFMApp: App {
 
     var body: some Scene {
         WindowGroup {
+            // Смена изучаемого языка — другая база и другие ключи прогресса:
+            // экраны пересоздаются целиком, ничего старого в них не остаётся.
             RootView()
+                .modelContainer(languages.currentContainer)
+                .id(languages.current)
         }
-        .modelContainer(container)
     }
 }

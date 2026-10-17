@@ -255,4 +255,55 @@ final class CEFRLevelTests: XCTestCase {
         XCTAssertEqual(CEFRLevel.b1.next, .b2)
         XCTAssertEqual(CEFRLevel.c2.next, .c2, "выше C2 целиться некуда")
     }
+
+    // MARK: - Изучаемый язык (P-67)
+
+    private func target(_ target: StudyLanguage, language: AppLanguage = .russian) -> String {
+        DeckRequest(topic: "Lesson 5", language: language, target: target).system
+    }
+
+    /// Наборы для английского не изменились с появлением языков.
+    func testEnglishPromptKeepsItsRules() {
+        let system = target(.english)
+        XCTAssertTrue(system.contains("learner of American English"))
+        XCTAssertTrue(system.contains("General American transcription between slashes."))
+        XCTAssertTrue(system.contains("phrasal verbs"))
+        XCTAssertTrue(system.contains("a British/American difference. Otherwise"))
+    }
+
+    func testPortuguesePromptIsEuropean() {
+        let system = target(.portuguese)
+        XCTAssertTrue(system.contains("European Portuguese"))
+        XCTAssertTrue(system.contains("never Brazilian"))
+        XCTAssertTrue(system.contains("autocarro"))
+        XCTAssertFalse(system.contains("American"), "американские правила в португальском наборе")
+    }
+
+    func testRomanceNounsComeWithTheirArticle() {
+        XCTAssertTrue(target(.portuguese).contains("article"))
+        XCTAssertTrue(target(.italian).contains("article"))
+    }
+
+    func testTranscriptionFollowsTheTarget() {
+        XCTAssertTrue(target(.italian).contains("standard Italian transcription"))
+        XCTAssertTrue(target(.portuguese).contains("Lisbon"))
+    }
+
+    /// Учим португальский с английским интерфейсом — перевод на английский,
+    /// а не английское толкование, как для изучающих английский.
+    func testPortugueseWithEnglishInterfaceGetsTranslations() {
+        let system = target(.portuguese, language: .english)
+        XCTAssertTrue(system.contains("equivalents in"))
+        XCTAssertFalse(system.contains("plain-English definition"))
+    }
+
+    func testEnglishWithEnglishInterfaceStillGetsDefinitions() {
+        XCTAssertTrue(target(.english, language: .english).contains("plain-English definition"))
+    }
+
+    func testNoDoublePeriodBeforeOtherwise() {
+        for language in StudyLanguage.allCases {
+            XCTAssertFalse(target(language).contains(".. Otherwise"), language.rawValue)
+        }
+    }
 }

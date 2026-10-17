@@ -59,7 +59,8 @@ final class DeckRequestModel {
     var request: DeckRequest {
         DeckRequest(
             topic: topic, subtitles: subtitles, wordCount: wordCount, level: level,
-            language: AppSettings.language, knownTerms: knownTerms)
+            language: AppSettings.language, knownTerms: knownTerms,
+            target: StudyLanguageStore.storedCurrent)
     }
 
     var canSubmit: Bool {
@@ -115,7 +116,7 @@ final class DeckRequestModel {
                 response = try await RecapBackend.shared.movieDeck(BackendAPI.MovieDeckBody(
                     movieId: movie.id, language: AppSettings.language, level: level,
                     wordCount: wordCount, knownTerms: knownTerms, subtitles: subtitles,
-                    requestId: requestID))
+                    requestId: requestID, target: StudyLanguageStore.storedCurrent))
             } else {
                 let target: (showID: Int, season: Int, episode: Int, show: String)
                 if let episode {
@@ -137,7 +138,8 @@ final class DeckRequestModel {
                 response = try await RecapBackend.shared.deck(BackendAPI.DeckBody(
                     showId: target.showID, season: target.season, episode: target.episode,
                     language: AppSettings.language, level: level, wordCount: wordCount,
-                    knownTerms: knownTerms, subtitles: subtitles, requestId: requestID))
+                    knownTerms: knownTerms, subtitles: subtitles, requestId: requestID,
+                    target: StudyLanguageStore.storedCurrent))
             }
             RecapAccount.shared.update(response.plan)
             var file = response.deck
