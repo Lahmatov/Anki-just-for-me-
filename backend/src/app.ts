@@ -15,7 +15,8 @@ import { catalogNotes, listShows, localizeNotes, showDecks } from "./catalog";
 import {
   DECK_MAX_TOKENS, DECK_SCHEMA, DISCUSSION_MAX_TOKENS, DISCUSSION_SCHEMA, HELP_MAX_TOKENS,
   HELP_QUESTION_LIMIT, HELP_SCHEMA, KNOWN_TERMS_LIMIT, helpSystem, helpUserMessage, parseHelpReply,
-  LANGUAGES, LEVELS, MAX_LEARNER_TURNS, TARGETS, deckFile, deckSystem, deckUserMessage, movieDeckFile,
+  LANGUAGES, LEVELS, LESSON_LIMIT, MAX_LEARNER_TURNS, TARGETS, lessonDeckFile, lessonSystem,
+  lessonUserMessage, deckFile, deckSystem, deckUserMessage, movieDeckFile,
   discussionMessages, discussionSystem, estimateTokens, parseDeckNotes, parseDiscussionReply,
   type Turn,
 } from "./prompts";
@@ -51,6 +52,7 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
       case "POST /v1/promo/redeem": return await redeemPromo(request, env, deps);
       case "POST /v1/subscription/verify": return await verify(request, env, deps);
       case "POST /v1/deck": return await deck(request, env, deps);
+      case "POST /v1/lesson": return await lesson(request, env, deps);
       case "POST /v1/discuss": return await discuss(request, env, deps);
       case "POST /v1/help": return await help(request, env, deps);
       case "GET /v1/catalog": return await catalog(request, env, deps);
@@ -360,6 +362,39 @@ async function rememberEpisode(env: Env, deps: Deps, device: Device,
     `INSERT OR IGNORE INTO device_episodes (device_id, show_id, season, episode, created_at)
      VALUES (?, ?, ?, ?, ?)`,
   ).bind(device.id, showId, season, episode, deps.now()).run();
+}
+
+/**
+ * Карточки из урока (P-68): единственный путь с текстом от человека, поэтому
+ * он только по подписке, с жёстким пределом длины и тем же лимитом, что у
+ * наборов. Текст урока идёт модели внутри <lesson> как данные.
+ */
+async function lesson(request: Request, env: Env, deps: Deps): Promise<Response> {
+  const { device, entitlement } = await context(request, env, deps);
+  const now = deps.now();
+  const body = await readJson(request, BODY_LIMIT);
+  const text = str(body, "lesson", LESSON_LIMIT);
+  const input = {
+    lesson: text,
+    title: optionalStr(body, "title", 80),
+    language: oneOf(body, "language", LANGUAGES)!,
+    target: oneOf(body, "target", TARGETS, true) ?? "en",
+    level: oneOf(body, "level", LEVELS, true),
+    wordCount: int(body, "wordCount", 5, 40),
+    knownTerms: stringList(body, "knownTerms", KNOWN_TERMS_LIMIT, 80),
+  };
+  const active = requireActive(entitlement, now);
+  await limitAI(env, device, now);
+  const result = await callWithQuota(env, deps, device, active, "lesson", {
+    system: lessonSystem(input),
+    messages: [{ role: "user", content: lessonUserMessage(input) }],
+    maxTokens: DECK_MAX_TOKENS,
+    schema: DECK_SCHEMA as unknown as Record<string, unknown>,
+  });
+  const notes = parseDeckNotes(result.text, input.wordCount);
+  if (notes.length === 0) throw new ApiError(502, "model_error");
+  return json({ deck: lessonDeckFile(result.text, input, notes), source: "model",
+                plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) });
 }
 
 async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {

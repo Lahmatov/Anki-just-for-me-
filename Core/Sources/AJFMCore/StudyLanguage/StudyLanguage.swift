@@ -96,6 +96,15 @@ public enum StudyLanguage: String, CaseIterable, Codable, Sendable, Identifiable
         }
     }
 
+    /// На каком языке переводы в карточках. Обычно — язык интерфейса; но
+    /// учить португальский с переводом на португальский бессмысленно, тогда
+    /// переводим на английский. Английский с английским интерфейсом остаётся
+    /// как был — с толкованиями.
+    public func translationLanguage(for interface: AppLanguage) -> AppLanguage {
+        if self == .portuguese && interface == .portuguese { return .english }
+        return interface
+    }
+
     /// Каталог сериалов, тест уровня и карта по сериям сделаны для
     /// английского: слова к американским сериалам и вопросы на английском.
     public var hasShowCatalog: Bool { self == .english }

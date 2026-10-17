@@ -60,3 +60,19 @@ final class StudyLanguageTests: XCTestCase {
         XCTAssertFalse(StudyLanguage.italian.hasPlacementTest)
     }
 }
+
+final class TranslationLanguageTests: XCTestCase {
+    func testTranslationsGoIntoTheInterfaceLanguage() {
+        XCTAssertEqual(StudyLanguage.portuguese.translationLanguage(for: .russian), .russian)
+        XCTAssertEqual(StudyLanguage.italian.translationLanguage(for: .portuguese), .portuguese)
+    }
+
+    func testPortugueseIsNotTranslatedIntoItself() {
+        XCTAssertEqual(StudyLanguage.portuguese.translationLanguage(for: .portuguese), .english)
+    }
+
+    /// Английский с английским интерфейсом — толкования, как и раньше.
+    func testEnglishWithEnglishInterfaceStaysEnglish() {
+        XCTAssertEqual(StudyLanguage.english.translationLanguage(for: .english), .english)
+    }
+}

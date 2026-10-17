@@ -49,6 +49,24 @@ final class BackendAPITests: XCTestCase {
         XCTAssertEqual(movie["target"] as? String, "it")
     }
 
+    func testLessonBodyCarriesTheLessonAndClampsIt() throws {
+        let long = String(repeating: "a", count: DeckRequest.lessonLimit + 50)
+        let request = DeckRequest(topic: "  Aula 5 ", wordCount: 500, level: .a2, language: .russian,
+                                  knownTerms: ["olá"], target: .portuguese, lesson: "  \(long) ")
+        let body = try json(BackendAPI.LessonBody(request))
+        XCTAssertEqual((body["lesson"] as? String)?.count, DeckRequest.lessonLimit)
+        XCTAssertEqual(body["title"] as? String, "Aula 5")
+        XCTAssertEqual(body["target"] as? String, "pt-PT")
+        XCTAssertEqual(body["language"] as? String, "ru")
+        XCTAssertEqual(body["wordCount"] as? Int, DeckRequest.wordCountRange.upperBound)
+        XCTAssertEqual(body["knownTerms"] as? [String], ["olá"])
+    }
+
+    func testLessonBodyWithoutTitleSendsNoTitle() throws {
+        let request = DeckRequest(topic: " ", language: .russian, target: .italian, lesson: "ciao")
+        XCTAssertNil(try json(BackendAPI.LessonBody(request))["title"])
+    }
+
     func testDeckBodyRespectsServerLimits() {
         let long = String(repeating: "x", count: 81)
         let many = (0..<500).map { "w\($0)" }

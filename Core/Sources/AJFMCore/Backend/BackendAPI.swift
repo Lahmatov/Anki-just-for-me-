@@ -134,6 +134,30 @@ public enum BackendAPI {
         }
     }
 
+    /// Карточки из урока (P-68) — только по подписке.
+    public struct LessonBody: Encodable, Equatable, Sendable {
+        public var lesson: String
+        public var title: String?
+        public var language: String
+        public var target: String
+        public var level: String?
+        public var wordCount: Int
+        public var knownTerms: [String]
+
+        public init(_ request: DeckRequest) {
+            let lesson = (request.lesson ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            self.lesson = String(lesson.prefix(DeckRequest.lessonLimit))
+            let title = request.topic.trimmingCharacters(in: .whitespacesAndNewlines)
+            self.title = title.isEmpty ? nil : String(title.prefix(80))
+            self.language = request.language.rawValue
+            self.target = request.target.rawValue
+            self.level = request.level?.rawValue
+            self.wordCount = min(max(request.wordCount, DeckRequest.wordCountRange.lowerBound),
+                                 DeckRequest.wordCountRange.upperBound)
+            self.knownTerms = Array(request.knownTerms.prefix(DeckRequest.knownTermsLimit))
+        }
+    }
+
     public struct DeckResponse: Decodable, Sendable {
         public var deck: DeckFile
         /// «catalog» — готовый набор без расхода, «model» — собран моделью.

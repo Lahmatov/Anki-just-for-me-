@@ -17,6 +17,7 @@ struct RootView: View {
     @State private var showRestoreImporter = false
     @State private var showQuickAdd = false
     @State private var showDeckRequest = false
+    @State private var showLessonRequest = false
     @State private var onboarding: OnboardingPlan?
     /// Сколько раз закрывалось знакомство — сигнал «Сегодня» перечитать базу.
     @State private var onboardingFinished = 0
@@ -208,6 +209,9 @@ struct RootView: View {
         .sheet(isPresented: $showQuickAdd) {
             QuickAddView()
         }
+        .sheet(isPresented: $showLessonRequest) {
+            DeckRequestView(lessonMode: true)
+        }
         .sheet(isPresented: $showDeckRequest) {
             DeckRequestView()
         }
@@ -295,6 +299,10 @@ struct RootView: View {
             Menu {
                 Button(tr("Новое слово", "Nova palavra", "New word"), systemImage: "plus.circle") {
                     showQuickAdd = true
+                }
+                Button(tr("Карточки из урока", "Cartões da aula", "Cards from a lesson"),
+                       systemImage: "graduationcap") {
+                    showLessonRequest = true
                 }
                 Divider()
                 Button(tr("Импорт из файла", "Importar de ficheiro", "Import from file"),

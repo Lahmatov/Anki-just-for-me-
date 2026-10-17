@@ -52,6 +52,11 @@ final class RecapBackend {
         try await send("POST", "/v1/deck", body: encode(body), timeout: 90)
     }
 
+    /// Карточки из урока — отдельный маршрут: единственный со свободным текстом.
+    func lesson(_ body: BackendAPI.LessonBody) async throws -> BackendAPI.DeckResponse {
+        try await send("POST", "/v1/lesson", body: encode(body), timeout: 90)
+    }
+
     func discuss(_ body: BackendAPI.DiscussBody) async throws -> BackendAPI.DiscussResponse {
         try await send("POST", "/v1/discuss", body: encode(body), timeout: 60)
     }

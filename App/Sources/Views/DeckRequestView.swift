@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
+import UIKit
 import AJFMCore
 
 /// Набор по короткому запросу: написал «Friends 1x03» — получил слова.
@@ -14,6 +15,8 @@ struct DeckRequestView: View {
     var episode: EpisodeContext?
     /// Фильм из поиска: вместо поля запроса — его карточка.
     var movie: Movie?
+    /// Карточки из урока: вместо темы — выжимка занятия (P-68).
+    var lessonMode = false
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -41,7 +44,9 @@ struct DeckRequestView: View {
                 }
             }
             .animation(.app, value: result != nil)
-            .navigationTitle(tr("Набор через Claude", "Baralho com o Claude", "Deck with Claude"))
+            .navigationTitle(lessonMode
+                             ? tr("Карточки из урока", "Cartões da aula", "Cards from a lesson")
+                             : tr("Набор через Claude", "Baralho com o Claude", "Deck with Claude"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -54,6 +59,7 @@ struct DeckRequestView: View {
                 let created = DeckRequestModel(context: context)
                 if !initialTopic.isEmpty { created.topic = initialTopic }
                 created.episode = episode
+                if lessonMode { created.lesson = "" }
                 if let movie {
                     created.movie = movie
                     created.topic = movie.deckTopic
@@ -61,7 +67,7 @@ struct DeckRequestView: View {
                 model = created
             }
             // У фильма поля запроса нет — и клавиатура выскакивать не должна.
-            topicFocused = movie == nil
+            topicFocused = movie == nil && !lessonMode
         }
         .interactiveDismissDisabled(model?.step == .working || model?.step == .interrupted)
         // Вернулись в приложение — продолжаем оборванный запрос с тем же номером.
@@ -83,6 +89,63 @@ struct DeckRequestView: View {
             ImportPreviewView(plan: pending.plan) { edited, includeDuplicates in
                 apply(edited, includeDuplicates: includeDuplicates)
             }
+        }
+    }
+
+    // MARK: - Урок (P-68)
+
+    @ViewBuilder
+    private func lessonSection(_ model: DeckRequestModel) -> some View {
+        @Bindable var model = model
+        Section {
+            TextField(tr("Название (необязательно): «Урок 5»",
+                         "Nome (opcional): «Aula 5»",
+                         "Title (optional): “Lesson 5”"),
+                      text: $model.topic)
+            TextEditor(text: Binding(get: { model.lesson ?? "" }, set: { model.lesson = $0 }))
+                .frame(minHeight: 180)
+                .font(.app(.body))
+                .overlay(alignment: .topLeading) {
+                    if (model.lesson ?? "").isEmpty {
+                        Text(tr("Вставь выжимку урока: слова с доски, конспект, правило…",
+                                "Cola o resumo da aula: palavras do quadro, apontamentos, uma regra…",
+                                "Paste the lesson summary: words from the board, notes, a rule…"))
+                            .foregroundStyle(Theme.muted)
+                            .padding(.top, 8)
+                            .padding(.leading, 5)
+                            .allowsHitTesting(false)
+                    }
+                }
+                .accessibilityIdentifier("lesson.text")
+            if UIPasteboard.general.hasStrings {
+                Button(tr("Вставить из буфера", "Colar", "Paste"), systemImage: "doc.on.clipboard") {
+                    model.lesson = (model.lesson ?? "") + (UIPasteboard.general.string ?? "")
+                }
+            }
+        } header: {
+            Text(tr("Что было на уроке", "O que se deu na aula", "What the lesson covered"))
+        } footer: {
+            Text(tr("Слова и фразы станут карточками с переводом, правила — карточками "
+                        + "«конструкция → объяснение» с примером. Наборы ложатся в папку «Уроки».",
+                    "As palavras e expressões viram cartões com tradução, as regras — cartões "
+                        + "«construção → explicação» com exemplo. Os baralhos vão para a pasta «Aulas».",
+                    "Words and phrases become cards with a translation, rules become "
+                        + "“pattern → explanation” cards with an example. Decks go into Lessons."))
+        }
+        Section {
+            Button(tr("Скопировать промпт для своего чата", "Copiar o prompt para o meu chat",
+                      "Copy the prompt for my own chat"), systemImage: "doc.on.doc") {
+                UIPasteboard.general.string = model.request.chatPrompt
+                Haptics.success()
+            }
+            .disabled(!model.request.hasLesson)
+        } footer: {
+            Text(tr("Без ключа и подписки: вставь промпт в Claude или ChatGPT, скопируй ответ "
+                        + "и открой «Наборы» → меню «…» → «Вставить из буфера».",
+                    "Sem chave nem subscrição: cola o prompt no Claude ou no ChatGPT, copia a "
+                        + "resposta e abre «Baralhos» → menu «…» → «Colar da área de transferência».",
+                    "No key or subscription: paste the prompt into Claude or ChatGPT, copy the "
+                        + "answer, then open Decks → the “…” menu → Paste from clipboard."))
         }
     }
 
@@ -118,6 +181,8 @@ struct DeckRequestView: View {
                     Text(tr("Набор ляжет в папку «Фильмы».", "O baralho vai para a pasta «Filmes».",
                             "The deck goes into the Movies folder."))
                 }
+            } else if lessonMode {
+                lessonSection(model)
             } else {
                 Section {
                     TextField(
@@ -139,35 +204,38 @@ struct DeckRequestView: View {
                 }
             }
 
-            Section {
-                if let name = model.subtitlesName {
-                    HStack {
-                        Label(name, systemImage: "captions.bubble")
-                            .lineLimit(1)
-                        Spacer()
-                        Button(tr("Убрать", "Remover", "Remove"), role: .destructive) {
-                            model.removeSubtitles()
+            if !lessonMode {
+                Section {
+                    if let name = model.subtitlesName {
+                        HStack {
+                            Label(name, systemImage: "captions.bubble")
+                                .lineLimit(1)
+                            Spacer()
+                            Button(tr("Убрать", "Remover", "Remove"), role: .destructive) {
+                                model.removeSubtitles()
+                            }
+                                .font(.app(.callout))
                         }
-                            .font(.app(.callout))
+                    } else {
+                        Button(tr("Приложить субтитры", "Anexar legendas", "Attach subtitles"),
+                               systemImage: "captions.bubble") {
+                            showSubtitlePicker = true
+                        }
                     }
-                } else {
-                    Button(tr("Приложить субтитры", "Anexar legendas", "Attach subtitles"),
-                           systemImage: "captions.bubble") {
-                        showSubtitlePicker = true
-                    }
+                } footer: {
+                    Text(tr("С субтитрами примеры — настоящие реплики из серии. "
+                                + "Без них — просто хорошие примеры, цитатами они не притворяются.",
+                            "Com legendas, os exemplos são falas reais do episódio. Sem elas, "
+                                + "são só bons exemplos — não se fazem passar por citações.",
+                            "With subtitles, examples are real lines from the episode. Without "
+                                + "them they're just good examples — they don't pose as quotes."))
                 }
-            } footer: {
-                Text(tr("С субтитрами примеры — настоящие реплики из серии. "
-                            + "Без них — просто хорошие примеры, цитатами они не притворяются.",
-                        "Com legendas, os exemplos são falas reais do episódio. Sem elas, "
-                            + "são só bons exemplos — não se fazem passar por citações.",
-                        "With subtitles, examples are real lines from the episode. Without "
-                            + "them they're just good examples — they don't pose as quotes."))
             }
 
             Section {
                 Stepper(
-                    tr("Слов: ", "Palavras: ", "Words: ") + "\(model.wordCount)",
+                    (lessonMode ? tr("Карточек: до ", "Cartões: até ", "Cards: up to ")
+                                : tr("Слов: ", "Palavras: ", "Words: ")) + "\(model.wordCount)",
                     value: $model.wordCount,
                     in: DeckRequest.wordCountRange, step: 5)
                 Picker(tr("Мой уровень", "O meu nível", "My level"), selection: $model.level) {

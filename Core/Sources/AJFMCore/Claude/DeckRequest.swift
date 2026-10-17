@@ -3,6 +3,7 @@ import Foundation
 public enum DeckRequestError: Error, Equatable, LocalizedError {
     case emptyTopic
     case subtitlesTooLong(characters: Int, limit: Int)
+    case lessonTooLong(characters: Int, limit: Int)
 
     public var errorDescription: String? {
         switch self {
@@ -17,6 +18,13 @@ public enum DeckRequestError: Error, Equatable, LocalizedError {
                         + "de \(limit). Parece uma temporada inteira, não um episódio.",
                       "The subtitles are too long: \(characters) characters with a limit of "
                         + "\(limit). Looks like a whole season, not one episode.")
+        case .lessonTooLong(let characters, let limit):
+            return tr("Урок слишком длинный: \(characters) символов при пределе \(limit). "
+                        + "Вставь выжимку — главное с занятия.",
+                      "A aula é longa demais: \(characters) caracteres para um limite de \(limit). "
+                        + "Cola um resumo — o essencial da aula.",
+                      "The lesson is too long: \(characters) characters with a limit of \(limit). "
+                        + "Paste a summary — the essentials of the class.")
         }
     }
 }
@@ -41,6 +49,9 @@ public struct DeckRequest: Equatable, Sendable {
     public var knownTerms: [String]
     /// Какой язык учим: из него и слова, и транскрипция (P-67).
     public var target: StudyLanguage
+    /// Выжимка урока: если есть, карточки делаются из неё — слова, фразы и
+    /// правила, — а тема служит только названием.
+    public var lesson: String?
 
     public static let wordCountRange = 5...40
     public static let defaultWordCount = 20
@@ -51,6 +62,10 @@ public struct DeckRequest: Equatable, Sendable {
     /// свежие слова; тысячи старых только удорожают запрос.
     public static let knownTermsLimit = 400
     public static let folder = "Claude"
+    /// Урок — это страница-две конспекта; больше — почти наверняка учебник целиком.
+    public static let lessonLimit = 30_000
+    /// Папка уроков — на языке интерфейса, как и другие папки.
+    public static var lessonFolder: String { tr("Уроки", "Aulas", "Lessons") }
 
     public init(
         topic: String, subtitles: String? = nil, wordCount: Int = DeckRequest.defaultWordCount,
@@ -64,13 +79,17 @@ public struct DeckRequest: Equatable, Sendable {
         self.language = language
         self.knownTerms = knownTerms
         self.target = target
+        self.lesson = lesson
     }
 
     /// Проверка до отправки: ошибку лучше показать бесплатно.
     public func validate() throws {
         guard !topic.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                || hasSubtitles else {
+                || hasSubtitles || hasLesson else {
             throw DeckRequestError.emptyTopic
+        }
+        if let lesson, lesson.count > Self.lessonLimit {
+            throw DeckRequestError.lessonTooLong(characters: lesson.count, limit: Self.lessonLimit)
         }
         if let subtitles, subtitles.count > Self.subtitlesLimit {
             throw DeckRequestError.subtitlesTooLong(
@@ -86,9 +105,16 @@ public struct DeckRequest: Equatable, Sendable {
         !(subtitles ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
+    public var hasLesson: Bool {
+        !(lesson ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    var entryCount: Int { clampedCount }
+
     // MARK: - Запрос
 
     public var system: String {
+        if hasLesson { return lessonSystem }
         // Определение вместо перевода — только когда и учим английский, и
         // переводим на английский; португальский с английским интерфейсом
         // переводится на английский как обычно.
@@ -141,6 +167,7 @@ public struct DeckRequest: Equatable, Sendable {
     }
 
     public var userMessage: String {
+        if hasLesson { return lessonUserMessage }
         var parts: [String] = []
         let topic = self.topic.trimmingCharacters(in: .whitespacesAndNewlines)
         parts.append("Make a deck of \(clampedCount) entries.")
@@ -257,8 +284,10 @@ public struct DeckRequest: Equatable, Sendable {
         if file.deck.name == DeckNormalizer.fallbackDeckName, !topic.isEmpty {
             file.deck.name = String(topic.prefix(60))
         }
-        file.deck.folder = file.deck.folder ?? Self.folder
+        file.deck.folder = file.deck.folder ?? (hasLesson ? Self.lessonFolder : Self.folder)
         file.deck.source = file.deck.source ?? (topic.isEmpty ? nil : topic)
+        // Урок — не серия, даже если в названии случайно нашлось «1x03».
+        if hasLesson { return file }
         // Серию раскладываем по папкам сразу — даже если TVMaze потом
         // не ответит, набор уже лежит в «Сериалы / Шоу / Сезон N».
         if let episode = episode(fromResponse: text) {
@@ -271,12 +300,14 @@ public struct DeckRequest: Equatable, Sendable {
 /// Правила промпта, которые зависят от изучаемого языка. Английские — те же,
 /// что были до появления языков: наборы для английского не изменились.
 struct TargetRules {
+    let target: StudyLanguage
     let prefer: String
     let term: String
     let cloze: String
     let pitfalls: String
 
     init(_ target: StudyLanguage) {
+        self.target = target
         switch target {
         case .english:
             prefer = "Prefer what actually makes speech sound natural: phrasal verbs, idioms, " +

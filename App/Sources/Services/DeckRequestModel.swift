@@ -19,6 +19,8 @@ final class DeckRequestModel {
     }
 
     var topic = ""
+    /// Выжимка урока; nil — обычный набор по теме (P-68).
+    var lesson: String?
     var wordCount = DeckRequest.defaultWordCount
     var level: CEFRLevel? = AppSettings.englishLevel
     private(set) var subtitles: String?
@@ -59,14 +61,18 @@ final class DeckRequestModel {
     var request: DeckRequest {
         DeckRequest(
             topic: topic, subtitles: subtitles, wordCount: wordCount, level: level,
-            language: AppSettings.language, knownTerms: knownTerms,
-            target: StudyLanguageStore.storedCurrent)
+            language: StudyLanguageStore.storedCurrent.translationLanguage(for: AppSettings.language),
+            knownTerms: knownTerms,
+            target: StudyLanguageStore.storedCurrent, lesson: lesson)
     }
 
     var canSubmit: Bool {
-        step != .working && (episode != nil || movie != nil
-                             || !topic.trimmingCharacters(in: .whitespaces).isEmpty
-                             || subtitles != nil)
+        guard step != .working else { return false }
+        // Урок — только с текстом урока: название без текста карточек не даст.
+        if lesson != nil { return request.hasLesson }
+        return episode != nil || movie != nil
+            || !topic.trimmingCharacters(in: .whitespaces).isEmpty
+            || subtitles != nil
     }
 
     /// Оценка до отправки, чтобы цена не была сюрпризом.
@@ -112,7 +118,10 @@ final class DeckRequestModel {
         step = .working
         do {
             let response: BackendAPI.DeckResponse
-            if let movie {
+            if request.hasLesson {
+                try request.validate()
+                response = try await RecapBackend.shared.lesson(BackendAPI.LessonBody(request))
+            } else if let movie {
                 response = try await RecapBackend.shared.movieDeck(BackendAPI.MovieDeckBody(
                     movieId: movie.id, language: AppSettings.language, level: level,
                     wordCount: wordCount, knownTerms: knownTerms, subtitles: subtitles,
