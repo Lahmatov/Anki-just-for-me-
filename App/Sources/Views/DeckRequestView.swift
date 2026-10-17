@@ -578,3 +578,17 @@ struct DeckRequestView: View {
         }
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        DeckRequestView()
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#Preview("К серии") { DeckRequestView(episode: PreviewData.episode).previewEnvironment() }
+#endif

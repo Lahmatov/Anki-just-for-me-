@@ -105,3 +105,16 @@ struct LaunchIntroView: View {
         }
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        LaunchIntroView(onFinish: {})
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

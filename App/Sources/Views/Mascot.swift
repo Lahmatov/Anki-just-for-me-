@@ -129,3 +129,20 @@ extension MascotEmptyState where Actions == EmptyView {
         self.init(mood: mood, title: title, message: message) { EmptyView() }
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        VStack(spacing: 24) {
+            MascotView(mood: .cheer)
+            MascotSays(text: "Hello! Ready for five words?")
+            MascotEmptyState(mood: .sleepy, title: "Nothing here yet", message: "Add a deck to start.")
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

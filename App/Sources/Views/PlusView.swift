@@ -214,3 +214,18 @@ struct PlusView: View {
         }
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        NavigationStack {
+            PlusView()
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

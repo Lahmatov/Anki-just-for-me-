@@ -143,10 +143,14 @@ def check_duplicate_types():
     seen = {}
     for path in CORE + APP:
         for match in re.finditer(
-                r'^(?:public |private |internal |final |@\w+\s+)*'
+                r'^((?:public |private |fileprivate |internal |final |@\w+\s+)*)'
                 r'(?:public\s+)?(?:final\s+)?(struct|class|enum|protocol)\s+(\w+)',
                 read(path), re.M):
-            seen.setdefault(match.group(2), []).append(os.path.basename(path))
+            # private на уровне файла виден только в файле — с другим не столкнётся
+            # (так устроены `private struct Previews` в каждом экране).
+            if re.search(r'\b(private|fileprivate)\b', match.group(1)):
+                continue
+            seen.setdefault(match.group(3), []).append(os.path.basename(path))
     for name, files in seen.items():
         if len(files) > 1:
             problems.append(f"тип {name} объявлен несколько раз: {', '.join(files)}")
@@ -243,6 +247,9 @@ def check_untranslated():
                 if 'ru' in (label, label_before):
                     continue
             line = src.count('\n', 0, start) + 1
+            # Название превью видно только в Xcode Canvas.
+            if src.splitlines()[line - 1].lstrip().startswith('#Preview('):
+                continue
             # Кириллица, которую не показывают, а сопоставляют (шаблоны
             # разбора «2 сезон 5 серия»), помечается в строке явно.
             if NOT_UI_MARK in src.splitlines()[line - 1]:
@@ -330,6 +337,37 @@ def check_store_metadata():
                 problems.append(f"fastlane/metadata/{locale}/{name}: пробел после запятой")
 
 
+# Правила навыка ios-architecture: проверяются здесь, чтобы не держались
+# только на памяти того, кто пишет код.
+LEGACY_STATE = re.compile(r'\b(ObservableObject|@Published|@StateObject|@ObservedObject|@EnvironmentObject)\b')
+LEGACY_NAV = re.compile(r'\b(NavigationView|PreviewProvider)\b|NavigationLink\(destination:')
+# Экраны-обёртки над UIKit: в Canvas без устройства они пусты или ходят в сеть.
+NO_PREVIEW_OK = ('DocumentCameraView.swift', 'ShareSheet.swift', 'YouGlishView.swift')
+
+
+def check_architecture():
+    for path in APP:
+        if is_test(path):
+            continue
+        name = os.path.basename(path)
+        _, code = scan_literals(read(path))
+        for regex, rule in ((LEGACY_STATE, 'вместо него @Observable'),
+                            (LEGACY_NAV, 'вместо него NavigationStack и #Preview')):
+            for match in regex.finditer(code):
+                line = code.count('\n', 0, match.start()) + 1
+                problems.append(f"{name}:{line}: {match.group(0)} — {rule} (ios-architecture)")
+        # @Observable без @MainActor — данные экрана меняются с любого потока.
+        for match in re.finditer(r'@Observable\s*\n((?:\s*@\w+\s*\n)*)\s*(?:final\s+)?class\s+(\w+)', code):
+            if '@MainActor' not in match.group(1) and '@MainActor' not in code[max(0, match.start() - 40):match.start()]:
+                line = code.count('\n', 0, match.start()) + 1
+                problems.append(f"{name}:{line}: @Observable {match.group(2)} без @MainActor (ios-architecture)")
+        # Каждый экран — с превью на mock-данных.
+        if '/Views/' in path and name not in NO_PREVIEW_OK:
+            declares_view = re.search(r'^(?:private )?struct \w+(?:<[^>]*>)?\s*:\s*[^{]*\bView\b', code, re.M)
+            if declares_view and '#Preview' not in code:
+                problems.append(f"{name}: нет #Preview с mock-данными (ios-architecture, правило 4)")
+
+
 def report():
     tests = sum(
         len(re.findall(r'func test\w+', read(p)))
@@ -352,4 +390,5 @@ if __name__ == '__main__':
     check_untranslated()
     check_secret_logging()
     check_store_metadata()
+    check_architecture()
     sys.exit(report())

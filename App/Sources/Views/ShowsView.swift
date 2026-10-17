@@ -169,3 +169,17 @@ private struct ShowCard: View {
         .buttonStyle(.plain)
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        ShowsView()
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#Preview("Пусто") { ShowsView().previewEnvironment(empty: true) }
+#endif

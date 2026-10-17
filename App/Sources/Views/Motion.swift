@@ -397,3 +397,21 @@ extension Animation {
     /// Смена вкладки: быстрее остального — это навигация, а не событие.
     static var tabSwitch: Animation { .smooth(duration: 0.24) }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        VStack(spacing: 24) {
+            MonchikLoader(label: "Thinking")
+            CountingText(value: 42)
+                .font(.app(.largeTitle))
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#Preview("Праздник") { CelebrationOverlay(title: "Daily goal!", subtitle: "10 minutes today", onDismiss: {}).previewEnvironment() }
+#endif

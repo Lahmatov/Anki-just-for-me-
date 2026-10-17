@@ -166,3 +166,18 @@ struct LessonTopic: Equatable, Hashable {
         self.init(title: deck.name, terms: notes.map(\.term))
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        NavigationStack {
+            LessonHubView(deck: PreviewData.lessonDeck)
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

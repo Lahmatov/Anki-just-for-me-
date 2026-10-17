@@ -48,3 +48,16 @@ struct AvatarView: View {
         .foregroundStyle(Theme.onPrimary)
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        AvatarView(size: 96)
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

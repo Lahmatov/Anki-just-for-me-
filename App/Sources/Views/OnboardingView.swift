@@ -636,3 +636,16 @@ struct OnboardingView: View {
         }
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        OnboardingView(plan: OnboardingPlanBuilder.make(context: PreviewData.context))
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

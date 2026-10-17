@@ -496,3 +496,16 @@ struct AccountView: View {
         return "\(short) (\(build))"
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        AccountView()
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

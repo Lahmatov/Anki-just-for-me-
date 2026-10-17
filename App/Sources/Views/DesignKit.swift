@@ -447,3 +447,27 @@ enum Haptics {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                ScreenTitle("Today")
+                CardSectionHeader(title: "Section")
+                HintHeader(title: "Title", hint: "A short hint")
+                ChunkyProgressBar(value: 0.6)
+                IconBadge(systemName: "flame.fill")
+                Button("Primary", action: {}).buttonStyle(.chunky)
+                Button("Secondary", action: {}).buttonStyle(.chunkySecondary)
+            }
+            .padding()
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

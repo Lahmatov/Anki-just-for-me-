@@ -416,3 +416,18 @@ struct RetellView: View {
         String(format: "%d:%02d", Int(interval) / 60, Int(interval) % 60)
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        NavigationStack {
+            RetellView(episode: PreviewData.episode)
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

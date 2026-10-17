@@ -46,3 +46,19 @@ struct AgeGateView: View {
         .accessibilityIdentifier("ageGate")
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var decision: AgeDecision = .needsAge
+
+    var body: some View {
+        AgeGateView(decision: decision)
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#Preview("Младше 13") { Previews(decision: .underMinimumAge) }
+#endif

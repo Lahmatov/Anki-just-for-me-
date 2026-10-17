@@ -595,3 +595,19 @@ private struct FlipOnReveal: ViewModifier {
         }
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        NavigationStack {
+            ReviewSessionView(deck: PreviewData.deck, limit: 5)
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#Preview("Итог") { SessionSummaryView(stats: SessionStats(answered: 10, correct: 7, typos: 1, wrong: 2), onDone: {}).previewEnvironment() }
+#endif

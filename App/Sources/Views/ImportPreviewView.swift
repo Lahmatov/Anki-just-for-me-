@@ -203,3 +203,16 @@ struct CoverImage: View {
         .accessibilityHidden(true)
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        ImportPreviewView(plan: PreviewData.importPlan, onConfirm: { _, _ in })
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

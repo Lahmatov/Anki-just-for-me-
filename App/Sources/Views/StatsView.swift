@@ -219,3 +219,19 @@ enum SnapshotService {
         try? context.save()
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        NavigationStack {
+            StatsView()
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#Preview("Пусто") { NavigationStack { StatsView() }.previewEnvironment(empty: true) }
+#endif

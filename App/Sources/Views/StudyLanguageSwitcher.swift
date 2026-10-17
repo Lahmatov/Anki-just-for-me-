@@ -51,3 +51,18 @@ struct StudyLanguagePicker: View {
         .accessibilityIdentifier("studyLanguage.picker")
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        List {
+            StudyLanguagePicker()
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

@@ -460,3 +460,16 @@ struct FlipCard<Front: View, Back: View>: View {
             .panel(radius: 24)
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        PlacementTestView(onFinish: { _ in })
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

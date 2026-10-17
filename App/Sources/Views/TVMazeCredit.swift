@@ -22,3 +22,16 @@ struct TVMazeCredit: View {
         .frame(maxWidth: .infinity)
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        TVMazeCredit()
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

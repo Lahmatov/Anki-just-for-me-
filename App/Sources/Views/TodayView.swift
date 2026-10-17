@@ -564,3 +564,17 @@ struct TodayView: View {
         return milestone
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        TodayView()
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#Preview("Первый день") { TodayView().previewEnvironment(empty: true) }
+#endif

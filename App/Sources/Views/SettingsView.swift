@@ -527,3 +527,16 @@ struct SettingsView: View {
         await NotificationService.reschedule(context: context)
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        SettingsView()
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

@@ -289,3 +289,19 @@ struct EpisodeDiscussionView: View {
         .background(Theme.surface.ignoresSafeArea(edges: .bottom))
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        NavigationStack {
+            EpisodeDiscussionView(episode: PreviewData.episode)
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#Preview("Урок") { NavigationStack { EpisodeDiscussionView(lesson: PreviewData.lessonTopic) }.previewEnvironment() }
+#endif

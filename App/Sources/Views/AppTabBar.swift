@@ -85,3 +85,18 @@ final class TabBarVisibility {
     static let shared = TabBarVisibility()
     var hiddenBySession = false
 }
+
+#if DEBUG
+private struct Previews: View {
+    @State private var selection: AppTab = .today
+
+    var body: some View {
+        AppTabBar(selection: $selection)
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

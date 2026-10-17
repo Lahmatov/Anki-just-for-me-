@@ -39,3 +39,16 @@ struct SpeakButton: View {
         rate == .slow ? "tortoise" : "speaker.wave.2"
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        SpeakButton(text: "hello", label: "Listen")
+            .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif

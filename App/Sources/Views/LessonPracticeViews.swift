@@ -407,3 +407,19 @@ struct LessonSpeakView: View {
         }
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        NavigationStack {
+            LessonQuizView(deck: PreviewData.lessonDeck)
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#Preview("Спряжение") { NavigationStack { ConjugationDrillView(verbs: ["go", "travel"]) }.previewEnvironment() }
+#endif

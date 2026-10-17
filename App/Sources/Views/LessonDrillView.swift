@@ -256,3 +256,19 @@ struct DrillSummary: View {
         .frame(maxWidth: .infinity)
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        NavigationStack {
+            LessonDrillView(notes: PreviewData.lessonNotes, mode: .translation)
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#Preview("Пропуски") { NavigationStack { LessonDrillView(notes: PreviewData.lessonNotes, mode: .cloze) }.previewEnvironment() }
+#endif

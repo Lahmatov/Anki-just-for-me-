@@ -137,3 +137,18 @@ private struct LessonNode: View {
         return tr("Слова \(words) · ", "Palavras \(words) · ", "Words \(words) · ") + quiz
     }
 }
+
+#if DEBUG
+private struct Previews: View {
+    var body: some View {
+        NavigationStack {
+            LessonsMapView()
+        }
+        .previewEnvironment()
+    }
+}
+
+#Preview("Светлая") { Previews() }
+#Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
+#Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
+#endif
