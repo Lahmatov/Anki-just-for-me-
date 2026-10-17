@@ -1,0 +1,7 @@
+{
+  "route": "POST /v1/lesson/chat",
+  "body": {
+    "title": "Aula 5", "terms": ["comer", "apetecer"], "language": "ru", "target": "pt-PT",
+    "level": "A2", "turns": [], "retelling": "Ontem comi bacalhau."
+  }
+}

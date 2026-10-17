@@ -12,6 +12,12 @@ database_name = "recap"
 database_id = "REPLACE_WITH_D1_DATABASE_ID"
 migrations_dir = "migrations"
 
+# Снимки бэкапов в R2 (P-71). Включить: `wrangler r2 bucket create recap-backups`
+# и раскомментировать. Без этой строки снимки пишутся в D1, как раньше.
+# [[r2_buckets]]
+# binding = "BACKUPS"
+# bucket_name = "recap-backups"
+
 # Ночная чистка старых данных по срокам хранения (src/retention.ts).
 [triggers]
 crons = ["17 3 * * *"]
@@ -29,3 +35,34 @@ MAX_DEVICES_PER_SUBSCRIPTION = "3"
 SUBSCRIPTION_PRODUCTS = "com.lahmatov.ajfm.plus.monthly,com.lahmatov.ajfm.plus.yearly"
 # Бесплатный помощник Monchik Help: не больше стольких вопросов в сутки на весь сервер.
 HELP_DAILY_CAP = "2000"
+# Самая старая сборка приложения, которой сервер отвечает; пусто — все (P-71).
+# Поднимать только вместе с выпуском, в котором старое API больше не нужно.
+MIN_CLIENT_BUILD = ""
+# Аварийный выключатель: "lesson,help" или "all" — см. src/compat.ts.
+DISABLED_FEATURES = ""
+
+# Тестовый сервер: своя база и свой адрес, те же миграции. Деплой —
+# Actions → Deploy server → staging. Создать один раз:
+# `wrangler d1 create recap-staging` и вписать id ниже.
+[env.staging]
+name = "recap-backend-staging"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "recap-staging"
+database_id = "REPLACE_WITH_STAGING_D1_DATABASE_ID"
+migrations_dir = "migrations"
+
+[env.staging.triggers]
+crons = ["17 3 * * *"]
+
+[env.staging.vars]
+BUNDLE_ID = "com.lahmatov.ajfm"
+MODEL = "claude-haiku-4-5"
+SUBSCRIPTION_UNITS = "2000000"
+PROMO_UNITS = "2000000"
+MAX_DEVICES_PER_SUBSCRIPTION = "3"
+SUBSCRIPTION_PRODUCTS = "com.lahmatov.ajfm.plus.monthly,com.lahmatov.ajfm.plus.yearly"
+HELP_DAILY_CAP = "200"
+MIN_CLIENT_BUILD = ""
+DISABLED_FEATURES = ""

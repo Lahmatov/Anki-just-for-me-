@@ -1,8 +1,9 @@
 # Recap — Política de privacidade
 
-_Última atualização: 30 de setembro de 2026_
+_Última atualização: 17 de outubro de 2026_
 
-O Recap é uma aplicação de cartões para aprender inglês americano com séries. É feito
+O Recap é uma aplicação de cartões para aprender línguas (inglês americano, português
+europeu e italiano) com séries e aulas. É feito
 por uma pessoa e não tem publicidade, análise nem rastreio. A conta é opcional.
 
 ## Responsável pelo tratamento
@@ -21,6 +22,9 @@ acesso a isso:
 - o nome do perfil e a foto do avatar;
 - chaves da API e a ligação à nuvem (no Keychain do iOS).
 
+As fotos e os PDF das aulas são lidos no telemóvel (Vision da Apple) e não são enviados;
+só segue o texto que vês no campo e podes corrigir.
+
 As gravações de voz de pronúncia e recontos não são guardadas: só se usa o texto
 reconhecido. O reconhecimento corre no telemóvel quando o iOS o permite; caso contrário,
 o áudio é processado pelo serviço da Apple, segundo a
@@ -32,6 +36,9 @@ o áudio é processado pelo serviço da Apple, segundo a
 |---|---|---|
 | **Anthropic (API do Claude)**, com a tua chave | Pedes um baralho ou uma análise de reconto, depois de autorizares | O texto do pedido, legendas anexadas, o texto do reconto e a lista de palavras que já tens. Vai do telemóvel diretamente para a Anthropic, na **tua** conta Anthropic; o criador não o recebe. Ver a [política da Anthropic](https://www.anthropic.com/legal/privacy). |
 | **Servidor Recap** (só com Recap Plus ou código promocional) | Pedes palavras ou conversas com o Monchik sobre um episódio | Um número aleatório do dispositivo, o número da série/temporada/episódio, o idioma e o nível, as palavras que já tens, legendas anexadas e as falas da conversa. O servidor envia o texto à Anthropic e **não** o guarda. |
+| **Servidor Recap: aulas** (só com Recap Plus ou código promocional) | Crias cartões de uma aula ou conversas com o Monchik sobre ela | O texto da aula, o título, as palavras que já tens, o idioma e o nível; na conversa — o título e as palavras da aula, o que contaste e as falas. O servidor envia o texto à Anthropic e **não** o guarda. Não coloques na aula dados pessoais de outras pessoas. |
+| **Servidor Recap: Monchik Help** | Fazes uma pergunta ao assistente | O texto da pergunta e o idioma. O servidor envia-o à Anthropic e não o guarda. |
+| **Servidor Recap: pedido de suporte** | Envias um pedido | O tema, o texto, o e-mail (se o indicares) e, se não o desligares, o diagnóstico: versões da app e do iOS, modelo do dispositivo, idiomas, número de cartões. Palavras e progresso não seguem. |
 | **Apple** (só se iniciares sessão) | Tocas em «Iniciar sessão com a Apple» | A Apple confirma ao servidor Recap quem és. Pedimos apenas o nome, que fica no telemóvel. Nunca pedimos o e-mail. |
 | **Servidor Recap: cópia na nuvem** (opcional) | Uma vez por dia, só se ligaste a «Cópia na nuvem» | Uma cópia comprimida da base de dados de estudo: baralhos, palavras, progresso. Cifrada no servidor. |
 | **Apple (catálogo de filmes iTunes)** | Procuras um filme ou crias um baralho para ele | O título do filme que procuras; o servidor Recap pede à Apple os dados do filme escolhido pelo número. |
@@ -46,6 +53,7 @@ recebe o teu nome, e-mail ou foto.
 
 | Dados | Porquê | Fundamento (RGPD) | Conservação |
 |---|---|---|---|
+| Pedidos de suporte: tema, texto, e-mail (opcional), diagnóstico, resposta | Responder-te e ver o que avaria mais | Contrato — art. 6.º, n.º 1, al. b); interesse legítimo — al. f) | Um ano após a última resposta; apagados com os dados ou a conta |
 | Número aleatório do dispositivo e hash do seu token de acesso | Reconhecer o teu telemóvel | Contrato — art. 6.º, n.º 1, al. b) | Até apagares os dados, ou 12 meses após o último contacto do telemóvel com o servidor |
 | Conta: HMAC do identificador de utilizador Apple | Encontrar a conta no próximo início de sessão | Contrato — art. 6.º, n.º 1, al. b) | Até apagares a conta, ou 12 meses após o último início de sessão se nenhum telemóvel estiver ligado |
 | Conta: token de sessão da Apple, cifrado | Apenas para revogar o início de sessão com a Apple quando apagas a conta | Regras da plataforma Apple; contrato | Até apagares a conta |
@@ -55,13 +63,15 @@ recebe o teu nome, e-mail ou foto.
 | Cópia na nuvem: cópias comprimidas e cifradas da base de estudo, com data, número de palavras e nome do dispositivo | Restaurar num telemóvel novo | Contrato — art. 6.º, n.º 1, al. b) | As últimas 7 cópias; apagadas quando tocas em «Apagar todas as cópias», apagas os dados ou a conta, ou com o dispositivo ou a conta nos prazos acima |
 | Contadores de pedidos por número do dispositivo ou HMAC do endereço IP | Evitar abusos (limites de frequência, tentativas de adivinhar códigos) | Interesse legítimo — art. 6.º, n.º 1, al. f) | Até ao fim da janela do contador (no máximo 24 horas) |
 
-O texto dos pedidos, as legendas, os recontos e as falas da conversa nunca são
-guardados no servidor nem nos seus registos. A cópia na nuvem é a única exceção, e só
+O texto dos pedidos, das aulas, as legendas, os recontos, as perguntas ao assistente e
+as falas da conversa nunca são guardados no servidor nem nos seus registos. Com cada
+pedido o servidor vê a versão da aplicação — para pedir que atualizes, se estiver desatualizada. A cópia na nuvem é a única exceção, e só
 se a ligaste.
 
 ## Quem trata os dados por nossa conta
 
-- **Cloudflare, Inc.** aloja o servidor Recap e a sua base de dados.
+- **Cloudflare, Inc.** aloja o servidor Recap, a sua base de dados e as cópias na nuvem
+  (D1 e R2), e encaminha ao responsável os e-mails dos pedidos de suporte.
 - **Anthropic, PBC** fornece o modelo Claude, que gera as palavras e as respostas do
   Monchik. Segundo os termos comerciais da Anthropic, os dados da API não são usados
   para treinar modelos e são apagados após um período limitado (atualmente até 30 dias).
@@ -87,7 +97,8 @@ dados, e de oposição ao tratamento baseado em interesse legítimo.
   apaga tudo no telemóvel, a conta e o registo do dispositivo no servidor e, se
   escolheres, as cópias na nuvem no servidor Recap. Apagar a aplicação também apaga os
   dados locais. A subscrição pertence ao Apple ID e cancela-se nas definições da Apple.
-- **Qualquer outro pedido:** escreve para CONTACT_EMAIL e indica o código de suporte
+- **Qualquer outro pedido:** na aplicação, «Ajuda → Escrever ao suporte → Os meus dados»
+  (o pedido recebe logo um número), ou escreve para CONTACT_EMAIL e indica o código de suporte
   do Perfil — sem contas por e-mail, é a única forma de encontrar o teu registo.
 
 Respondemos no prazo de um mês. Podes também apresentar reclamação à Comissão Nacional

@@ -1,0 +1,7 @@
+{
+  "route": "POST /v1/discuss",
+  "body": {
+    "showId": 431, "season": 1, "episode": 3, "language": "ru", "level": "B1", "turns": [],
+    "retelling": "Phoebe finds a thumb.", "questions": 3, "target": "pt-PT"
+  }
+}

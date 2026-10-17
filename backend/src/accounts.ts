@@ -4,7 +4,7 @@ import { better, entitlementOf, linkDevice, linkDeviceIfRoom } from "./quota";
 import { exchangeCode, revokeToken, siwaConfigured, verifyIdentityToken } from "./siwa";
 import type { Device } from "./auth";
 import type { Deps, Env } from "./env";
-import { deleteBackupsStatements } from "./backups";
+import { blobIdsOf, deleteBackupBlobs, deleteBackupsStatements } from "./backups";
 
 /**
  * Аккаунт — необязательный слой над устройствами.
@@ -139,9 +139,12 @@ export async function deleteAccount(env: Env, deps: Deps, device: Device): Promi
   }
   // Снимки аккаунта — его данные: удаление аккаунта без них было бы неполным.
   statements.push(...deleteBackupsStatements(db, account.id));
+  statements.push(db.prepare("DELETE FROM support_tickets WHERE account_id = ?").bind(account.id));
   statements.push(db.prepare("UPDATE devices SET account_id = NULL WHERE account_id = ?").bind(account.id));
   statements.push(db.prepare("DELETE FROM accounts WHERE id = ?").bind(account.id));
+  const blobs = await blobIdsOf(db, account.id);
   await db.batch(statements);
+  await deleteBackupBlobs(env, blobs);
   device.account_id = null;
   if (device.entitlement_id === account.entitlement_id) device.entitlement_id = null;
 }

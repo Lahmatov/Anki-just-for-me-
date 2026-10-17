@@ -1,0 +1,15 @@
+{
+  "backups": [
+    {
+      "id": "8bb92c582e8a1a034213ee0b69b81256",
+      "createdAt": 1800000000,
+      "device": "iPhone",
+      "noteCount": 2,
+      "matureWords": 0,
+      "size": 4,
+      "language": "pt-PT"
+    }
+  ],
+  "keep": 7,
+  "signedIn": false
+}

@@ -1,8 +1,9 @@
 # Recap — Privacy Policy
 
-_Last updated: 30 September 2026_
+_Last updated: 17 October 2026_
 
-Recap is a flashcard app for learning American English from TV shows. It is built
+Recap is a flashcard app for learning languages (American English, European Portuguese
+and Italian) from TV shows and lessons. It is built
 by one person and has no ads, no analytics and no tracking. An account is optional.
 
 ## Who is responsible
@@ -21,6 +22,9 @@ access to it:
 - your profile name and avatar photo;
 - API keys and the cloud connection string (in the iOS Keychain).
 
+Photos and PDFs of lessons are read on your phone (Apple Vision) and never sent; only
+the text you see in the field, and can edit, goes further.
+
 Voice recordings used for pronunciation and retelling are not saved. Only the
 recognized text is used. Speech recognition runs on the device when iOS supports
 it; otherwise Apple's speech service processes the audio under
@@ -32,6 +36,9 @@ it; otherwise Apple's speech service processes the audio under
 |---|---|---|
 | **Anthropic (Claude API)**, with your own key | You ask for a deck or a retelling review, after you allow it | Your request text, attached subtitles, the retelling text and a list of words you already have. This goes from your phone straight to Anthropic under **your own** Anthropic account; the developer does not receive it. See [Anthropic's privacy policy](https://www.anthropic.com/legal/privacy). |
 | **Recap server** (only with Recap Plus or a promo code) | You ask for words or chat with Monchik about an episode | A random device ID, the show/season/episode number, your language and level, the words you already have, attached subtitles and chat lines. The server forwards the text to Anthropic and does **not** store it. |
+| **Recap server: lessons** (only with Recap Plus or a promo code) | You make cards from a lesson or chat with Monchik about it | The lesson text, its title, the words you already have, your language and level; for the chat — the lesson's title and words, what you said and the chat lines. The server forwards the text to Anthropic and does **not** store it. Don't put other people's personal data into a lesson. |
+| **Recap server: Monchik Help** | You ask the assistant a question | The question text and language. The server forwards it to Anthropic and does not store it. |
+| **Recap server: support request** | You send a request | The topic, text, e-mail (if you add one) and, unless you turn it off, diagnostics: app and iOS versions, device model, languages, card count. Words and progress are not sent. |
 | **Apple** (only if you sign in) | You tap “Sign in with Apple” | Apple confirms who you are to the Recap server. We ask only for your name, and it stays on your phone. We never ask for your e-mail. |
 | **Recap server: cloud backup** (optional) | Once a day, only if you turned on Cloud backup | A compressed copy of your learning database: decks, words, progress. Encrypted on the server. |
 | **Apple (iTunes movie catalog)** | You search for a movie or make a deck for it | The movie title you search for; the Recap server asks Apple for the chosen movie's details by its number. |
@@ -46,6 +53,7 @@ never receives your name, e-mail or photo.
 
 | Data | Why | Legal basis (GDPR) | Kept |
 |---|---|---|---|
+| Support requests: topic, text, e-mail (optional), diagnostics, the reply | To answer you and see what breaks most often | Contract — Art. 6(1)(b); legitimate interest — Art. 6(1)(f) | One year after the last reply; deleted with your data or account |
 | Random device ID and a hash of its access token | To recognize your phone | Contract — Art. 6(1)(b) | Until you delete your data, or 12 months after the phone last contacted the server |
 | Account: a keyed hash of your Apple user ID | To find your account the next time you sign in | Contract — Art. 6(1)(b) | Until you delete the account, or 12 months after the last sign-in if no phone is linked |
 | Account: Apple sign-in token, encrypted | Only to revoke Sign in with Apple when you delete the account | Legal obligation to Apple's platform rules; contract | Until you delete the account |
@@ -55,13 +63,15 @@ never receives your name, e-mail or photo.
 | Cloud backup: compressed, encrypted copies of your learning database with date, word count and device name | To restore on a new phone | Contract — Art. 6(1)(b) | The last 7 copies; erased when you tap Delete all copies, delete your data or account, or together with the device or account under the periods above |
 | Request counters keyed by device ID or a keyed hash of the IP address | To stop abuse (rate limits, promo-code guessing) | Legitimate interest — Art. 6(1)(f) | Until the counter's window ends (at most 24 hours) |
 
-The text of your requests, subtitles, retellings and chat lines is never stored on
-the server or in its logs. Cloud backup is the only exception, and only if you turned
+The text of your requests, lessons, subtitles, retellings, assistant questions and chat
+lines is never stored on the server or in its logs. With each request the server sees
+the app version — to ask you to update if it is out of date. Cloud backup is the only exception, and only if you turned
 it on.
 
 ## Who processes data for us
 
-- **Cloudflare, Inc.** hosts the Recap server and its database.
+- **Cloudflare, Inc.** hosts the Recap server, its database and the cloud backups (D1
+  and R2), and forwards support-request e-mails to the controller.
 - **Anthropic, PBC** runs the Claude model that generates words and Monchik's
   replies. Under Anthropic's commercial terms, API data is not used to train models
   and is deleted after a limited period (currently up to 30 days).
@@ -87,7 +97,8 @@ object to processing based on legitimate interest.
   and, if you choose, the cloud backup copies on the Recap server. Deleting the app also
   deletes all local data. A subscription belongs to your Apple ID and is cancelled in
   Apple's settings.
-- **Anything else:** write to CONTACT_EMAIL and include the support code from
+- **Anything else:** in the app, Help → Contact support → My data (the request gets a
+  number right away), or write to CONTACT_EMAIL and include the support code from
   Profile — without accounts by e-mail, it is the only way to find your record.
 
 We answer within one month. You can also complain to the Portuguese data

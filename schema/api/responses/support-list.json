@@ -1,0 +1,13 @@
+{
+  "tickets": [
+    {
+      "id": "R-29SSS3",
+      "category": "bug",
+      "message": "Диктант не читает фразу вслух.",
+      "status": "open",
+      "reply": null,
+      "createdAt": 1800000000,
+      "updatedAt": 1800000000
+    }
+  ]
+}

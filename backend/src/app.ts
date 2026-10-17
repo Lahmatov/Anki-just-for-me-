@@ -26,8 +26,11 @@ import { hmacHex } from "./crypto";
 import { intVar, type Deps, type Env } from "./env";
 import { accountOf, deleteAccount, followAccount, shareWithAccount, signIn, signOut } from "./accounts";
 import { RETENTION } from "./retention";
+import { API_VERSION, requireEnabled, requireSupportedClient } from "./compat";
+import { createTicket, listTickets } from "./support";
 import {
-  BACKUP, adoptDeviceBackups, deleteBackupsStatements, listBackups, loadBackup, ownerOf, saveBackup,
+  BACKUP, adoptDeviceBackups, blobIdsOf, deleteBackupBlobs, deleteBackupsStatements, listBackups,
+  loadBackup, ownerOf, saveBackup,
 } from "./backups";
 
 /** Субтитры одной серии — 30–60 тысяч символов; больше — это сезон. */
@@ -42,7 +45,10 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
   try {
     const url = new URL(request.url);
     const route = `${request.method} ${url.pathname}`;
+    requireSupportedClient(request, env, route);
+    requireEnabled(env, route);
     switch (route) {
+      case "GET /v1/health": return await health(env);
       case "POST /v1/devices": return await register(request, env, deps);
       case "GET /v1/me": return await me(request, env, deps);
       case "DELETE /v1/me": return await forget(request, env, deps);
@@ -57,6 +63,8 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
       case "POST /v1/discuss": return await discuss(request, env, deps);
       case "POST /v1/lesson/chat": return await lessonChat(request, env, deps);
       case "POST /v1/help": return await help(request, env, deps);
+      case "POST /v1/support": return await supportCreate(request, env, deps);
+      case "GET /v1/support": return await supportList(request, env, deps);
       case "GET /v1/catalog": return await catalog(request, env, deps);
       case "GET /v1/backups": return await backups(request, env, deps, url);
       case "POST /v1/backups": return await uploadBackup(request, env, deps, url);
@@ -76,6 +84,28 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
     console.error("unexpected", error instanceof Error ? error.name : "unknown");
     return errorResponse(new ApiError(500, "internal"));
   }
+}
+
+// MARK: - Здоровье
+
+/**
+ * Проверка после деплоя и для мониторинга: база отвечает, видно, какой
+ * коммит развёрнут и до какой миграции дошла схема. Без авторизации и без
+ * данных людей.
+ */
+async function health(env: Env): Promise<Response> {
+  let database = false;
+  let schema: string | null = null;
+  try {
+    database = (await env.DB.prepare("SELECT 1 AS ok").first<{ ok: number }>())?.ok === 1;
+    schema = (await env.DB.prepare("SELECT name FROM d1_migrations ORDER BY id DESC LIMIT 1")
+      .first<{ name: string }>())?.name ?? null;
+  } catch {
+    // Таблицы миграций нет (локальная база без wrangler) — схема неизвестна.
+  }
+  return json({ ok: database, api: API_VERSION, version: env.BUILD_VERSION ?? "dev", schema,
+                minClientBuild: Number.parseInt(env.MIN_CLIENT_BUILD ?? "", 10) || null,
+                backups: env.BACKUPS ? "r2" : "d1" }, database ? 200 : 503);
 }
 
 // MARK: - Устройство и доступ
@@ -181,6 +211,10 @@ async function exportData(request: Request, env: Env, deps: Deps): Promise<Respo
       kind: item.kind, inputTokens: item.input_tokens, outputTokens: item.output_tokens,
       at: iso(item.created_at),
     })),
+    supportTickets: (await listTickets(env, device)).map((item) => ({
+      id: item.id, category: item.category, message: item.message, status: item.status,
+      reply: item.reply, at: iso(item.createdAt),
+    })),
     backups: (await listBackups(env.DB, ownerOf(device))).map((item) => ({
       device: item.device, words: item.noteCount, bytes: item.size, at: iso(item.createdAt),
       language: item.language,
@@ -188,6 +222,7 @@ async function exportData(request: Request, env: Env, deps: Deps): Promise<Respo
     retentionDays: {
       inactiveDevice: RETENTION.inactiveDeviceDays,
       usageLog: RETENTION.usageLogDays,
+      supportTicket: RETENTION.supportTicketDays,
     },
   });
 }
@@ -205,12 +240,15 @@ export function supportCode(deviceId: string): string {
  */
 async function forget(request: Request, env: Env, deps: Deps): Promise<Response> {
   const { device, entitlement } = await context(request, env, deps);
+  const blobs = await blobIdsOf(env.DB, device.id);
   const statements = [
     // Снимки, сделанные без входа, принадлежат телефону и уходят с ним.
     // Снимки аккаунта — нет: их стирает «Удалить копии в облаке» или удаление аккаунта.
     ...deleteBackupsStatements(env.DB, device.id),
     env.DB.prepare("DELETE FROM device_episodes WHERE device_id = ?").bind(device.id),
     env.DB.prepare("DELETE FROM usage_log WHERE device_id = ?").bind(device.id),
+    // Обращения с этого телефона — тоже его данные.
+    env.DB.prepare("DELETE FROM support_tickets WHERE device_id = ?").bind(device.id),
     env.DB.prepare("DELETE FROM devices WHERE id = ?").bind(device.id),
   ];
   if (entitlement?.kind === "promo") {
@@ -224,6 +262,7 @@ async function forget(request: Request, env: Env, deps: Deps): Promise<Response>
       "UPDATE promo_codes SET redeemed_by = NULL WHERE redeemed_by = ?").bind(device.id));
   }
   await env.DB.batch(statements);
+  await deleteBackupBlobs(env, blobs);
   return json({ deleted: true });
 }
 
@@ -314,7 +353,9 @@ async function downloadBackup(request: Request, env: Env, deps: Deps, id: string
 
 async function eraseBackups(request: Request, env: Env, deps: Deps): Promise<Response> {
   const { owner } = await backupContext(request, env, deps);
+  const blobs = await blobIdsOf(env.DB, owner);
   const results = await env.DB.batch(deleteBackupsStatements(env.DB, owner));
+  await deleteBackupBlobs(env, blobs);
   return json({ deleted: results[1]?.meta?.changes ?? 0 });
 }
 
@@ -707,6 +748,26 @@ function parseTurns(value: unknown, limit: number): Turn[] {
     throw new ApiError(400, "conversation_over");
   }
   return turns;
+}
+
+// MARK: - Поддержка (P-72)
+
+/**
+ * Обращение в поддержку — без подписки: проблема с оплатой не должна
+ * требовать оплаты. Лимиты — от спама: пять в час и двадцать в сутки.
+ */
+async function supportCreate(request: Request, env: Env, deps: Deps): Promise<Response> {
+  const { device } = await context(request, env, deps);
+  const now = deps.now();
+  await hit(env.DB, "support-hour:" + device.id, 5, 3600, now);
+  await hit(env.DB, "support-day:" + device.id, 20, 86_400, now);
+  const ticket = await createTicket(env, deps, device, await readJson(request, 12_000));
+  return json({ ticket }, 201);
+}
+
+async function supportList(request: Request, env: Env, deps: Deps): Promise<Response> {
+  const { device } = await context(request, env, deps);
+  return json({ tickets: await listTickets(env, device) });
 }
 
 // MARK: - Monchik Help

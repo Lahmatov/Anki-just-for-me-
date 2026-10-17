@@ -19,6 +19,8 @@ const SECURITY_HEADERS: Record<string, string> = {
   "cache-control": "no-store",
   "x-content-type-options": "nosniff",
   "referrer-policy": "no-referrer",
+  // Версия формата API: клиент видит, с каким сервером говорит (P-71).
+  "x-recap-api": "1",
 };
 
 export function json(body: unknown, status = 200): Response {

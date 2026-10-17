@@ -314,3 +314,104 @@ describe("нарезка снимка", () => {
     expect(splitChunks(new Uint8Array(), 10)).toEqual([]);
   });
 });
+
+describe("снимки в R2 (P-71)", () => {
+  it("новый снимок — одним объектом в R2, без кусков в D1, и возвращается байт в байт", async () => {
+    const w = makeWorld({ r2: true });
+    const token = await w.device();
+    const data = payload(300_000);
+    const saved = await upload(w, token, data);
+    expect(saved.status).toBe(201);
+    expect(w.r2!.objects.size).toBe(1);
+    expect(w.db.raw.prepare("SELECT COUNT(*) AS n FROM backup_chunks").get()).toEqual({ n: 0 });
+    expect(w.db.raw.prepare("SELECT storage FROM backups").get()).toEqual({ storage: "r2" });
+    const loaded = await download(w, token, saved.body.backup.id);
+    expect(loaded.status).toBe(200);
+    expect(Buffer.from(loaded.bytes).equals(Buffer.from(data))).toBe(true);
+  });
+
+  it("в R2 лежит шифр, а не сам снимок", async () => {
+    const w = makeWorld({ r2: true });
+    const token = await w.device();
+    const data = new TextEncoder().encode("comer bacalhau ".repeat(100));
+    await upload(w, token, data);
+    const stored = [...w.r2!.objects.values()][0]!;
+    expect(new TextDecoder().decode(stored)).not.toContain("bacalhau");
+  });
+
+  /** Старые копии из D1 читаются и после подключения R2: переезд без поломки. */
+  it("снимок, сделанный до R2, по-прежнему скачивается", async () => {
+    const w = makeWorld();
+    const token = await w.device();
+    const data = payload(600_000, 3);
+    const saved = await upload(w, token, data);
+    const withR2 = { ...w.env, BACKUPS: new (await import("./helpers")).FakeR2() as unknown as R2Bucket };
+    const response = await handle(new Request(`https://api.test/v1/backups/${saved.body.backup.id}`, {
+      headers: { authorization: `Bearer ${token}` },
+    }), withR2, w.deps);
+    expect(response.status).toBe(200);
+    expect(Buffer.from(await response.arrayBuffer()).equals(Buffer.from(data))).toBe(true);
+  });
+
+  it("вытесненные старые снимки стираются и из R2", async () => {
+    const w = makeWorld({ r2: true });
+    const token = await w.device();
+    for (let index = 0; index < BACKUP.keep + 3; index++) {
+      await upload(w, token, payload(1_000, index));
+      w.advance(60);
+    }
+    expect(w.db.raw.prepare("SELECT COUNT(*) AS n FROM backups").get()).toEqual({ n: BACKUP.keep });
+    expect(w.r2!.objects.size).toBe(BACKUP.keep);
+  });
+
+  it("объект пропал — честная ошибка, а не пустой файл", async () => {
+    const w = makeWorld({ r2: true });
+    const token = await w.device();
+    const saved = await upload(w, token, payload(1_000));
+    w.r2!.objects.clear();
+    expect((await download(w, token, saved.body.backup.id)).status).toBe(500);
+  });
+
+  it("сбой записи в R2 — записи в базе нет", async () => {
+    const w = makeWorld({ r2: true });
+    const token = await w.device();
+    w.r2!.failPut = true;
+    expect((await upload(w, token, payload(1_000))).status).toBe(500);
+    expect(w.db.raw.prepare("SELECT COUNT(*) AS n FROM backups").get()).toEqual({ n: 0 });
+  });
+
+  it("«Удалить все данные» стирает объекты сразу, не дожидаясь ночи", async () => {
+    const w = makeWorld({ r2: true });
+    const token = await w.device();
+    await upload(w, token, payload(1_000));
+    await upload(w, token, payload(1_000, 2));
+    expect((await w.call("DELETE", "/v1/me", undefined, token)).status).toBe(200);
+    expect(w.r2!.objects.size).toBe(0);
+  });
+
+  it("«Удалить копии в облаке» стирает объекты", async () => {
+    const w = makeWorld({ r2: true });
+    const token = await w.device();
+    await upload(w, token, payload(1_000));
+    expect((await w.call("DELETE", "/v1/backups", undefined, token)).status).toBe(200);
+    expect(w.r2!.objects.size).toBe(0);
+  });
+
+  it("ночная сверка удаляет объекты без записей и не трогает живые", async () => {
+    const w = makeWorld({ r2: true });
+    const token = await w.device();
+    const saved = await upload(w, token, payload(1_000));
+    await w.r2!.put("backups/" + "f".repeat(32), new Uint8Array([1, 2, 3]));
+    for (let index = 0; index < 600; index++) {
+      await w.r2!.put(`backups/orphan-${String(index).padStart(4, "0")}`, new Uint8Array([index & 0xff]));
+    }
+    const { sweepBackupBlobs } = await import("../src/backups");
+    expect(await sweepBackupBlobs(w.env)).toBe(601);
+    expect([...w.r2!.objects.keys()]).toEqual(["backups/" + saved.body.backup.id]);
+  });
+
+  it("без R2 сверке нечего делать", async () => {
+    const { sweepBackupBlobs } = await import("../src/backups");
+    expect(await sweepBackupBlobs(makeWorld().env)).toBe(0);
+  });
+});

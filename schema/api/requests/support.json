@@ -1,0 +1,8 @@
+{
+  "route": "POST /v1/support",
+  "body": {
+    "category": "bug", "message": "Диктант не читает фразу вслух.", "contact": "anna@example.com",
+    "diagnostics": { "app": "0.4 (17)", "ios": "26.1", "device": "iPad", "language": "ru",
+                     "studyLanguage": "pt-PT" }
+  }
+}

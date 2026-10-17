@@ -1,0 +1,14 @@
+{
+  "reply": "Olá!",
+  "tip": null,
+  "finished": false,
+  "onTopic": true,
+  "turnSig": "553f6b42e1358e20eac97306c09044692aeeeaddabd7e691815fded83a41a5d9",
+  "plan": {
+    "plan": "promo",
+    "active": true,
+    "unitsTotal": 100000,
+    "unitsLeft": 92800,
+    "periodEnd": "2027-02-14T08:00:00.000Z"
+  }
+}

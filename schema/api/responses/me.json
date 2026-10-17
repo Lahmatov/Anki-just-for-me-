@@ -1,0 +1,9 @@
+{
+  "plan": "promo",
+  "active": true,
+  "unitsTotal": 100000,
+  "unitsLeft": 100000,
+  "periodEnd": "2027-02-14T08:00:00.000Z",
+  "signedIn": false,
+  "supportCode": "C98D-01D0"
+}

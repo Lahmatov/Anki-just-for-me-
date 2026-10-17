@@ -18,6 +18,8 @@ export const RETENTION = {
   episodeCacheDays: 30,
   /** Готовые наборы для повтора оборванного запроса: повтор бывает в течение минут. */
   deckRequestDays: 1,
+  /** Обращение в поддержку — год после последнего ответа: хватает, чтобы вернуться к истории. */
+  supportTicketDays: 365,
 } as const;
 
 const DAY = 86_400;
@@ -32,6 +34,7 @@ export interface PurgeReport {
   episodeCache: number;
   deckRequests: number;
   backups: number;
+  supportTickets: number;
 }
 
 /**
@@ -81,6 +84,12 @@ export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
     // Порядок важен — после удаления устройств и аккаунтов выше.
     db.prepare(`DELETE FROM backup_chunks WHERE backup_id IN (${orphanBackups})`),
     db.prepare(`DELETE FROM backups WHERE id IN (${orphanBackups})`),
+    // Обращения — по сроку и вместе с забытым телефоном (если не держит аккаунт).
+    db.prepare(
+      `DELETE FROM support_tickets WHERE updated_at < ?
+         OR (NOT EXISTS (SELECT 1 FROM devices WHERE devices.id = support_tickets.device_id)
+             AND NOT EXISTS (SELECT 1 FROM accounts WHERE accounts.id = support_tickets.account_id))`,
+    ).bind(now - RETENTION.supportTicketDays * DAY),
   ]);
   const changes = (index: number) => results[index]?.meta?.changes ?? 0;
   return {
@@ -93,5 +102,6 @@ export async function purge(db: D1Database, now: number): Promise<PurgeReport> {
     episodeCache: changes(8) + changes(9),
     deckRequests: changes(10),
     backups: changes(12),
+    supportTickets: changes(13),
   };
 }

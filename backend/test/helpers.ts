@@ -28,6 +28,42 @@ export class FakeClaude implements ClaudeLike {
 
 export type Route = (init?: RequestInit) => Response | Promise<Response>;
 
+/** R2 в памяти: только то, чем пользуется сервер, — put, get, delete, list. */
+export class FakeR2 {
+  objects = new Map<string, Uint8Array>();
+  /** Сбой записи — проверить, что запись в базе не появляется без объекта. */
+  failPut = false;
+
+  async put(key: string, value: ArrayBuffer | Uint8Array) {
+    if (this.failPut) throw new Error("r2 unavailable");
+    this.objects.set(key, value instanceof Uint8Array ? new Uint8Array(value) : new Uint8Array(value));
+    return {};
+  }
+
+  async get(key: string) {
+    const value = this.objects.get(key);
+    if (!value) return null;
+    return { arrayBuffer: async () => value.slice().buffer };
+  }
+
+  async delete(keys: string | string[]) {
+    for (const key of Array.isArray(keys) ? keys : [keys]) this.objects.delete(key);
+  }
+
+  async list(options: { prefix?: string; cursor?: string; limit?: number } = {}) {
+    // Курсор — последний выданный ключ, как у настоящего R2: удаление уже
+    // выданных объектов не сдвигает следующую страницу.
+    const all = [...this.objects.keys()]
+      .filter((key) => key.startsWith(options.prefix ?? "") && (!options.cursor || key > options.cursor))
+      .sort();
+    const limit = options.limit ?? 1000;
+    const page = all.slice(0, limit);
+    const truncated = all.length > limit;
+    return { objects: page.map((key) => ({ key })), truncated,
+             cursor: truncated ? page[page.length - 1] : undefined };
+  }
+}
+
 /** Сеть: TVMaze и Apple отвечают тем, что задано в тесте. */
 export function fakeFetch(routes: Record<string, Route>): typeof fetch {
   return (async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -45,8 +81,9 @@ export const TVMAZE = {
   "https://api.tvmaze.com/shows/431": () => Response.json({ name: "Friends" }),
 };
 
-export function makeWorld(options: { routes?: Record<string, Route> } = {}) {
+export function makeWorld(options: { routes?: Record<string, Route>; r2?: boolean } = {}) {
   const db = makeDB();
+  const r2 = options.r2 ? new FakeR2() : undefined;
   const claude = new FakeClaude();
   let clock = 1_800_000_000;
   const env: Env = {
@@ -54,6 +91,7 @@ export function makeWorld(options: { routes?: Record<string, Route> } = {}) {
     BUNDLE_ID: "com.lahmatov.ajfm", MODEL: "claude-haiku-4-5",
     SUBSCRIPTION_UNITS: "2000000", PROMO_UNITS: "100000", MAX_DEVICES_PER_SUBSCRIPTION: "2",
     SUBSCRIPTION_PRODUCTS: "com.lahmatov.ajfm.plus.monthly",
+    ...(r2 ? { BACKUPS: r2 as unknown as R2Bucket } : {}),
   };
   const deps: Deps = {
     claude,
@@ -85,7 +123,7 @@ export function makeWorld(options: { routes?: Record<string, Route> } = {}) {
   }
 
   return {
-    db, env, deps, claude, call, device, addPromo,
+    db, env, deps, claude, call, device, addPromo, r2,
     advance: (seconds: number) => { clock += seconds; },
     now: () => clock,
   };

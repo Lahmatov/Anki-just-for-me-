@@ -1,0 +1,7 @@
+{
+  "route": "POST /v1/deck",
+  "body": {
+    "showId": 431, "season": 1, "episode": 3, "language": "ru", "level": "B1", "wordCount": 20,
+    "knownTerms": ["hello"], "requestId": "contract-deck-1", "target": "pt-PT"
+  }
+}

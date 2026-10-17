@@ -1,0 +1,30 @@
+{
+  "deck": {
+    "format": "ajfm-deck",
+    "version": 1,
+    "deck": {
+      "name": "S01E03 · The One with the Thumb",
+      "folder": "Сериалы/Friends/Сезон 1",
+      "source": "Friends S01E03"
+    },
+    "notes": [
+      {
+        "term": "hang out",
+        "translation": "тусоваться",
+        "ipa": "/hæŋ aʊt/",
+        "partOfSpeech": "phrasal verb",
+        "example": "We hang out here.",
+        "exampleTranslation": "Мы тут тусуемся.",
+        "cloze": "We ___ ___ here."
+      }
+    ]
+  },
+  "source": "model",
+  "plan": {
+    "plan": "promo",
+    "active": true,
+    "unitsTotal": 100000,
+    "unitsLeft": 96500,
+    "periodEnd": "2027-02-14T08:00:00.000Z"
+  }
+}

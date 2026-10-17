@@ -195,6 +195,22 @@ struct MonchikHelpView: View {
 
     private var contactSection: some View {
         Section {
+            // Обращение через сервер (P-72): с номером, а ответ — здесь же.
+            if RecapBackend.isConfigured {
+                NavigationLink {
+                    SupportTicketView()
+                } label: {
+                    Label(tr("Написать в поддержку", "Escrever ao suporte", "Contact support"),
+                          systemImage: "bubble.left.and.text.bubble.right")
+                }
+                .accessibilityIdentifier("help.ticket")
+                NavigationLink {
+                    SupportTicketsView()
+                } label: {
+                    Label(tr("Мои обращения", "Os meus pedidos", "My requests"), systemImage: "tray.full")
+                }
+                .accessibilityIdentifier("help.tickets")
+            }
             if let url = SupportContact.mailURL {
                 Button {
                     openURL(url)

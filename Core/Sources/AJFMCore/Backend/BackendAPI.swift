@@ -10,6 +10,14 @@ public enum BackendAPI {
 
     // MARK: - Доступ
 
+    /// Заголовок `x-recap-client: ios/0.4 (17)` (P-71): по номеру сборки сервер
+    /// узнаёт слишком старое приложение и просит обновиться, а не падает.
+    public static func clientHeader(version: String?, build: String?) -> String {
+        let cleanVersion = (version ?? "").trimmingCharacters(in: .whitespaces)
+        let number = Int((build ?? "").trimmingCharacters(in: .whitespaces)) ?? 0
+        return "ios/\(cleanVersion.isEmpty ? "0" : cleanVersion) (\(number))"
+    }
+
     public struct PlanStatus: Codable, Equatable, Sendable {
         public var plan: String
         public var active: Bool
@@ -447,6 +455,17 @@ public enum BackendAPI {
                 return tr("Слишком большой снимок для облака. Сохрани бэкап файлом.",
                           "Cópia grande demais para a nuvem. Guarda o backup num ficheiro.",
                           "The snapshot is too big for the cloud. Save a backup file instead.")
+            case "upgrade_required":
+                return tr("Эта версия Recap устарела — обнови приложение в App Store. Карточки и "
+                            + "занятия работают и без обновления.",
+                          "Esta versão do Recap está desatualizada — atualiza a app na App Store. Os "
+                            + "cartões e as sessões funcionam sem atualizar.",
+                          "This version of Recap is out of date — update it in the App Store. Cards and "
+                            + "study sessions keep working without the update.")
+            case "feature_disabled":
+                return tr("Эта функция временно на обслуживании. Попробуй позже — карточки работают.",
+                          "Esta função está temporariamente em manutenção. Tenta mais tarde.",
+                          "This feature is briefly under maintenance. Try later — cards still work.")
             case "deck_pending":
                 return tr("Набор ещё собирается — продолжу через пару секунд.",
                           "O baralho ainda está a ser feito — continuo daqui a uns segundos.",

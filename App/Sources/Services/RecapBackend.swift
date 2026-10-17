@@ -61,6 +61,18 @@ final class RecapBackend {
         try await send("POST", "/v1/discuss", body: encode(body), timeout: 60)
     }
 
+    /// Обращение в поддержку (P-72) — без подписки.
+    func support(_ body: BackendAPI.SupportTicketBody) async throws -> BackendAPI.SupportTicket {
+        let response: BackendAPI.SupportTicketResponse =
+            try await send("POST", "/v1/support", body: encode(body), timeout: 30)
+        return response.ticket
+    }
+
+    func supportTickets() async throws -> [BackendAPI.SupportTicket] {
+        let response: BackendAPI.SupportTicketList = try await send("GET", "/v1/support")
+        return response.tickets
+    }
+
     /// Разговор об уроке (P-69) — тот же ответ, что у разговора о серии.
     func lessonChat(_ body: BackendAPI.LessonChatBody) async throws -> BackendAPI.DiscussResponse {
         try await send("POST", "/v1/lesson/chat", body: encode(body), timeout: 60)
@@ -157,6 +169,11 @@ final class RecapBackend {
         try JSONEncoder().encode(value)
     }
 
+    /// Версия и сборка приложения для сервера (P-71).
+    static let clientHeader = BackendAPI.clientHeader(
+        version: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
+        build: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String)
+
     private func send<Response: Decodable>(
         _ method: String, _ path: String, body: Data? = nil, query: [URLQueryItem] = [],
         timeout: TimeInterval = 20, retrying: Bool = true
@@ -184,6 +201,7 @@ final class RecapBackend {
         urlRequest.httpMethod = method
         urlRequest.timeoutInterval = timeout
         urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "authorization")
+        urlRequest.setValue(Self.clientHeader, forHTTPHeaderField: "x-recap-client")
         if let body {
             urlRequest.setValue(contentType, forHTTPHeaderField: "content-type")
             urlRequest.httpBody = body
@@ -223,6 +241,7 @@ final class RecapBackend {
             var request = URLRequest(url: base.appending(path: "/v1/devices"))
             request.httpMethod = "POST"
             request.timeoutInterval = 20
+            request.setValue(Self.clientHeader, forHTTPHeaderField: "x-recap-client")
             let (data, response) = try await session.data(for: request)
             let status = (response as? HTTPURLResponse)?.statusCode ?? 0
             guard status == 201,

@@ -1,0 +1,80 @@
+# Деплой сервера Recap кнопкой (Actions → Deploy server → Run workflow).
+#
+# Порядок (P-71, docs/server-updates.md): тесты → отметка Time Travel базы
+# (откат данных на минуту до миграции) → миграции → новый код → проверка
+# /v1/health. Проверка не прошла — код откатывается к прошлой версии сам.
+# Сначала staging, потом production: у production в настройках окружения
+# GitHub стоит обязательное подтверждение, чтобы не выкатить по ошибке.
+#
+# Нужно один раз: секреты CLOUDFLARE_API_TOKEN и CLOUDFLARE_ACCOUNT_ID и
+# переменная окружения RECAP_URL (адрес Worker) у окружений staging и production.
+name: Deploy server
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Куда
+        type: choice
+        options: [staging, production]
+        default: staging
+
+concurrency:
+  group: deploy-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Деплой в ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      # production — окружение wrangler по умолчанию, staging — [env.staging].
+      WRANGLER_ENV: ${{ inputs.environment == 'staging' && '--env staging' || '' }}
+      DATABASE: ${{ inputs.environment == 'staging' && 'recap-staging' || 'recap' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+      - name: Точка отката базы (Time Travel)
+        run: npx --yes wrangler@4 d1 time-travel info "$DATABASE" $WRANGLER_ENV
+
+      - name: Миграции
+        run: npx --yes wrangler@4 d1 migrations apply "$DATABASE" --remote $WRANGLER_ENV
+
+      - name: Новый код
+        run: npx --yes wrangler@4 deploy $WRANGLER_ENV --var "BUILD_VERSION:${GITHUB_SHA::7}"
+
+      - name: Проверка после деплоя
+        id: smoke
+        env:
+          RECAP_URL: ${{ vars.RECAP_URL }}
+        run: |
+          for attempt in 1 2 3 4 5; do
+            BODY=$(curl -fsS "$RECAP_URL/v1/health" || true)
+            echo "$BODY"
+            if echo "$BODY" | grep -q "\"version\":\"${GITHUB_SHA::7}\"" && echo "$BODY" | grep -q '"ok":true'; then
+              exit 0
+            fi
+            sleep 6
+          done
+          echo "::error::/v1/health не подтвердил новую версию"
+          exit 1
+
+      - name: Откат кода
+        if: failure() && steps.smoke.conclusion == 'failure'
+        run: |
+          npx --yes wrangler@4 rollback $WRANGLER_ENV --message "health check failed for ${GITHUB_SHA::7}"
+          echo "::warning::Код откачен. Миграции только добавляют — откатывать базу не нужно; если нужно, см. docs/server-updates.md (Time Travel)."

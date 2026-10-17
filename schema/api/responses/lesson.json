@@ -1,0 +1,29 @@
+{
+  "deck": {
+    "format": "ajfm-deck",
+    "version": 1,
+    "deck": {
+      "name": "Aula 5",
+      "folder": "Уроки"
+    },
+    "notes": [
+      {
+        "term": "hang out",
+        "translation": "тусоваться",
+        "ipa": "/hæŋ aʊt/",
+        "partOfSpeech": "phrasal verb",
+        "example": "We hang out here.",
+        "exampleTranslation": "Мы тут тусуемся.",
+        "cloze": "We ___ ___ here."
+      }
+    ]
+  },
+  "source": "model",
+  "plan": {
+    "plan": "promo",
+    "active": true,
+    "unitsTotal": 100000,
+    "unitsLeft": 93000,
+    "periodEnd": "2027-02-14T08:00:00.000Z"
+  }
+}

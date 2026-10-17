@@ -1,0 +1,8 @@
+{
+  "route": "POST /v1/lesson",
+  "body": {
+    "lesson": "Aula 5 — pretérito perfeito\ncomer → comi", "title": "Aula 5", "language": "ru",
+    "target": "pt-PT", "level": "A2", "wordCount": 20, "knownTerms": ["olá"],
+    "requestId": "contract-lesson-1"
+  }
+}

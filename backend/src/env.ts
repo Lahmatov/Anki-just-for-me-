@@ -3,6 +3,11 @@ import type { ClaudeLike } from "./claude";
 /** Привязки и настройки Worker. Секреты задаются `wrangler secret put`. */
 export interface Env {
   DB: D1Database;
+  /**
+   * Хранилище снимков бэкапа (R2, аналог S3, P-71). Не подключено — снимки
+   * пишутся в D1 кусками, как до R2: сервер работает и без него.
+   */
+  BACKUPS?: R2Bucket;
   /** Секрет: ключ Anthropic. Живёт только здесь — в приложении его нет. */
   ANTHROPIC_API_KEY: string;
   /** Секрет: «перец» для хешей промокодов и IP. */
@@ -28,6 +33,19 @@ export interface Env {
   SUBSCRIPTION_PRODUCTS: string;
   /** Потолок бесплатных вопросов помощнику на весь сервер за сутки. */
   HELP_DAILY_CAP?: string;
+  /** Самая старая сборка приложения, которой сервер отвечает (P-71); пусто — все. */
+  MIN_CLIENT_BUILD?: string;
+  /** Выключенные функции через запятую (`lesson,help` или `all`), см. compat.ts. */
+  DISABLED_FEATURES?: string;
+  /** Что сейчас развёрнуто — коммит из деплоя; видно в /v1/health. */
+  BUILD_VERSION?: string;
+  /**
+   * Почта поддержки (P-72): привязка отправки писем Cloudflare, адрес
+   * отправителя в своём домене и куда слать. Не заданы — обращения только в базе.
+   */
+  SUPPORT_MAIL?: SendEmail;
+  SUPPORT_FROM?: string;
+  SUPPORT_TO?: string;
 }
 
 /** Внешний мир, подменяемый в тестах: модель, сеть, часы и случайность. */
@@ -42,6 +60,8 @@ export interface Deps {
    * Без неё свёрнутый телефон рвал соединение — и оплаченный вызов модели пропадал.
    */
   waitUntil?: (promise: Promise<unknown>) => void;
+  /** Отправить письмо об обращении в поддержку; нет — письма не шлются. */
+  sendSupportMail?: (mail: import("./support").SupportMail) => Promise<void>;
 }
 
 export function intVar(value: string | undefined, fallback: number): number {
