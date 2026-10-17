@@ -79,8 +79,9 @@ struct LessonDrillView: View {
                 }
                 TextField(mode == .dictation ? tr("Что услышал", "O que ouviste", "What you heard")
                                              : tr("Ответ", "Resposta", "Answer"),
-                          text: $typed, axis: .vertical)
-                    .lineLimit(1...3)
+                          text: $typed)
+                    // Одна строка: «Ввод» проверяет ответ, а не переносит строку.
+                    .submitLabel(.done)
                     .textFieldStyle(.soft)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()

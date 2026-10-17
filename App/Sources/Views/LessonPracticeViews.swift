@@ -113,6 +113,7 @@ struct ConjugationDrillView: View {
         guard let task, check == nil, !typed.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         // Без поблажки на артикль: в спряжении важна каждая буква, но одна
         // опечатка (потерянное ударение «falamos») — полбалла, а не ноль.
+        focused = false
         let result = AnswerChecker.check(input: typed, expected: task.answer)
         check = result
         switch result.verdict {

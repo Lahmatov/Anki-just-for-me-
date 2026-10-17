@@ -22,19 +22,32 @@ final class LessonsUITests: XCTestCase {
         app.descendants(matching: .any)[identifier].firstMatch
     }
 
-    private func scrollTo(_ target: XCUIElement, in app: XCUIApplication, attempts: Int = 8) {
-        var left = attempts
-        while !(target.exists && target.isHittable) && left > 0 {
-            app.swipeUp()
-            left -= 1
+    /// Довести элемент до пальца медленными свайпами: быстрый на маленьком
+    /// экране проскакивал его, а ленивый список убирал проскоченное из дерева.
+    private func scrollTo(_ target: XCUIElement, in app: XCUIApplication) {
+        for _ in 0..<12 where !(target.exists && target.isHittable) { app.swipeUp(velocity: .slow) }
+        for _ in 0..<12 where !(target.exists && target.isHittable) { app.swipeDown(velocity: .slow) }
+    }
+
+    /// Нажать, когда элемент перестал двигаться: нажатие по едущему после
+    /// свайпа списку попадало в соседнюю карточку.
+    private func tapWhenSettled(_ target: XCUIElement) {
+        XCTAssertTrue(target.waitForExistence(timeout: 15), "нет элемента \(target)")
+        var frame = target.frame
+        let deadline = Date().addingTimeInterval(5)
+        while Date() < deadline {
+            Thread.sleep(forTimeInterval: 0.3)
+            if target.frame == frame && target.isHittable { break }
+            frame = target.frame
         }
+        target.tap()
     }
 
     private func tap(_ identifier: String, in app: XCUIApplication, scrolling: Bool = true) {
         let target = element(app, identifier)
         if scrolling { scrollTo(target, in: app) }
         XCTAssertTrue(target.waitForExistence(timeout: 15), "нет «\(identifier)»")
-        target.tap()
+        tapWhenSettled(target)
     }
 
     private func openLesson(_ app: XCUIApplication) {
@@ -53,7 +66,12 @@ final class LessonsUITests: XCTestCase {
             XCTAssertTrue(field.waitForExistence(timeout: 10), "нет поля ответа")
             field.tap()
             field.typeText(answer)
-            tap(checkID, in: app, scrolling: false)
+            // Проверка — кнопкой, если её видно; иначе клавишей «Ввод»: на
+            // маленьком экране кнопку закрывает клавиатура.
+            let check = element(app, checkID)
+            if check.isHittable { check.tap() } else { field.typeText("\n") }
+            let next = element(app, nextID)
+            scrollTo(next, in: app)
             tap(nextID, in: app, scrolling: false)
         }
         XCTAssertTrue(element(app, scoreID).waitForExistence(timeout: 10), "тренажёр не дошёл до итога")
@@ -119,11 +137,14 @@ final class LessonsUITests: XCTestCase {
         }
         XCTAssertTrue(element(app, "quiz.score").waitForExistence(timeout: 10), "тест не дошёл до итога")
 
-        // Назад — на страницу урока, затем на карту.
-        app.navigationBars.buttons.firstMatch.tap()
-        app.navigationBars.buttons.firstMatch.tap()
+        // Назад — на страницу урока, затем на карту. Нажатие во время
+        // анимации перехода теряется, поэтому — пока не увидим карту.
         let step = element(app, "lessons.step.0")
-        XCTAssertTrue(step.waitForExistence(timeout: 10))
+        for _ in 0..<4 where !step.waitForExistence(timeout: 2) {
+            let back = app.navigationBars.buttons.element(boundBy: 0)
+            if back.exists { back.tap() }
+        }
+        XCTAssertTrue(step.waitForExistence(timeout: 10), "не вернулись на карту уроков")
         // До теста у шага «no quiz yet», после — процент.
         XCTAssertTrue(step.label.contains("%"), "на карте не виден результат теста: \(step.label)")
     }

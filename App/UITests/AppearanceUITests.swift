@@ -20,11 +20,10 @@ final class AppearanceUITests: XCTestCase {
     private func themePicker(_ app: XCUIApplication) -> XCUIElement {
         app.buttons["tab.settings"].tap()
         let picker = app.segmentedControls["settings.theme"]
-        var left = 8
-        while !(picker.exists && picker.isHittable) && left > 0 {
-            app.swipeUp()
-            left -= 1
-        }
+        // Медленно и в обе стороны: с крупным шрифтом быстрый свайп проскакивал
+        // строку, а форма убирает проскоченные строки из дерева.
+        for _ in 0..<12 where !(picker.exists && picker.isHittable) { app.swipeUp(velocity: .slow) }
+        for _ in 0..<12 where !(picker.exists && picker.isHittable) { app.swipeDown(velocity: .slow) }
         XCTAssertTrue(picker.waitForExistence(timeout: 10), "в настройках нет выбора темы")
         return picker
     }
