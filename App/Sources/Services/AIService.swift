@@ -29,40 +29,58 @@ enum AIService {
 
     /// Следующая реплика Мончика.
     static func discuss(
-        context: ModelContext, episode: EpisodeContext,
+        context: ModelContext, topic: DiscussionTopic,
         turns: [EpisodeDiscussion.Turn], retelling: String?,
         questions: Int = EpisodeDiscussion.maxLearnerTurns
     ) async throws -> DiscussionResult {
+        let wireQuestions = questions == EpisodeDiscussion.maxLearnerTurns ? nil : questions
         // С подпиской — через сервер Recap: ключа в приложении нет, а сервер
-        // пускает разговор только о сериях, к которым взяты слова.
+        // пускает разговор только о сериях, к которым взяты слова, и об уроках.
         if RecapAccount.shared.usesBackend {
-            let response = try await RecapBackend.shared.discuss(BackendAPI.DiscussBody(
-                showId: episode.showID, season: episode.episode.season,
-                episode: episode.episode.number, language: explanationLanguage,
-                level: AppSettings.englishLevel, turns: turns, retelling: retelling,
-                questions: questions == EpisodeDiscussion.maxLearnerTurns ? nil : questions,
-                target: StudyLanguageStore.storedCurrent))
+            let response: BackendAPI.DiscussResponse
+            switch topic {
+            case .episode(let episode):
+                response = try await RecapBackend.shared.discuss(BackendAPI.DiscussBody(
+                    showId: episode.showID, season: episode.episode.season,
+                    episode: episode.episode.number, language: explanationLanguage,
+                    level: AppSettings.englishLevel, turns: turns, retelling: retelling,
+                    questions: wireQuestions, target: StudyLanguageStore.storedCurrent))
+            case .lesson(let lesson):
+                response = try await RecapBackend.shared.lessonChat(BackendAPI.LessonChatBody(
+                    title: lesson.title, terms: lesson.terms, language: explanationLanguage,
+                    level: AppSettings.englishLevel, turns: turns, retelling: retelling,
+                    questions: wireQuestions, target: StudyLanguageStore.storedCurrent))
+            }
             RecapAccount.shared.update(response.plan)
             return DiscussionResult(reply: response.asReply, cost: 0)
         }
         return try await discussDirectly(
-            context: context, episode: episode, turns: turns, retelling: retelling,
+            context: context, topic: topic, turns: turns, retelling: retelling,
             questions: questions)
     }
 
     private static func discussDirectly(
-        context: ModelContext, episode: EpisodeContext,
+        context: ModelContext, topic: DiscussionTopic,
         turns: [EpisodeDiscussion.Turn], retelling: String?, questions: Int
     ) async throws -> DiscussionResult {
         let budget = ClaudeBudget(context: context)
         guard let apiKey = budget.apiKey else { throw ClaudeClientError.noAPIKey }
         // Разговор — короткие реплики: быстрая модель, как для наборов.
         let model = budget.deckModel
-        let system = EpisodeDiscussion.system(
-            language: explanationLanguage, level: AppSettings.englishLevel,
-            episodeTitle: episode.title,
-            reference: episode.synopsis.map { .synopsis($0) }, retelling: retelling,
-            target: StudyLanguageStore.storedCurrent)
+        let system: String
+        switch topic {
+        case .episode(let episode):
+            system = EpisodeDiscussion.system(
+                language: explanationLanguage, level: AppSettings.englishLevel,
+                episodeTitle: episode.title,
+                reference: episode.synopsis.map { .synopsis($0) }, retelling: retelling,
+                target: StudyLanguageStore.storedCurrent)
+        case .lesson(let lesson):
+            system = LessonChat.system(
+                language: explanationLanguage, level: AppSettings.englishLevel,
+                target: StudyLanguageStore.storedCurrent, title: lesson.title, terms: lesson.terms,
+                retelling: retelling)
+        }
         let messages = EpisodeDiscussion.messages(for: turns, limit: questions)
 
         let input = RetellPrompt.estimateTokens(system)

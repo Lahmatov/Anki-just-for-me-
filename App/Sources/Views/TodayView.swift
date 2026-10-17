@@ -31,6 +31,7 @@ struct TodayView: View {
     @State private var matureWords = 0
     @State private var journey: JourneyPosition?
     @State private var showPath: ShowPath?
+    @State private var lessonPath: LessonPath?
     @State private var isSessionActive = false
     @State private var showDeckRequest = false
     @State private var starterFailed = false
@@ -68,6 +69,8 @@ struct TodayView: View {
                     if let streak, streak.days > 0 {
                         streakCard(streak)
                     }
+
+                    lessonsLink
 
                     if noteCount > 0 {
                         progressCard
@@ -224,6 +227,25 @@ struct TodayView: View {
 
     /// Минуты за день против цели. Цель меняется тут же, меню на карточке:
     /// идти за этим в настройки — лишний шаг.
+    /// Уроки (P-69): карта всегда видна — с неё же добавляется первый урок.
+    private var lessonsLink: some View {
+        let subtitle: String
+        if let lessonPath, lessonPath.total > 0 {
+            subtitle = tr("Пройдено \(lessonPath.doneCount) из \(lessonPath.total)",
+                          "Concluídas \(lessonPath.doneCount) de \(lessonPath.total)",
+                          "\(lessonPath.doneCount) of \(lessonPath.total) done")
+        } else {
+            subtitle = tr("Вставь конспект урока — будут карточки и тренажёры",
+                          "Cola o resumo da aula — terás cartões e treinos",
+                          "Paste your lesson notes — get cards and trainers")
+        }
+        return CardLink(title: tr("Мои уроки", "As minhas aulas", "My lessons"), subtitle: subtitle,
+                        systemImage: "graduationcap.fill", color: Theme.purple) {
+            LessonsMapView()
+        }
+        .accessibilityIdentifier("today.lessons")
+    }
+
     private var goalCard: some View {
         let fraction = DailyGoal.progress(studiedSeconds: studiedSeconds, goalMinutes: goalMinutes)
         let done = DailyGoal.wholeMinutes(studiedSeconds)
@@ -469,6 +491,7 @@ struct TodayView: View {
             matureWords = progress.matureWordCount()
             journey = progress.journeyPosition()
             showPath = StudyShow.path(in: context)
+            lessonPath = LessonLibrary.path(in: context)
         }
         loaded = true
         celebrateIfDeserved(goalBefore: goalBefore)

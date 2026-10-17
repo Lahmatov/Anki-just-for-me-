@@ -2,15 +2,33 @@ import SwiftUI
 import SwiftData
 import AJFMCore
 
-/// Разговор с Мончиком о серии: он спрашивает, ты отвечаешь голосом или
-/// текстом, после каждого ответа — одна поправка.
+/// Разговор с Мончиком о серии или об уроке: он спрашивает, ты отвечаешь
+/// голосом или текстом, после каждого ответа — одна поправка.
 struct EpisodeDiscussionView: View {
-    let episode: EpisodeContext
+    let topic: DiscussionTopic
     var retelling: String?
     /// Длина разговора: в Recap — три вопроса вместо шести.
     var questions: Int = EpisodeDiscussion.maxLearnerTurns
     /// Разговор закончен — для шагов Recap.
     var onFinish: (() -> Void)?
+
+    init(episode: EpisodeContext, retelling: String? = nil,
+         questions: Int = EpisodeDiscussion.maxLearnerTurns, onFinish: (() -> Void)? = nil) {
+        self.topic = .episode(episode)
+        self.retelling = retelling
+        self.questions = questions
+        self.onFinish = onFinish
+    }
+
+    init(lesson: LessonTopic, retelling: String? = nil) {
+        self.topic = .lesson(lesson)
+        self.retelling = retelling
+    }
+
+    private var isLesson: Bool {
+        if case .lesson = topic { return true }
+        return false
+    }
 
     @Environment(\.modelContext) private var context
     @State private var model: EpisodeDiscussionModel?
@@ -31,14 +49,15 @@ struct EpisodeDiscussionView: View {
                 MonchikLoader(large: true)
             }
         }
-        .navigationTitle(tr("Разговор о серии", "Conversa sobre o episódio", "Episode chat"))
+        .navigationTitle(isLesson ? tr("Разговор об уроке", "Conversa sobre a aula", "Lesson chat")
+                                  : tr("Разговор о серии", "Conversa sobre o episódio", "Episode chat"))
         .navigationBarTitleDisplayMode(.inline)
         .background(Theme.background.ignoresSafeArea())
         .aiConsentAlert(pending: $pendingAI)
         .onAppear {
             guard model == nil else { return }
             let created = EpisodeDiscussionModel(
-                context: context, episode: episode, retelling: retelling, questions: questions)
+                context: context, topic: topic, retelling: retelling, questions: questions)
             model = created
             AIConsent.run({ Task { await created.start() } }, pending: $pendingAI)
         }
@@ -67,7 +86,7 @@ struct EpisodeDiscussionView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 14) {
-                        Text(episode.title)
+                        Text(topic.title)
                             .font(.app(.headline))
                             .foregroundStyle(Theme.muted)
                             .frame(maxWidth: .infinity)
@@ -75,9 +94,13 @@ struct EpisodeDiscussionView: View {
 
                         // AI Act, ст. 50: собеседник должен знать, что говорит
                         // с ИИ, — с 2 августа 2026 это обязанность, а не вежливость.
-                        Label(tr("Мончик — ИИ (Claude). Он может ошибаться в деталях серии.",
-                                 "O Monchik é uma IA (Claude). Pode enganar-se nos detalhes.",
-                                 "Monchik is an AI (Claude). He may get episode details wrong."),
+                        Label(isLesson
+                              ? tr("Мончик — ИИ (Claude). Он может ошибаться.",
+                                   "O Monchik é uma IA (Claude). Pode enganar-se.",
+                                   "Monchik is an AI (Claude). He can make mistakes.")
+                              : tr("Мончик — ИИ (Claude). Он может ошибаться в деталях серии.",
+                                   "O Monchik é uma IA (Claude). Pode enganar-se nos detalhes.",
+                                   "Monchik is an AI (Claude). He may get episode details wrong."),
                               systemImage: "sparkles")
                             .font(.app(.caption))
                             .foregroundStyle(Theme.muted)
@@ -184,7 +207,11 @@ struct EpisodeDiscussionView: View {
         case .finished:
             VStack(spacing: 12) {
                 MascotSays(mood: .cheer,
-                           text: tr("Классно поболтали! Приходи после следующей серии.",
+                           text: isLesson
+                               ? tr("Классно поболтали! Слова урока уже звучат.",
+                                    "Que boa conversa! As palavras da aula já saem.",
+                                    "Great chat! The lesson's words are already coming out.")
+                               : tr("Классно поболтали! Приходи после следующей серии.",
                                     "Que boa conversa! Volta depois do próximo episódio.",
                                     "Great chat! Come back after the next episode."))
                 if model.tipCount > 0 {

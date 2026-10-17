@@ -2,3 +2,4 @@
 "CFBundleDisplayName" = "Recap";
 "NSMicrophoneUsageDescription" = "Para verificar a pronúncia, a aplicação precisa de acesso ao microfone. A gravação fica no dispositivo.";
 "NSSpeechRecognitionUsageDescription" = "O reconhecimento de fala funciona localmente e serve para comparar a palavra dita com a que estás a aprender.";
+"NSCameraUsageDescription" = "A câmara serve para fotografar a página da aula. O texto é reconhecido no dispositivo e a imagem não é enviada.";

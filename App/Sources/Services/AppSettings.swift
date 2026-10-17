@@ -84,6 +84,8 @@ enum SettingsKey {
     /// Где фишку видели на карте в прошлый раз: остановка и сквозной номер
     /// старта её круга. Отсюда фишка шагает при следующем открытии.
     static var journeyLastSeenStop: String { scoped("journeyLastSeenStop") }
+    /// Лучший результат мини-теста каждого урока (P-69): ключ урока → доля 0…1.
+    static var lessonQuizScores: String { scoped("lessonQuizScores") }
     /// Выбранный провайдер ИИ и модель у каждого (`AIKeys`).
     static let aiProvider = "aiProvider"
     static let aiModelPrefix = "aiModel."

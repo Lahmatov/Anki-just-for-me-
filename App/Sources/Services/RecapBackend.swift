@@ -61,6 +61,11 @@ final class RecapBackend {
         try await send("POST", "/v1/discuss", body: encode(body), timeout: 60)
     }
 
+    /// Разговор об уроке (P-69) — тот же ответ, что у разговора о серии.
+    func lessonChat(_ body: BackendAPI.LessonChatBody) async throws -> BackendAPI.DiscussResponse {
+        try await send("POST", "/v1/lesson/chat", body: encode(body), timeout: 60)
+    }
+
     /// Стереть это устройство на сервере — часть «Удалить все данные».
     /// Не зарегистрировано — стирать нечего, лишнюю регистрацию не делаем.
     func forgetDevice() async throws {

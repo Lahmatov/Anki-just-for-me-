@@ -3,7 +3,21 @@ import SwiftData
 import Observation
 import AJFMCore
 
-/// Ход разговора с Мончиком о серии.
+/// О чём разговор с Мончиком: о серии или об уроке (P-69). Ход разговора,
+/// поправки и карточки из них одни и те же — различается только тема.
+enum DiscussionTopic: Equatable {
+    case episode(EpisodeContext)
+    case lesson(LessonTopic)
+
+    var title: String {
+        switch self {
+        case .episode(let episode): return episode.title
+        case .lesson(let lesson): return lesson.title
+        }
+    }
+}
+
+/// Ход разговора с Мончиком о серии или об уроке.
 @Observable
 @MainActor
 final class EpisodeDiscussionModel {
@@ -26,17 +40,17 @@ final class EpisodeDiscussionModel {
     private(set) var spent: Double = 0
     var draft = ""
 
-    let episode: EpisodeContext
+    let topic: DiscussionTopic
     let retelling: String?
     /// Сколько вопросов задаст Мончик: шесть в обычном разговоре, три в Recap.
     let questions: Int
     let recorder = RetellRecorder()
     private let context: ModelContext
 
-    init(context: ModelContext, episode: EpisodeContext, retelling: String?,
+    init(context: ModelContext, topic: DiscussionTopic, retelling: String?,
          questions: Int = EpisodeDiscussion.maxLearnerTurns) {
         self.context = context
-        self.episode = episode
+        self.topic = topic
         self.retelling = retelling
         self.questions = EpisodeDiscussion.clampedLimit(questions)
     }
@@ -79,7 +93,7 @@ final class EpisodeDiscussionModel {
         step = .thinking
         do {
             let result = try await AIService.discuss(
-                context: context, episode: episode, turns: turns, retelling: retelling,
+                context: context, topic: topic, turns: turns, retelling: retelling,
                 questions: questions)
             turns.append(EpisodeDiscussion.Turn(
                 speaker: .monchik, text: result.reply.text, tip: result.reply.tip,
@@ -126,7 +140,7 @@ final class EpisodeDiscussionModel {
     func makeDeck() -> ImportResult? {
         guard let file = EpisodeDiscussion.deckFile(
             from: turns,
-            name: tr("Разговор: ", "Conversa: ", "Chat: ") + episode.title,
+            name: tr("Разговор: ", "Conversa: ", "Chat: ") + topic.title,
             folder: tr("Пересказы", "Recontos", "Retellings")) else { return nil }
         let importer = ImportService(context: context)
         guard let plan = try? importer.makePlan(from: file) else { return nil }

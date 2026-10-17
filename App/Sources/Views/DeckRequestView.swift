@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
 import UIKit
+import PhotosUI
 import AJFMCore
 
 /// Набор по короткому запросу: написал «Friends 1x03» — получил слова.
@@ -31,6 +32,13 @@ struct DeckRequestView: View {
     @State private var applyError: String?
     @State private var pendingAI: (() -> Void)?
     @FocusState private var topicFocused: Bool
+    // Урок с фото и из PDF (P-69).
+    @State private var photoItems: [PhotosPickerItem] = []
+    @State private var showCamera = false
+    @State private var showPDFPicker = false
+    @State private var pickingPDF = false
+    @State private var scanning = false
+    @State private var scanError: String?
 
     var body: some View {
         NavigationStack {
@@ -122,6 +130,7 @@ struct DeckRequestView: View {
                     model.lesson = (model.lesson ?? "") + (UIPasteboard.general.string ?? "")
                 }
             }
+            scanButtons(model)
         } header: {
             Text(tr("Что было на уроке", "O que se deu na aula", "What the lesson covered"))
         } footer: {
@@ -146,6 +155,56 @@ struct DeckRequestView: View {
                         + "resposta e abre «Baralhos» → menu «…» → «Colar da área de transferência».",
                     "No key or subscription: paste the prompt into Claude or ChatGPT, copy the "
                         + "answer, then open Decks → the “…” menu → Paste from clipboard."))
+        }
+    }
+
+    /// Фото страницы, снимки из галереи и PDF — текст распознаётся на телефоне
+    /// и дописывается в поле, где его можно поправить до отправки.
+    @ViewBuilder
+    private func scanButtons(_ model: DeckRequestModel) -> some View {
+        if scanning {
+            HStack(spacing: 10) {
+                MonchikLoader()
+                Text(tr("Читаю страницу…", "A ler a página…", "Reading the page…"))
+                    .foregroundStyle(Theme.muted)
+            }
+        } else {
+            if DocumentCameraView.isAvailable {
+                Button(tr("Сфотографировать страницу", "Fotografar a página", "Scan a page"),
+                       systemImage: "camera.viewfinder") { showCamera = true }
+                    .accessibilityIdentifier("lesson.camera")
+            }
+            PhotosPicker(selection: $photoItems, maxSelectionCount: 5, matching: .images) {
+                Label(tr("Из фото", "Das fotos", "From photos"), systemImage: "photo.on.rectangle")
+            }
+            .accessibilityIdentifier("lesson.photos")
+            Button(tr("Из PDF", "De um PDF", "From a PDF"), systemImage: "doc.richtext") {
+                pickingPDF = true
+                showPDFPicker = true
+            }
+            .accessibilityIdentifier("lesson.pdf")
+        }
+        if let scanError {
+            Label(scanError, systemImage: "exclamationmark.triangle")
+                .font(.app(.callout))
+                .foregroundStyle(Theme.orange)
+        }
+    }
+
+    private func appendScan(_ model: DeckRequestModel, _ work: @escaping () async throws -> String) {
+        scanning = true
+        scanError = nil
+        Task {
+            defer { scanning = false }
+            do {
+                let text = try await work()
+                let current = (model.lesson ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+                model.lesson = current.isEmpty ? text : current + "\n\n" + text
+                Haptics.success()
+            } catch {
+                Log.failure(.importing, "Текст урока не распознался", error)
+                scanError = error.localizedDescription
+            }
         }
     }
 
@@ -219,6 +278,7 @@ struct DeckRequestView: View {
                     } else {
                         Button(tr("Приложить субтитры", "Anexar legendas", "Attach subtitles"),
                                systemImage: "captions.bubble") {
+                            pickingPDF = false
                             showSubtitlePicker = true
                         }
                     }
@@ -360,11 +420,44 @@ struct DeckRequestView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 8)
         }
+        .fullScreenCover(isPresented: $showCamera) {
+            DocumentCameraView(onScan: { pages in
+                showCamera = false
+                let language = StudyLanguageStore.storedCurrent
+                appendScan(model) { try await LessonScanner.text(fromImages: pages, language: language) }
+            }, onCancel: { showCamera = false })
+            .ignoresSafeArea()
+        }
+        .onChange(of: photoItems) { _, items in
+            guard !items.isEmpty else { return }
+            let language = StudyLanguageStore.storedCurrent
+            appendScan(model) {
+                var images: [Data] = []
+                for item in items {
+                    if let data = try await item.loadTransferable(type: Data.self) { images.append(data) }
+                }
+                return try await LessonScanner.text(fromImages: images, language: language)
+            }
+            photoItems = []
+        }
+        // Один выбор файла на экран: два .fileImporter на одном виде SwiftUI
+        // путает, и открывается только один. Что выбираем — помнит pickingPDF.
         .fileImporter(
-            isPresented: $showSubtitlePicker,
-            allowedContentTypes: [.plainText, .text, .data]
+            isPresented: Binding(
+                get: { showSubtitlePicker || showPDFPicker },
+                set: { if !$0 { showSubtitlePicker = false; showPDFPicker = false } }),
+            allowedContentTypes: pickingPDF ? [.pdf] : [.plainText, .text, .data]
         ) { outcome in
             guard case .success(let url) = outcome else { return }
+            if pickingPDF {
+                let language = StudyLanguageStore.storedCurrent
+                appendScan(model) {
+                    let scoped = url.startAccessingSecurityScopedResource()
+                    defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+                    return try await LessonScanner.text(fromPDF: url, language: language)
+                }
+                return
+            }
             let scoped = url.startAccessingSecurityScopedResource()
             defer { if scoped { url.stopAccessingSecurityScopedResource() } }
             if let data = try? Data(contentsOf: url) {
