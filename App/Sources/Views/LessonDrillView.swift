@@ -260,7 +260,7 @@ struct DrillSummary: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             LessonDrillView(notes: PreviewData.lessonNotes, mode: .translation)
         }
         .previewEnvironment()
@@ -270,5 +270,5 @@ private struct Previews: View {
 #Preview("Светлая") { Previews() }
 #Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
 #Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
-#Preview("Пропуски") { NavigationStack { LessonDrillView(notes: PreviewData.lessonNotes, mode: .cloze) }.previewEnvironment() }
+#Preview("Пропуски") { RoutedStack { LessonDrillView(notes: PreviewData.lessonNotes, mode: .cloze) }.previewEnvironment() }
 #endif

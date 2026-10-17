@@ -51,11 +51,7 @@ struct DifficultCardsView: View {
 
                 ForEach(difficult) { card in
                     Section {
-                        NavigationLink {
-                            if let note = card.note {
-                                NoteDetailView(note: note)
-                            }
-                        } label: {
+                        NavigationLink(value: card.note.map { AppRoute.note($0.persistentModelID) }) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(card.note?.term ?? "—").fontWeight(.medium)
                                 Text(card.note?.translation ?? "")
@@ -95,7 +91,7 @@ struct DifficultCardsView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             DifficultCardsView()
         }
         .previewEnvironment()

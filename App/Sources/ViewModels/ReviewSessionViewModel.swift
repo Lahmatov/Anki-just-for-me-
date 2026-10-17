@@ -17,7 +17,7 @@ struct SessionStats: Equatable {
 /// Состояние одной сессии повторений.
 @Observable
 @MainActor
-final class ReviewSessionModel {
+final class ReviewSessionViewModel {
     private(set) var cards: [Card] = []
     private(set) var index = 0
     private(set) var isRevealed = false

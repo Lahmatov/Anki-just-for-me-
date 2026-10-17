@@ -5,9 +5,11 @@ import AJFMCore
 
 struct DeckDetailView: View {
     let deck: Deck
-    var onExport: (ExportedFile) -> Void
 
     @Environment(\.modelContext) private var context
+    /// Файл набора для «Поделиться» — экран показывает его сам, без
+    /// замыкания через все папки (так переход укладывается в AppRoute).
+    @State private var exportedFile: ExportedFile?
     @State private var exportError: String?
     @State private var showSubtitleImporter = false
     @State private var enrichResult: EnrichService.Result?
@@ -53,9 +55,7 @@ struct DeckDetailView: View {
 
             Section(tr("Слова", "Palavras", "Words") + " (\(notes.count))") {
                 ForEach(notes) { note in
-                    NavigationLink {
-                        NoteDetailView(note: note)
-                    } label: {
+                    NavigationLink(value: AppRoute.note(note.persistentModelID)) {
                         NoteRow(note: note)
                     }
                 }
@@ -76,9 +76,7 @@ struct DeckDetailView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            NavigationLink {
-                ReviewSessionView(deck: deck)
-            } label: {
+            NavigationLink(value: AppRoute.review(deck: deck.persistentModelID)) {
                 Label(tr("Учить этот набор", "Estudar este baralho", "Study this deck"),
                       systemImage: "play.fill")
                     .font(.app(.headline))
@@ -106,6 +104,9 @@ struct DeckDetailView: View {
                 return
             }
             enrichResult = EnrichService(context: context).enrich(deck: deck, with: track)
+        }
+        .sheet(item: $exportedFile) { file in
+            ShareSheet(url: file.url)
         }
         .alert(
             tr("Примеры добавлены", "Exemplos adicionados", "Examples added"),
@@ -135,7 +136,7 @@ struct DeckDetailView: View {
 
     private func export() {
         do {
-            onExport(ExportedFile(url: try ExportService(context: context).writeDeckFile(deck)))
+            exportedFile = ExportedFile(url: try ExportService(context: context).writeDeckFile(deck))
         } catch {
             exportError = error.localizedDescription
         }
@@ -173,8 +174,8 @@ struct NoteRow: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
-            DeckDetailView(deck: PreviewData.deck, onExport: { _ in })
+        RoutedStack {
+            DeckDetailView(deck: PreviewData.deck)
         }
         .previewEnvironment()
     }

@@ -25,9 +25,7 @@ struct AIKeysView: View {
 
             Section {
                 ForEach(AIProvider.allCases) { provider in
-                    NavigationLink {
-                        AIProviderKeyView(provider: provider, active: $active)
-                    } label: {
+                    NavigationLink(value: provider) {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(provider.displayName).font(.app(.body, weight: .bold))
@@ -58,6 +56,11 @@ struct AIKeysView: View {
         .themedScreen()
         .navigationTitle(tr("Ключи ИИ", "Chaves de IA", "AI keys"))
         .navigationBarTitleDisplayMode(.inline)
+        // Экран ключа меняет выбранного провайдера — ему нужна привязка,
+        // поэтому значение-провайдер разворачивается здесь, а не в AppRoute.
+        .navigationDestination(for: AIProvider.self) { provider in
+            AIProviderKeyView(provider: provider, active: $active)
+        }
         .onAppear { active = AIKeys.active }
     }
 
@@ -195,7 +198,7 @@ struct AIProviderKeyView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             AIKeysView()
         }
         .previewEnvironment()

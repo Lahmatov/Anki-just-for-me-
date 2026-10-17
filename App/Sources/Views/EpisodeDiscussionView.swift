@@ -31,7 +31,7 @@ struct EpisodeDiscussionView: View {
     }
 
     @Environment(\.modelContext) private var context
-    @State private var model: EpisodeDiscussionModel?
+    @State private var model: EpisodeDiscussionViewModel?
     @State private var pendingAI: (() -> Void)?
     @State private var deckResult: ImportResult?
     @FocusState private var inputFocused: Bool
@@ -56,7 +56,7 @@ struct EpisodeDiscussionView: View {
         .aiConsentAlert(pending: $pendingAI)
         .onAppear {
             guard model == nil else { return }
-            let created = EpisodeDiscussionModel(
+            let created = EpisodeDiscussionViewModel(
                 context: context, topic: topic, retelling: retelling, questions: questions)
             model = created
             AIConsent.run({ Task { await created.start() } }, pending: $pendingAI)
@@ -81,7 +81,7 @@ struct EpisodeDiscussionView: View {
     }
 
     @ViewBuilder
-    private func content(_ model: EpisodeDiscussionModel) -> some View {
+    private func content(_ model: EpisodeDiscussionViewModel) -> some View {
         VStack(spacing: 0) {
             ScrollViewReader { proxy in
                 ScrollView {
@@ -187,7 +187,7 @@ struct EpisodeDiscussionView: View {
     }
 
     @ViewBuilder
-    private func status(_ model: EpisodeDiscussionModel) -> some View {
+    private func status(_ model: EpisodeDiscussionViewModel) -> some View {
         switch model.step {
         case .notStarted, .thinking:
             HStack(spacing: 8) {
@@ -239,7 +239,7 @@ struct EpisodeDiscussionView: View {
 
     // MARK: - Ввод
 
-    private func inputBar(_ model: EpisodeDiscussionModel) -> some View {
+    private func inputBar(_ model: EpisodeDiscussionViewModel) -> some View {
         @Bindable var model = model
         return VStack(spacing: 6) {
             if model.step == .recording {
@@ -293,7 +293,7 @@ struct EpisodeDiscussionView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             EpisodeDiscussionView(episode: PreviewData.episode)
         }
         .previewEnvironment()
@@ -303,5 +303,5 @@ private struct Previews: View {
 #Preview("Светлая") { Previews() }
 #Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
 #Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
-#Preview("Урок") { NavigationStack { EpisodeDiscussionView(lesson: PreviewData.lessonTopic) }.previewEnvironment() }
+#Preview("Урок") { RoutedStack { EpisodeDiscussionView(lesson: PreviewData.lessonTopic) }.previewEnvironment() }
 #endif

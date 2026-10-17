@@ -286,15 +286,16 @@ struct IconBadge: View {
 }
 
 /// Строка-переход в виде карточки для экранов из карточек, а не списков.
-struct CardLink<Destination: View>: View {
+/// Переход — маршрутом через `NavigationPath` (ios-architecture, правило 2).
+struct CardLink: View {
     let title: String
     var subtitle: String?
     let systemImage: String
     var color: Color = Theme.primary
-    @ViewBuilder var destination: () -> Destination
+    let route: AppRoute
 
     var body: some View {
-        NavigationLink(destination: destination) {
+        NavigationLink(value: route) {
             HStack(spacing: 14) {
                 IconBadge(systemName: systemImage, color: color)
                 VStack(alignment: .leading, spacing: 2) {

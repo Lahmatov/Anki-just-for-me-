@@ -29,7 +29,7 @@ struct ImportPreviewView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             List {
                 if let cover = plan.coverURL.flatMap({ URL(string: $0) }) {
                     Section {

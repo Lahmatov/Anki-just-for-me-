@@ -179,7 +179,7 @@ struct SellerInfoView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             LegalDocumentView(kind: .privacy)
         }
         .previewEnvironment()

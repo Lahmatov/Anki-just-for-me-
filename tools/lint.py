@@ -340,7 +340,10 @@ def check_store_metadata():
 # Правила навыка ios-architecture: проверяются здесь, чтобы не держались
 # только на памяти того, кто пишет код.
 LEGACY_STATE = re.compile(r'\b(ObservableObject|@Published|@StateObject|@ObservedObject|@EnvironmentObject)\b')
-LEGACY_NAV = re.compile(r'\b(NavigationView|PreviewProvider)\b|NavigationLink\(destination:')
+LEGACY_NAV = re.compile(r'\b(NavigationView|PreviewProvider)\b|NavigationLink\(destination:|NavigationLink \{'
+                        r'|NavigationStack \{')
+# Единственный голый NavigationStack — внутри routedStack, на пути роутера.
+NAV_HOME = 'Router.swift'
 # Экраны-обёртки над UIKit: в Canvas без устройства они пусты или ходят в сеть.
 NO_PREVIEW_OK = ('DocumentCameraView.swift', 'ShareSheet.swift', 'YouGlishView.swift')
 
@@ -352,8 +355,10 @@ def check_architecture():
         name = os.path.basename(path)
         _, code = scan_literals(read(path))
         for regex, rule in ((LEGACY_STATE, 'вместо него @Observable'),
-                            (LEGACY_NAV, 'вместо него NavigationStack и #Preview')):
+                            (LEGACY_NAV, 'вместо него AppRoute + routedStack / RoutedStack, превью — #Preview')):
             for match in regex.finditer(code):
+                if name == NAV_HOME:
+                    continue
                 line = code.count('\n', 0, match.start()) + 1
                 problems.append(f"{name}:{line}: {match.group(0)} — {rule} (ios-architecture)")
         # @Observable без @MainActor — данные экрана меняются с любого потока.

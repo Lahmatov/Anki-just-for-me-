@@ -107,7 +107,7 @@ struct MinimalPairsView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             MinimalPairsView()
         }
         .previewEnvironment()

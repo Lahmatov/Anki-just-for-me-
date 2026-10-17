@@ -130,9 +130,7 @@ struct EpisodeView: View {
 
     /// Главная кнопка после просмотра: весь разбор серии в одном месте.
     private var recapButton: some View {
-        NavigationLink {
-            EpisodeRecapView(show: show, episode: episode)
-        } label: {
+        NavigationLink(value: AppRoute.episodeRecap(show: show.persistentModelID, episode)) {
             HStack(spacing: 14) {
                 MascotView(mood: recap.isComplete ? .cheer : .hello, size: 54)
                 VStack(alignment: .leading, spacing: 4) {
@@ -179,9 +177,7 @@ struct EpisodeView: View {
             .buttonStyle(.plain)
 
             if watched {
-                NavigationLink {
-                    RetellView(episode: episode)
-                } label: {
+                NavigationLink(value: AppRoute.retell(episode)) {
                     actionLabel(tr("Пересказать", "Recontar", "Retell it"),
                                 subtitle: tr("Расскажи, о чём была серия, — проверю понимание",
                                              "Conta de que tratou — verifico a compreensão",
@@ -190,9 +186,7 @@ struct EpisodeView: View {
                 }
                 .buttonStyle(.plain)
 
-                NavigationLink {
-                    EpisodeDiscussionView(episode: episode)
-                } label: {
+                NavigationLink(value: AppRoute.episodeChat(episode)) {
                     actionLabel(tr("Поговорить с Мончиком", "Conversar com o Monchik",
                                    "Chat with Monchik"),
                                 subtitle: tr("Шесть вопросов о серии, поправки по ходу",
@@ -236,7 +230,7 @@ struct EpisodeView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             EpisodeView(show: PreviewData.show, episode: PreviewData.episode)
         }
         .previewEnvironment()

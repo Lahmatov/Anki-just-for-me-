@@ -5,7 +5,6 @@ import AJFMCore
 /// Содержимое одной папки: вложенные папки и наборы. `folder == nil` — корень.
 struct FolderContentsView: View {
     let folder: Folder?
-    var onExport: (ExportedFile) -> Void
 
     @Environment(\.modelContext) private var context
     @State private var showDeckRequest = false
@@ -66,10 +65,7 @@ struct FolderContentsView: View {
             if !childFolders.isEmpty {
                 Section(tr("Папки", "Pastas", "Folders")) {
                     ForEach(childFolders) { child in
-                        NavigationLink {
-                            FolderContentsView(folder: child, onExport: onExport)
-                                .navigationTitle(child.name)
-                        } label: {
+                        NavigationLink(value: AppRoute.folder(child.persistentModelID)) {
                             HStack(spacing: 14) {
                                 IconBadge(systemName: "folder.fill", color: .blue)
                                 VStack(alignment: .leading, spacing: 2) {
@@ -89,9 +85,7 @@ struct FolderContentsView: View {
             if !decks.isEmpty {
                 Section(tr("Наборы", "Baralhos", "Decks")) {
                     ForEach(decks) { deck in
-                        NavigationLink {
-                            DeckDetailView(deck: deck, onExport: onExport)
-                        } label: {
+                        NavigationLink(value: AppRoute.deck(deck.persistentModelID)) {
                             DeckRow(deck: deck)
                         }
                     }
@@ -143,8 +137,8 @@ struct DeckRow: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
-            FolderContentsView(folder: nil, onExport: { _ in })
+        RoutedStack {
+            FolderContentsView(folder: nil)
         }
         .previewEnvironment()
     }

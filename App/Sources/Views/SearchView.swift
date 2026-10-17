@@ -47,9 +47,7 @@ struct SearchView: View {
 
             Section(tr("Найдено: ", "Encontradas: ", "Found: ") + "\(results.count)") {
                 ForEach(results) { note in
-                    NavigationLink {
-                        NoteDetailView(note: note)
-                    } label: {
+                    NavigationLink(value: AppRoute.note(note.persistentModelID)) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(note.term).fontWeight(.medium)
                             Text(note.translation)
@@ -126,9 +124,7 @@ struct NoteDetailView: View {
             }
 
             Section {
-                NavigationLink {
-                    YouGlishScreen(word: note.term)
-                } label: {
+                NavigationLink(value: AppRoute.youglish(word: note.term)) {
                     Label(tr("Как это звучит у людей", "Como soa na boca das pessoas",
                              "How real people say it"),
                           systemImage: "play.rectangle")
@@ -151,7 +147,7 @@ struct NoteDetailView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             SearchView()
         }
         .previewEnvironment()
@@ -161,5 +157,5 @@ private struct Previews: View {
 #Preview("Светлая") { Previews() }
 #Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
 #Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
-#Preview("Слово") { NavigationStack { NoteDetailView(note: PreviewData.note) }.previewEnvironment() }
+#Preview("Слово") { RoutedStack { NoteDetailView(note: PreviewData.note) }.previewEnvironment() }
 #endif

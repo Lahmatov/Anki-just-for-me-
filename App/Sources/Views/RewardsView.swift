@@ -355,7 +355,7 @@ struct NewContractView: View {
     @State private var deadline = Date().addingTimeInterval(60 * 86_400)
 
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             Form {
                 Section {
                     Stepper(tr("Цель: ", "Objetivo: ", "Goal: ") + Counted.words(goal),

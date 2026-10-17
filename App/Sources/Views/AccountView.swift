@@ -165,7 +165,7 @@ struct AccountView: View {
 
     /// Всё про аватарку в одной шторке: фото, Мончик, удалить.
     private var avatarSheet: some View {
-        NavigationStack {
+        RoutedStack {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
                     // PhotosPicker прямо на экране, а не через флаг: так окно
@@ -317,9 +317,7 @@ struct AccountView: View {
 
     private var plusSection: some View {
         Section {
-            NavigationLink {
-                PlusView()
-            } label: {
+            NavigationLink(value: AppRoute.plus) {
                 HStack(spacing: 14) {
                     IconBadge(systemName: "star.fill", color: Theme.gold)
                     VStack(alignment: .leading, spacing: 2) {
@@ -361,9 +359,7 @@ struct AccountView: View {
 
     private var aiKeysSection: some View {
         Section {
-            NavigationLink {
-                AIKeysView()
-            } label: {
+            NavigationLink(value: AppRoute.aiKeys) {
                 HStack(spacing: 14) {
                     IconBadge(systemName: "key.fill", color: Theme.blue)
                     VStack(alignment: .leading, spacing: 2) {
@@ -395,16 +391,12 @@ struct AccountView: View {
     private var dataSection: some View {
         Section {
             if RecapBackend.isConfigured {
-                NavigationLink {
-                    ServerDataView()
-                } label: {
+                NavigationLink(value: AppRoute.serverData) {
                     Label(tr("Мои данные на сервере", "Os meus dados no servidor", "My data on the server"),
                           systemImage: "server.rack")
                 }
             }
-            NavigationLink {
-                PrivacyView()
-            } label: {
+            NavigationLink(value: AppRoute.privacy) {
                 Label(tr("Конфиденциальность и удаление данных", "Privacidade e apagar dados",
                          "Privacy and data deletion"),
                       systemImage: "hand.raised")
@@ -423,16 +415,12 @@ struct AccountView: View {
     private var documentsSection: some View {
         Section(tr("Документы", "Documentos", "Documents")) {
             ForEach(LegalDocument.Kind.allCases) { kind in
-                NavigationLink {
-                    LegalDocumentView(kind: kind)
-                } label: {
+                NavigationLink(value: AppRoute.legal(kind)) {
                     Label(kind.title, systemImage: symbol(for: kind))
                 }
                 .accessibilityIdentifier("docs.\(kind.rawValue)")
             }
-            NavigationLink {
-                SellerInfoView()
-            } label: {
+            NavigationLink(value: AppRoute.sellerInfo) {
                 Label(tr("О продавце", "Sobre o vendedor", "About the trader"),
                       systemImage: "building.2")
             }
@@ -451,9 +439,7 @@ struct AccountView: View {
 
     private var supportSection: some View {
         Section {
-            NavigationLink {
-                MonchikHelpView()
-            } label: {
+            NavigationLink(value: AppRoute.help) {
                 Label("Monchik Help", systemImage: "questionmark.bubble")
             }
             .accessibilityIdentifier("profile.help")

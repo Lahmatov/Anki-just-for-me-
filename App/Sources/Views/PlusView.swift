@@ -71,12 +71,8 @@ struct PlusView: View {
                 .disabled(account.busy)
                 // Документы — прямо в приложении: правило 3.1.2 требует рабочих
                 // ссылок на экране подписки, и без сети они тоже должны открываться.
-                NavigationLink(LegalDocument.Kind.terms.title) {
-                    LegalDocumentView(kind: .terms)
-                }
-                NavigationLink(LegalDocument.Kind.privacy.title) {
-                    LegalDocumentView(kind: .privacy)
-                }
+                NavigationLink(LegalDocument.Kind.terms.title, value: AppRoute.legal(.terms))
+                NavigationLink(LegalDocument.Kind.privacy.title, value: AppRoute.legal(.privacy))
                 Link(tr("Стандартное лицензионное соглашение Apple", "Contrato de licença padrão da Apple",
                         "Apple's Standard License Agreement"),
                      destination: Self.termsURL)
@@ -218,7 +214,7 @@ struct PlusView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             PlusView()
         }
         .previewEnvironment()

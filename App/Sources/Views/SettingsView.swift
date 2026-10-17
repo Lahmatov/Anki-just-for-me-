@@ -34,7 +34,7 @@ struct SettingsView: View {
     private var speech: SpeechService { SpeechService.shared }
 
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             // На первом экране — то, что меняют все: язык, уровень, цель,
             // звук, напоминание. Лимиты FSRS, свой ключ Claude и облако
             // Postgres — для тех, кто знает, зачем они; им место глубже.
@@ -53,6 +53,7 @@ struct SettingsView: View {
             }
             .themedScreen()
             .navigationTitle(tr("Настройки", "Definições", "Settings"))
+            .navigationDestination(for: Route.self) { _ in advancedScreen }
             .fullScreenCover(item: $onboarding) { plan in
                 OnboardingView(plan: plan)
             }
@@ -67,9 +68,7 @@ struct SettingsView: View {
     /// Вход в личный кабинет — первой строкой, как принято в iOS.
     private var profileSection: some View {
         Section {
-            NavigationLink {
-                AccountView()
-            } label: {
+            NavigationLink(value: AppRoute.account) {
                 HStack(spacing: 14) {
                     AvatarView(size: 56)
                     VStack(alignment: .leading, spacing: 2) {
@@ -220,34 +219,13 @@ struct SettingsView: View {
 
     // MARK: - Для продвинутых
 
+    /// Экран «Для продвинутых» держит привязки к настройкам этого экрана,
+    /// поэтому он — свой маршрут вкладки, а не общий AppRoute.
+    enum Route: Hashable { case advanced }
+
     private var advancedSection: some View {
         Section {
-            NavigationLink {
-                Form {
-                    loadSection
-                    claudeSection
-                    Section {
-                        NavigationLink {
-                            LogView()
-                        } label: {
-                            Label(tr("Журнал событий", "Registo de eventos", "Event log"),
-                                  systemImage: "text.alignleft")
-                        }
-                    } footer: {
-                        Text(tr("Что происходило внутри приложения. Если что-то повело себя "
-                                    + "странно — журнал можно переслать одним нажатием, это "
-                                    + "быстрее любых описаний.",
-                                "O que aconteceu dentro da aplicação. Se algo se portou de forma "
-                                    + "estranha, o registo envia-se com um toque — é mais rápido "
-                                    + "do que qualquer descrição.",
-                                "What happened inside the app. If something behaved oddly, the log "
-                                    + "can be shared with one tap — faster than any description."))
-                    }
-                }
-                .themedScreen()
-                .navigationTitle(tr("Для продвинутых", "Avançado", "Advanced"))
-                .navigationBarTitleDisplayMode(.inline)
-            } label: {
+            NavigationLink(value: Route.advanced) {
                 Label(tr("Для продвинутых", "Avançado", "Advanced"), systemImage: "slider.horizontal.3")
             }
         } footer: {
@@ -255,6 +233,31 @@ struct SettingsView: View {
                     "Limites e algoritmo de revisão, chave própria do Claude, cópia na nuvem, registo.",
                     "Review limits and algorithm, your own Claude key, cloud backup, event log."))
         }
+    }
+
+    private var advancedScreen: some View {
+        Form {
+            loadSection
+            claudeSection
+            Section {
+                NavigationLink(value: AppRoute.log) {
+                    Label(tr("Журнал событий", "Registo de eventos", "Event log"),
+                          systemImage: "text.alignleft")
+                }
+            } footer: {
+                Text(tr("Что происходило внутри приложения. Если что-то повело себя "
+                            + "странно — журнал можно переслать одним нажатием, это "
+                            + "быстрее любых описаний.",
+                        "O que aconteceu dentro da aplicação. Se algo se portou de forma "
+                            + "estranha, o registo envia-se com um toque — é mais rápido "
+                            + "do que qualquer descrição.",
+                        "What happened inside the app. If something behaved oddly, the log "
+                            + "can be shared with one tap — faster than any description."))
+            }
+        }
+        .themedScreen()
+        .navigationTitle(tr("Для продвинутых", "Avançado", "Advanced"))
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     @ViewBuilder
@@ -374,9 +377,7 @@ struct SettingsView: View {
     private var claudeSection: some View {
         Section {
             // Ключи — в Профиле: там же выбор провайдера (Gemini, ChatGPT, Kimi…).
-            NavigationLink {
-                AIKeysView()
-            } label: {
+            NavigationLink(value: AppRoute.aiKeys) {
                 Label(tr("Ключи ИИ", "Chaves de IA", "AI keys"), systemImage: "key.fill")
             }
             Picker(tr("Наборы слов", "Baralhos", "Word decks"), selection: $deckModel) {
@@ -418,9 +419,7 @@ struct SettingsView: View {
 
     private var cloudSection: some View {
         Section {
-            NavigationLink {
-                CloudBackupView()
-            } label: {
+            NavigationLink(value: AppRoute.cloudBackup) {
                 LabeledContent {
                     Text(CloudBackupService.isConfigured
                          ? tr("включено", "ligada", "on")

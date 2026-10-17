@@ -55,9 +55,6 @@ struct ShowDetailView: View {
         .themedScreen()
         .navigationTitle(show.name)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationDestination(for: EpisodeContext.self) { episode in
-            EpisodeView(show: show, episode: episode)
-        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
@@ -103,7 +100,7 @@ struct ShowDetailView: View {
                     .foregroundStyle(Theme.muted)
                 ChunkyProgressBar(value: progress.fraction, height: 12)
                 if let next = progress.nextEpisode {
-                    NavigationLink(value: episodeContext(for: next)) {
+                    NavigationLink(value: AppRoute.episode(show: show.persistentModelID, episodeContext(for: next))) {
                         Label(tr("Дальше: ", "A seguir: ", "Next: ") + next.code,
                               systemImage: "play.fill")
                             .font(.app(.callout))
@@ -134,7 +131,7 @@ struct ShowDetailView: View {
             .accessibilityLabel(watched ? tr("Просмотрена", "Vista", "Watched")
                                         : tr("Не просмотрена", "Por ver", "Not watched"))
 
-            NavigationLink(value: episodeContext(for: episode)) {
+            NavigationLink(value: AppRoute.episode(show: show.persistentModelID, episodeContext(for: episode))) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(episode.code + (episode.name.isEmpty ? "" : " · " + episode.name))
                         .font(.app(.body, weight: watched ? .regular : .bold))
@@ -182,7 +179,7 @@ struct ShowDetailView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             ShowDetailView(show: PreviewData.show)
         }
         .previewEnvironment()

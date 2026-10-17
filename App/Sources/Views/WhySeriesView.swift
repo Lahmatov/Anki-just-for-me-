@@ -51,7 +51,7 @@ struct WhySeriesView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             WhySeriesView()
         }
         .previewEnvironment()

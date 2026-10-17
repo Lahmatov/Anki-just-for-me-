@@ -126,7 +126,7 @@ struct ServerDataView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             ServerDataView()
         }
         .previewEnvironment()

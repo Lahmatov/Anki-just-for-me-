@@ -30,9 +30,7 @@ struct LessonsMapView: View {
                         .foregroundStyle(Theme.muted)
                     ForEach(Array(path.steps.enumerated()), id: \.element.id) { index, step in
                         if let deck = decks[step.id] {
-                            NavigationLink {
-                                LessonHubView(deck: deck)
-                            } label: {
+                            NavigationLink(value: AppRoute.lesson(deck.persistentModelID)) {
                                 LessonNode(step: step, number: index + 1,
                                            isCurrent: step.id == path.current?.id)
                             }
@@ -141,7 +139,7 @@ private struct LessonNode: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             LessonsMapView()
         }
         .previewEnvironment()

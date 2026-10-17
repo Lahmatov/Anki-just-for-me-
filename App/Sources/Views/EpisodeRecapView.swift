@@ -35,6 +35,9 @@ struct EpisodeRecapView: View {
         .navigationTitle("Recap")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: refresh)
+        // Шаг сообщает о конце через замыкание — поэтому шаги разворачиваются
+        // здесь, а не в AppRoute: замыкание в NavigationPath не положить.
+        .navigationDestination(for: RecapStep.self, destination: stepScreen)
         .sheet(isPresented: $showDeckRequest, onDismiss: refresh) {
             DeckRequestView(initialTopic: "\(episode.showName) \(episode.episode.code)", episode: episode)
         }
@@ -71,13 +74,27 @@ struct EpisodeRecapView: View {
     // MARK: - Шаги
 
     @ViewBuilder
+    private func stepScreen(_ step: RecapStep) -> some View {
+        switch step {
+        case .words:
+            if let deck {
+                ReviewSessionView(deck: deck, limit: RecapPlan.words) { finish(.words) }
+            }
+        case .questions:
+            EpisodeDiscussionView(episode: episode, questions: EpisodeDiscussion.recapQuestions) {
+                finish(.questions)
+            }
+        case .retell:
+            RetellView(episode: episode) { finish(.retell) }
+        }
+    }
+
+    @ViewBuilder
     private var wordsStep: some View {
         let title = tr("\(RecapPlan.words) слов из серии", "\(RecapPlan.words) palavras do episódio",
                        "\(RecapPlan.words) words from the episode")
         if let deck {
-            NavigationLink {
-                ReviewSessionView(deck: deck, limit: RecapPlan.words) { finish(.words) }
-            } label: {
+            NavigationLink(value: RecapStep.words) {
                 stepCard(.words, number: 1, title: title,
                          subtitle: tr("Быстро повторить слова этой серии", "Rever depressa as palavras deste episódio",
                                       "A quick review of this episode's words"),
@@ -104,11 +121,7 @@ struct EpisodeRecapView: View {
     }
 
     private var questionsStep: some View {
-        NavigationLink {
-            EpisodeDiscussionView(episode: episode, questions: EpisodeDiscussion.recapQuestions) {
-                finish(.questions)
-            }
-        } label: {
+        NavigationLink(value: RecapStep.questions) {
             stepCard(.questions, number: 2,
                      title: tr("3 вопроса Мончика", "3 perguntas do Monchik", "3 questions from Monchik"),
                      subtitle: tr("Ответь голосом или текстом — поправлю по ходу",
@@ -121,9 +134,7 @@ struct EpisodeRecapView: View {
     }
 
     private var retellStep: some View {
-        NavigationLink {
-            RetellView(episode: episode) { finish(.retell) }
-        } label: {
+        NavigationLink(value: RecapStep.retell) {
             stepCard(.retell, number: 3,
                      title: tr("Пересказ", "Reconto", "Retelling"),
                      subtitle: tr("Расскажи серию своими словами — проверю понимание",
@@ -214,7 +225,7 @@ struct EpisodeRecapView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             EpisodeRecapView(show: PreviewData.show, episode: PreviewData.episode)
         }
         .previewEnvironment()

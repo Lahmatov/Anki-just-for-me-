@@ -11,7 +11,7 @@ struct RetellView: View {
     var onFinish: (() -> Void)?
 
     @Environment(\.modelContext) private var context
-    @State private var model: RetellFlowModel?
+    @State private var model: RetellViewModel?
     @State private var showSubtitleImporter = false
     @State private var importResult: ImportResult?
     @State private var pendingAI: (() -> Void)?
@@ -28,7 +28,7 @@ struct RetellView: View {
         .navigationTitle(tr("Пересказ", "Reconto", "Retelling"))
         .aiConsentAlert(pending: $pendingAI)
         .onAppear {
-            if model == nil { model = RetellFlowModel(context: context, episode: episode) }
+            if model == nil { model = RetellViewModel(context: context, episode: episode) }
         }
         .onChange(of: model?.step) { _, step in
             if step == .done { onFinish?() }
@@ -63,7 +63,7 @@ struct RetellView: View {
     }
 
     @ViewBuilder
-    private func content(_ model: RetellFlowModel) -> some View {
+    private func content(_ model: RetellViewModel) -> some View {
         List {
             subtitleSection(model)
 
@@ -103,7 +103,7 @@ struct RetellView: View {
     // MARK: - Шаги
 
     @ViewBuilder
-    private func subtitleSection(_ model: RetellFlowModel) -> some View {
+    private func subtitleSection(_ model: RetellViewModel) -> some View {
         Section {
             if let summary = model.subtitleSummary {
                 LabeledContent(tr("Субтитры", "Legendas", "Subtitles"), value: summary)
@@ -176,7 +176,7 @@ struct RetellView: View {
     }
 
     @ViewBuilder
-    private func recordSection(_ model: RetellFlowModel) -> some View {
+    private func recordSection(_ model: RetellViewModel) -> some View {
         Section {
             Button(tr("Начать пересказ", "Começar o reconto", "Start retelling"),
                    systemImage: "mic.circle.fill") {
@@ -195,7 +195,7 @@ struct RetellView: View {
     }
 
     @ViewBuilder
-    private func recordingSection(_ model: RetellFlowModel) -> some View {
+    private func recordingSection(_ model: RetellViewModel) -> some View {
         Section {
             HStack {
                 Image(systemName: "waveform")
@@ -222,7 +222,7 @@ struct RetellView: View {
     }
 
     @ViewBuilder
-    private func transcriptSection(_ model: RetellFlowModel) -> some View {
+    private func transcriptSection(_ model: RetellViewModel) -> some View {
         Section {
             TextEditor(text: Binding(
                 get: { model.transcript }, set: { model.transcript = $0 }))
@@ -258,7 +258,7 @@ struct RetellView: View {
     }
 
     @ViewBuilder
-    private func reportSections(_ report: RetellReport, model: RetellFlowModel) -> some View {
+    private func reportSections(_ report: RetellReport, model: RetellViewModel) -> some View {
         Section {
             HStack {
                 Text(tr("Понимание", "Compreensão", "Understanding"))
@@ -319,9 +319,7 @@ struct RetellView: View {
             .disabled(model.deckCandidateCount == 0)
 
             if let episode = model.episode {
-                NavigationLink {
-                    EpisodeDiscussionView(episode: episode, retelling: model.transcript)
-                } label: {
+                NavigationLink(value: AppRoute.episodeChat(episode, retelling: model.transcript)) {
                     Label(tr("Поговорить о серии с Мончиком", "Conversar sobre o episódio com o Monchik",
                              "Chat about the episode with Monchik"),
                           systemImage: "bubble.left.and.bubble.right.fill")
@@ -420,7 +418,7 @@ struct RetellView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             RetellView(episode: PreviewData.episode)
         }
         .previewEnvironment()

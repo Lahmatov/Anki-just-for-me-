@@ -23,7 +23,7 @@ struct DeckRequestView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
 
-    @State private var model: DeckRequestModel?
+    @State private var model: DeckRequestViewModel?
     @State private var plan: PendingImport?
     @State private var result: ImportResult?
     @State private var showSubtitlePicker = false
@@ -41,7 +41,7 @@ struct DeckRequestView: View {
     @State private var scanError: String?
 
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             Group {
                 if let result {
                     doneView(result)
@@ -64,7 +64,7 @@ struct DeckRequestView: View {
         }
         .onAppear {
             if model == nil {
-                let created = DeckRequestModel(context: context)
+                let created = DeckRequestViewModel(context: context)
                 if !initialTopic.isEmpty { created.topic = initialTopic }
                 created.episode = episode
                 if lessonMode { created.lesson = "" }
@@ -103,7 +103,7 @@ struct DeckRequestView: View {
     // MARK: - Урок (P-68)
 
     @ViewBuilder
-    private func lessonSection(_ model: DeckRequestModel) -> some View {
+    private func lessonSection(_ model: DeckRequestViewModel) -> some View {
         @Bindable var model = model
         Section {
             TextField(tr("Название (необязательно): «Урок 5»",
@@ -161,7 +161,7 @@ struct DeckRequestView: View {
     /// Фото страницы, снимки из галереи и PDF — текст распознаётся на телефоне
     /// и дописывается в поле, где его можно поправить до отправки.
     @ViewBuilder
-    private func scanButtons(_ model: DeckRequestModel) -> some View {
+    private func scanButtons(_ model: DeckRequestViewModel) -> some View {
         if scanning {
             HStack(spacing: 10) {
                 MonchikLoader()
@@ -191,7 +191,7 @@ struct DeckRequestView: View {
         }
     }
 
-    private func appendScan(_ model: DeckRequestModel, _ work: @escaping () async throws -> String) {
+    private func appendScan(_ model: DeckRequestViewModel, _ work: @escaping () async throws -> String) {
         scanning = true
         scanError = nil
         Task {
@@ -211,7 +211,7 @@ struct DeckRequestView: View {
     // MARK: - Форма
 
     @ViewBuilder
-    private func form(_ model: DeckRequestModel) -> some View {
+    private func form(_ model: DeckRequestViewModel) -> some View {
         @Bindable var model = model
         Form {
             if let movie = model.movie {
@@ -358,9 +358,7 @@ struct DeckRequestView: View {
                             .font(.app(.callout))
                     }
                     if model.needsPlan {
-                        NavigationLink {
-                            PlusView()
-                        } label: {
+                        NavigationLink(value: AppRoute.plus) {
                             Label(tr("Оформить Recap Plus или ввести промокод",
                                      "Obter o Recap Plus ou usar um código",
                                      "Get Recap Plus or use a promo code"),
@@ -492,7 +490,7 @@ struct DeckRequestView: View {
 
     /// Запуск и продолжение одного и того же запроса. Обрыв из-за
     /// свёрнутого приложения — не ошибка: ни вибрации, ни красного текста.
-    private func run(_ model: DeckRequestModel) {
+    private func run(_ model: DeckRequestViewModel) {
         Task {
             if let generated = await model.generate() {
                 Haptics.success()
@@ -510,7 +508,7 @@ struct DeckRequestView: View {
     }
 
     @ViewBuilder
-    private func submitButton(_ model: DeckRequestModel) -> some View {
+    private func submitButton(_ model: DeckRequestViewModel) -> some View {
         Button {
             Haptics.tap()
             topicFocused = false

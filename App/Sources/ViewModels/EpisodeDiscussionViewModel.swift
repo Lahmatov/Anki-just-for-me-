@@ -20,7 +20,7 @@ enum DiscussionTopic: Equatable {
 /// Ход разговора с Мончиком о серии или об уроке.
 @Observable
 @MainActor
-final class EpisodeDiscussionModel {
+final class EpisodeDiscussionViewModel {
 
     enum Step: Equatable {
         case notStarted

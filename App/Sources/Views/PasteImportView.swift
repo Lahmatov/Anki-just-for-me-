@@ -11,7 +11,7 @@ struct PasteImportView: View {
     @State private var text = ""
 
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             VStack(alignment: .leading) {
                 TextEditor(text: $text)
                     .font(.system(.footnote, design: .monospaced))

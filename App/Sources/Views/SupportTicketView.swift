@@ -8,32 +8,11 @@ import AJFMCore
 /// «Мои обращения», а если оставить почту — и письмом.
 struct SupportTicketView: View {
     @Environment(\.modelContext) private var context
-    @State private var category: SupportCategory = .question
-    @State private var message = ""
-    @State private var contact = ""
-    @State private var attachDiagnostics = true
-    @State private var sending = false
-    @State private var sent: BackendAPI.SupportTicket?
-    @State private var error: String?
-
-    private var diagnostics: [String: String] {
-        SupportDiagnostics.make(
-            appVersion: AccountView.version, systemVersion: UIDevice.current.systemVersion,
-            device: UIDevice.current.model, language: Loc.language,
-            studyLanguage: StudyLanguageStore.storedCurrent,
-            cards: try? context.fetchCount(FetchDescriptor<Card>()))
-            // Сводка сбоев за месяц от MetricKit — без стека и адресов (P-74).
-            .merging(DiagnosticsService.summary) { current, _ in current }
-    }
-
-    private var body_: BackendAPI.SupportTicketBody {
-        BackendAPI.SupportTicketBody(category: category, message: message, contact: contact,
-                                     diagnostics: attachDiagnostics ? diagnostics : nil)
-    }
+    @State private var model = SupportTicketViewModel()
 
     var body: some View {
         Form {
-            if let sent {
+            if let sent = model.sent {
                 Section {
                     MascotSays(mood: .cheer,
                                text: tr("Получил! Номер обращения \(sent.id). Ответ появится в «Мои обращения».",
@@ -45,7 +24,7 @@ struct SupportTicketView: View {
                 }
             } else {
                 Section(tr("О чём", "Sobre o quê", "About")) {
-                    Picker(tr("Тема", "Tema", "Topic"), selection: $category) {
+                    Picker(tr("Тема", "Tema", "Topic"), selection: $model.category) {
                         ForEach(SupportCategory.allCases) { item in
                             Label(item.title, systemImage: item.symbol).tag(item)
                         }
@@ -53,8 +32,10 @@ struct SupportTicketView: View {
                     .accessibilityIdentifier("support.category")
                 }
                 Section {
-                    TextEditor(text: $message)
-                        .frame(minHeight: 140)
+                    TextField(tr("Например: диктант молчит на iPad", "Por exemplo: o ditado não fala no iPad",
+                                 "For example: dictation is silent on iPad"),
+                              text: $model.message, axis: .vertical)
+                        .lineLimit(6...)
                         .accessibilityIdentifier("support.message")
                 } header: {
                     Text(tr("Что случилось", "O que aconteceu", "What happened"))
@@ -64,36 +45,33 @@ struct SupportTicketView: View {
                             "The more detail, the faster: what you did, expected and saw."))
                 }
                 Section {
-                    TextField(tr("Почта (необязательно)", "E-mail (opcional)", "E-mail (optional)"), text: $contact)
+                    TextField(tr("Почта (необязательно)", "E-mail (opcional)", "E-mail (optional)"), text: $model.contact)
                         .keyboardType(.emailAddress)
                         .textContentType(.emailAddress)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .accessibilityIdentifier("support.contact")
                     Toggle(tr("Приложить диагностику", "Anexar diagnóstico", "Attach diagnostics"),
-                           isOn: $attachDiagnostics)
+                           isOn: $model.attachDiagnostics)
                 } footer: {
-                    Text(attachDiagnostics
-                         ? tr("Уйдут: ", "Vai: ", "Sent: ") + diagnostics.sorted { $0.key < $1.key }
-                            .map { "\($0.key) \($0.value)" }.joined(separator: " · ")
+                    Text(model.attachDiagnostics
+                         ? tr("Уйдут: ", "Vai: ", "Sent: ") + model.diagnosticsSummary
                          : tr("Без диагностики, возможно, придётся переспросить версию.",
                               "Sem diagnóstico, talvez tenhamos de perguntar a versão.",
                               "Without diagnostics we may need to ask for your version."))
                 }
-                if let error {
+                if let error = model.error {
                     Section { Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(Theme.orange) }
                 }
                 Section {
-                    Button {
-                        Task { await send() }
-                    } label: {
+                    Button(action: send) {
                         HStack {
-                            if sending { MonchikLoader() }
+                            if model.sending { MonchikLoader() }
                             Text(tr("Отправить", "Enviar", "Send")).font(.app(.headline))
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    .disabled(!body_.isValid || sending)
+                    .disabled(!model.canSend)
                     .accessibilityIdentifier("support.send")
                 } footer: {
                     Text(tr("Обращение хранится год после ответа и удаляется вместе с данными. "
@@ -108,38 +86,28 @@ struct SupportTicketView: View {
         .themedScreen()
         .navigationTitle(tr("Поддержка", "Suporte", "Support"))
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear { model.loadDiagnostics(in: context) }
     }
 
-    private func send() async {
-        sending = true
-        error = nil
-        defer { sending = false }
-        do {
-            sent = try await RecapBackend.shared.support(body_)
-            AnalyticsService.track(.supportSent(category: category))
-            Haptics.success()
-        } catch {
-            Log.failure(.network, "Обращение в поддержку не ушло", error)
-            self.error = error.localizedDescription
-        }
+    private func send() {
+        Task { await model.send() }
     }
 }
 
 /// «Мои обращения»: номер, статус и ответ поддержки.
 struct SupportTicketsView: View {
-    @State private var tickets: [BackendAPI.SupportTicket]?
-    @State private var error: String?
+    @State private var model = SupportTicketsViewModel()
 
     var body: some View {
         List {
-            if let error {
+            if let error = model.error {
                 Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(Theme.orange)
             }
-            if let tickets, tickets.isEmpty {
+            if let tickets = model.tickets, tickets.isEmpty {
                 Text(tr("Обращений пока нет.", "Ainda não há pedidos.", "No requests yet."))
                     .foregroundStyle(Theme.muted)
             }
-            ForEach(tickets ?? []) { ticket in
+            ForEach(model.tickets ?? []) { ticket in
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
                         Label(ticket.kind.title, systemImage: ticket.kind.symbol)
@@ -170,26 +138,16 @@ struct SupportTicketsView: View {
         .themedScreen()
         .navigationTitle(tr("Мои обращения", "Os meus pedidos", "My requests"))
         .navigationBarTitleDisplayMode(.inline)
-        .overlay { if tickets == nil && error == nil { MonchikLoader(large: true) } }
-        .task { await load() }
-        .refreshable { await load() }
-    }
-
-    private func load() async {
-        do {
-            tickets = try await RecapBackend.shared.supportTickets()
-            error = nil
-        } catch {
-            self.error = error.localizedDescription
-            if tickets == nil { tickets = [] }
-        }
+        .overlay { if model.isLoading { MonchikLoader(large: true) } }
+        .task { await model.load() }
+        .refreshable { await model.load() }
     }
 }
 
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             SupportTicketView()
         }
         .previewEnvironment()

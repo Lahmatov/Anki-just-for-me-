@@ -7,7 +7,7 @@ import AJFMCore
 /// «Сделай набор по Friends 1x03» — прямо из приложения, без чата.
 @Observable
 @MainActor
-final class DeckRequestModel {
+final class DeckRequestViewModel {
 
     enum Step: Equatable {
         case editing

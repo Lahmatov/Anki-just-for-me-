@@ -15,7 +15,7 @@ struct ShowSearchView: View {
     @FocusState private var focused: Bool
 
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             List {
                 if let error {
                     Section { MascotSays(mood: .oops, text: error, size: 64) }

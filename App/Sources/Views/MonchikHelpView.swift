@@ -47,9 +47,7 @@ struct MonchikHelpView: View {
             contactSection
 
             Section {
-                NavigationLink {
-                    WhySeriesView()
-                } label: {
+                NavigationLink(value: AppRoute.whySeries) {
                     Label(tr("Почему сериалы работают", "Porque é que as séries funcionam",
                              "Why TV shows work"),
                           systemImage: "book.pages")
@@ -197,16 +195,12 @@ struct MonchikHelpView: View {
         Section {
             // Обращение через сервер (P-72): с номером, а ответ — здесь же.
             if RecapBackend.isConfigured {
-                NavigationLink {
-                    SupportTicketView()
-                } label: {
+                NavigationLink(value: AppRoute.supportTicket) {
                     Label(tr("Написать в поддержку", "Escrever ao suporte", "Contact support"),
                           systemImage: "bubble.left.and.text.bubble.right")
                 }
                 .accessibilityIdentifier("help.ticket")
-                NavigationLink {
-                    SupportTicketsView()
-                } label: {
+                NavigationLink(value: AppRoute.supportTickets) {
                     Label(tr("Мои обращения", "Os meus pedidos", "My requests"), systemImage: "tray.full")
                 }
                 .accessibilityIdentifier("help.tickets")
@@ -239,7 +233,7 @@ struct MonchikHelpView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             MonchikHelpView()
         }
         .previewEnvironment()

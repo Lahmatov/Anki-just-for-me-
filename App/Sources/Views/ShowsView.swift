@@ -13,7 +13,7 @@ struct ShowsView: View {
     @State private var showMovieSearch = false
 
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             ScrollView {
                 VStack(spacing: Design.stackSpacing) {
                     ScreenTitle(tr("Сериалы и фильмы", "Séries e filmes", "Shows & movies"))
@@ -55,8 +55,8 @@ struct ShowsView: View {
                         subtitle: tr("С субтитрами любой серии или фильма",
                                      "Com as legendas de qualquer episódio ou filme",
                                      "With subtitles of any episode or film"),
-                        systemImage: "text.bubble.fill", color: Theme.purple
-                    ) { RetellView() }
+                        systemImage: "text.bubble.fill", color: Theme.purple, route: .retell(nil)
+                    )
                     // Пары ship/sheep — английские; у других языков своих пар пока нет.
                     if StudyLanguageStore.shared.current == .english {
                         CardLink(
@@ -64,8 +64,8 @@ struct ShowsView: View {
                             subtitle: tr("ship или sheep — тренажёр произношения",
                                          "ship ou sheep — treino de pronúncia",
                                          "ship or sheep — pronunciation drill"),
-                            systemImage: "waveform", color: Theme.red
-                        ) { MinimalPairsView() }
+                            systemImage: "waveform", color: Theme.red, route: .minimalPairs
+                        )
                     }
                 }
                 .padding(.horizontal)
@@ -73,9 +73,6 @@ struct ShowsView: View {
             }
             .background(Theme.background.ignoresSafeArea())
             .tabRootTitle(tr("Сериалы и фильмы", "Séries e filmes", "Shows & movies"))
-            .navigationDestination(for: TrackedShow.self) { show in
-                ShowDetailView(show: show)
-            }
             .sheet(isPresented: $showSearch) {
                 ShowSearchView()
             }
@@ -120,7 +117,7 @@ private struct ShowCard: View {
 
     var body: some View {
         let progress = show.progress()
-        NavigationLink(value: show) {
+        NavigationLink(value: AppRoute.show(show.persistentModelID)) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .top, spacing: 14) {
                     if let url = show.posterURL.flatMap({ URL(string: $0) }) {

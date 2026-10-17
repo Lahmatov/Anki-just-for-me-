@@ -40,7 +40,7 @@ struct OnboardingView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             VStack(spacing: 0) {
                 if plan.count > 1 {
                     VStack(alignment: .trailing, spacing: 4) {
@@ -179,9 +179,7 @@ struct OnboardingView: View {
                 .font(.app(.body))
                 .foregroundStyle(Theme.muted)
                 .multilineTextAlignment(.center)
-            NavigationLink {
-                WhySeriesView()
-            } label: {
+            NavigationLink(value: AppRoute.whySeries) {
                 Label(tr("Почему это работает", "Porque é que funciona", "Why it works"),
                       systemImage: "book.pages")
                     .font(.app(.callout, weight: .bold))

@@ -21,17 +21,15 @@ struct LessonHubView: View {
                 CardLink(title: tr("Карточки урока", "Cartões da aula", "Lesson cards"),
                          subtitle: tr("Повторения по расписанию", "Revisões no tempo certo",
                                       "Spaced reviews"),
-                         systemImage: "rectangle.stack.fill", color: Theme.primary) {
-                    ReviewSessionView(deck: deck)
-                }
+                         systemImage: "rectangle.stack.fill", color: Theme.primary,
+                         route: .review(deck: deck.persistentModelID))
                 .accessibilityIdentifier("lesson.review")
 
                 CardSectionHeader(title: tr("Тренажёры", "Treinos", "Trainers"))
                 ForEach(LessonDrill.availableModes(notes: notes)) { mode in
                     CardLink(title: mode.title, subtitle: Self.subtitle(mode),
-                             systemImage: Self.symbol(mode), color: Self.color(mode)) {
-                        LessonDrillView(notes: notes, mode: mode)
-                    }
+                             systemImage: Self.symbol(mode), color: Self.color(mode),
+                             route: .lessonDrill(deck.persistentModelID, mode))
                     .accessibilityIdentifier("lesson.drill.\(mode.rawValue)")
                 }
                 let verbs = ConjugationDrill.verbs(notes: notes, language: language)
@@ -39,18 +37,16 @@ struct LessonHubView: View {
                     CardLink(title: tr("Спряжение", "Conjugação", "Conjugation"),
                              subtitle: Counted.words(verbs.count) + " · "
                                 + Tense.allCases.map { $0.title(for: language) }.joined(separator: ", "),
-                             systemImage: "list.bullet.indent", color: Theme.orange) {
-                        ConjugationDrillView(verbs: verbs)
-                    }
+                             systemImage: "list.bullet.indent", color: Theme.orange,
+                             route: .conjugation(verbs: verbs))
                     .accessibilityIdentifier("lesson.conjugation")
                 }
 
                 CardSectionHeader(title: tr("Проверка", "Verificação", "Check"))
                 CardLink(title: tr("Мини-тест", "Mini-teste", "Mini quiz"),
                          subtitle: quizSubtitle,
-                         systemImage: "checkmark.seal.fill", color: Theme.green) {
-                    LessonQuizView(deck: deck)
-                }
+                         systemImage: "checkmark.seal.fill", color: Theme.green,
+                         route: .lessonQuiz(deck.persistentModelID))
                 .accessibilityIdentifier("lesson.quiz")
 
                 CardSectionHeader(title: tr("Речь", "Fala", "Speaking"))
@@ -58,17 +54,15 @@ struct LessonHubView: View {
                          subtitle: tr("Скажи вслух — посчитаю, какие слова урока прозвучали",
                                       "Diz em voz alta — conto as palavras da aula que usaste",
                                       "Say it out loud — I'll count the lesson words you used"),
-                         systemImage: "mic.fill", color: Theme.red) {
-                    LessonSpeakView(deck: deck, notes: notes)
-                }
+                         systemImage: "mic.fill", color: Theme.red,
+                         route: .lessonSpeak(deck.persistentModelID))
                 .accessibilityIdentifier("lesson.speak")
                 CardLink(title: tr("Разговор с Мончиком", "Conversa com o Monchik", "Chat with Monchik"),
                          subtitle: tr("Вопросы, на которые отвечаешь словами урока",
                                       "Perguntas para responder com as palavras da aula",
                                       "Questions you answer with the lesson's words"),
-                         systemImage: "bubble.left.and.bubble.right.fill", color: Theme.blue) {
-                    EpisodeDiscussionView(lesson: LessonTopic(deck: deck, notes: notes))
-                }
+                         systemImage: "bubble.left.and.bubble.right.fill", color: Theme.blue,
+                         route: .lessonChat(deck.persistentModelID))
                 .accessibilityIdentifier("lesson.chat")
             }
             .padding(.horizontal)
@@ -170,7 +164,7 @@ struct LessonTopic: Equatable, Hashable {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             LessonHubView(deck: PreviewData.lessonDeck)
         }
         .previewEnvironment()

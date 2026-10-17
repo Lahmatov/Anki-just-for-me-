@@ -64,42 +64,50 @@ final class LessonHubViewModel {
   или `AppSettings`.
 - Модели, которым нужен `ModelContext`, создаются в `.task {}` экрана
   (контекст из `@Environment(\.modelContext)` в `init` ещё недоступен) —
-  как `ReviewSessionModel` в `ReviewSessionView`.
+  как `ReviewSessionViewModel` в `ReviewSessionView`.
 
 ## Правило 2. Навигация — `NavigationStack` + `NavigationPath`
 
+Устроено в `App/Sources/Navigation/`:
+
+- `AppRoute` — все экраны, куда переходят внутри стека. В значениях только
+  `Hashable`-данные: `PersistentIdentifier` записи, `EpisodeContext`, строки.
+  Ни записей SwiftData, ни замыканий.
+- `AppRouteView` — экран по маршруту; запись достаёт по идентификатору
+  из базы текущего языка, удалённая — экран «уже удалено».
+- `Router` (`@Observable @MainActor`) — `NavigationPath` одного стека,
+  `push(_:)`, `popToRoot()`. Лежит в окружении: `@Environment(Router.self)`.
+- `.routedStack(router)` — корень стека: `NavigationStack(path:)`, все
+  `AppRoute` и роутер в окружении. `RoutedStack { … }` — то же со своим
+  роутером для листов и превью.
+
 ```swift
-enum ShowsRoute: Hashable {
-    case show(TrackedShow.ID)
-    case episode(TrackedShow.ID, season: Int, episode: Int)
-}
+// Переход по нажатию
+NavigationLink(value: AppRoute.deck(deck.persistentModelID)) { DeckRow(deck: deck) }
+CardLink(title: "…", systemImage: "chart.bar.fill", route: .stats)
 
-struct ShowsView: View {
-    @State private var path = NavigationPath()
+// Переход из кода
+@Environment(Router.self) private var router
+router.push(.review(deck: deck.persistentModelID))
 
-    var body: some View {
-        NavigationStack(path: $path) {
-            List(shows) { show in
-                NavigationLink(value: ShowsRoute.show(show.id)) { ShowRow(show: show) }
-            }
-            .navigationDestination(for: ShowsRoute.self, destination: destination)
-        }
-    }
+// Корень вкладки, которому самому нужно переходить
+@State private var router = Router()
+var body: some View { content.routedStack(router) }
 
-    @ViewBuilder
-    private func destination(_ route: ShowsRoute) -> some View { ... }
-}
+// Лист со своим стеком
+.sheet(isPresented: $showPlus) { RoutedStack { PlusView() } }
 ```
 
 - Никогда: `NavigationView`, `NavigationLink(destination:)`,
-  `NavigationLink { … } label: { … }` в новом коде.
-- Маршрут — `enum …Route: Hashable` рядом с корнем стека; в маршрут кладём
-  идентификатор (`PersistentIdentifier`, `UUID`), а не сам `@Model`.
-- `navigationDestination(for:)` — один раз на тип в одном стеке. Не смешивать
-  в одном стеке ссылки по значению и ссылки с замыканием.
-- Путь стека — `@State` в корне вкладки: вкладки навигируют независимо.
-- Листы и полноэкранные окна — `sheet(item:)` / `fullScreenCover(item:)`,
-  внутри — свой `NavigationStack`, если нужны переходы.
+  `NavigationLink { экран } label: { … }`, голый `NavigationStack` без пути.
+- Экрану нужно замыкание или привязка (сообщить «шаг пройден», выбрать
+  провайдера) — свой маленький `Hashable`-маршрут и `navigationDestination(for:)`
+  в том экране, который их держит: `RecapStep` в `EpisodeRecapView`,
+  `AIProvider` в `AIKeysView`, `SettingsView.Route`. В `AppRoute` замыкание
+  не положить.
+- `navigationDestination(for:)` — один раз на тип в одном стеке.
+- Путь — в `@State` корня вкладки: вкладки навигируют независимо.
+- Новый экран: case в `AppRoute`, строка в `AppRouteView`, превью.
 
 ## Правило 3. View — раскладка, ViewModel — логика
 
@@ -157,7 +165,7 @@ private struct Previews: View {
 
 1. Логика — в `Core/` (с тестом) или в `…ViewModel` (`@Observable @MainActor`).
 2. View без логики; действия — методы модели.
-3. Переходы — `NavigationLink(value:)` + `navigationDestination(for:)`.
+3. Переходы — case в `AppRoute` + `NavigationLink(value:)` или `router.push`.
 4. Тексты — `tr()`, числа — `FormatStyle`.
 5. Превью: `private struct Previews: View` + `#Preview`, два состояния.
 6. `accessibilityIdentifier` на том, что трогают UI-тесты.

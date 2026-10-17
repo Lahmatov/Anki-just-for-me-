@@ -309,15 +309,13 @@ struct RootView: View {
     }
 
     private var decksTab: some View {
-        NavigationStack {
-            FolderContentsView(folder: nil, onExport: { exportedFile = $0 })
+        RoutedStack {
+            FolderContentsView(folder: nil)
                 .tabRootTitle(AppTab.decks.title)
                 .toolbar { toolbar }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        NavigationLink {
-                            SearchView()
-                        } label: {
+                        NavigationLink(value: AppRoute.search) {
                             Image(systemName: "magnifyingglass")
                         }
                     }

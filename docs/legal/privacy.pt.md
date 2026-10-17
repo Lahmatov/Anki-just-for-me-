@@ -20,7 +20,7 @@ acesso a isso:
 - recontos e as respetivas análises;
 - objetivos, recompensas e definições;
 - o nome do perfil e a foto do avatar;
-- chaves da API e a ligação à nuvem (no Keychain do iOS).
+- chaves da API e o token do dispositivo para o servidor Recap (no Keychain do iOS).
 
 As fotos e os PDF das aulas são lidos no telemóvel (Vision da Apple) e não são enviados;
 só segue o texto que vês no campo e podes corrigir.

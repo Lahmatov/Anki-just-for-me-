@@ -578,6 +578,22 @@ py-fsrs. Проверено перегенерацией векторов — ф
   (StoreKit не ответил) сервер не выключает. Список — `RegionPolicy`, одна
   строка на страну.
 
+- **P-79. Навыки iOS, MVVM и навигация через NavigationPath.** Правила
+  владельца (MVVM на `@Observable`, `NavigationStack` + `NavigationPath`, View без
+  логики, превью с mock-данными) собраны в `.claude/skills/ios-architecture`
+  вместе с тремя навыками из открытых источников (SwiftUI Pro, ios-design-skills,
+  iOS Claude Code setup) и частично проверяются `tools/lint.py`. Навигация: один
+  `AppRoute` на всё приложение, `Router` с путём на каждый стек (`routedStack`,
+  `RoutedStack`); в маршруте — идентификаторы записей, не записи. Экраны,
+  которым нужно замыкание или привязка, держат свой маленький маршрут рядом
+  (`RecapStep`, `AIProvider`, `SettingsView.Route`). Цель iOS остаётся 26:
+  «минимум iOS 17» владельца относится к тому, чтобы не требовать новых API
+  без нужды, — опустить цель значило бы отказаться от Liquid Glass и Declared
+  Age Range. ViewModel — в `App/Sources/ViewModels/`, контекст базы приходит
+  параметром метода (модель живёт в `@State`, а окружение доступно только в
+  `body`). Превью — `private struct Previews: View` + `#Preview` под `#if DEBUG`
+  на данных `PreviewData` (база в памяти).
+
 ## Открытые — решаем по ходу
 
 ### D-6. Вход через Apple и Google — что с ним делать ✅ решено в P-44

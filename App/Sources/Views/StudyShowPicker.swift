@@ -23,7 +23,7 @@ struct StudyShowPicker: View {
         if embedded {
             content
         } else {
-            NavigationStack {
+            RoutedStack {
                 ScrollView { content.padding() }
                     .background(Theme.background.ignoresSafeArea())
                     .navigationTitle(tr("Какой сериал учим?", "Que série estudamos?", "Which show?"))

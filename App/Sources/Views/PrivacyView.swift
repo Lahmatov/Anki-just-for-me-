@@ -10,13 +10,7 @@ import AJFMCore
 /// Опубликованная копия — docs/privacy-policy.md.
 struct PrivacyView: View {
     @Environment(\.modelContext) private var context
-
-    @State private var confirmErase = false
-    @State private var eraseCloud = true
-    @State private var erasing = false
-    @State private var erased = false
-    @State private var eraseError: String?
-    @State private var aiConsent = AIConsent.isGiven
+    @State private var model = PrivacyViewModel()
 
     /// Публичный адрес политики — для App Store Connect. В приложении
     /// политика открывается текстом из ресурсов (`LegalDocumentView`).
@@ -37,11 +31,12 @@ struct PrivacyView: View {
 
             Section(tr("Что хранится", "O que é guardado", "What is stored")) {
                 point("iphone", tr("Только на телефоне: слова, карточки, история повторов, "
-                                      + "пересказы, цели и настройки. Аккаунтов нет.",
+                                      + "пересказы, цели и настройки. Аккаунт — по желанию, "
+                                      + "только вход через Apple.",
                                    "Só no telemóvel: palavras, cartões, histórico, recontos, "
-                                      + "objetivos e definições. Não há contas.",
+                                      + "objetivos e definições. A conta é opcional, só com a Apple.",
                                    "On the phone only: words, cards, review history, retellings, "
-                                      + "goals and settings. There are no accounts."))
+                                      + "goals and settings. An account is optional — Sign in with Apple only."))
                 point("mic", tr("Запись голоса для произношения и пересказа не сохраняется: "
                                    + "из неё берётся только текст. Распознавание идёт на "
                                    + "телефоне, где iOS это умеет; иначе — сервисом Apple.",
@@ -51,9 +46,9 @@ struct PrivacyView: View {
                                 "Voice recordings aren't kept — only the text is used. "
                                    + "Recognition runs on the phone where iOS supports it; "
                                    + "otherwise Apple's service handles it."))
-                point("key", tr("Ключи API и строка подключения к облаку — в Keychain.",
-                                "As chaves da API e a ligação à nuvem ficam no Keychain.",
-                                "API keys and the cloud connection string are kept in the Keychain."))
+                point("key", tr("Ключи API и токен устройства — в Keychain, только на этом телефоне.",
+                                "As chaves da API e o token do dispositivo ficam no Keychain, só neste telemóvel.",
+                                "API keys and the device token stay in the Keychain, on this phone only."))
             }
 
             Section(tr("Что и куда уходит", "O que sai e para onde", "What leaves the phone")) {
@@ -100,8 +95,8 @@ struct PrivacyView: View {
 
             Section {
                 Toggle(tr("Разрешить отправку в Claude", "Permitir envio ao Claude",
-                          "Allow sending to Claude"), isOn: $aiConsent)
-                    .onChange(of: aiConsent) { _, value in AIConsent.isGiven = value }
+                          "Allow sending to Claude"), isOn: $model.aiConsent)
+                    .onChange(of: model.aiConsent) { _, value in model.aiConsentChanged(value) }
             } footer: {
                 Text(tr("Без разрешения наборы через Claude и разборы пересказов спросят "
                             + "его перед отправкой.",
@@ -111,9 +106,7 @@ struct PrivacyView: View {
             }
 
             Section {
-                NavigationLink {
-                    LegalDocumentView(kind: .privacy)
-                } label: {
+                NavigationLink(value: AppRoute.legal(.privacy)) {
                     Label(tr("Полный текст политики", "Texto completo da política",
                              "Full privacy policy"),
                           systemImage: "doc.text")
@@ -122,21 +115,21 @@ struct PrivacyView: View {
 
             Section {
                 Button(role: .destructive) {
-                    confirmErase = true
+                    model.confirmErase = true
                 } label: {
                     HStack {
                         Label(tr("Удалить все данные", "Apagar todos os dados", "Delete all data"),
                               systemImage: "trash")
-                        if erasing {
+                        if model.erasing {
                             Spacer()
                             MonchikLoader()
                         }
                     }
                 }
-                .disabled(erasing)
-                if RecapBackend.isConfigured {
+                .disabled(model.erasing)
+                if model.serverAvailable {
                     Toggle(tr("И копии в облаке", "E as cópias na nuvem", "And the cloud copies"),
-                           isOn: $eraseCloud)
+                           isOn: $model.eraseCloud)
                 }
             } footer: {
                 Text(tr("Удаляются слова, прогресс, цели, расходы, ключи, настройки и бэкапы. "
@@ -152,15 +145,13 @@ struct PrivacyView: View {
         .navigationBarTitleDisplayMode(.inline)
         .confirmationDialog(
             tr("Удалить все данные?", "Apagar todos os dados?", "Delete all data?"),
-            isPresented: $confirmErase, titleVisibility: .visible
+            isPresented: $model.confirmErase, titleVisibility: .visible
         ) {
             Button(tr("Удалить навсегда", "Apagar para sempre", "Delete forever"),
-                   role: .destructive) {
-                Task { await erase() }
-            }
+                   role: .destructive, action: erase)
             Button(CommonText.cancel, role: .cancel) {}
         }
-        .alert(tr("Готово", "Feito", "Done"), isPresented: $erased) {
+        .alert(tr("Готово", "Feito", "Done"), isPresented: $model.erased) {
             Button(CommonText.ok) {}
         } message: {
             Text(tr("Все данные удалены. Приложение как после установки.",
@@ -168,8 +159,8 @@ struct PrivacyView: View {
                     "All data deleted. The app is as good as freshly installed."))
         }
         .alert(CommonText.failedTitle,
-               isPresented: Binding(get: { eraseError != nil }, set: { if !$0 { eraseError = nil } }),
-               presenting: eraseError) { _ in
+               isPresented: $model.isShowingError,
+               presenting: model.eraseError) { _ in
             Button(CommonText.gotIt) {}
         } message: { Text($0) }
     }
@@ -182,56 +173,15 @@ struct PrivacyView: View {
         }
     }
 
-    private func erase() async {
-        erasing = true
-        defer { erasing = false }
-        // Облако — первым: после удаления токена устройства снимки на сервере не найти.
-        if eraseCloud, RecapBackend.isConfigured {
-            do {
-                try await CloudBackupService(context: context).eraseAll()
-            } catch {
-                Log.failure(.backup, "Снимки в облаке не удалились", error)
-                eraseError = tr("Копии в облаке не удалились: \(error.localizedDescription). "
-                                    + "Локальные данные не тронуты — попробуй ещё раз.",
-                                "As cópias na nuvem não foram apagadas: \(error.localizedDescription). "
-                                    + "Os dados locais estão intactos — tenta de novo.",
-                                "Cloud copies weren't deleted: \(error.localizedDescription). "
-                                    + "Local data is untouched — try again.")
-                return
-            }
-        }
-        // Сервер Recap — тоже до ключей: без токена устройство там не найти.
-        // Сначала аккаунт (с отзывом входа у Apple), потом само устройство.
-        if RecapBackend.isConfigured {
-            do {
-                try await RecapAccount.shared.deleteAccountIfSignedIn()
-                try await RecapBackend.shared.forgetDevice()
-            } catch {
-                Log.failure(.network, "Устройство на сервере Recap не удалилось", error)
-                eraseError = tr("Данные на сервере Recap не удалились: \(error.localizedDescription). "
-                                    + "Локальные данные не тронуты — попробуй ещё раз.",
-                                "Os dados no servidor Recap não foram apagados: \(error.localizedDescription). "
-                                    + "Os dados locais estão intactos — tenta de novo.",
-                                "Recap server data wasn't deleted: \(error.localizedDescription). "
-                                    + "Local data is untouched — try again.")
-                return
-            }
-        }
-        do {
-            try DataEraseService(context: context).eraseEverythingLocal()
-            Haptics.success()
-            erased = true
-        } catch {
-            Log.failure(.app, "Данные не удалились", error)
-            eraseError = error.localizedDescription
-        }
+    private func erase() {
+        Task { await model.erase(in: context) }
     }
 }
 
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             PrivacyView()
         }
         .previewEnvironment()

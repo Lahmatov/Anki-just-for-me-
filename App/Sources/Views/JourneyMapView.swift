@@ -24,7 +24,7 @@ struct JourneyMapView: View {
     @State private var matureWords = 0
     @State private var selected: ShowPathEpisode?
     @State private var pendingAction: StepAction?
-    @State private var destination: MapDestination?
+    @Environment(Router.self) private var router
     @State private var deckRequest: EpisodeRequest?
     @State private var showPicker = false
     @State private var loaded = false
@@ -76,12 +76,6 @@ struct JourneyMapView: View {
         }
         .sheet(item: $deckRequest, onDismiss: { load(scrollWith: nil) }) { request in
             DeckRequestView(initialTopic: request.topic, episode: request.episode)
-        }
-        .navigationDestination(item: $destination) { target in
-            switch target {
-            case .review(let deck): ReviewSessionView(deck: deck)
-            case .episode(let show, let episode): EpisodeView(show: show, episode: episode)
-            }
         }
     }
 
@@ -326,7 +320,7 @@ struct JourneyMapView: View {
         switch action {
         case .study(let episode):
             if let deck = StudyShow.deck(for: episode.key, showName: path.name, in: context) {
-                destination = .review(deck)
+                router.push(.review(deck: deck.persistentModelID))
             }
         case .addCatalogWords(let episode):
             do {
@@ -342,7 +336,7 @@ struct JourneyMapView: View {
                                          episode: episodeContext(episode.key))
         case .open(let episode):
             if let tracked, let context = episodeContext(episode.key) {
-                destination = .episode(tracked, context)
+                router.push(.episode(show: tracked.persistentModelID, context))
             }
         }
     }
@@ -574,11 +568,6 @@ enum StepAction: Equatable {
     case open(ShowPathEpisode)
 }
 
-enum MapDestination: Hashable {
-    case review(Deck)
-    case episode(TrackedShow, EpisodeContext)
-}
-
 struct EpisodeRequest: Identifiable {
     let id = UUID()
     let topic: String
@@ -659,9 +648,7 @@ struct JourneyCard: View {
     var path: ShowPath?
 
     var body: some View {
-        NavigationLink {
-            JourneyMapView()
-        } label: {
+        NavigationLink(value: AppRoute.journeyMap) {
             HStack(spacing: 14) {
                 ladder
                 VStack(alignment: .leading, spacing: 6) {
@@ -742,7 +729,7 @@ struct JourneyCard: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             JourneyMapView()
         }
         .previewEnvironment()

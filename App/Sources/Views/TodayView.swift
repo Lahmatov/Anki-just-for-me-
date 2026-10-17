@@ -32,7 +32,8 @@ struct TodayView: View {
     @State private var journey: JourneyPosition?
     @State private var showPath: ShowPath?
     @State private var lessonPath: LessonPath?
-    @State private var isSessionActive = false
+    /// Путь вкладки: «Начать» кладёт в него сессию повторения.
+    @State private var router = Router()
     @State private var showDeckRequest = false
     @State private var starterFailed = false
 
@@ -45,78 +46,76 @@ struct TodayView: View {
     @State private var loaded = false
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: Design.stackSpacing) {
-                    HStack(alignment: .center) {
-                        ScreenTitle(tr("Сегодня", "Hoje", "Today"))
-                        StudyLanguageMenu()
-                    }
-                    MascotSays(mood: mood, text: greeting)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    if noteCount == 0 {
-                        emptyCard
-                    } else if let summary, !summary.isEmpty {
-                        dueCard(summary)
-                    }
-
-                    if noteCount > 0 {
-                        goalCard
-                        if let journey { JourneyCard(position: journey, path: showPath) }
-                    }
-
-                    if let streak, streak.days > 0 {
-                        streakCard(streak)
-                    }
-
-                    lessonsLink
-
-                    if noteCount > 0 {
-                        progressCard
-                        CardLink(
-                            title: tr("Награды и цели", "Recompensas e objetivos", "Rewards and goals"),
-                            subtitle: tr("Цель с призом, неделя и достижения",
-                                         "Objetivo com prémio, semana e conquistas",
-                                         "A goal with a prize, the week and achievements"),
-                            systemImage: "trophy.fill", color: Theme.gold
-                        ) { RewardsView() }
-                        .accessibilityIdentifier("today.rewards")
-                        CardSectionHeader(title: tr("Разбор", "Análise", "Insights"))
-                        CardLink(
-                            title: tr("Графики и прогноз нагрузки", "Gráficos e previsão",
-                                      "Charts and forecast"),
-                            subtitle: tr("Сколько карточек ждёт в ближайшие дни",
-                                         "Quantos cartões esperam nos próximos dias",
-                                         "How many cards are coming up in the next days"),
-                            systemImage: "chart.bar.fill", color: .indigo
-                        ) { StatsView() }
-                        CardLink(
-                            title: tr("Трудные карточки", "Cartões difíceis", "Difficult cards"),
-                            subtitle: tr("Слова, которые не держатся в памяти",
-                                         "Palavras que não ficam na memória",
-                                         "Words that won't stick"),
-                            systemImage: "exclamationmark.triangle.fill", color: .orange
-                        ) { DifficultCardsView() }
-                    }
+        ScrollView {
+            VStack(spacing: Design.stackSpacing) {
+                HStack(alignment: .center) {
+                    ScreenTitle(tr("Сегодня", "Hoje", "Today"))
+                    StudyLanguageMenu()
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 24)
+                MascotSays(mood: mood, text: greeting)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                if noteCount == 0 {
+                    emptyCard
+                } else if let summary, !summary.isEmpty {
+                    dueCard(summary)
+                }
+
+                if noteCount > 0 {
+                    goalCard
+                    if let journey { JourneyCard(position: journey, path: showPath) }
+                }
+
+                if let streak, streak.days > 0 {
+                    streakCard(streak)
+                }
+
+                lessonsLink
+
+                if noteCount > 0 {
+                    progressCard
+                    CardLink(
+                        title: tr("Награды и цели", "Recompensas e objetivos", "Rewards and goals"),
+                        subtitle: tr("Цель с призом, неделя и достижения",
+                                     "Objetivo com prémio, semana e conquistas",
+                                     "A goal with a prize, the week and achievements"),
+                        systemImage: "trophy.fill", color: Theme.gold, route: .rewards
+                    )
+                    .accessibilityIdentifier("today.rewards")
+                    CardSectionHeader(title: tr("Разбор", "Análise", "Insights"))
+                    CardLink(
+                        title: tr("Графики и прогноз нагрузки", "Gráficos e previsão",
+                                  "Charts and forecast"),
+                        subtitle: tr("Сколько карточек ждёт в ближайшие дни",
+                                     "Quantos cartões esperam nos próximos dias",
+                                     "How many cards are coming up in the next days"),
+                        systemImage: "chart.bar.fill", color: .indigo, route: .stats
+                    )
+                    CardLink(
+                        title: tr("Трудные карточки", "Cartões difíceis", "Difficult cards"),
+                        subtitle: tr("Слова, которые не держатся в памяти",
+                                     "Palavras que não ficam na memória",
+                                     "Words that won't stick"),
+                        systemImage: "exclamationmark.triangle.fill", color: .orange,
+                        route: .difficultCards
+                    )
+                }
             }
-            .background(Theme.background.ignoresSafeArea())
-            .tabRootTitle(tr("Сегодня", "Hoje", "Today"))
-            .navigationDestination(isPresented: $isSessionActive) {
-                ReviewSessionView(deck: nil)
-            }
-            .sheet(isPresented: $showDeckRequest, onDismiss: refresh) {
-                DeckRequestView()
-            }
-            .onAppear(perform: refresh)
-            .onChange(of: isSessionActive) { _, active in
-                if !active { refresh() }
-            }
-            .onChange(of: refreshToken) { _, _ in refresh() }
+            .padding(.horizontal)
+            .padding(.bottom, 24)
         }
+        .background(Theme.background.ignoresSafeArea())
+        .tabRootTitle(tr("Сегодня", "Hoje", "Today"))
+        .sheet(isPresented: $showDeckRequest, onDismiss: refresh) {
+            DeckRequestView()
+        }
+        .onAppear(perform: refresh)
+        // Вернулись к корню вкладки (с сессии, наград, карты) — цифры свежие.
+        .onChange(of: router.path) { _, path in
+            if path.isEmpty { refresh() }
+        }
+        .onChange(of: refreshToken) { _, _ in refresh() }
+        .routedStack(router)
     }
 
     // MARK: - Главная карточка
@@ -151,7 +150,7 @@ struct TodayView: View {
 
             Button {
                 Haptics.tap()
-                isSessionActive = true
+                router.push(.review(deck: nil))
             } label: {
                 Label(tr("Учить", "Estudar", "Study"), systemImage: "play.fill")
                     .font(.app(.headline))
@@ -240,9 +239,7 @@ struct TodayView: View {
                           "Paste your lesson notes — get cards and trainers")
         }
         return CardLink(title: tr("Мои уроки", "As minhas aulas", "My lessons"), subtitle: subtitle,
-                        systemImage: "graduationcap.fill", color: Theme.purple) {
-            LessonsMapView()
-        }
+                        systemImage: "graduationcap.fill", color: Theme.purple, route: .lessonsMap)
         .accessibilityIdentifier("today.lessons")
     }
 

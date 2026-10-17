@@ -201,29 +201,10 @@ struct StatsView: View {
     }
 }
 
-/// Ежедневный снимок прогресса.
-@MainActor
-enum SnapshotService {
-    static func recordIfNeeded(context: ModelContext, now: Date = Date()) {
-        let existing = (try? context.fetch(FetchDescriptor<ProgressSnapshot>())) ?? []
-        let today = Calendar.current.startOfDay(for: now)
-        guard !existing.contains(where: {
-            Calendar.current.isDate($0.date, inSameDayAs: today)
-        }) else { return }
-
-        let progress = ProgressService(context: context)
-        context.insert(ProgressSnapshot(
-            date: today,
-            matureWords: progress.matureWordCount(),
-            totalWords: (try? context.fetch(FetchDescriptor<Note>()))?.count ?? 0))
-        try? context.save()
-    }
-}
-
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             StatsView()
         }
         .previewEnvironment()
@@ -233,5 +214,5 @@ private struct Previews: View {
 #Preview("Светлая") { Previews() }
 #Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
 #Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
-#Preview("Пусто") { NavigationStack { StatsView() }.previewEnvironment(empty: true) }
+#Preview("Пусто") { RoutedStack { StatsView() }.previewEnvironment(empty: true) }
 #endif

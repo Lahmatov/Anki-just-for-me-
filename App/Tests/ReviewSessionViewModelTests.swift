@@ -4,13 +4,13 @@ import AJFMCore
 @testable import AJFM
 
 @MainActor
-final class ReviewSessionModelTests: XCTestCase {
+final class ReviewSessionViewModelTests: XCTestCase {
 
     private func makeSession(
         cardTypes: [CardType] = [.recall],
         notes: [NoteData]? = nil,
         settings: AppSettings = AppSettings.default
-    ) throws -> (ModelContext, ReviewSessionModel) {
+    ) throws -> (ModelContext, ReviewSessionViewModel) {
         let context = try TestDB.makeContext()
         let importer = ImportService(context: context)
         let payload = notes ?? [
@@ -19,7 +19,7 @@ final class ReviewSessionModelTests: XCTestCase {
         try importer.apply(try importer.makePlan(
             from: TestDB.deckFile(cardTypes: cardTypes, notes: payload)))
 
-        let model = ReviewSessionModel(context: context, settings: settings)
+        let model = ReviewSessionViewModel(context: context, settings: settings)
         model.load()
         return (context, model)
     }
@@ -37,7 +37,7 @@ final class ReviewSessionModelTests: XCTestCase {
 
     func testEmptyDatabaseGivesFinishedSession() throws {
         let context = try TestDB.makeContext()
-        let model = ReviewSessionModel(context: context)
+        let model = ReviewSessionViewModel(context: context)
         model.load()
         XCTAssertTrue(model.isFinished)
         XCTAssertNil(model.current)

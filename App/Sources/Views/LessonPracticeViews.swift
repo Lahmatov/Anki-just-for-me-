@@ -370,9 +370,7 @@ struct LessonSpeakView: View {
                     .font(.app(.callout))
                     .foregroundStyle(Theme.muted)
             }
-            NavigationLink {
-                EpisodeDiscussionView(lesson: LessonTopic(deck: deck, notes: notes), retelling: transcript)
-            } label: {
+            NavigationLink(value: AppRoute.lessonChat(deck.persistentModelID, retelling: transcript)) {
                 Label(tr("Обсудить с Мончиком", "Conversar com o Monchik", "Discuss with Monchik"),
                       systemImage: "bubble.left.and.bubble.right.fill")
                     .font(.app(.headline))
@@ -411,7 +409,7 @@ struct LessonSpeakView: View {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             LessonQuizView(deck: PreviewData.lessonDeck)
         }
         .previewEnvironment()
@@ -421,5 +419,5 @@ private struct Previews: View {
 #Preview("Светлая") { Previews() }
 #Preview("Тёмная") { Previews().preferredColorScheme(.dark) }
 #Preview("Крупный шрифт") { Previews().dynamicTypeSize(.accessibility3) }
-#Preview("Спряжение") { NavigationStack { ConjugationDrillView(verbs: ["go", "travel"]) }.previewEnvironment() }
+#Preview("Спряжение") { RoutedStack { ConjugationDrillView(verbs: ["go", "travel"]) }.previewEnvironment() }
 #endif

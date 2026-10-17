@@ -20,7 +20,7 @@ access to it:
 - retellings and their reviews;
 - goals, rewards and settings;
 - your profile name and avatar photo;
-- API keys and the cloud connection string (in the iOS Keychain).
+- API keys and the device token for the Recap server (in the iOS Keychain).
 
 Photos and PDFs of lessons are read on your phone (Apple Vision) and never sent; only
 the text you see in the field, and can edit, goes further.

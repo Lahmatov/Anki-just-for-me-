@@ -20,7 +20,7 @@ struct EpisodeContext: Equatable, Hashable {
 /// Состояние процесса «пересказал серию — получил разбор».
 @Observable
 @MainActor
-final class RetellFlowModel {
+final class RetellViewModel {
 
     enum Step: Equatable {
         case needsSubtitles

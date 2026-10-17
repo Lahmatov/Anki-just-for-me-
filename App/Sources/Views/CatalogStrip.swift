@@ -19,9 +19,7 @@ struct CatalogStrip: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(alignment: .top, spacing: 12) {
                             ForEach(shows) { show in
-                                NavigationLink {
-                                    CatalogShowView(entry: show)
-                                } label: {
+                                NavigationLink(value: AppRoute.catalogShow(resource: show.resource)) {
                                     CatalogTile(entry: show)
                                 }
                                 .buttonStyle(.plain)

@@ -19,7 +19,7 @@ struct PlacementTestView: View {
     @State private var picked: String?
 
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             Group {
                 if !started {
                     introView

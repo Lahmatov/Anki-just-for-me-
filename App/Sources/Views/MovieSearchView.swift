@@ -15,7 +15,7 @@ struct MovieSearchView: View {
     @State private var picked: Movie?
 
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             List {
                 if let error {
                     Section { MascotSays(mood: .oops, text: error, size: 64) }

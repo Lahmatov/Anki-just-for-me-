@@ -13,7 +13,7 @@ struct ReviewSessionView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var model: ReviewSessionModel?
+    @State private var model: ReviewSessionViewModel?
     /// Счётчик ответов — будит реакцию Мончика даже на два одинаковых вердикта подряд.
     @State private var reactions = 0
     /// Растёт на единицу с каждым неверным ответом: одно покачивание карточки.
@@ -53,7 +53,7 @@ struct ReviewSessionView: View {
         }
         .onAppear {
             if model == nil {
-                let created = ReviewSessionModel(context: context)
+                let created = ReviewSessionViewModel(context: context)
                 created.load(deck: deck, limit: limit)
                 model = created
                 liveActivity.start(deckName: deck?.name ?? tr("Повторение", "Revisão", "Review"),
@@ -68,7 +68,7 @@ struct ReviewSessionView: View {
     }
 
     @ViewBuilder
-    private func sessionBody(_ model: ReviewSessionModel) -> some View {
+    private func sessionBody(_ model: ReviewSessionViewModel) -> some View {
         VStack(spacing: 0) {
             VStack(spacing: 6) {
                 ChunkyProgressBar(value: model.progress)
@@ -120,7 +120,7 @@ struct ReviewSessionView: View {
     /// Слой управления сессией. Стекло — только здесь, над карточкой:
     /// сама карточка — содержимое и остаётся плотной.
     @ViewBuilder
-    private func footer(_ model: ReviewSessionModel) -> some View {
+    private func footer(_ model: ReviewSessionViewModel) -> some View {
         let hasControls = model.isRevealed
             || model.current?.type.requiresTyping == true
             || model.current?.type == .pronunciation
@@ -132,7 +132,7 @@ struct ReviewSessionView: View {
     }
 
     @ViewBuilder
-    private func footerContent(_ model: ReviewSessionModel) -> some View {
+    private func footerContent(_ model: ReviewSessionViewModel) -> some View {
         VStack(spacing: 10) {
             if model.isRevealed {
                 GradeButtons(model: model)
@@ -165,7 +165,7 @@ struct ReviewSessionView: View {
     /// Счёт сессии — рядом с полосой прогресса, а не в стеклянном подвале:
     /// под стеклом мелкий серый текст сливается с карточкой, которая
     /// прокручивается под ним.
-    private func sessionCaption(_ model: ReviewSessionModel) -> some View {
+    private func sessionCaption(_ model: ReviewSessionViewModel) -> some View {
         HStack(spacing: 12) {
             Text("\(model.index + 1) " + tr("из", "de", "of") + " \(model.cards.count)")
                 .contentTransition(.numericText())
@@ -196,7 +196,7 @@ struct ReviewSessionView: View {
 
 struct CardPromptView: View {
     let card: Card
-    let model: ReviewSessionModel
+    let model: ReviewSessionViewModel
 
     private var note: Note? { card.note }
 
@@ -400,7 +400,7 @@ struct CardPromptView: View {
 }
 
 struct GradeButtons: View {
-    let model: ReviewSessionModel
+    let model: ReviewSessionViewModel
 
     /// Оценку, которую подсказывает проверка ответа, выделяем плотным стеклом —
     /// выбор остаётся за человеком, но очевидный вариант под пальцем.
@@ -599,7 +599,7 @@ private struct FlipOnReveal: ViewModifier {
 #if DEBUG
 private struct Previews: View {
     var body: some View {
-        NavigationStack {
+        RoutedStack {
             ReviewSessionView(deck: PreviewData.deck, limit: 5)
         }
         .previewEnvironment()
