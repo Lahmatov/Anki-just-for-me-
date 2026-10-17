@@ -198,7 +198,15 @@ public enum BackendAPI {
             self.episode = episode
             self.language = language.rawValue
             self.level = level?.rawValue
-            self.turns = turns.compactMap { turn in
+            self.turns = Self.wire(turns)
+            let trimmed = retelling?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            self.retelling = trimmed.isEmpty ? nil : String(trimmed.prefix(4_000))
+        }
+
+        /// Реплики для сервера: у Мончика — как есть, с подписью, у ученика —
+        /// без пустых и не длиннее предела.
+        static func wire(_ turns: [EpisodeDiscussion.Turn]) -> [Turn] {
+            turns.compactMap { turn in
                 // Реплику Мончика нельзя менять ни на символ: подпись сервера
                 // сделана по точному тексту.
                 if turn.speaker == .monchik {
@@ -208,8 +216,32 @@ public enum BackendAPI {
                 guard !text.isEmpty else { return nil }
                 return Turn(speaker: turn.speaker.rawValue, text: String(text.prefix(600)), sig: nil)
             }
-            let trimmed = retelling?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            self.retelling = trimmed.isEmpty ? nil : String(trimmed.prefix(4_000))
+        }
+    }
+
+    /// Разговор об уроке (P-69): вместо номера серии — название и слова урока.
+    public struct LessonChatBody: Encodable, Equatable, Sendable {
+        public var title: String
+        public var terms: [String]
+        public var language: String
+        public var target: String?
+        public var level: String?
+        public var turns: [DiscussBody.Turn]
+        public var retelling: String?
+        public var questions: Int?
+
+        public init(title: String, terms: [String], language: AppLanguage, level: CEFRLevel?,
+                    turns: [EpisodeDiscussion.Turn], retelling: String?, questions: Int? = nil,
+                    target: StudyLanguage = .english) {
+            self.title = LessonChat.cleanTitle(title)
+            self.terms = LessonChat.cleanTerms(terms)
+            self.language = language.rawValue
+            self.target = target == .english ? nil : target.rawValue
+            self.level = level?.rawValue
+            self.turns = DiscussBody.wire(turns)
+            let told = (retelling ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            self.retelling = told.isEmpty ? nil : told.prefix(utf16: LessonChat.retellingLimit)
+            self.questions = questions.map(EpisodeDiscussion.clampedLimit)
         }
     }
 

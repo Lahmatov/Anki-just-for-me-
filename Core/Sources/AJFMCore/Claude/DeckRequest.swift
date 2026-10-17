@@ -66,6 +66,15 @@ public struct DeckRequest: Equatable, Sendable {
     public static let lessonLimit = 30_000
     /// Папка уроков — на языке интерфейса, как и другие папки.
     public static var lessonFolder: String { tr("Уроки", "Aulas", "Lessons") }
+    /// Папка урока называется на языке интерфейса в момент создания —
+    /// поэтому урок узнаётся по любому из трёх названий.
+    public static let lessonFolderNames: Set<String> = ["Уроки", "Aulas", "Lessons"] // lint: не интерфейс
+
+    /// Набор — урок, если лежит в папке уроков (или в её подпапке).
+    public static func isLessonFolder(_ path: String?) -> Bool {
+        guard let top = path?.split(separator: "/").first else { return false }
+        return lessonFolderNames.contains(top.trimmingCharacters(in: .whitespaces))
+    }
 
     public init(
         topic: String, subtitles: String? = nil, wordCount: Int = DeckRequest.defaultWordCount,

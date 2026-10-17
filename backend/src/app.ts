@@ -17,7 +17,8 @@ import {
   HELP_QUESTION_LIMIT, HELP_SCHEMA, KNOWN_TERMS_LIMIT, helpSystem, helpUserMessage, parseHelpReply,
   LANGUAGES, LEVELS, LESSON_LIMIT, LESSON_SCHEMA, MAX_LEARNER_TURNS, TARGETS, lessonDeckFile, lessonSystem,
   lessonUserMessage, deckFile, deckSystem, deckUserMessage, movieDeckFile,
-  discussionMessages, discussionSystem, estimateTokens, parseDeckNotes, parseDiscussionReply,
+  discussionMessages, discussionSystem, lessonChatSystem, LESSON_CHAT_TERMS, LESSON_CHAT_TITLE,
+  LESSON_CHAT_RETELLING, estimateTokens, parseDeckNotes, parseDiscussionReply,
   type Turn,
 } from "./prompts";
 import { PaidModelError, type ClaudeCall } from "./claude";
@@ -54,6 +55,7 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
       case "POST /v1/deck": return await deck(request, env, deps);
       case "POST /v1/lesson": return await lesson(request, env, deps);
       case "POST /v1/discuss": return await discuss(request, env, deps);
+      case "POST /v1/lesson/chat": return await lessonChat(request, env, deps);
       case "POST /v1/help": return await help(request, env, deps);
       case "GET /v1/catalog": return await catalog(request, env, deps);
       case "GET /v1/backups": return await backups(request, env, deps, url);
@@ -566,7 +568,7 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
   const questions = body.questions === undefined
     ? MAX_LEARNER_TURNS : int(body, "questions", 1, MAX_LEARNER_TURNS);
   const turns = parseTurns(body.turns, questions);
-  await verifyTurns(env, device.id, showId, season, episode, turns);
+  await verifyTurns(env, device.id, episodeScope(showId, season, episode), turns);
 
   // Разговор — только о серии, к которой уже взяты слова: так подписка
   // тратится на изучение сериалов, а не на чат обо всём.
@@ -590,7 +592,48 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
   });
   const reply = parseDiscussionReply(result.text);
   if (!reply) throw new ApiError(502, "model_error");
-  const turnSig = await turnSignature(env, device.id, showId, season, episode, turns.length, reply.reply);
+  const turnSig = await turnSignature(env, device.id, episodeScope(showId, season, episode),
+    turns.length, reply.reply);
+  return json({ ...reply, turnSig,
+                plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) });
+}
+
+/**
+ * Разговор с Мончиком об уроке (P-69). Урок живёт только на телефоне,
+ * поэтому сервер получает его название и слова и подписывает реплики
+ * вместе с ними: историю чужого урока к этому не подставить. Тема одна —
+ * урок; три разговора об одном уроке в день, как у серии.
+ */
+async function lessonChat(request: Request, env: Env, deps: Deps): Promise<Response> {
+  const { device, entitlement } = await context(request, env, deps);
+  const now = deps.now();
+  const active = requireActive(entitlement, now);
+  const body = await readJson(request, 60_000);
+  const title = str(body, "title", LESSON_CHAT_TITLE);
+  const terms = stringList(body, "terms", LESSON_CHAT_TERMS, 80);
+  if (terms.length === 0) throw new ApiError(400, "invalid_field", "terms");
+  const language = oneOf(body, "language", LANGUAGES)!;
+  const target = oneOf(body, "target", TARGETS, true) ?? "en";
+  const level = oneOf(body, "level", LEVELS, true);
+  const retelling = optionalStr(body, "retelling", LESSON_CHAT_RETELLING);
+  const questions = body.questions === undefined
+    ? MAX_LEARNER_TURNS : int(body, "questions", 1, MAX_LEARNER_TURNS);
+  const turns = parseTurns(body.turns, questions);
+  const scope = lessonScope(title, terms);
+  await verifyTurns(env, device.id, scope, turns);
+
+  await limitAI(env, device, now);
+  const topic = (await hmacHex(env.PROMO_PEPPER, scope)).slice(0, 16);
+  await hit(env.DB, `lchat:${device.id}:${topic}`, (MAX_LEARNER_TURNS + 1) * 3, 86_400, now);
+  const result = await callWithQuota(env, deps, device, active, "lesson_chat", {
+    system: lessonChatSystem({ title, terms, language, target, level, retelling }),
+    messages: discussionMessages(turns, questions),
+    maxTokens: DISCUSSION_MAX_TOKENS,
+    schema: DISCUSSION_SCHEMA as unknown as Record<string, unknown>,
+  });
+  const reply = parseDiscussionReply(result.text);
+  if (!reply) throw new ApiError(502, "model_error");
+  const turnSig = await turnSignature(env, device.id, scope, turns.length, reply.reply);
   return json({ ...reply, turnSig,
                 plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) });
 }
@@ -602,19 +645,28 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
  * свою реплику вместе с устройством, серией и местом в разговоре и не
  * принимает историю, где хоть одна реплика Мончика не его.
  */
-async function turnSignature(env: Env, deviceId: string, showId: number, season: number,
-                             episode: number, index: number, text: string): Promise<string> {
-  return hmacHex(env.PROMO_PEPPER, `turn|${deviceId}|${showId}|${season}|${episode}|${index}|${text}`);
+async function turnSignature(env: Env, deviceId: string, scope: string, index: number,
+                             text: string): Promise<string> {
+  return hmacHex(env.PROMO_PEPPER, `turn|${deviceId}|${scope}|${index}|${text}`);
 }
 
-async function verifyTurns(env: Env, deviceId: string, showId: number, season: number,
-                           episode: number, turns: Turn[]): Promise<void> {
+/** О чём разговор: у серии — её номер (та же строка, что до уроков, —
+ *  старые подписи остаются верными), у урока — его название и слова. */
+function episodeScope(showId: number, season: number, episode: number): string {
+  return `${showId}|${season}|${episode}`;
+}
+
+function lessonScope(title: string, terms: string[]): string {
+  return `lesson|${JSON.stringify([title, terms])}`;
+}
+
+async function verifyTurns(env: Env, deviceId: string, scope: string, turns: Turn[]): Promise<void> {
   for (const [index, turn] of turns.entries()) {
     // Порядок строгий: Мончик, ученик, Мончик… и последним — ученик.
     const expected = index % 2 === 0 ? "monchik" : "learner";
     if (turn.speaker !== expected) throw new ApiError(400, "turns_tampered");
     if (turn.speaker !== "monchik") continue;
-    const signature = await turnSignature(env, deviceId, showId, season, episode, index, turn.text);
+    const signature = await turnSignature(env, deviceId, scope, index, turn.text);
     if (!turn.sig || !constantTimeEqual(signature, turn.sig)) {
       throw new ApiError(400, "turns_tampered");
     }
