@@ -81,7 +81,7 @@ struct StatsView: View {
 
                 LabeledContent(
                     tr("В среднем в день", "Média por dia", "Average per day"),
-                    value: String(format: "%.0f", Forecast.averagePerDay(days)))
+                    value: Forecast.averagePerDay(days).formatted(.number.precision(.fractionLength(0))))
                     .font(.app(.caption))
                 if let peak {
                     LabeledContent(

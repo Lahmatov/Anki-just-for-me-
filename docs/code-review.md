@@ -1,0 +1,95 @@
+# Ревью iOS-кода по навыкам проекта
+
+_Октябрь 2026. Проверка по `.claude/skills/` (`ios-architecture`, `swiftui-review`,
+`ios-polish`, `ios-verify`) всего `App/Sources`. Ниже — что исправлено сразу
+и что осталось, по важности. Новые нарушения части правил ловит `tools/lint.py`._
+
+## Итог
+
+| Правило | Было | Стало |
+|---|---|---|
+| `@Observable` вместо `ObservableObject` | нарушений нет | нарушений нет, lint следит |
+| `@MainActor` у `@Observable` | все 16 классов с ним | lint следит |
+| Нет `NavigationView` | нарушений нет | lint следит |
+| `NavigationStack` + `NavigationPath` | 17 стеков без пути, 50 переходов замыканиями, смесь `navigationDestination(for:)` и ссылок-замыканий в стеке «Сериалы» | все стеки на пути (`Router`), все переходы — значения (`AppRoute`); lint запрещает старое |
+| View — раскладка, ViewModel — логика | 4 модели экранов, логика базы и сети в 28 экранах | 10 ViewModel в `App/Sources/ViewModels/`; остальное — ниже |
+| Превью с mock-данными | 0 | 54 экрана: светлая, тёмная, крупный шрифт, крайние состояния; `PreviewData`; lint требует превью у нового экрана |
+
+## Исправлено в этом ревью
+
+**Навигация** (`App/Sources/Navigation/`)
+- `AppRoute` + `AppRouteView` + `Router`; `CardLink` принимает маршрут.
+- Стек «Сериалы» смешивал `navigationDestination(for: TrackedShow)` с ссылками-
+  замыканиями во вложенных экранах — SwiftUI в таком стеке теряет переходы.
+  Теперь всё через `AppRoute`.
+- «Сегодня»: сессия и обновление цифр — через путь вкладки, без флага
+  `isSessionActive`. Карта — `router.push` вместо `navigationDestination(item:)`.
+- Экспорт набора больше не протаскивается замыканием через все папки:
+  экран набора сам показывает «Поделиться».
+
+**MVVM**
+- Прежние модели переименованы и перенесены: `ReviewSessionViewModel`,
+  `DeckRequestViewModel`, `EpisodeDiscussionViewModel`, `RetellViewModel`.
+- Новые: `CloudBackupViewModel`, `PrivacyViewModel`, `QuickAddViewModel`
+  (с тестами), `SupportTicketViewModel`, `SupportTicketsViewModel`,
+  `ShowSearchViewModel`. `SnapshotService` вынесен из файла экрана в сервисы.
+
+**Производительность**
+- Поддержка: диагностика (запрос числа карточек в базе) считалась на каждый
+  проход `body`, дважды за проход. Теперь — один раз при открытии.
+- Поиск сериала: запрос в базу «уже добавлен?» на каждую строку при каждой
+  перерисовке. Теперь — множество id, считается вместе с результатами.
+
+**Правильность и тексты**
+- Экран «Конфиденциальность» и политика на трёх языках обещали «аккаунтов нет»
+  и «строку подключения к облаку» — устарело (вход через Apple есть, Neon убран, P-56).
+- Сохранение слова молча глотало ошибку базы (`try?`) — теперь человек видит причину.
+
+**Современные API (SwiftUI Pro)**
+- `DispatchQueue.main.async(After)` → `Task` + `Task.sleep(for:)` (3 места).
+- `ScrollView(showsIndicators: false)` → `.scrollIndicators(.hidden)` (3).
+- `String(format: "$%.2f")` → `Money.usd` (FormatStyle, по языку интерфейса,
+  с тестами): «0,25 US$» на португальском вместо «$0.25». Длительность —
+  `Duration.formatted`, числа — `.number.precision`.
+- `replacingOccurrences` → `replacing`; `fontWeight(.bold)` → `bold()`.
+- `onTapGesture` у строки минимальных пар → `Button`; у строки журнала и
+  праздника — признаки и действие для VoiceOver.
+- Меню «…» и поиск — с текстовой подписью, а не одной иконкой (VoiceOver,
+  Voice Control).
+
+## Осталось — по важности
+
+1. **MVVM, крупные экраны.** Логика базы и сети ещё в `body` и методах View:
+   - `RootView` — импорт, восстановление, бэкап файлом;
+   - `DeckRequestView` — у него есть ViewModel, но разбор PDF, сканера и
+     предпросмотра остался в экране;
+   - `TodayView` — `refresh()` собирает очередь, серию, цель, карту;
+   - `JourneyMapView`, `DeckDetailView`, `AIKeysView` / `AIProviderKeyView`,
+     `EpisodeView`, `AccountView`.
+
+   План: по одному экрану за изменение, каждый — с тестом ViewModel в `App/Tests`
+   и прогоном Devices. Порядок: `TodayView` (главный экран, больше всего логики),
+   `RootView`, `DeckDetailView`, `AIKeysView`, `JourneyMapView`.
+2. **`Binding(get:set:)` в `body`** (10 мест: алерты `isPresented` от
+   необязательного значения). Решение — вычисляемое свойство в ViewModel,
+   как `isRestorePending` в `CloudBackupViewModel`; уйдёт вместе с пунктом 1.
+3. **Отклик.** `Haptics.*` на `UIFeedbackGenerator` — переводить на
+   `.sensoryFeedback(_:trigger:)` по ходу правок экранов (`ios-polish`).
+4. **Тело экрана из `var …: some View`.** SwiftUI Pro советует отдельные
+   `struct`. В проекте это повсеместно и читается; выносить, когда секция
+   превышает ~60 строк или переиспользуется.
+5. **iPhone Duo.** Раскладка держится на ширине (`readableColumn`), но на iPhone
+   только портретная ориентация. Решить по скриншотам Duo из Devices; при
+   переходе на Xcode 27 — проверить вертикальную панель (`AppTabBar` — своя,
+   система её не переносит).
+6. **Мелочи.** `Date()` → `Date.now` (68 мест) — по ходу правок, отдельным
+   изменением не стоит.
+
+## Не находки
+
+- `BarMark.cornerRadius` — API Charts, не устаревший `View.cornerRadius`.
+- `Task.detached` в `LessonScanner` — распознавание Vision тяжёлое, ему место
+  вне главного потока.
+- Свой `AppTabBar` вместо `TabView` — решение P-28/P-49 (живёт только открытая вкладка).
+- `String(format: "%02x")` в хеше и `String(format:)` в журнале — не интерфейс.
+- Цель iOS 26 при правиле «минимум iOS 17» — решение P-79.

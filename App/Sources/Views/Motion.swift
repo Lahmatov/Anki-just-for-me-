@@ -304,6 +304,8 @@ struct CelebrationOverlay: View {
         }
         .contentShape(Rectangle())
         .onTapGesture { close() }
+        // Закрыть праздник с VoiceOver — жест «назад» (двумя пальцами зигзаг).
+        .accessibilityAction(.escape) { close() }
         .onAppear {
             Haptics.success()
             Sounds.play(.fanfare)

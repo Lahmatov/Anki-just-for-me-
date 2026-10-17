@@ -32,9 +32,9 @@ enum AppleSignIn {
             bytes = (0..<32).map { _ in UInt8.random(in: .min ... .max) }
         }
         return Data(bytes).base64EncodedString()
-            .replacingOccurrences(of: "+", with: "-")
-            .replacingOccurrences(of: "/", with: "_")
-            .replacingOccurrences(of: "=", with: "")
+            .replacing("+", with: "-")
+            .replacing("/", with: "_")
+            .replacing("=", with: "")
     }
 
     static func sha256(_ text: String) -> String {

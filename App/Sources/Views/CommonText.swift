@@ -17,5 +17,8 @@ enum CommonText {
     static var delete: String { tr("Удалить", "Apagar", "Delete") }
     static var listen: String { tr("Прослушать", "Ouvir", "Listen") }
     static var failedTitle: String { tr("Не получилось", "Não correu bem", "Something went wrong") }
+    /// Подпись меню «…» для VoiceOver и Voice Control.
+    static var more: String { tr("Ещё", "Mais", "More") }
+    static var search: String { tr("Поиск", "Procurar", "Search") }
     static var notSelected: String { tr("Не выбран", "Não escolhido", "Not set") }
 }

@@ -16,7 +16,7 @@ struct CatalogStrip: View {
             if !shows.isEmpty {
                 VStack(alignment: .leading, spacing: 10) {
                     CardSectionHeader(title: tr("Готовые наборы", "Baralhos prontos", "Ready decks"))
-                    ScrollView(.horizontal, showsIndicators: false) {
+                    ScrollView(.horizontal) {
                         LazyHStack(alignment: .top, spacing: 12) {
                             ForEach(shows) { show in
                                 NavigationLink(value: AppRoute.catalogShow(resource: show.resource)) {
@@ -28,6 +28,7 @@ struct CatalogStrip: View {
                         }
                         .padding(.vertical, 4)
                     }
+                    .scrollIndicators(.hidden)
                 }
             }
         }

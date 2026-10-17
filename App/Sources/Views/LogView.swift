@@ -69,7 +69,7 @@ struct LogView: View {
                         refreshToken = UUID()
                     }
                 } label: {
-                    Image(systemName: "ellipsis.circle")
+                    Label(CommonText.more, systemImage: "ellipsis.circle")
                 }
             }
         }
@@ -130,6 +130,8 @@ struct LogRow: View {
         .onTapGesture {
             if entry.detail != nil { expanded.toggle() }
         }
+        // Жест оставлен ради выделения текста подробностей; для VoiceOver — кнопка.
+        .accessibilityAddTraits(entry.detail != nil ? .isButton : [])
     }
 
     private var color: Color {

@@ -237,7 +237,7 @@ struct RetellView: View {
 
             LabeledContent(
                 tr("Обойдётся примерно в", "Vai custar cerca de", "Will cost about"),
-                value: String(format: "$%.3f", model.estimatedCost))
+                value: Money.usd(model.estimatedCost, fractionDigits: 3))
                 .font(.app(.caption))
             Button(tr("Перезаписать", "Gravar de novo", "Record again")) { model.reset() }
                 .font(.app(.caption))
@@ -271,7 +271,7 @@ struct RetellView: View {
             Text(tr("Итог", "Resultado", "Result"))
         } footer: {
             Text(tr("Разбор стоил ", "A análise custou ", "The review cost ")
-                 + String(format: "$%.3f", model.lastCost))
+                 + Money.usd(model.lastCost, fractionDigits: 3))
         }
 
         if !report.topPriorities.isEmpty {
@@ -411,7 +411,7 @@ struct RetellView: View {
     }
 
     private func timeString(_ interval: TimeInterval) -> String {
-        String(format: "%d:%02d", Int(interval) / 60, Int(interval) % 60)
+        Duration.seconds(Int(interval)).formatted(.time(pattern: .minuteSecond))
     }
 }
 

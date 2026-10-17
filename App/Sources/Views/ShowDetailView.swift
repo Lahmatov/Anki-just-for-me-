@@ -69,6 +69,7 @@ struct ShowDetailView: View {
                 } label: {
                     if refreshing { MonchikLoader() } else { Image(systemName: "ellipsis.circle") }
                 }
+                .accessibilityLabel(CommonText.more)
             }
         }
         .confirmationDialog(

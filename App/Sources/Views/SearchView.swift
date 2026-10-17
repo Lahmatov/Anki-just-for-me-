@@ -28,7 +28,7 @@ struct SearchView: View {
         List {
             if !allTags.isEmpty {
                 Section {
-                    ScrollView(.horizontal, showsIndicators: false) {
+                    ScrollView(.horizontal) {
                         HStack {
                             ForEach(allTags, id: \.self) { tag in
                                 Button {
@@ -42,6 +42,7 @@ struct SearchView: View {
                             }
                         }
                     }
+                    .scrollIndicators(.hidden)
                 }
             }
 

@@ -126,8 +126,8 @@ struct RewardsView: View {
                               systemImage: "calendar")
                     }
                     if let pace = progress.requiredPerDay {
-                        Text(String(format: tr("%.1f слова в день", "%.1f palavras por dia",
-                                               "%.1f words a day"), pace))
+                        let perDay = pace.formatted(.number.precision(.fractionLength(1)))
+                        Text(tr("\(perDay) слова в день", "\(perDay) palavras por dia", "\(perDay) words a day"))
                     }
                 }
                 .font(.app(.caption, weight: .bold))

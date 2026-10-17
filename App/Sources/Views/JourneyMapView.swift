@@ -153,7 +153,7 @@ struct JourneyMapView: View {
                                     + "open one to put it on Monchik; tap again to take it off."))
                 .font(.app(.caption, weight: .heavy))
                 .foregroundStyle(Theme.muted)
-            ScrollView(.horizontal, showsIndicators: false) {
+            ScrollView(.horizontal) {
                 HStack(spacing: 10) {
                     ForEach(MonchikGifts.all) { gift in
                         giftTile(gift, open: gift.words <= words.words, worn: gift == worn)
@@ -161,6 +161,7 @@ struct JourneyMapView: View {
                 }
                 .padding(.vertical, 4)
             }
+            .scrollIndicators(.hidden)
         }
         .cardSurface()
     }
@@ -281,7 +282,7 @@ struct JourneyMapView: View {
         let from = lastID.flatMap { id in nodes.firstIndex { $0.id == id } } ?? target
         tokenIndex = min(from, target)
         // Сразу в onAppear прокрутка теряется: поле ещё не разложено.
-        DispatchQueue.main.async { proxy.scrollTo(nodes[tokenIndex ?? target].id, anchor: .center) }
+        Task { @MainActor in proxy.scrollTo(nodes[tokenIndex ?? target].id, anchor: .center) }
         guard from < target, !reduceMotion else {
             tokenIndex = target
             return
@@ -305,7 +306,8 @@ struct JourneyMapView: View {
         let stored = UserDefaults.standard.array(forKey: key) as? [Int]
         defer { UserDefaults.standard.set(path.completedSeasons, forKey: key) }
         guard let season = path.seasonToCelebrate(celebrated: stored.map(Set.init)) else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(500))
             Celebrations.shared.show(
                 tr("Сезон \(season) пройден!", "Temporada \(season) concluída!", "Season \(season) done!"),
                 subtitle: tr("Все слова сезона в работе. Мончик гордится — дальше новый сезон.",

@@ -7,23 +7,19 @@ struct ShowSearchView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    @State private var query = ""
-    @State private var results: [TVMaze.Show] = []
-    @State private var searching = false
-    @State private var adding: Int?
-    @State private var error: String?
+    @State private var model = ShowSearchViewModel()
     @FocusState private var focused: Bool
 
     var body: some View {
         RoutedStack {
             List {
-                if let error {
+                if let error = model.error {
                     Section { MascotSays(mood: .oops, text: error, size: 64) }
                         .listRowBackground(Color.clear)
                 }
-                ForEach(results) { show in
+                ForEach(model.results) { show in
                     Button {
-                        Task { await add(show) }
+                        add(show)
                     } label: {
                         HStack(spacing: 12) {
                             if let url = show.posterURL.flatMap({ URL(string: $0) }) {
@@ -42,9 +38,9 @@ struct ShowSearchView: View {
                                 }
                             }
                             Spacer()
-                            if adding == show.id {
+                            if model.adding == show.id {
                                 MonchikLoader()
-                            } else if ShowService(context: context).tracked(id: show.id) != nil {
+                            } else if model.trackedIDs.contains(show.id) {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(Theme.green)
                             } else {
@@ -53,21 +49,21 @@ struct ShowSearchView: View {
                             }
                         }
                     }
-                    .disabled(adding != nil)
+                    .disabled(model.adding != nil)
                 }
-                if !results.isEmpty {
+                if !model.results.isEmpty {
                     Section { TVMazeCredit() }
                         .listRowBackground(Color.clear)
                 }
             }
             .themedScreen()
             .overlay {
-                if searching { MonchikLoader(large: true) }
+                if model.searching { MonchikLoader(large: true) }
             }
-            .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always),
+            .searchable(text: $model.query, placement: .navigationBarDrawer(displayMode: .always),
                         prompt: tr("Friends, The Office…", "Friends, The Office…",
                                    "Friends, The Office…"))
-            .onSubmit(of: .search) { Task { await search() } }
+            .onSubmit(of: .search) { Task { await model.search(in: context) } }
             .navigationTitle(tr("Найти сериал", "Procurar série", "Find a show"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -78,32 +74,9 @@ struct ShowSearchView: View {
         }
     }
 
-    private func search() async {
-        searching = true
-        error = nil
-        defer { searching = false }
-        do {
-            results = try await ShowService(context: context).search(query)
-            if results.isEmpty {
-                error = tr("Ничего не нашлось. Попробуй английское название.",
-                           "Nada encontrado. Tenta o título em inglês.",
-                           "Nothing found. Try the English title.")
-            }
-        } catch {
-            self.error = error.localizedDescription
-        }
-    }
-
-    private func add(_ show: TVMaze.Show) async {
-        adding = show.id
-        defer { adding = nil }
-        do {
-            try await ShowService(context: context).add(show)
-            Haptics.success()
-            dismiss()
-        } catch {
-            Haptics.failure()
-            self.error = error.localizedDescription
+    private func add(_ show: TVMaze.Show) {
+        Task {
+            if await model.add(show, in: context) { dismiss() }
         }
     }
 }

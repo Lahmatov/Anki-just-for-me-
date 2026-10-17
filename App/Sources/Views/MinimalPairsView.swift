@@ -72,20 +72,19 @@ struct MinimalPairsView: View {
 
                 Section {
                     ForEach(pairs) { item in
-                        HStack {
-                            Text("\(item.first) — \(item.second)")
-                            Spacer()
-                            Text(item.contrast)
-                                .font(.app(.caption))
-                                .foregroundStyle(Theme.muted)
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            if let index = pairs.firstIndex(of: item) {
-                                pairIndex = index
-                                targetIsFirst = true
-                                lastVerdict = nil
+                        // Кнопка, а не жест: VoiceOver называет строку действием.
+                        Button {
+                            select(item)
+                        } label: {
+                            HStack {
+                                Text("\(item.first) — \(item.second)")
+                                    .foregroundStyle(Theme.ink)
+                                Spacer()
+                                Text(item.contrast)
+                                    .font(.app(.caption))
+                                    .foregroundStyle(Theme.muted)
                             }
+                            .contentShape(Rectangle())
                         }
                     }
                 } header: {
@@ -101,6 +100,13 @@ struct MinimalPairsView: View {
         }
         .themedScreen()
         .navigationTitle(tr("Произношение", "Pronúncia", "Pronunciation"))
+    }
+
+    private func select(_ item: MinimalPair) {
+        guard let index = pairs.firstIndex(of: item) else { return }
+        pairIndex = index
+        targetIsFirst = true
+        lastVerdict = nil
     }
 }
 

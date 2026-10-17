@@ -211,7 +211,8 @@ struct EpisodeRecapView: View {
         if progress.isComplete, !wasComplete {
             Haptics.success()
             // Праздник (и его фанфары) — когда человек вернётся на этот экран, а не поверх шага.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(600))
                 Celebrations.shared.show(
                     tr("Серия разобрана!", "Episódio arrumado!", "Episode wrapped up!"),
                     subtitle: tr("Слова, вопросы и пересказ — всё. Теперь эта серия и правда твоя.",

@@ -374,11 +374,11 @@ struct DeckRequestView: View {
                 Section {
                     LabeledContent(
                         tr("Примерно", "Cerca de", "About"),
-                        value: String(format: "$%.2f", model.estimatedCost))
+                        value: Money.usd(model.estimatedCost))
                     LabeledContent(
                         tr("В этом месяце", "Este mês", "This month"),
-                        value: String(format: "$%.2f / $%.0f",
-                                      model.usage.monthCost, model.usage.limit))
+                        value: Money.usd(model.usage.monthCost) + " / "
+                            + Money.usd(model.usage.limit, fractionDigits: 0))
                 } footer: {
                     Text(tr("Слова, которые уже есть в базе, модель пропустит сама, "
                                 + "а повторы превью покажет отдельно.",
@@ -544,7 +544,7 @@ struct DeckRequestView: View {
             Text(Counted.words(result.addedNotes) + " · " + Counted.cards(result.addedCards))
                 .foregroundStyle(Theme.muted)
             if let model, model.lastCost > 0 {
-                Text(tr("Стоило ", "Custou ", "Cost ") + String(format: "$%.3f", model.lastCost))
+                Text(tr("Стоило ", "Custou ", "Cost ") + Money.usd(model.lastCost, fractionDigits: 3))
                     .font(.app(.footnote))
                     .foregroundStyle(Theme.muted)
             }

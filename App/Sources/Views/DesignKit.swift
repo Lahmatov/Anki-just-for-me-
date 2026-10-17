@@ -176,7 +176,7 @@ struct ChunkyButtonStyle: ButtonStyle {
         // как двойная тень. Нажатие — кнопка пружинисто сжимается, тень
         // прижимается к ней.
         return configuration.label
-            .fontWeight(.bold)
+            .bold()
             .foregroundStyle(isEnabled ? foreground : Theme.muted)
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, 12)

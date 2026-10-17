@@ -316,7 +316,7 @@ struct RootView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         NavigationLink(value: AppRoute.search) {
-                            Image(systemName: "magnifyingglass")
+                            Label(CommonText.search, systemImage: "magnifyingglass")
                         }
                     }
                 }
@@ -365,7 +365,7 @@ struct RootView: View {
                     promptCopied = true
                 }
             } label: {
-                Image(systemName: "ellipsis.circle")
+                Label(CommonText.more, systemImage: "ellipsis.circle")
             }
         }
     }
