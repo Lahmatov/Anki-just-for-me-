@@ -211,4 +211,30 @@ enum AppAppearance: String, CaseIterable, Identifiable {
         case .dark: return "moon.fill"
         }
     }
+
+    /// Та же тема для UIKit: окно целиком, вместе с листами, алертами и
+    /// системными окнами выбора. `preferredColorScheme(nil)` после тёмной
+    /// темы на части версий iOS не возвращает системную до перезапуска —
+    /// стиль окна возвращает сразу.
+    var interfaceStyle: UIUserInterfaceStyle {
+        switch self {
+        case .system: return .unspecified
+        case .light: return .light
+        case .dark: return .dark
+        }
+    }
+
+    /// Из сохранённого значения; неизвестное — как в системе.
+    static func stored(_ raw: String?) -> AppAppearance {
+        raw.flatMap(AppAppearance.init(rawValue:)) ?? .system
+    }
+
+    @MainActor
+    func applyToWindows() {
+        let style = interfaceStyle
+        for scene in UIApplication.shared.connectedScenes {
+            guard let windowScene = scene as? UIWindowScene else { continue }
+            for window in windowScene.windows { window.overrideUserInterfaceStyle = style }
+        }
+    }
 }

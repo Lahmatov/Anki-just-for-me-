@@ -13,6 +13,9 @@ import AJFMCore
 /// 2. На экране одно очевидное действие; всё прочее — тише и мельче.
 /// 3. Учат обычно одной рукой и на ходу, поэтому главные кнопки крупные и внизу.
 enum Design {
+    /// Ширина колонки на iPad (P-70): строки и карточки шире этого читаются
+    /// хуже, а кнопки разъезжаются по краям огромного экрана.
+    static let readableWidth: CGFloat = 720
     static let cardPadding: CGFloat = 18
     static let stackSpacing: CGFloat = 18
     static let cornerRadius: CGFloat = 18
@@ -83,6 +86,12 @@ struct Panel: ViewModifier {
 }
 
 extension View {
+    /// Колонка по центру на широком экране; на iPhone ничего не меняет.
+    func readableColumn() -> some View {
+        frame(maxWidth: Design.readableWidth)
+            .frame(maxWidth: .infinity)
+    }
+
     func panel(
         fill: Color = Theme.surface, border: Color = Theme.border,
         lip: Bool = true, radius: CGFloat = Design.cornerRadius

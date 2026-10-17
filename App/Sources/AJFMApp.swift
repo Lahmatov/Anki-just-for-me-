@@ -27,6 +27,9 @@ struct AJFMApp: App {
         if UITesting.wantsDemoShow {
             UITesting.installDemoShow(into: container.mainContext)
         }
+        if UITesting.wantsDemoLesson {
+            UITesting.installDemoLesson(into: container.mainContext)
+        }
     }
 
     var body: some Scene {

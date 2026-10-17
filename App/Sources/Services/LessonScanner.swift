@@ -70,7 +70,11 @@ enum LessonScanner {
             let request = VNRecognizeTextRequest()
             request.recognitionLevel = .accurate
             request.usesLanguageCorrection = true
-            request.recognitionLanguages = [language.speechLocale, "ru-RU", "en-US"]
+            // Незнакомый Vision язык — ошибка запроса, поэтому берём только те,
+            // что он знает. Португальский у Vision один — бразильский; буквы те же.
+            let wanted = [language == .portuguese ? "pt-BR" : language.speechLocale, "ru-RU", "en-US"]
+            let supported = (try? request.supportedRecognitionLanguages()) ?? []
+            request.recognitionLanguages = supported.isEmpty ? wanted : wanted.filter(supported.contains)
             let handler = VNImageRequestHandler(cgImage: cgImage, orientation: LessonScanner.orientation(of: image))
             try handler.perform([request])
             let observations = request.results ?? []

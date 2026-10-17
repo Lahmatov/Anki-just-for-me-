@@ -64,7 +64,8 @@ targets:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         MARKETING_VERSION: "0.1"
         CURRENT_PROJECT_VERSION: "1"
-        TARGETED_DEVICE_FAMILY: "1"
+        # iPhone и iPad (P-70): на iPad тот же интерфейс, колонкой по центру.
+        TARGETED_DEVICE_FAMILY: "1,2"
     info:
       path: App/Info.plist
       properties:
@@ -83,6 +84,13 @@ targets:
           UIColorName: LaunchBackground
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        # На iPad — все повороты: без них iOS не даёт приложению делить экран
+        # (Split View, Slide Over), а на подставке iPad лежит горизонтально.
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
         UIUserInterfaceStyle: Automatic
         # Только HTTPS системными средствами — освобождено от экспортного
         # контроля. Без ключа App Store Connect спрашивает об этом при каждой сборке.
@@ -159,7 +167,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.lahmatov.ajfm.widget
         MARKETING_VERSION: "0.1"
         CURRENT_PROJECT_VERSION: "1"
-        TARGETED_DEVICE_FAMILY: "1"
+        TARGETED_DEVICE_FAMILY: "1,2"
         SKIP_INSTALL: YES
     info:
       path: Widget/Info.plist

@@ -66,17 +66,23 @@ struct RootView: View {
                             : .asymmetric(insertion: .opacity.combined(with: .offset(y: 8)),
                                           removal: .opacity))
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .readableColumn()
+            .frame(maxHeight: .infinity)
+            // Фон — на весь экран: на iPad колонка уже экрана, а поля по
+            // бокам должны быть того же цвета, что и экраны.
+            .background(Theme.background.ignoresSafeArea())
             .animation(.tabSwitch, value: tab)
 
             // Пока открыта клавиатура, панель прячется: иначе она висела бы
             // над клавиатурой и отъедала место у поля ввода.
             if !keyboard.isVisible, !tabBarVisibility.hiddenBySession {
                 AppTabBar(selection: $tab)
+                    .readableColumn()
                     .background(Theme.background.ignoresSafeArea(edges: .bottom))
             }
         }
         .preferredColorScheme(appearance.colorScheme)
+        .onChange(of: appearanceRaw, initial: true) { _, _ in appearance.applyToWindows() }
         // Смена шрифта или языка перестраивает экраны целиком: тексты берут
         // и то и другое в момент отрисовки.
         .id(fontStyle + language)

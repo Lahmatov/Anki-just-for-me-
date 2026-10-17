@@ -31,6 +31,33 @@ enum UITesting {
         isActive && ProcessInfo.processInfo.arguments.contains("-ui-onboarding")
     }
 
+    /// `-ui-demo-lesson`: урок в папке уроков — с глаголами, примерами и
+    /// пропусками, чтобы открывались все тренажёры, тест и спряжение (P-69).
+    static var wantsDemoLesson: Bool {
+        isActive && ProcessInfo.processInfo.arguments.contains("-ui-demo-lesson")
+    }
+
+    @MainActor
+    static func installDemoLesson(into context: ModelContext) {
+        let notes = [
+            NoteData(term: "go", translation: "move to another place", partOfSpeech: .verb,
+                     example: "We go to Lisbon every summer.", cloze: "We ___ to Lisbon every summer."),
+            NoteData(term: "travel", translation: "make a journey", partOfSpeech: .verb,
+                     example: "They travel by train.", cloze: "They ___ by train."),
+            NoteData(term: "book a flight", translation: "reserve a plane ticket", partOfSpeech: .phrase,
+                     example: "I booked a flight to Rome.", cloze: "I ___ a flight to Rome."),
+            NoteData(term: "get by", translation: "manage with what you have", partOfSpeech: .phrasalVerb,
+                     example: "I can get by in Italian."),
+            NoteData(term: "the luggage", translation: "bags you take on a trip", partOfSpeech: .noun,
+                     example: "Where is the luggage?"),
+        ]
+        let file = DeckFile(deck: DeckMeta(name: "Lesson 1: Travel", folder: DeckRequest.lessonFolder),
+                            notes: notes)
+        let importer = ImportService(context: context)
+        guard let plan = try? importer.makePlan(from: file) else { return }
+        _ = try? importer.apply(plan)
+    }
+
     /// До первого экрана: прошлый прогон не должен оставить ни настроек, ни языка.
     static func prepare() {
         guard isActive, let domain = Bundle.main.bundleIdentifier else { return }

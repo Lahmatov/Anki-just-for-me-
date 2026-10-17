@@ -1,4 +1,4 @@
-# Приложение на разных iPhone: UI-тесты и скриншоты на трёх языках.
+# Приложение на разных iPhone и iPad: UI-тесты и скриншоты на трёх языках.
 #
 # Приложение требует iOS 26, поэтому «разные iOS» — это все версии 26.x,
 # что есть на машине GitHub (самая новая и самая старая), а «разные
@@ -43,6 +43,12 @@ jobs:
           - { device: "iPhone 17 Pro Max", runtime: latest }
           - { device: "iPhone Air", runtime: latest }
           - { device: "iPhone 17", runtime: latest, text: accessibility-extra-large }
+          # iPad (P-70): от самого маленького до самого большого. Имя — начало
+          # названия симулятора: у iPad в скобках меняется чип каждый год.
+          - { device: "iPad mini", runtime: latest }
+          - { device: "iPad Air 11", runtime: latest }
+          - { device: "iPad Pro 13", runtime: latest }
+          - { device: "iPad", runtime: oldest }
     steps:
       - uses: actions/checkout@v5
       - name: XcodeGen
@@ -59,7 +65,8 @@ jobs:
           runtimes = [r for r in json.loads(subprocess.check_output(["xcrun", "simctl", "list", "runtimes", "-j"]))["runtimes"]
                       if r["platform"] == "iOS" and r["isAvailable"] and r["version"].startswith("26")]
           runtimes.sort(key=lambda r: [int(x) for x in r["version"].split(".")])
-          kind = next((t["identifier"] for t in types if t["name"] == device), "")
+          kind = next((t["identifier"] for t in types if t["name"] == device), "") or next(
+              (t["identifier"] for t in types if t["name"].startswith(device + " ")), "")
           runtime = (runtimes[-1] if which == "latest" else runtimes[0]) if runtimes else None
           print(f"TYPE={kind}")
           print(f"RUNTIME={runtime['identifier'] if runtime else ''}")

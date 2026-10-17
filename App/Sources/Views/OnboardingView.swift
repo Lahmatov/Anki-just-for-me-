@@ -76,6 +76,7 @@ struct OnboardingView: View {
                         .padding(.bottom, 8)
                 }
             }
+            .readableColumn()
             .background(Theme.background)
             .navigationTitle(step?.title ?? "")
             .navigationBarTitleDisplayMode(.inline)
