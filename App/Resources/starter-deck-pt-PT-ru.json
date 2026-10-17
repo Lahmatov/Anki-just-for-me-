@@ -1,0 +1,290 @@
+{
+ "format": "ajfm-deck",
+ "version": 1,
+ "deck": {
+  "name": "Первые слова",
+  "folder": "Базовое",
+  "language": "pt-PT",
+  "scheduler": "fsrs6",
+  "cardTypes": [
+   "recognition",
+   "recall",
+   "listening",
+   "pronunciation"
+  ],
+  "source": "слова на первые дни"
+ },
+ "notes": [
+  {
+   "term": "bom dia",
+   "translation": "доброе утро, добрый день",
+   "partOfSpeech": "phrase",
+   "example": "Bom dia! Tudo bem?",
+   "exampleTranslation": "Доброе утро! Как дела?",
+   "cloze": "___! Tudo bem?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/bõ ˈdiɐ/"
+  },
+  {
+   "term": "obrigado",
+   "translation": "спасибо",
+   "partOfSpeech": "phrase",
+   "example": "Obrigado pela ajuda.",
+   "exampleTranslation": "Спасибо за помощь.",
+   "cloze": "___ pela ajuda.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ɔbɾiˈɣadu/",
+   "note": "Говорит мужчина; женщина говорит «obrigada»."
+  },
+  {
+   "term": "por favor",
+   "translation": "пожалуйста (просьба)",
+   "partOfSpeech": "phrase",
+   "example": "Um café, por favor.",
+   "exampleTranslation": "Кофе, пожалуйста.",
+   "cloze": "Um café, ___.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/puɾ fɐˈvoɾ/"
+  },
+  {
+   "term": "desculpe",
+   "translation": "извините",
+   "partOfSpeech": "phrase",
+   "example": "Desculpe, onde fica a estação?",
+   "exampleTranslation": "Извините, где находится вокзал?",
+   "cloze": "___, onde fica a estação?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/dɨʃˈkulpɨ/"
+  },
+  {
+   "term": "ficar",
+   "translation": "находиться; оставаться",
+   "partOfSpeech": "verb",
+   "example": "O museu fica perto do rio.",
+   "exampleTranslation": "Музей находится рядом с рекой.",
+   "cloze": "O museu ___ perto do rio.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/fiˈkaɾ/",
+   "note": "О местоположении говорят «ficar», а не «estar»."
+  },
+  {
+   "term": "o autocarro",
+   "translation": "автобус",
+   "partOfSpeech": "noun",
+   "example": "Apanho o autocarro às oito.",
+   "exampleTranslation": "Я сажусь на автобус в восемь.",
+   "cloze": "Apanho o ___ às oito.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ɐwtɔˈkaʁu/",
+   "note": "В Бразилии — «ônibus»; в Португалии только «autocarro»."
+  },
+  {
+   "term": "o comboio",
+   "translation": "поезд",
+   "partOfSpeech": "noun",
+   "example": "O comboio para Sintra sai daqui.",
+   "exampleTranslation": "Поезд в Синтру отходит отсюда.",
+   "cloze": "O ___ para Sintra sai daqui.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/kõˈbɔju/",
+   "note": "В Бразилии — «trem»."
+  },
+  {
+   "term": "o pequeno-almoço",
+   "translation": "завтрак",
+   "partOfSpeech": "noun",
+   "example": "Tomo o pequeno-almoço em casa.",
+   "exampleTranslation": "Я завтракаю дома.",
+   "cloze": "Tomo o ___ em casa.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/pɨˈkenu aɫˈmosu/",
+   "note": "В Бразилии — «café da manhã»."
+  },
+  {
+   "term": "a casa de banho",
+   "translation": "туалет, ванная",
+   "partOfSpeech": "noun",
+   "example": "Onde é a casa de banho?",
+   "exampleTranslation": "Где туалет?",
+   "cloze": "Onde é a ___?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈkazɐ dɨ ˈbɐɲu/"
+  },
+  {
+   "term": "o telemóvel",
+   "translation": "мобильный телефон",
+   "partOfSpeech": "noun",
+   "example": "Esqueci-me do telemóvel.",
+   "exampleTranslation": "Я забыл телефон.",
+   "cloze": "Esqueci-me do ___.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/tɛlɛˈmɔvɛɫ/",
+   "note": "В Бразилии — «celular»."
+  },
+  {
+   "term": "a conta",
+   "translation": "счёт",
+   "partOfSpeech": "noun",
+   "example": "A conta, por favor.",
+   "exampleTranslation": "Счёт, пожалуйста.",
+   "cloze": "A ___, por favor.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈkõtɐ/"
+  },
+  {
+   "term": "estar a + infinitivo",
+   "translation": "делаю прямо сейчас: «estar» + «a» + глагол в инфинитиве",
+   "partOfSpeech": "other",
+   "example": "Estou a aprender português.",
+   "exampleTranslation": "Я учу португальский (сейчас, в эти дни).",
+   "cloze": "Estou ___ aprender português.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "note": "В Бразилии говорят «estou aprendendo» — в Португалии так не говорят."
+  },
+  {
+   "term": "gostar de",
+   "translation": "нравиться, любить",
+   "partOfSpeech": "verb",
+   "example": "Gosto muito de bacalhau.",
+   "exampleTranslation": "Я очень люблю треску.",
+   "cloze": "___ muito de bacalhau.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ɡuʃˈtaɾ dɨ/",
+   "note": "Всегда с «de»: gosto de café."
+  },
+  {
+   "term": "apetecer",
+   "translation": "хотеться",
+   "partOfSpeech": "verb",
+   "example": "Apetece-me um café.",
+   "exampleTranslation": "Мне хочется кофе.",
+   "cloze": "___-me um café.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ɐpɨtɨˈseɾ/",
+   "note": "Как «нравиться» по-русски: хочется кому — «apetece-me»."
+  },
+  {
+   "term": "a chávena",
+   "translation": "чашка",
+   "partOfSpeech": "noun",
+   "example": "Uma chávena de chá, por favor.",
+   "exampleTranslation": "Чашку чая, пожалуйста.",
+   "cloze": "Uma ___ de chá, por favor.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈʃavɨnɐ/",
+   "note": "В Бразилии — «xícara»."
+  },
+  {
+   "term": "perceber",
+   "translation": "понимать",
+   "partOfSpeech": "verb",
+   "example": "Não percebo, pode repetir?",
+   "exampleTranslation": "Не понимаю, можете повторить?",
+   "cloze": "Não ___, pode repetir?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/pɨɾsɨˈβeɾ/",
+   "note": "Ложный друг: не «воспринимать», а «понимать»."
+  },
+  {
+   "term": "devagar",
+   "translation": "медленно",
+   "partOfSpeech": "adverb",
+   "example": "Pode falar mais devagar?",
+   "exampleTranslation": "Можете говорить медленнее?",
+   "cloze": "Pode falar mais ___?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/dɨvɐˈɣaɾ/"
+  },
+  {
+   "term": "quanto custa",
+   "translation": "сколько стоит",
+   "partOfSpeech": "phrase",
+   "example": "Quanto custa o bilhete?",
+   "exampleTranslation": "Сколько стоит билет?",
+   "cloze": "___ o bilhete?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈkwɐ̃tu ˈkuʃtɐ/"
+  },
+  {
+   "term": "a rua",
+   "translation": "улица",
+   "partOfSpeech": "noun",
+   "example": "Moro nesta rua.",
+   "exampleTranslation": "Я живу на этой улице.",
+   "cloze": "Moro nesta ___.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈʁuɐ/"
+  },
+  {
+   "term": "fixe",
+   "translation": "классный (разг.)",
+   "partOfSpeech": "adjective",
+   "example": "O teu bairro é muito fixe!",
+   "exampleTranslation": "Твой район очень классный!",
+   "cloze": "O teu bairro é muito ___!",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈfiʃɨ/",
+   "note": "Разговорное слово Португалии; в Бразилии — «legal»."
+  }
+ ]
+}

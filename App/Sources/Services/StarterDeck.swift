@@ -24,12 +24,13 @@ enum StarterDeck {
 
     static func data(for language: AppLanguage = Loc.language,
                      target: StudyLanguage = StudyLanguageStore.storedCurrent) -> Data? {
-        // Нет перевода на язык интерфейса — берём русский: для изучаемых
-        // языков кроме английского он есть всегда.
-        let url = Bundle.main.url(forResource: resourceName(for: language, target: target),
-                                  withExtension: "json")
-            ?? Bundle.main.url(forResource: resourceName(for: .russian, target: target),
-                               withExtension: "json")
+        // Перевод — на язык интерфейса, кроме случая «учу португальский с
+        // португальским интерфейсом». Нет такого файла — английский, затем русский:
+        // у изучаемых языков кроме английского эти два есть всегда.
+        let candidates = [target.translationLanguage(for: language), .english, .russian]
+        let url = candidates.lazy.compactMap {
+            Bundle.main.url(forResource: resourceName(for: $0, target: target), withExtension: "json")
+        }.first
         guard let url else {
             Log.warning(.app, "Стартовый набор не найден в ресурсах приложения", detail: target.rawValue)
             return nil

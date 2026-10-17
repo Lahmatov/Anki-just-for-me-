@@ -94,4 +94,34 @@ final class StarterDeckTests: XCTestCase {
         let deck = try XCTUnwrap(try context.fetch(FetchDescriptor<Deck>()).first)
         XCTAssertEqual(deck.name, "Vocabulário para recontar")
     }
+
+    // MARK: - Другие изучаемые языки (P-67)
+
+    func testEveryStudyLanguageHasAStarterDeckInEachTranslation() throws {
+        for target in StudyLanguage.allCases {
+            for language in [AppLanguage.russian, .english, .portuguese] {
+                let data = try XCTUnwrap(StarterDeck.data(for: language, target: target),
+                                         "нет стартового набора \(target.rawValue)/\(language.rawValue)")
+                let file = try DeckParser.parse(data: data)
+                XCTAssertGreaterThanOrEqual(file.notes.count, 20, target.rawValue)
+                XCTAssertEqual(Set(file.notes.map { $0.term.lowercased() }).count, file.notes.count,
+                               "повторы в наборе \(target.rawValue)")
+            }
+        }
+    }
+
+    /// Португальский набор — на языке изучения, а переводы не на португальский.
+    func testPortugueseStarterIsInPortugueseWithForeignTranslations() throws {
+        let data = try XCTUnwrap(StarterDeck.data(for: .portuguese, target: .portuguese))
+        let file = try DeckParser.parse(data: data)
+        XCTAssertEqual(file.deck.language, "pt-PT")
+        XCTAssertTrue(file.notes.contains { $0.term == "o autocarro" })
+        XCTAssertEqual(file.notes.first { $0.term == "o autocarro" }?.translation, "the bus",
+                       "португальский с португальским интерфейсом переводится на английский")
+    }
+
+    func testItalianStarterHasRussianTranslations() throws {
+        let file = try DeckParser.parse(data: try XCTUnwrap(StarterDeck.data(for: .russian, target: .italian)))
+        XCTAssertEqual(file.notes.first { $0.term == "il treno" }?.translation, "поезд")
+    }
 }

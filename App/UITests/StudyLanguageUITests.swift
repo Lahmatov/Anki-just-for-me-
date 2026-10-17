@@ -29,6 +29,7 @@ final class StudyLanguageUITests: XCTestCase {
         XCTAssertTrue(app.buttons["tab.today"].waitForExistence(timeout: 15))
         XCTAssertFalse(app.buttons["today.study"].waitForExistence(timeout: 5),
                        "английские карточки попали в португальскую базу")
+        XCTAssertTrue(app.buttons["today.starter"].exists, "у португальского нет своего стартового набора")
 
         choose("English", in: app)
         XCTAssertTrue(app.buttons["today.study"].waitForExistence(timeout: 15),

@@ -1,0 +1,284 @@
+{
+ "format": "ajfm-deck",
+ "version": 1,
+ "deck": {
+  "name": "First words",
+  "folder": "Basics",
+  "language": "it-IT",
+  "scheduler": "fsrs6",
+  "cardTypes": [
+   "recognition",
+   "recall",
+   "listening",
+   "pronunciation"
+  ],
+  "source": "words for the first days"
+ },
+ "notes": [
+  {
+   "term": "buongiorno",
+   "translation": "good morning",
+   "partOfSpeech": "phrase",
+   "example": "Buongiorno, come sta?",
+   "exampleTranslation": "Good morning, how are you?",
+   "cloze": "___, come sta?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/bwonˈdʒorno/"
+  },
+  {
+   "term": "grazie",
+   "translation": "thank you",
+   "partOfSpeech": "phrase",
+   "example": "Grazie per l'aiuto.",
+   "exampleTranslation": "Thanks for the help.",
+   "cloze": "___ per l'aiuto.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈɡrattsje/"
+  },
+  {
+   "term": "per favore",
+   "translation": "please",
+   "partOfSpeech": "phrase",
+   "example": "Un caffè, per favore.",
+   "exampleTranslation": "A coffee, please.",
+   "cloze": "Un caffè, ___.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/per faˈvore/"
+  },
+  {
+   "term": "scusi",
+   "translation": "excuse me (formal)",
+   "partOfSpeech": "phrase",
+   "example": "Scusi, dov'è la stazione?",
+   "exampleTranslation": "Excuse me, where is the station?",
+   "cloze": "___, dov'è la stazione?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈskuzi/",
+   "note": "Informal: “scusa”."
+  },
+  {
+   "term": "il treno",
+   "translation": "the train",
+   "partOfSpeech": "noun",
+   "example": "Il treno per Roma parte alle nove.",
+   "exampleTranslation": "The train to Rome leaves at nine.",
+   "cloze": "Il ___ per Roma parte alle nove.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/il ˈtrɛno/"
+  },
+  {
+   "term": "l'autobus",
+   "translation": "the bus",
+   "partOfSpeech": "noun",
+   "example": "Prendo l'autobus ogni mattina.",
+   "exampleTranslation": "I take the bus every morning.",
+   "cloze": "Prendo ___ ogni mattina.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈlawtobus/",
+   "note": "Same in the plural: gli autobus."
+  },
+  {
+   "term": "la colazione",
+   "translation": "breakfast",
+   "partOfSpeech": "noun",
+   "example": "Faccio colazione al bar.",
+   "exampleTranslation": "I have breakfast at the café.",
+   "cloze": "Faccio ___ al bar.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/la kolatˈtsjone/",
+   "note": "“Fare colazione” — to have breakfast."
+  },
+  {
+   "term": "il bagno",
+   "translation": "the bathroom, the toilet",
+   "partOfSpeech": "noun",
+   "example": "Dov'è il bagno?",
+   "exampleTranslation": "Where is the bathroom?",
+   "cloze": "Dov'è ___?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/il ˈbaɲɲo/"
+  },
+  {
+   "term": "il conto",
+   "translation": "the bill",
+   "partOfSpeech": "noun",
+   "example": "Il conto, per favore.",
+   "exampleTranslation": "The bill, please.",
+   "cloze": "___, per favore.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/il ˈkonto/"
+  },
+  {
+   "term": "stare + gerundio",
+   "translation": "doing something right now: “stare” + gerund (-ando, -endo)",
+   "partOfSpeech": "other",
+   "example": "Sto imparando l'italiano.",
+   "exampleTranslation": "I'm learning Italian.",
+   "cloze": "___ imparando l'italiano.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy"
+  },
+  {
+   "term": "piacere",
+   "translation": "to like (to be pleasing)",
+   "partOfSpeech": "verb",
+   "example": "Mi piace molto la pizza.",
+   "exampleTranslation": "I really like pizza.",
+   "cloze": "Mi ___ molto la pizza.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/pjaˈtʃere/",
+   "note": "Like “appeal to”: “mi piace” — it appeals to me."
+  },
+  {
+   "term": "capire",
+   "translation": "to understand",
+   "partOfSpeech": "verb",
+   "example": "Non capisco, può ripetere?",
+   "exampleTranslation": "I don't understand, could you repeat?",
+   "cloze": "Non ___, può ripetere?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/kaˈpire/",
+   "note": "Takes -isc-: capisco, capisci, capisce."
+  },
+  {
+   "term": "piano",
+   "translation": "slowly; quietly",
+   "partOfSpeech": "adverb",
+   "example": "Può parlare più piano?",
+   "exampleTranslation": "Could you speak more slowly?",
+   "cloze": "Può parlare più ___?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈpjano/"
+  },
+  {
+   "term": "quanto costa",
+   "translation": "how much is",
+   "partOfSpeech": "phrase",
+   "example": "Quanto costa il biglietto?",
+   "exampleTranslation": "How much is the ticket?",
+   "cloze": "___ il biglietto?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈkwanto ˈkɔsta/"
+  },
+  {
+   "term": "la strada",
+   "translation": "the street, the road",
+   "partOfSpeech": "noun",
+   "example": "Abito in questa strada.",
+   "exampleTranslation": "I live on this street.",
+   "cloze": "Abito in questa ___.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/la ˈstrada/"
+  },
+  {
+   "term": "il cellulare",
+   "translation": "the mobile phone",
+   "partOfSpeech": "noun",
+   "example": "Ho dimenticato il cellulare.",
+   "exampleTranslation": "I forgot my phone.",
+   "cloze": "Ho dimenticato ___.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/il tʃelluˈlare/"
+  },
+  {
+   "term": "la tazza",
+   "translation": "the cup",
+   "partOfSpeech": "noun",
+   "example": "Una tazza di tè, per favore.",
+   "exampleTranslation": "A cup of tea, please.",
+   "cloze": "Una ___ di tè, per favore.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/la ˈtattsa/"
+  },
+  {
+   "term": "avere voglia di",
+   "translation": "to feel like",
+   "partOfSpeech": "idiom",
+   "example": "Ho voglia di un gelato.",
+   "exampleTranslation": "I feel like an ice cream.",
+   "cloze": "___ voglia di un gelato.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/aˈvere ˈvɔʎʎa di/"
+  },
+  {
+   "term": "dove",
+   "translation": "where",
+   "partOfSpeech": "adverb",
+   "example": "Dove abiti?",
+   "exampleTranslation": "Where do you live?",
+   "cloze": "___ abiti?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈdove/"
+  },
+  {
+   "term": "bello",
+   "translation": "beautiful",
+   "partOfSpeech": "adjective",
+   "example": "Che bella città!",
+   "exampleTranslation": "What a beautiful city!",
+   "cloze": "Che ___ città!",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈbɛllo/",
+   "note": "Changes form before nouns: bel ragazzo, bell'albero."
+  }
+ ]
+}

@@ -1,0 +1,290 @@
+{
+ "format": "ajfm-deck",
+ "version": 1,
+ "deck": {
+  "name": "First words",
+  "folder": "Basics",
+  "language": "pt-PT",
+  "scheduler": "fsrs6",
+  "cardTypes": [
+   "recognition",
+   "recall",
+   "listening",
+   "pronunciation"
+  ],
+  "source": "words for the first days"
+ },
+ "notes": [
+  {
+   "term": "bom dia",
+   "translation": "good morning",
+   "partOfSpeech": "phrase",
+   "example": "Bom dia! Tudo bem?",
+   "exampleTranslation": "Good morning! How are you?",
+   "cloze": "___! Tudo bem?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/bõ ˈdiɐ/"
+  },
+  {
+   "term": "obrigado",
+   "translation": "thank you",
+   "partOfSpeech": "phrase",
+   "example": "Obrigado pela ajuda.",
+   "exampleTranslation": "Thanks for the help.",
+   "cloze": "___ pela ajuda.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ɔbɾiˈɣadu/",
+   "note": "Said by a man; a woman says “obrigada”."
+  },
+  {
+   "term": "por favor",
+   "translation": "please",
+   "partOfSpeech": "phrase",
+   "example": "Um café, por favor.",
+   "exampleTranslation": "A coffee, please.",
+   "cloze": "Um café, ___.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/puɾ fɐˈvoɾ/"
+  },
+  {
+   "term": "desculpe",
+   "translation": "excuse me, sorry",
+   "partOfSpeech": "phrase",
+   "example": "Desculpe, onde fica a estação?",
+   "exampleTranslation": "Excuse me, where is the station?",
+   "cloze": "___, onde fica a estação?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/dɨʃˈkulpɨ/"
+  },
+  {
+   "term": "ficar",
+   "translation": "to be located; to stay",
+   "partOfSpeech": "verb",
+   "example": "O museu fica perto do rio.",
+   "exampleTranslation": "The museum is near the river.",
+   "cloze": "O museu ___ perto do rio.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/fiˈkaɾ/",
+   "note": "For where places are, use “ficar”, not “estar”."
+  },
+  {
+   "term": "o autocarro",
+   "translation": "the bus",
+   "partOfSpeech": "noun",
+   "example": "Apanho o autocarro às oito.",
+   "exampleTranslation": "I catch the bus at eight.",
+   "cloze": "Apanho o ___ às oito.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ɐwtɔˈkaʁu/",
+   "note": "Brazil says “ônibus”; Portugal only “autocarro”."
+  },
+  {
+   "term": "o comboio",
+   "translation": "the train",
+   "partOfSpeech": "noun",
+   "example": "O comboio para Sintra sai daqui.",
+   "exampleTranslation": "The train to Sintra leaves from here.",
+   "cloze": "O ___ para Sintra sai daqui.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/kõˈbɔju/",
+   "note": "Brazil says “trem”."
+  },
+  {
+   "term": "o pequeno-almoço",
+   "translation": "breakfast",
+   "partOfSpeech": "noun",
+   "example": "Tomo o pequeno-almoço em casa.",
+   "exampleTranslation": "I have breakfast at home.",
+   "cloze": "Tomo o ___ em casa.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/pɨˈkenu aɫˈmosu/",
+   "note": "Brazil says “café da manhã”."
+  },
+  {
+   "term": "a casa de banho",
+   "translation": "the bathroom, the toilet",
+   "partOfSpeech": "noun",
+   "example": "Onde é a casa de banho?",
+   "exampleTranslation": "Where is the bathroom?",
+   "cloze": "Onde é a ___?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈkazɐ dɨ ˈbɐɲu/"
+  },
+  {
+   "term": "o telemóvel",
+   "translation": "the mobile phone",
+   "partOfSpeech": "noun",
+   "example": "Esqueci-me do telemóvel.",
+   "exampleTranslation": "I forgot my phone.",
+   "cloze": "Esqueci-me do ___.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/tɛlɛˈmɔvɛɫ/",
+   "note": "Brazil says “celular”."
+  },
+  {
+   "term": "a conta",
+   "translation": "the bill",
+   "partOfSpeech": "noun",
+   "example": "A conta, por favor.",
+   "exampleTranslation": "The bill, please.",
+   "cloze": "A ___, por favor.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈkõtɐ/"
+  },
+  {
+   "term": "estar a + infinitivo",
+   "translation": "doing something right now: “estar” + “a” + infinitive",
+   "partOfSpeech": "other",
+   "example": "Estou a aprender português.",
+   "exampleTranslation": "I'm learning Portuguese.",
+   "cloze": "Estou ___ aprender português.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "note": "Brazilians say “estou aprendendo”; Portugal doesn't."
+  },
+  {
+   "term": "gostar de",
+   "translation": "to like",
+   "partOfSpeech": "verb",
+   "example": "Gosto muito de bacalhau.",
+   "exampleTranslation": "I really like salted cod.",
+   "cloze": "___ muito de bacalhau.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ɡuʃˈtaɾ dɨ/",
+   "note": "Always with “de”: gosto de café."
+  },
+  {
+   "term": "apetecer",
+   "translation": "to feel like (having)",
+   "partOfSpeech": "verb",
+   "example": "Apetece-me um café.",
+   "exampleTranslation": "I feel like a coffee.",
+   "cloze": "___-me um café.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ɐpɨtɨˈseɾ/",
+   "note": "Works like “appeal to”: the thing appeals to me — “apetece-me”."
+  },
+  {
+   "term": "a chávena",
+   "translation": "the cup",
+   "partOfSpeech": "noun",
+   "example": "Uma chávena de chá, por favor.",
+   "exampleTranslation": "A cup of tea, please.",
+   "cloze": "Uma ___ de chá, por favor.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈʃavɨnɐ/",
+   "note": "Brazil says “xícara”."
+  },
+  {
+   "term": "perceber",
+   "translation": "to understand",
+   "partOfSpeech": "verb",
+   "example": "Não percebo, pode repetir?",
+   "exampleTranslation": "I don't understand, could you repeat?",
+   "cloze": "Não ___, pode repetir?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/pɨɾsɨˈβeɾ/",
+   "note": "False friend: it means “understand”, not “perceive”."
+  },
+  {
+   "term": "devagar",
+   "translation": "slowly",
+   "partOfSpeech": "adverb",
+   "example": "Pode falar mais devagar?",
+   "exampleTranslation": "Could you speak more slowly?",
+   "cloze": "Pode falar mais ___?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/dɨvɐˈɣaɾ/"
+  },
+  {
+   "term": "quanto custa",
+   "translation": "how much is",
+   "partOfSpeech": "phrase",
+   "example": "Quanto custa o bilhete?",
+   "exampleTranslation": "How much is the ticket?",
+   "cloze": "___ o bilhete?",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈkwɐ̃tu ˈkuʃtɐ/"
+  },
+  {
+   "term": "a rua",
+   "translation": "the street",
+   "partOfSpeech": "noun",
+   "example": "Moro nesta rua.",
+   "exampleTranslation": "I live on this street.",
+   "cloze": "Moro nesta ___.",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈʁuɐ/"
+  },
+  {
+   "term": "fixe",
+   "translation": "cool (informal)",
+   "partOfSpeech": "adjective",
+   "example": "O teu bairro é muito fixe!",
+   "exampleTranslation": "Your neighbourhood is really cool!",
+   "cloze": "O teu bairro é muito ___!",
+   "tags": [
+    "basics"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈfiʃɨ/",
+   "note": "Informal, Portugal only; Brazil says “legal”."
+  }
+ ]
+}

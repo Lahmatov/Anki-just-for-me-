@@ -1,0 +1,284 @@
+{
+ "format": "ajfm-deck",
+ "version": 1,
+ "deck": {
+  "name": "Первые слова",
+  "folder": "Базовое",
+  "language": "it-IT",
+  "scheduler": "fsrs6",
+  "cardTypes": [
+   "recognition",
+   "recall",
+   "listening",
+   "pronunciation"
+  ],
+  "source": "слова на первые дни"
+ },
+ "notes": [
+  {
+   "term": "buongiorno",
+   "translation": "добрый день, доброе утро",
+   "partOfSpeech": "phrase",
+   "example": "Buongiorno, come sta?",
+   "exampleTranslation": "Добрый день, как вы?",
+   "cloze": "___, come sta?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/bwonˈdʒorno/"
+  },
+  {
+   "term": "grazie",
+   "translation": "спасибо",
+   "partOfSpeech": "phrase",
+   "example": "Grazie per l'aiuto.",
+   "exampleTranslation": "Спасибо за помощь.",
+   "cloze": "___ per l'aiuto.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈɡrattsje/"
+  },
+  {
+   "term": "per favore",
+   "translation": "пожалуйста (просьба)",
+   "partOfSpeech": "phrase",
+   "example": "Un caffè, per favore.",
+   "exampleTranslation": "Кофе, пожалуйста.",
+   "cloze": "Un caffè, ___.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/per faˈvore/"
+  },
+  {
+   "term": "scusi",
+   "translation": "извините (на «вы»)",
+   "partOfSpeech": "phrase",
+   "example": "Scusi, dov'è la stazione?",
+   "exampleTranslation": "Извините, где вокзал?",
+   "cloze": "___, dov'è la stazione?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈskuzi/",
+   "note": "На «ты» — «scusa»."
+  },
+  {
+   "term": "il treno",
+   "translation": "поезд",
+   "partOfSpeech": "noun",
+   "example": "Il treno per Roma parte alle nove.",
+   "exampleTranslation": "Поезд в Рим отходит в девять.",
+   "cloze": "Il ___ per Roma parte alle nove.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/il ˈtrɛno/"
+  },
+  {
+   "term": "l'autobus",
+   "translation": "автобус",
+   "partOfSpeech": "noun",
+   "example": "Prendo l'autobus ogni mattina.",
+   "exampleTranslation": "Я езжу на автобусе каждое утро.",
+   "cloze": "Prendo ___ ogni mattina.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈlawtobus/",
+   "note": "Во множественном числе не меняется: gli autobus."
+  },
+  {
+   "term": "la colazione",
+   "translation": "завтрак",
+   "partOfSpeech": "noun",
+   "example": "Faccio colazione al bar.",
+   "exampleTranslation": "Я завтракаю в баре.",
+   "cloze": "Faccio ___ al bar.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/la kolatˈtsjone/",
+   "note": "«Fare colazione» — завтракать."
+  },
+  {
+   "term": "il bagno",
+   "translation": "туалет, ванная",
+   "partOfSpeech": "noun",
+   "example": "Dov'è il bagno?",
+   "exampleTranslation": "Где туалет?",
+   "cloze": "Dov'è ___?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/il ˈbaɲɲo/"
+  },
+  {
+   "term": "il conto",
+   "translation": "счёт",
+   "partOfSpeech": "noun",
+   "example": "Il conto, per favore.",
+   "exampleTranslation": "Счёт, пожалуйста.",
+   "cloze": "___, per favore.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/il ˈkonto/"
+  },
+  {
+   "term": "stare + gerundio",
+   "translation": "делаю прямо сейчас: «stare» + деепричастие (-ando, -endo)",
+   "partOfSpeech": "other",
+   "example": "Sto imparando l'italiano.",
+   "exampleTranslation": "Я учу итальянский (сейчас).",
+   "cloze": "___ imparando l'italiano.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy"
+  },
+  {
+   "term": "piacere",
+   "translation": "нравиться",
+   "partOfSpeech": "verb",
+   "example": "Mi piace molto la pizza.",
+   "exampleTranslation": "Мне очень нравится пицца.",
+   "cloze": "Mi ___ molto la pizza.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/pjaˈtʃere/",
+   "note": "Как по-русски: нравится кому — «mi piace», «ti piace»."
+  },
+  {
+   "term": "capire",
+   "translation": "понимать",
+   "partOfSpeech": "verb",
+   "example": "Non capisco, può ripetere?",
+   "exampleTranslation": "Не понимаю, можете повторить?",
+   "cloze": "Non ___, può ripetere?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/kaˈpire/",
+   "note": "Спрягается с -isc-: capisco, capisci, capisce."
+  },
+  {
+   "term": "piano",
+   "translation": "медленно; тихо",
+   "partOfSpeech": "adverb",
+   "example": "Può parlare più piano?",
+   "exampleTranslation": "Можете говорить медленнее?",
+   "cloze": "Può parlare più ___?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈpjano/"
+  },
+  {
+   "term": "quanto costa",
+   "translation": "сколько стоит",
+   "partOfSpeech": "phrase",
+   "example": "Quanto costa il biglietto?",
+   "exampleTranslation": "Сколько стоит билет?",
+   "cloze": "___ il biglietto?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈkwanto ˈkɔsta/"
+  },
+  {
+   "term": "la strada",
+   "translation": "улица, дорога",
+   "partOfSpeech": "noun",
+   "example": "Abito in questa strada.",
+   "exampleTranslation": "Я живу на этой улице.",
+   "cloze": "Abito in questa ___.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/la ˈstrada/"
+  },
+  {
+   "term": "il cellulare",
+   "translation": "мобильный телефон",
+   "partOfSpeech": "noun",
+   "example": "Ho dimenticato il cellulare.",
+   "exampleTranslation": "Я забыл телефон.",
+   "cloze": "Ho dimenticato ___.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/il tʃelluˈlare/"
+  },
+  {
+   "term": "la tazza",
+   "translation": "чашка",
+   "partOfSpeech": "noun",
+   "example": "Una tazza di tè, per favore.",
+   "exampleTranslation": "Чашку чая, пожалуйста.",
+   "cloze": "Una ___ di tè, per favore.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/la ˈtattsa/"
+  },
+  {
+   "term": "avere voglia di",
+   "translation": "хотеться",
+   "partOfSpeech": "idiom",
+   "example": "Ho voglia di un gelato.",
+   "exampleTranslation": "Мне хочется мороженого.",
+   "cloze": "___ voglia di un gelato.",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/aˈvere ˈvɔʎʎa di/"
+  },
+  {
+   "term": "dove",
+   "translation": "где; куда",
+   "partOfSpeech": "adverb",
+   "example": "Dove abiti?",
+   "exampleTranslation": "Где ты живёшь?",
+   "cloze": "___ abiti?",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈdove/"
+  },
+  {
+   "term": "bello",
+   "translation": "красивый",
+   "partOfSpeech": "adjective",
+   "example": "Che bella città!",
+   "exampleTranslation": "Какой красивый город!",
+   "cloze": "Che ___ città!",
+   "tags": [
+    "основа"
+   ],
+   "difficulty": "easy",
+   "ipa": "/ˈbɛllo/",
+   "note": "Перед существительным меняет форму: bel ragazzo, bell'albero."
+  }
+ ]
+}

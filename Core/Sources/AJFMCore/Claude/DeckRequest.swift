@@ -70,7 +70,7 @@ public struct DeckRequest: Equatable, Sendable {
     public init(
         topic: String, subtitles: String? = nil, wordCount: Int = DeckRequest.defaultWordCount,
         level: CEFRLevel? = nil, language: AppLanguage, knownTerms: [String] = [],
-        target: StudyLanguage = .english
+        target: StudyLanguage = .english, lesson: String? = nil
     ) {
         self.topic = topic
         self.subtitles = subtitles
