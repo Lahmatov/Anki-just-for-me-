@@ -15,7 +15,7 @@ import { catalogNotes, listShows, localizeNotes, showDecks } from "./catalog";
 import {
   DECK_MAX_TOKENS, DECK_SCHEMA, DISCUSSION_MAX_TOKENS, DISCUSSION_SCHEMA, HELP_MAX_TOKENS,
   HELP_QUESTION_LIMIT, HELP_SCHEMA, KNOWN_TERMS_LIMIT, helpSystem, helpUserMessage, parseHelpReply,
-  LANGUAGES, LEVELS, LESSON_LIMIT, MAX_LEARNER_TURNS, TARGETS, lessonDeckFile, lessonSystem,
+  LANGUAGES, LEVELS, LESSON_LIMIT, LESSON_SCHEMA, MAX_LEARNER_TURNS, TARGETS, lessonDeckFile, lessonSystem,
   lessonUserMessage, deckFile, deckSystem, deckUserMessage, movieDeckFile,
   discussionMessages, discussionSystem, estimateTokens, parseDeckNotes, parseDiscussionReply,
   type Turn,
@@ -393,18 +393,27 @@ async function lesson(request: Request, env: Env, deps: Deps): Promise<Response>
     wordCount: int(body, "wordCount", 5, 40),
     knownTerms: stringList(body, "knownTerms", KNOWN_TERMS_LIMIT, 80),
   };
+  // Свой номер у урока — с префиксом, чтобы не совпасть с номером набора к серии.
+  const id = requestIdOf(body);
+  const requestId = id && "lesson-" + id;
+  if (requestId) {
+    const ready = await finishedDeck(env, deps, device.id, requestId);
+    if (ready) return json(ready);
+  }
   const active = requireActive(entitlement, now);
   await limitAI(env, device, now);
-  const result = await callWithQuota(env, deps, device, active, "lesson", {
-    system: lessonSystem(input),
-    messages: [{ role: "user", content: lessonUserMessage(input) }],
-    maxTokens: DECK_MAX_TOKENS,
-    schema: DECK_SCHEMA as unknown as Record<string, unknown>,
-  });
-  const notes = parseDeckNotes(result.text, input.wordCount);
-  if (notes.length === 0) throw new ApiError(502, "model_error");
-  return json({ deck: lessonDeckFile(result.text, input, notes), source: "model",
-                plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) });
+  return json(await survive(env, deps, device.id, requestId, async () => {
+    const result = await callWithQuota(env, deps, device, active, "lesson", {
+      system: lessonSystem(input),
+      messages: [{ role: "user", content: lessonUserMessage(input) }],
+      maxTokens: DECK_MAX_TOKENS,
+      schema: LESSON_SCHEMA as unknown as Record<string, unknown>,
+    });
+    const notes = parseDeckNotes(result.text, input.wordCount);
+    if (notes.length === 0) throw new ApiError(502, "model_error");
+    return { deck: lessonDeckFile(result.text, input, notes), source: "model",
+             plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) };
+  }));
 }
 
 async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
@@ -446,10 +455,7 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
     }
   }
 
-  const requestId = optionalStr(body, "requestId", 64);
-  if (requestId !== undefined && !/^[A-Za-z0-9-]{8,64}$/.test(requestId)) {
-    throw new ApiError(400, "invalid_field", "requestId");
-  }
+  const requestId = requestIdOf(body);
   if (requestId) {
     const ready = await finishedDeck(env, deps, device.id, requestId);
     if (ready) return json(ready);
@@ -458,7 +464,7 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
   const active = requireActive(entitlement, now);
   await limitAI(env, device, now);
   const input = { facts, language, level, wordCount, knownTerms, subtitles, target };
-  const work = (async () => {
+  return json(await survive(env, deps, device.id, requestId, async () => {
     const result = await callWithQuota(env, deps, device, active, "deck", {
       system: deckSystem(input),
       messages: [{ role: "user", content: deckUserMessage(input) }],
@@ -474,24 +480,40 @@ async function deck(request: Request, env: Env, deps: Deps): Promise<Response> {
       : deckFile(facts as EpisodeFacts, language, notes);
     return { deck: file, source: "model",
              plan: status(await entitlementOf(env.DB, active.id, deps.now()), deps.now()) };
-  })();
-  if (!requestId) return json(await work);
+  }));
+}
 
-  // Работа доживает и после обрыва связи: телефон, вернувшись, спросит
-  // тот же номер и получит готовый набор без второго списания.
-  const tracked = work.then(
+/** Номер запроса от телефона: по нему повтор после обрыва не списывает второй раз. */
+function requestIdOf(body: Record<string, unknown>): string | undefined {
+  const requestId = optionalStr(body, "requestId", 64);
+  if (requestId !== undefined && !/^[A-Za-z0-9-]{8,64}$/.test(requestId)) {
+    throw new ApiError(400, "invalid_field", "requestId");
+  }
+  return requestId;
+}
+
+/**
+ * Работа доживает и после обрыва связи: телефон, вернувшись, спросит
+ * тот же номер и получит готовый ответ без второго списания.
+ */
+async function survive(
+  env: Env, deps: Deps, deviceId: string, requestId: string | undefined,
+  work: () => Promise<Record<string, unknown>>,
+): Promise<Record<string, unknown>> {
+  if (!requestId) return work();
+  const tracked = work().then(
     (response) => env.DB.prepare(
       "UPDATE deck_requests SET status = 'done', response = ? WHERE device_id = ? AND request_id = ?",
-    ).bind(JSON.stringify(response), device.id, requestId).run().then(() => response),
+    ).bind(JSON.stringify(response), deviceId, requestId).run().then(() => response),
     async (error) => {
       await env.DB.prepare(
         "UPDATE deck_requests SET status = 'failed' WHERE device_id = ? AND request_id = ?",
-      ).bind(device.id, requestId).run();
+      ).bind(deviceId, requestId).run();
       throw error;
     },
   );
   deps.waitUntil?.(tracked.catch(() => undefined));
-  return json(await tracked);
+  return tracked;
 }
 
 /** Сколько ждать уже идущий запрос с тем же номером, прежде чем попросить повторить позже. */
@@ -539,6 +561,7 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
   const language = oneOf(body, "language", LANGUAGES)!;
   const level = oneOf(body, "level", LEVELS, true);
   const retelling = optionalStr(body, "retelling", 4_000);
+  const target = oneOf(body, "target", TARGETS, true) ?? "en";
   // Короткий разговор («Recap после серии») — меньше вопросов, не больше.
   const questions = body.questions === undefined
     ? MAX_LEARNER_TURNS : int(body, "questions", 1, MAX_LEARNER_TURNS);
@@ -560,7 +583,7 @@ async function discuss(request: Request, env: Env, deps: Deps): Promise<Response
     (MAX_LEARNER_TURNS + 1) * 3, 86_400, now);
   const facts = await episodeFacts(env.DB, deps, showId, season, episode);
   const result = await callWithQuota(env, deps, device, active, "discuss", {
-    system: discussionSystem(facts, language, level, retelling),
+    system: discussionSystem(facts, language, level, retelling, target),
     messages: discussionMessages(turns, questions),
     maxTokens: DISCUSSION_MAX_TOKENS,
     schema: DISCUSSION_SCHEMA as unknown as Record<string, unknown>,

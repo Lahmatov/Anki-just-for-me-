@@ -28,6 +28,28 @@ final class EpisodeDiscussionTests: XCTestCase {
         XCTAssertTrue(system.contains("in Russian"))
     }
 
+    func testEnglishIsTheDefaultLanguageOfTheChat() {
+        let system = D.system(language: .russian, level: nil, episodeTitle: "X",
+                              reference: nil, retelling: nil)
+        XCTAssertTrue(system.contains("You chat in American English"))
+        XCTAssertTrue(system.contains("the natural American way"))
+    }
+
+    func testPortugueseChatIsInEuropeanPortuguese() {
+        let system = D.system(language: .russian, level: nil, episodeTitle: "X",
+                              reference: nil, retelling: nil, target: .portuguese)
+        XCTAssertTrue(system.contains("You chat in European Portuguese (as spoken in Portugal"))
+        XCTAssertTrue(system.contains("the natural way in Portugal"))
+        XCTAssertFalse(system.contains("American"))
+    }
+
+    func testItalianChatIsInItalian() {
+        let system = D.system(language: .english, level: nil, episodeTitle: "X",
+                              reference: nil, retelling: nil, target: .italian)
+        XCTAssertTrue(system.contains("You chat in standard Italian"))
+        XCTAssertFalse(system.contains("American"))
+    }
+
     func testWithoutReferenceMonchikAsksOpinionsNotFacts() {
         let system = D.system(language: .english, level: nil, episodeTitle: "X",
                               reference: nil, retelling: nil)

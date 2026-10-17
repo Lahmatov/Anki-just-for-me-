@@ -11,6 +11,24 @@ final class RetellPromptTests: XCTestCase {
         XCTAssertTrue(system.contains("Do not rely on your own knowledge"))
     }
 
+    func testEnglishRetellPromptIsUnchanged() {
+        let system = RetellPrompt.system(for: .russian, reference: .synopsis("x"))
+        XCTAssertTrue(system.contains("You teach American English"))
+        XCTAssertTrue(system.contains("Quality of the English"))
+        XCTAssertTrue(system.contains("stay in English exactly as they are"))
+    }
+
+    /// Пересказ по-португальски разбирается как португальский, а цитаты из
+    /// английского описания серии остаются по-английски.
+    func testPortugueseRetellIsJudgedAsPortuguese() {
+        let system = RetellPrompt.system(for: .russian, reference: .synopsis("x"), target: .portuguese)
+        XCTAssertTrue(system.contains("You teach European Portuguese"))
+        XCTAssertTrue(system.contains("Quality of the Portuguese"))
+        XCTAssertTrue(system.contains("in their original language"))
+        XCTAssertFalse(system.contains("American"))
+        XCTAssertFalse(system.contains("stay in English"))
+    }
+
     func testSynopsisPromptDoesNotPunishDetailsTheSynopsisLacks() {
         let system = RetellPrompt.system(for: .russian, reference: .synopsis("x"))
         XCTAssertTrue(system.contains("ONLY by the attached official synopsis"))

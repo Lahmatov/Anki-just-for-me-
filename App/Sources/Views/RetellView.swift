@@ -184,11 +184,12 @@ struct RetellView: View {
             }
             .buttonStyle(.chunky)
         } footer: {
-            Text(tr("Говори по-английски две-пять минут: о чём была серия, что случилось, "
+            let language = StudyLanguageStore.storedCurrent.inLanguage
+            Text(tr("Говори \(language) две-пять минут: о чём была серия, что случилось, "
                         + "что ты понял. Ошибки — это нормально, они и станут карточками.",
-                    "Fala em inglês dois a cinco minutos: de que tratou o episódio, o que "
+                    "Fala \(language) dois a cinco minutos: de que tratou o episódio, o que "
                         + "aconteceu, o que percebeste. Errar é normal — os erros viram cartões.",
-                    "Speak English for two to five minutes: what the episode was about, what "
+                    "Speak \(language) for two to five minutes: what the episode was about, what "
                         + "happened, what you understood. Mistakes are fine — they become cards."))
         }
     }

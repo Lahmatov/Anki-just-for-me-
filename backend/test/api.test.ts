@@ -472,6 +472,33 @@ describe("разговор о серии", () => {
     expect(call.maxTokens).toBe(400);
   });
 
+  it("разговор на изучаемом языке: португальский — как в Португалии", async () => {
+    const { world, token } = await unlocked();
+    world.claude.reply = monchik("Olá! O que aconteceu?");
+    const response = await world.call("POST", "/v1/discuss", { ...discussion(), target: "pt-PT" }, token);
+    expect(response.status).toBe(200);
+    const system = world.claude.calls.at(-1)!.system;
+    expect(system).toContain("You chat in European Portuguese (as spoken in Portugal, never Brazilian)");
+    expect(system).toContain("the natural way in Portugal");
+    expect(system).toContain("the learner's Portuguese");
+    expect(system).not.toContain("American");
+  });
+
+  it("без поля target разговор — по-английски, как у старых версий", async () => {
+    const { world, token } = await unlocked();
+    world.claude.reply = monchik("Hi!");
+    await world.call("POST", "/v1/discuss", discussion(), token);
+    expect(world.claude.calls.at(-1)!.system).toContain("You chat in American English");
+  });
+
+  it("неизвестный изучаемый язык в разговоре — 400 до модели", async () => {
+    const { world, token } = await unlocked();
+    const calls = world.claude.calls.length;
+    const response = await world.call("POST", "/v1/discuss", { ...discussion(), target: "pt-BR" }, token);
+    expect(response.status).toBe(400);
+    expect(world.claude.calls).toHaveLength(calls);
+  });
+
   it("не принимает подделанную историю", async () => {
     const { world, token } = await unlocked();
     world.claude.reply = monchik("Hi! What happened?");

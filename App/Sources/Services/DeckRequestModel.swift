@@ -116,14 +116,18 @@ final class DeckRequestModel {
     /// пройдёт: так подписка тратится только на сериалы и кино.
     private func generateOnServer() async -> ImportPlan? {
         step = .working
+        // Перевод — на тот же язык, что и по своему ключу: португальский с
+        // португальским интерфейсом переводится на английский, а не сам в себя.
+        let request = self.request
         do {
             let response: BackendAPI.DeckResponse
             if request.hasLesson {
                 try request.validate()
-                response = try await RecapBackend.shared.lesson(BackendAPI.LessonBody(request))
+                response = try await RecapBackend.shared.lesson(
+                    BackendAPI.LessonBody(request, requestId: requestID))
             } else if let movie {
                 response = try await RecapBackend.shared.movieDeck(BackendAPI.MovieDeckBody(
-                    movieId: movie.id, language: AppSettings.language, level: level,
+                    movieId: movie.id, language: request.language, level: level,
                     wordCount: wordCount, knownTerms: knownTerms, subtitles: subtitles,
                     requestId: requestID, target: StudyLanguageStore.storedCurrent))
             } else {
@@ -146,7 +150,7 @@ final class DeckRequestModel {
                 }
                 response = try await RecapBackend.shared.deck(BackendAPI.DeckBody(
                     showId: target.showID, season: target.season, episode: target.episode,
-                    language: AppSettings.language, level: level, wordCount: wordCount,
+                    language: request.language, level: level, wordCount: wordCount,
                     knownTerms: knownTerms, subtitles: subtitles, requestId: requestID,
                     target: StudyLanguageStore.storedCurrent))
             }

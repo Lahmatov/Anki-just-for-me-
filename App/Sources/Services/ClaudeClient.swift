@@ -114,7 +114,9 @@ struct ClaudeClient {
         // с субтитрами и подбирает цитаты, поэтому усилие высокое.
         let completion = try await complete(ClaudeRequest(
             model: ClaudeModel.pricing(for: model),
-            system: RetellPrompt.system(for: Loc.language, reference: reference),
+            system: RetellPrompt.system(
+                for: StudyLanguageStore.storedCurrent.translationLanguage(for: Loc.language),
+                reference: reference, target: StudyLanguageStore.storedCurrent),
             userMessage: RetellPrompt.userMessage(
                 reference: reference, retell: retell,
                 episodeTitle: episodeTitle, watchedUpTo: watchedUpTo),

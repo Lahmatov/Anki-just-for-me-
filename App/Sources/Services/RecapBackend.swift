@@ -119,12 +119,7 @@ final class RecapBackend {
 
     /// Копии изучаемого языка — восстанавливают в базу того же языка.
     func backups(language: StudyLanguage = StudyLanguageStore.storedCurrent) async throws -> CloudBackupList {
-        let data = try await request("GET", "/v1/backups", query: CloudBackup.languageQuery(language))
-        do {
-            return try JSONDecoder().decode(CloudBackupList.self, from: data)
-        } catch {
-            throw BackendAPI.Failure.server(code: "bad_response", status: 200)
-        }
+        try await send("GET", "/v1/backups", query: CloudBackup.languageQuery(language))
     }
 
     /// Снимок уходит телом как есть — base64 в JSON раздул бы его на треть.
@@ -158,10 +153,11 @@ final class RecapBackend {
     }
 
     private func send<Response: Decodable>(
-        _ method: String, _ path: String, body: Data? = nil,
+        _ method: String, _ path: String, body: Data? = nil, query: [URLQueryItem] = [],
         timeout: TimeInterval = 20, retrying: Bool = true
     ) async throws -> Response {
-        let data = try await request(method, path, body: body, timeout: timeout, retrying: retrying)
+        let data = try await request(method, path, body: body, query: query, timeout: timeout,
+                                     retrying: retrying)
         do {
             return try JSONDecoder().decode(Response.self, from: data)
         } catch {

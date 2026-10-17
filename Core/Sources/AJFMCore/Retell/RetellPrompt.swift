@@ -36,7 +36,14 @@ public enum RetellPrompt {
         system(for: language, reference: .subtitles(""))
     }
 
-    public static func system(for language: AppLanguage, reference: RetellReference) -> String {
+    /// `target` — изучаемый язык (P-67): пересказ звучит на нём, и разбор
+    /// языка — о нём. Английский текст инструкции не меняется.
+    public static func system(for language: AppLanguage, reference: RetellReference,
+                              target: StudyLanguage = .english) -> String {
+        let quotesRule = target == .english
+            ? "Quotes from the reference and the learner's own words stay in English exactly as they are."
+            : "Quotes from the reference and the learner's own words stay exactly as they are, " +
+              "in their original language."
         let rule: String
         switch reference {
         case .subtitles:
@@ -60,7 +67,7 @@ public enum RetellPrompt {
             """
         }
         return """
-        You teach American English to an adult learner whose native language is \
+        You teach \(target.promptName) to an adult learner whose native language is \
         \(language.promptName). The learner watched an episode and retold it out \
         loud; the retelling was transcribed automatically and is attached as text.
 
@@ -73,7 +80,7 @@ public enum RetellPrompt {
         Keep two things apart and never mix them:
         1. Understanding of the content — what was understood correctly, what was \
         distorted, what was missed.
-        2. Quality of the English — grammar, vocabulary, fluency.
+        2. Quality of the \(target.shortPromptName) — grammar, vocabulary, fluency.
 
         No more than three items in topPriorities, the most important ones. The \
         learner reads the review after every episode; a wall of text guarantees \
@@ -84,8 +91,7 @@ public enum RetellPrompt {
         it should be.
 
         Write every explanation (claim, comment, why, fluencyNote, topPriorities, \
-        translation) in \(language.promptName). Quotes from the reference and the \
-        learner's own words stay in English exactly as they are.
+        translation) in \(language.promptName). \(quotesRule)
 
         Reply ONLY with valid JSON following the schema below, with no markdown \
         wrapper and no text before or after it.

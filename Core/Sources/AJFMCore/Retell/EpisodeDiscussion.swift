@@ -93,7 +93,7 @@ public enum EpisodeDiscussion {
 
     public static func system(
         language: AppLanguage, level: CEFRLevel?, episodeTitle: String,
-        reference: RetellReference?, retelling: String?
+        reference: RetellReference?, retelling: String?, target: StudyLanguage = .english
     ) -> String {
         let levelLine = level.map {
             "The learner's level is about \($0.rawValue): use words and grammar they can "
@@ -102,7 +102,7 @@ public enum EpisodeDiscussion {
 
         var parts = ["""
         You are Monchik, a friendly cartoon moose who loves TV shows. \
-        You chat in American English with an adult learner whose native language is \
+        You chat in \(target.promptName) with an adult learner whose native language is \
         \(language.promptName). You both just watched the episode "\(episodeTitle)".
 
         \(levelLine)
@@ -118,7 +118,7 @@ public enum EpisodeDiscussion {
 
         Corrections go ONLY into "tip", never into "reply":
         - At most one tip per turn, for the most useful mistake in the learner's last \
-        message: "said" — their words, "better" — the natural American way, "why" — \
+        message: "said" — their words, "better" — \(target.naturalWay), "why" — \
         one short sentence in \(language.promptName).
         - No real mistake — leave all three fields of the tip empty. Do not invent one.
         - On your very first turn the tip is empty.

@@ -62,6 +62,21 @@ final class BackendAPITests: XCTestCase {
         XCTAssertEqual(body["knownTerms"] as? [String], ["olá"])
     }
 
+    func testLessonBodyCutsByServerUnitsWithoutBreakingCharacters() throws {
+        let title = String(repeating: "😀", count: 50)
+        let request = DeckRequest(topic: title, language: .russian, target: .italian, lesson: "ciao")
+        let sent = try XCTUnwrap(try json(BackendAPI.LessonBody(request))["title"] as? String)
+        XCTAssertEqual(sent.utf16.count, DeckRequest.lessonTitleLimit)
+        XCTAssertEqual(sent, String(repeating: "😀", count: 40))
+    }
+
+    func testLessonBodyCarriesTheRequestNumber() throws {
+        let request = DeckRequest(topic: "", language: .russian, target: .italian, lesson: "ciao")
+        XCTAssertEqual(try json(BackendAPI.LessonBody(request, requestId: "req-12345678"))["requestId"]
+                        as? String, "req-12345678")
+        XCTAssertNil(try json(BackendAPI.LessonBody(request))["requestId"])
+    }
+
     func testLessonBodyWithoutTitleSendsNoTitle() throws {
         let request = DeckRequest(topic: " ", language: .russian, target: .italian, lesson: "ciao")
         XCTAssertNil(try json(BackendAPI.LessonBody(request))["title"])
@@ -121,6 +136,15 @@ final class BackendAPITests: XCTestCase {
         XCTAssertNil(body.turns[1].sig)
         XCTAssertNil(body.retelling)
         XCTAssertEqual(try json(body)["language"] as? String, "en")
+    }
+
+    func testDiscussBodyCarriesTheStudyLanguageButNotForEnglish() throws {
+        let english = BackendAPI.DiscussBody(showId: 1, season: 1, episode: 2, language: .russian,
+                                             level: nil, turns: [], retelling: nil)
+        XCTAssertNil(try json(english)["target"])
+        let italian = BackendAPI.DiscussBody(showId: 1, season: 1, episode: 2, language: .russian,
+                                             level: nil, turns: [], retelling: nil, target: .italian)
+        XCTAssertEqual(try json(italian)["target"] as? String, "it")
     }
 
     func testMonchikTurnsGoBackUnchangedWithTheirSignature() throws {

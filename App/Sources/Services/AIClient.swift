@@ -105,7 +105,9 @@ struct AIClient {
                  modelID: String, watchedUpTo: TimeInterval?) async throws -> ClaudeClient.Outcome {
         let completion = try await complete(ClaudeRequest(
             model: ClaudeModel.pricing(for: modelID),
-            system: RetellPrompt.system(for: Loc.language, reference: reference),
+            system: RetellPrompt.system(
+                for: StudyLanguageStore.storedCurrent.translationLanguage(for: Loc.language),
+                reference: reference, target: StudyLanguageStore.storedCurrent),
             userMessage: RetellPrompt.userMessage(
                 reference: reference, retell: retell,
                 episodeTitle: episodeTitle, watchedUpTo: watchedUpTo),

@@ -57,13 +57,16 @@ struct ShowsView: View {
                                      "With subtitles of any episode or film"),
                         systemImage: "text.bubble.fill", color: Theme.purple
                     ) { RetellView() }
-                    CardLink(
-                        title: tr("Минимальные пары", "Pares mínimos", "Minimal pairs"),
-                        subtitle: tr("ship или sheep — тренажёр произношения",
-                                     "ship ou sheep — treino de pronúncia",
-                                     "ship or sheep — pronunciation drill"),
-                        systemImage: "waveform", color: Theme.red
-                    ) { MinimalPairsView() }
+                    // Пары ship/sheep — английские; у других языков своих пар пока нет.
+                    if StudyLanguageStore.shared.current == .english {
+                        CardLink(
+                            title: tr("Минимальные пары", "Pares mínimos", "Minimal pairs"),
+                            subtitle: tr("ship или sheep — тренажёр произношения",
+                                         "ship ou sheep — treino de pronúncia",
+                                         "ship or sheep — pronunciation drill"),
+                            systemImage: "waveform", color: Theme.red
+                        ) { MinimalPairsView() }
+                    }
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 24)

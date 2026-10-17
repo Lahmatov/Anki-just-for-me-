@@ -70,6 +70,24 @@ public enum StudyLanguage: String, CaseIterable, Codable, Sendable, Identifiable
         }
     }
 
+    /// «по-португальски» — для подсказок «Напиши …», «Говори …».
+    public var inLanguage: String {
+        switch self {
+        case .english: return tr("по-английски", "em inglês", "in English")
+        case .portuguese: return tr("по-португальски", "em português", "in Portuguese")
+        case .italian: return tr("по-итальянски", "em italiano", "in Italian")
+        }
+    }
+
+    /// «… минут португальского сегодня».
+    public var ofLanguage: String {
+        switch self {
+        case .english: return tr("английского", "de inglês", "of English")
+        case .portuguese: return tr("португальского", "de português", "of Portuguese")
+        case .italian: return tr("итальянского", "de italiano", "of Italian")
+        }
+    }
+
     public var flag: String {
         switch self {
         case .english: return "🇺🇸"
@@ -84,6 +102,25 @@ public enum StudyLanguage: String, CaseIterable, Codable, Sendable, Identifiable
         case .english: return "American English"
         case .portuguese: return "European Portuguese (as spoken in Portugal, never Brazilian)"
         case .italian: return "standard Italian"
+        }
+    }
+
+    /// Короткое имя языка внутри фраз промпта: «the learner's Portuguese».
+    public var shortPromptName: String {
+        switch self {
+        case .english: return "English"
+        case .portuguese: return "Portuguese"
+        case .italian: return "Italian"
+        }
+    }
+
+    /// Как звучит «правильно» в поправках Мончика: для португальского — как
+    /// в Португалии, иначе модель тянет к бразильскому.
+    public var naturalWay: String {
+        switch self {
+        case .english: return "the natural American way"
+        case .portuguese: return "the natural way in Portugal"
+        case .italian: return "the natural Italian way"
         }
     }
 

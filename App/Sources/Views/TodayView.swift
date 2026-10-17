@@ -525,9 +525,9 @@ struct TodayView: View {
             goalCelebratedDay = today
             Celebrations.shared.show(
                 tr("Цель дня выполнена!", "Objetivo do dia cumprido!", "Daily goal done!"),
-                subtitle: DailyGoal.format(minutes: goalMinutes)
-                    + tr(" английского сегодня. До завтра!", " de inglês hoje. Até amanhã!",
-                         " of English today. See you tomorrow!"))
+                subtitle: DailyGoal.format(minutes: goalMinutes) + " "
+                    + StudyLanguageStore.storedCurrent.ofLanguage
+                    + tr(" сегодня. До завтра!", " hoje. Até amanhã!", " today. See you tomorrow!"))
         }
     }
 

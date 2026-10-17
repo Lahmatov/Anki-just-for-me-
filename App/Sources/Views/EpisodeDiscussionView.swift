@@ -18,6 +18,11 @@ struct EpisodeDiscussionView: View {
     @State private var deckResult: ImportResult?
     @FocusState private var inputFocused: Bool
 
+    private var speakPrompt: String {
+        let language = StudyLanguageStore.storedCurrent.inLanguage
+        return tr("Говори \(language)…", "Fala \(language)…", "Speak \(language)…")
+    }
+
     var body: some View {
         Group {
             if let model {
@@ -212,7 +217,7 @@ struct EpisodeDiscussionView: View {
         return VStack(spacing: 6) {
             if model.step == .recording {
                 Text(model.recorder.fullText.isEmpty
-                     ? tr("Говори по-английски…", "Fala em inglês…", "Speak English…")
+                     ? speakPrompt
                      : model.recorder.fullText)
                     .font(.app(.callout))
                     .foregroundStyle(Theme.muted)

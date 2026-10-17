@@ -59,6 +59,27 @@ final class StudyLanguageTests: XCTestCase {
         XCTAssertFalse(StudyLanguage.portuguese.hasShowCatalog)
         XCTAssertFalse(StudyLanguage.italian.hasPlacementTest)
     }
+
+    // MARK: - Подсказки на языке интерфейса
+
+    func testHintsNameTheStudyLanguageInTheInterfaceLanguage() {
+        let saved = Loc.language
+        defer { Loc.language = saved }
+        Loc.language = .russian
+        XCTAssertEqual(StudyLanguage.portuguese.inLanguage, "по-португальски")
+        XCTAssertEqual(StudyLanguage.italian.ofLanguage, "итальянского")
+        Loc.language = .portuguese
+        XCTAssertEqual(StudyLanguage.english.inLanguage, "em inglês")
+        Loc.language = .english
+        XCTAssertEqual(StudyLanguage.italian.inLanguage, "in Italian")
+    }
+
+    func testEveryLanguageHasDistinctPromptWording() {
+        let all = StudyLanguage.allCases
+        XCTAssertEqual(Set(all.map(\.shortPromptName)).count, all.count)
+        XCTAssertEqual(Set(all.map(\.naturalWay)).count, all.count)
+        XCTAssertTrue(StudyLanguage.portuguese.naturalWay.contains("Portugal"))
+    }
 }
 
 final class TranslationLanguageTests: XCTestCase {

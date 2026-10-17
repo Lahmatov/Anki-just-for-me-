@@ -52,6 +52,42 @@ describe("урок", () => {
     expect(body.deck.deck.folder).toBe("Aulas");
   });
 
+  it("схема ответа требует имя — иначе модели некуда его написать", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    await world.call("POST", "/v1/lesson", LESSON, token);
+    const schema = world.claude.calls[0]!.schema as { required: string[]; properties: Record<string, unknown> };
+    expect(schema.required).toEqual(["name", "notes"]);
+    expect(schema.properties.name).toEqual({ type: "string" });
+  });
+
+  it("повтор оборванного урока с тем же номером — без второго вызова модели", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    const request = { ...LESSON, requestId: "lesson-request-1" };
+    const first = await world.call("POST", "/v1/lesson", request, token);
+    const again = await world.call("POST", "/v1/lesson", request, token);
+    expect(again.status).toBe(200);
+    expect(again.body.deck).toEqual(first.body.deck);
+    expect(world.claude.calls).toHaveLength(1);
+  });
+
+  it("номер урока не совпадает с номером набора к серии", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    await world.call("POST", "/v1/lesson", { ...LESSON, requestId: "same-number-1" }, token);
+    const rows = world.db.raw.prepare("SELECT request_id AS id FROM deck_requests").all();
+    expect(rows).toEqual([{ id: "lesson-same-number-1" }]);
+  });
+
+  it("мусор в номере урока — 400 до модели", async () => {
+    const world = makeWorld();
+    const token = await withPromo(world);
+    const response = await world.call("POST", "/v1/lesson", { ...LESSON, requestId: "x y" }, token);
+    expect(response.status).toBe(400);
+    expect(world.claude.calls).toHaveLength(0);
+  });
+
   it("пустой урок, слишком длинный урок и чужой язык — отказ до модели", async () => {
     const world = makeWorld();
     const token = await withPromo(world);

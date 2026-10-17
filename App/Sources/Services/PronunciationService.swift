@@ -74,9 +74,9 @@ final class PronunciationService {
         bestConfidence = 0
 
         guard let recognizer, recognizer.isAvailable else {
-            status = .failed(tr("Распознавание английской речи недоступно на этом устройстве.",
-                                "O reconhecimento de fala em inglês não está disponível neste dispositivo.",
-                                "English speech recognition isn't available on this device."))
+            status = .failed(tr("Распознавание речи на этом языке недоступно на этом устройстве.",
+                                "O reconhecimento de fala neste idioma não está disponível neste dispositivo.",
+                                "Speech recognition for this language isn't available on this device."))
             return
         }
 

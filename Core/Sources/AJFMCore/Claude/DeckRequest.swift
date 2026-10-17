@@ -88,8 +88,11 @@ public struct DeckRequest: Equatable, Sendable {
                 || hasSubtitles || hasLesson else {
             throw DeckRequestError.emptyTopic
         }
-        if let lesson, lesson.count > Self.lessonLimit {
-            throw DeckRequestError.lessonTooLong(characters: lesson.count, limit: Self.lessonLimit)
+        // Длина — в UTF-16, как её меряет сервер: иначе урок с эмодзи прошёл бы
+        // проверку здесь и получил отказ там.
+        let lessonLength = (lesson ?? "").trimmingCharacters(in: .whitespacesAndNewlines).utf16.count
+        if lessonLength > Self.lessonLimit {
+            throw DeckRequestError.lessonTooLong(characters: lessonLength, limit: Self.lessonLimit)
         }
         if let subtitles, subtitles.count > Self.subtitlesLimit {
             throw DeckRequestError.subtitlesTooLong(

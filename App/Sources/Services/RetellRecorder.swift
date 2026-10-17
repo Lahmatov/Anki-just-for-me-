@@ -85,9 +85,9 @@ final class RetellRecorder {
     func start() {
         guard status != .recording else { return }
         guard let recognizer, recognizer.isAvailable else {
-            status = .failed(tr("Распознавание английской речи недоступно.",
-                                "O reconhecimento de fala em inglês não está disponível.",
-                                "English speech recognition isn't available."))
+            status = .failed(tr("Распознавание речи на этом языке недоступно.",
+                                "O reconhecimento de fala neste idioma não está disponível.",
+                                "Speech recognition for this language isn't available."))
             return
         }
 

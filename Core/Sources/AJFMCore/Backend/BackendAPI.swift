@@ -143,18 +143,19 @@ public enum BackendAPI {
         public var level: String?
         public var wordCount: Int
         public var knownTerms: [String]
+        /// Номер запроса: повтор после обрыва связи отдаёт готовый набор без второго списания.
+        public var requestId: String?
 
-        public init(_ request: DeckRequest) {
-            let lesson = (request.lesson ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-            self.lesson = String(lesson.prefix(DeckRequest.lessonLimit))
-            let title = request.topic.trimmingCharacters(in: .whitespacesAndNewlines)
-            self.title = title.isEmpty ? nil : String(title.prefix(80))
+        public init(_ request: DeckRequest, requestId: String? = nil) {
+            self.lesson = request.lessonText
+            self.title = request.lessonTitle
             self.language = request.language.rawValue
             self.target = request.target.rawValue
             self.level = request.level?.rawValue
             self.wordCount = min(max(request.wordCount, DeckRequest.wordCountRange.lowerBound),
                                  DeckRequest.wordCountRange.upperBound)
             self.knownTerms = Array(request.knownTerms.prefix(DeckRequest.knownTermsLimit))
+            self.requestId = requestId
         }
     }
 
@@ -184,11 +185,14 @@ public enum BackendAPI {
         public var retelling: String?
         /// Длина разговора; nil — обычная (шесть вопросов), сервер решит сам.
         public var questions: Int?
+        /// Изучаемый язык; у английского поля нет, как у старых версий.
+        public var target: String?
 
         public init(showId: Int, season: Int, episode: Int, language: AppLanguage,
                     level: CEFRLevel?, turns: [EpisodeDiscussion.Turn], retelling: String?,
-                    questions: Int? = nil) {
+                    questions: Int? = nil, target: StudyLanguage = .english) {
             self.questions = questions.map(EpisodeDiscussion.clampedLimit)
+            self.target = target == .english ? nil : target.rawValue
             self.showId = showId
             self.season = season
             self.episode = episode

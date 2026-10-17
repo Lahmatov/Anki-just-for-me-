@@ -21,6 +21,12 @@ enum AIService {
         var cost: Double
     }
 
+    /// На каком языке поправки: как и переводы в карточках — португальский
+    /// с португальским интерфейсом объясняется по-английски.
+    private static var explanationLanguage: AppLanguage {
+        StudyLanguageStore.storedCurrent.translationLanguage(for: Loc.language)
+    }
+
     /// Следующая реплика Мончика.
     static func discuss(
         context: ModelContext, episode: EpisodeContext,
@@ -32,9 +38,10 @@ enum AIService {
         if RecapAccount.shared.usesBackend {
             let response = try await RecapBackend.shared.discuss(BackendAPI.DiscussBody(
                 showId: episode.showID, season: episode.episode.season,
-                episode: episode.episode.number, language: Loc.language,
+                episode: episode.episode.number, language: explanationLanguage,
                 level: AppSettings.englishLevel, turns: turns, retelling: retelling,
-                questions: questions == EpisodeDiscussion.maxLearnerTurns ? nil : questions))
+                questions: questions == EpisodeDiscussion.maxLearnerTurns ? nil : questions,
+                target: StudyLanguageStore.storedCurrent))
             RecapAccount.shared.update(response.plan)
             return DiscussionResult(reply: response.asReply, cost: 0)
         }
@@ -52,9 +59,10 @@ enum AIService {
         // Разговор — короткие реплики: быстрая модель, как для наборов.
         let model = budget.deckModel
         let system = EpisodeDiscussion.system(
-            language: Loc.language, level: AppSettings.englishLevel,
+            language: explanationLanguage, level: AppSettings.englishLevel,
             episodeTitle: episode.title,
-            reference: episode.synopsis.map { .synopsis($0) }, retelling: retelling)
+            reference: episode.synopsis.map { .synopsis($0) }, retelling: retelling,
+            target: StudyLanguageStore.storedCurrent)
         let messages = EpisodeDiscussion.messages(for: turns, limit: questions)
 
         let input = RetellPrompt.estimateTokens(system)

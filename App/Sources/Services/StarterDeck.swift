@@ -27,19 +27,25 @@ enum StarterDeck {
         // Перевод — на язык интерфейса, кроме случая «учу португальский с
         // португальским интерфейсом». Нет такого файла — английский, затем русский:
         // у изучаемых языков кроме английского эти два есть всегда.
-        let candidates = [target.translationLanguage(for: language), .english, .russian]
-        let url = candidates.lazy.compactMap {
-            Bundle.main.url(forResource: resourceName(for: $0, target: target), withExtension: "json")
-        }.first
-        guard let url else {
+        guard let url = url(for: language, target: target) else {
             Log.warning(.app, "Стартовый набор не найден в ресурсах приложения", detail: target.rawValue)
             return nil
         }
         return try? Data(contentsOf: url)
     }
 
+    private static func url(for language: AppLanguage, target: StudyLanguage) -> URL? {
+        let candidates = [target.translationLanguage(for: language), .english, .russian]
+        return candidates.lazy.compactMap {
+            Bundle.main.url(forResource: resourceName(for: $0, target: target), withExtension: "json")
+        }.first
+    }
+
     /// Есть ли стартовый набор для изучаемого языка — иначе кнопку не показываем.
-    static var isAvailable: Bool { data() != nil }
+    /// Спрашивается из body экранов, поэтому только ищет файл, не читая его.
+    static var isAvailable: Bool {
+        url(for: Loc.language, target: StudyLanguageStore.storedCurrent) != nil
+    }
 
     /// Сколько слов в наборе — показывается на экране знакомства.
     static func wordCount() -> Int {

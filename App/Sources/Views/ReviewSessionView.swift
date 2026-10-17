@@ -298,7 +298,8 @@ struct CardPromptView: View {
                 }
                 SpeakButton(text: note?.term ?? "", rate: .slow, label: SpeechRate.slow.title)
                 PronunciationRecorderView(word: note?.term ?? "")
-                if let pair = MinimalPairLibrary.pair(containing: note?.term ?? "") {
+                if StudyLanguageStore.storedCurrent == .english,
+                   let pair = MinimalPairLibrary.pair(containing: note?.term ?? "") {
                     Text(tr("Это слово из минимальной пары «\(pair.first) — \(pair.second)». "
                                 + "Вкладка «Речь» проверит его строже.",
                             "Esta palavra faz parte do par mínimo «\(pair.first) — \(pair.second)». "

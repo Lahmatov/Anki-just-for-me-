@@ -174,7 +174,9 @@ extension CardType {
     var instruction: String {
         switch self {
         case .recognition: return tr("Выбери перевод", "Escolhe a tradução", "Pick the translation")
-        case .recall: return tr("Напиши по-английски", "Escreve em inglês", "Write it in English")
+        case .recall:
+            let language = StudyLanguageStore.storedCurrent.inLanguage
+            return tr("Напиши \(language)", "Escreve \(language)", "Write it \(language)")
         case .listening: return tr("Запиши то, что слышишь", "Escreve o que ouves", "Type what you hear")
         case .spelling: return tr("Напиши слово без ошибок", "Escreve a palavra sem erros", "Spell the word correctly")
         case .pronunciation: return tr("Произнеси вслух", "Diz em voz alta", "Say it out loud")
