@@ -109,7 +109,7 @@ jobs:
           mkdir -p shots
           xcrun xcresulttool export attachments --path result.xcresult --output-path shots || true
           ls shots | head -50
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always() && steps.sim.outputs.skip != 'true'
         with:
           name: screens-${{ matrix.device }}-${{ steps.sim.outputs.version }}${{ matrix.text && format('-{0}', matrix.text) || '' }}
