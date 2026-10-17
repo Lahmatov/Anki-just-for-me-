@@ -56,7 +56,7 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
       case "POST /v1/discuss": return await discuss(request, env, deps);
       case "POST /v1/help": return await help(request, env, deps);
       case "GET /v1/catalog": return await catalog(request, env, deps);
-      case "GET /v1/backups": return await backups(request, env, deps);
+      case "GET /v1/backups": return await backups(request, env, deps, url);
       case "POST /v1/backups": return await uploadBackup(request, env, deps, url);
       case "DELETE /v1/backups": return await eraseBackups(request, env, deps);
     }
@@ -181,6 +181,7 @@ async function exportData(request: Request, env: Env, deps: Deps): Promise<Respo
     })),
     backups: (await listBackups(env.DB, ownerOf(device))).map((item) => ({
       device: item.device, words: item.noteCount, bytes: item.size, at: iso(item.createdAt),
+      language: item.language,
     })),
     retentionDays: {
       inactiveDevice: RETENTION.inactiveDeviceDays,
@@ -261,9 +262,17 @@ async function backupContext(request: Request, env: Env, deps: Deps) {
   return { device, owner: ownerOf(device) };
 }
 
-async function backups(request: Request, env: Env, deps: Deps): Promise<Response> {
+/** Язык копий из адреса; без него — английский, как у версий до языков. */
+function backupLanguage(url: URL): string {
+  const value = url.searchParams.get("language");
+  if (value === null || value === "") return "en";
+  if (!(TARGETS as readonly string[]).includes(value)) throw new ApiError(400, "invalid_field", "language");
+  return value;
+}
+
+async function backups(request: Request, env: Env, deps: Deps, url: URL): Promise<Response> {
   const { device, owner } = await backupContext(request, env, deps);
-  return json({ backups: await listBackups(env.DB, owner), keep: BACKUP.keep,
+  return json({ backups: await listBackups(env.DB, owner, backupLanguage(url)), keep: BACKUP.keep,
                 signedIn: device.account_id !== null });
 }
 
@@ -288,6 +297,7 @@ async function uploadBackup(request: Request, env: Env, deps: Deps, url: URL): P
     device: str(query, "device", 64),
     noteCount: numbers("notes"),
     matureWords: numbers("mature"),
+    language: backupLanguage(url),
   };
   const payload = await readBytes(request, BACKUP.maxBytes);
   const entry = await saveBackup(env, deps, owner, meta, payload);

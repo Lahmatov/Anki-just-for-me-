@@ -25,6 +25,8 @@ export interface BackupMeta {
   device: string;
   noteCount: number;
   matureWords: number;
+  /** Изучаемый язык (P-67); копии хранятся и чистятся у каждого свои. */
+  language: string;
 }
 
 export interface BackupEntry {
@@ -34,6 +36,7 @@ export interface BackupEntry {
   noteCount: number;
   matureWords: number;
   size: number;
+  language: string;
 }
 
 interface BackupRow {
@@ -44,6 +47,7 @@ interface BackupRow {
   size: number;
   chunks: number;
   created_at: number;
+  language: string;
 }
 
 /** Чьи снимки: аккаунта, если вошёл, — только он переживает смену телефона. */
@@ -85,38 +89,51 @@ export async function saveBackup(
 
   const statements = [
     db.prepare(
-      `INSERT INTO backups (id, owner, device_label, note_count, mature_words, size, chunks, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    ).bind(id, owner, meta.device, meta.noteCount, meta.matureWords, payload.length, parts.length, now),
+      `INSERT INTO backups (id, owner, device_label, note_count, mature_words, size, chunks, created_at,
+                            language)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ).bind(id, owner, meta.device, meta.noteCount, meta.matureWords, payload.length, parts.length, now,
+           meta.language),
   ];
   for (const [seq, part] of parts.entries()) {
     const sealed = await sealBytes(env.PROMO_PEPPER, `${PURPOSE}|${id}|${seq}`, part, deps.randomBytes);
     statements.push(db.prepare("INSERT INTO backup_chunks (backup_id, seq, data) VALUES (?, ?, ?)")
       .bind(id, seq, base64url(sealed)));
   }
-  // Лишние — всё старше `keep` последних. rowid различает снимки одной секунды.
-  const extra = `SELECT id FROM backups WHERE owner = ? ORDER BY created_at DESC, rowid DESC
-                 LIMIT -1 OFFSET ${BACKUP.keep}`;
-  statements.push(db.prepare(`DELETE FROM backup_chunks WHERE backup_id IN (${extra})`).bind(owner));
-  statements.push(db.prepare(`DELETE FROM backups WHERE id IN (${extra})`).bind(owner));
+  // Лишние — всё старше `keep` последних этого же языка: ежедневные
+  // португальские копии не вытесняют английские. rowid различает снимки одной секунды.
+  const extra = `SELECT id FROM backups WHERE owner = ? AND language = ?
+                 ORDER BY created_at DESC, rowid DESC LIMIT -1 OFFSET ${BACKUP.keep}`;
+  statements.push(db.prepare(`DELETE FROM backup_chunks WHERE backup_id IN (${extra})`)
+    .bind(owner, meta.language));
+  statements.push(db.prepare(`DELETE FROM backups WHERE id IN (${extra})`).bind(owner, meta.language));
   await db.batch(statements);
 
   return { id, createdAt: now, device: meta.device, noteCount: meta.noteCount,
-           matureWords: meta.matureWords, size: payload.length };
+           matureWords: meta.matureWords, size: payload.length, language: meta.language };
 }
 
-/** Список без самих снимков: для выбора хватает даты, размера и числа слов. */
-export async function listBackups(db: D1Database, owner: string): Promise<BackupEntry[]> {
-  const rows = await db.prepare(
-    `SELECT id, device_label, note_count, mature_words, size, chunks, created_at FROM backups
-     WHERE owner = ? ORDER BY created_at DESC, rowid DESC`,
-  ).bind(owner).all<BackupRow>();
+/**
+ * Список без самих снимков: для выбора хватает даты, размера и числа слов.
+ * С языком — только его копии: восстанавливают в базу того же языка.
+ */
+export async function listBackups(db: D1Database, owner: string, language?: string): Promise<BackupEntry[]> {
+  const rows = language === undefined
+    ? await db.prepare(
+      `SELECT id, device_label, note_count, mature_words, size, chunks, created_at, language FROM backups
+       WHERE owner = ? ORDER BY created_at DESC, rowid DESC`,
+    ).bind(owner).all<BackupRow>()
+    : await db.prepare(
+      `SELECT id, device_label, note_count, mature_words, size, chunks, created_at, language FROM backups
+       WHERE owner = ? AND language = ? ORDER BY created_at DESC, rowid DESC`,
+    ).bind(owner, language).all<BackupRow>();
   return rows.results.map(entryOf);
 }
 
 function entryOf(row: BackupRow): BackupEntry {
   return { id: row.id, createdAt: row.created_at, device: row.device_label,
-           noteCount: row.note_count, matureWords: row.mature_words, size: row.size };
+           noteCount: row.note_count, matureWords: row.mature_words, size: row.size,
+           language: row.language };
 }
 
 /**
@@ -126,7 +143,7 @@ function entryOf(row: BackupRow): BackupEntry {
 export async function loadBackup(env: Env, owner: string, id: string): Promise<Uint8Array> {
   const db = env.DB;
   const row = await db.prepare(
-    `SELECT id, device_label, note_count, mature_words, size, chunks, created_at FROM backups
+    `SELECT id, device_label, note_count, mature_words, size, chunks, created_at, language FROM backups
      WHERE id = ? AND owner = ?`,
   ).bind(id, owner).first<BackupRow>();
   if (!row) throw new ApiError(404, "backup_not_found");

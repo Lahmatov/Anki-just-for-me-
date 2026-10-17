@@ -53,6 +53,21 @@ final class CloudBackupTests: XCTestCase {
         XCTAssertEqual(items.map(\.value), ["iPhone · AB12", "120", "30"])
     }
 
+    /// Английская копия описывается как до появления языков — без параметра.
+    func testEnglishUploadHasNoLanguage() {
+        let items = CloudBackup.uploadQuery(device: "iPhone", noteCount: 1, matureWords: 0)
+        XCTAssertFalse(items.contains { $0.name == "language" })
+        XCTAssertTrue(CloudBackup.languageQuery(.english).isEmpty)
+    }
+
+    func testOtherLanguagesNameTheirCopies() {
+        let items = CloudBackup.uploadQuery(device: "iPhone", noteCount: 1, matureWords: 0,
+                                            language: .portuguese)
+        XCTAssertEqual(items.last?.name, "language")
+        XCTAssertEqual(items.last?.value, "pt-PT")
+        XCTAssertEqual(CloudBackup.languageQuery(.italian).first?.value, "it")
+    }
+
     func testUploadQueryClampsWhatTheServerWouldReject() {
         let items = CloudBackup.uploadQuery(device: String(repeating: "x", count: 100),
                                             noteCount: -1, matureWords: -5)

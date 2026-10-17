@@ -120,6 +120,35 @@ describe("облачный бэкап на своём сервере", () => {
     expect(list.body.signedIn).toBe(false);
   });
 
+  it("копии разных языков не смешиваются: список и чистка — по языку", async () => {
+    const w = makeWorld();
+    const token = await w.device();
+    const english = await upload(w, token, payload(100, 1));
+    expect(english.body.backup.language).toBe("en");
+    // Португальских больше, чем хранится, — английская всё равно остаётся.
+    let lastPortuguese = "";
+    for (let index = 0; index < BACKUP.keep + 2; index++) {
+      w.advance(60);
+      const saved = await upload(w, token, payload(50 + index, index),
+        "device=iPhone&notes=10&mature=1&language=pt-PT");
+      lastPortuguese = saved.body.backup.id;
+    }
+    const portuguese = await w.call("GET", "/v1/backups?language=pt-PT", undefined, token);
+    expect(portuguese.body.backups).toHaveLength(BACKUP.keep);
+    expect(portuguese.body.backups[0].id).toBe(lastPortuguese);
+    const englishList = await w.call("GET", "/v1/backups", undefined, token);
+    expect(englishList.body.backups.map((item: { id: string }) => item.id)).toEqual([english.body.backup.id]);
+    expect((await download(w, token, english.body.backup.id)).status).toBe(200);
+  });
+
+  it("неизвестный язык копии — 400", async () => {
+    const w = makeWorld();
+    const token = await w.device();
+    const bad = await upload(w, token, payload(10), "device=iPhone&notes=1&mature=0&language=pt-BR");
+    expect(bad.status).toBe(400);
+    expect((await w.call("GET", "/v1/backups?language=xx", undefined, token)).status).toBe(400);
+  });
+
   it("хранятся только последние снимки — старые стираются вместе с частями", async () => {
     const w = makeWorld();
     const token = await w.device();

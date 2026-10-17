@@ -90,11 +90,18 @@ public enum CloudBackup {
     }
 
     /// Описание снимка — в адресе запроса: тело занято самим снимком.
-    public static func uploadQuery(device: String, noteCount: Int, matureWords: Int) -> [URLQueryItem] {
+    public static func uploadQuery(device: String, noteCount: Int, matureWords: Int,
+                                   language: StudyLanguage = .english) -> [URLQueryItem] {
         [
             URLQueryItem(name: "device", value: String(device.prefix(64))),
             URLQueryItem(name: "notes", value: String(max(0, noteCount))),
             URLQueryItem(name: "mature", value: String(max(0, matureWords))),
-        ]
+        ] + languageQuery(language)
+    }
+
+    /// Копии у каждого изучаемого языка свои (P-67). Английский — без
+    /// параметра: так же, как спрашивали версии до появления языков.
+    public static func languageQuery(_ language: StudyLanguage) -> [URLQueryItem] {
+        language == .english ? [] : [URLQueryItem(name: "language", value: language.rawValue)]
     }
 }

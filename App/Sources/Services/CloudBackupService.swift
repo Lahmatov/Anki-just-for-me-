@@ -76,7 +76,8 @@ struct CloudBackupService {
             .count
 
         _ = try await backend.uploadBackup(payload, query: CloudBackup.uploadQuery(
-            device: Self.deviceLabel, noteCount: backup.noteCount, matureWords: mature))
+            device: Self.deviceLabel, noteCount: backup.noteCount, matureWords: mature,
+            language: backup.studyLanguage))
         UserDefaults.standard.set(now, forKey: SettingsKey.lastCloudBackupDate)
         Log.info(.backup, "Бэкап отправлен в облако",
                  detail: "слов: \(backup.noteCount), \(raw / 1024) → \(payload.count / 1024) КБ")

@@ -117,8 +117,14 @@ final class RecapBackend {
 
     // MARK: - Облачный бэкап
 
-    func backups() async throws -> CloudBackupList {
-        try await send("GET", "/v1/backups")
+    /// Копии изучаемого языка — восстанавливают в базу того же языка.
+    func backups(language: StudyLanguage = StudyLanguageStore.storedCurrent) async throws -> CloudBackupList {
+        let data = try await request("GET", "/v1/backups", query: CloudBackup.languageQuery(language))
+        do {
+            return try JSONDecoder().decode(CloudBackupList.self, from: data)
+        } catch {
+            throw BackendAPI.Failure.server(code: "bad_response", status: 200)
+        }
     }
 
     /// Снимок уходит телом как есть — base64 в JSON раздул бы его на треть.
