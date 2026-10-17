@@ -24,7 +24,8 @@ jobs:
   device:
     name: ${{ matrix.device }} · iOS ${{ matrix.runtime }}${{ matrix.text && format(' · {0}', matrix.text) || '' }}
     runs-on: macos-26
-    timeout-minutes: 40
+    # 60, а не 40: с уроками, темой и iPad тестов стало вдвое больше.
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       max-parallel: 5

@@ -29,6 +29,7 @@ final class StudyLanguageStore {
         StudyShow.invalidate()
         current = language
         Log.info(.app, "Изучаемый язык", detail: language.rawValue)
+        AnalyticsService.track(.studyLanguageSwitched(to: language))
     }
 
     static let schema = Schema([

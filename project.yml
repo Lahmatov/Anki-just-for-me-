@@ -66,6 +66,14 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
         # iPhone и iPad (P-70): на iPad тот же интерфейс, колонкой по центру.
         TARGETED_DEVICE_FAMILY: "1,2"
+      # Свой сервер у каждой сборки (P-74): из Xcode (Debug) — тестовый, в
+      # TestFlight и App Store (Release) — рабочий. Ошибка в разработке не
+      # трогает данные настоящих людей. Адреса — после `wrangler deploy`.
+      configs:
+        Debug:
+          RECAP_BACKEND_URL: https://recap-backend-staging.CHANGE-ME.workers.dev
+        Release:
+          RECAP_BACKEND_URL: https://recap-backend.CHANGE-ME.workers.dev
     info:
       path: App/Info.plist
       properties:
@@ -99,7 +107,7 @@ targets:
         NSSupportsLiveActivities: true
         # Адрес сервера Recap (backend/) после `wrangler deploy`. Пока стоит
         # заглушка, подписка и промокоды в приложении не показываются.
-        RecapBackendURL: https://recap-backend.CHANGE-ME.workers.dev
+        RecapBackendURL: $(RECAP_BACKEND_URL)
         # Продавец — те же имя, адрес и почта, что в App Store Connect для DSA.
         # Подставляются в условия и политику в приложении и в письмо в поддержку.
         RecapSellerName: CHANGE-ME

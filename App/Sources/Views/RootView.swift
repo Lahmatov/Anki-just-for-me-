@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
 import UIKit
+import StoreKit
 import AJFMCore
 
 struct RootView: View {
@@ -31,6 +32,7 @@ struct RootView: View {
     @State private var keyboard = KeyboardObserver()
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.requestReview) private var requestReview
     private var tabBarVisibility: TabBarVisibility { .shared }
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
     /// Пустая строка — язык не выбран явно, действует системный.
@@ -38,6 +40,19 @@ struct RootView: View {
     @AppStorage(SettingsKey.appearance) private var appearanceRaw = AppAppearance.system.rawValue
 
     private var appearance: AppAppearance { AppAppearance(rawValue: appearanceRaw) ?? .system }
+
+    /// После праздника — самый честный момент спросить оценку (P-74).
+    /// Правила — `ReviewPrompt`: не в первую неделю, раз на версию, с паузой.
+    private func askForReviewIfDeserved() {
+        let days = ProgressService(context: context).studyDayCount()
+        guard ReviewPromptService.shouldAsk(studyDays: days, moment: .dailyGoal) else { return }
+        ReviewPromptService.markAsked()
+        Task {
+            // Окно App Store — не поверх уходящего праздника.
+            try? await Task.sleep(for: .seconds(1))
+            requestReview()
+        }
+    }
 
     var body: some View {
         // Свои вкладки вместо системного TabView — стекло то же, что в iOS 26,
@@ -90,6 +105,7 @@ struct RootView: View {
             if let moment = Celebrations.shared.current {
                 CelebrationOverlay(title: moment.title, subtitle: moment.subtitle) {
                     Celebrations.shared.dismiss()
+                    askForReviewIfDeserved()
                 }
                 .id(moment.id)
                 .transition(.opacity.combined(with: .scale(scale: 0.96)))

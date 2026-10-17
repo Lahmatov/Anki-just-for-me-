@@ -19,6 +19,10 @@ struct AJFMApp: App {
         // и потом шрифт уже не подхватывают.
         AppFont.current.applyToNavigationBars()
 
+        // Сбои от iOS и первый запуск для просьбы об оценке (P-74).
+        DiagnosticsService.shared.start()
+        ReviewPromptService.noteLaunch()
+
         // База открывается для изучаемого языка; у каждого языка своя (P-67).
         let container = StudyLanguageStore.shared.currentContainer
         if UITesting.wantsDemoData {

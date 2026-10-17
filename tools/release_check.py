@@ -16,8 +16,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Что и где должно быть заполнено — и подсказка, откуда взять значение.
 CHECKS = [
-    ('project.yml', r'RecapBackendURL:.*CHANGE-ME',
-     'RecapBackendURL — адрес сервера после `wrangler deploy` (docs/backend.md)'),
+    # Рабочий сервер — у сборки Release; тестовый (Debug) в App Store не уходит.
+    ('project.yml', r'Release:\s*\n\s*RECAP_BACKEND_URL:.*CHANGE-ME',
+     'RECAP_BACKEND_URL (Release) — адрес рабочего сервера после `wrangler deploy` (docs/backend.md)'),
     ('project.yml', r'RecapSellerName:\s*CHANGE-ME',
      'RecapSellerName — имя продавца, как в App Store Connect → DSA'),
     ('project.yml', r'RecapSellerAddress:\s*CHANGE-ME',

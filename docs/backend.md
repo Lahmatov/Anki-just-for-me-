@@ -119,7 +119,7 @@ npm run deploy     # напечатает адрес: https://recap-backend.<и�
 Ночная чистка включается сама: расписание — `[triggers]` в `wrangler.toml`,
 итог каждого запуска виден в `npx wrangler tail`.
 
-Адрес вписать в `project.yml` → `RecapBackendURL`, затем `xcodegen` и
+Адрес вписать в `project.yml` → `RECAP_BACKEND_URL` (Debug — staging, Release — production), затем `xcodegen` и
 собрать приложение. Пока там заглушка `CHANGE-ME`, приложение работает
 по-старому: со своим ключом и без Recap Plus.
 

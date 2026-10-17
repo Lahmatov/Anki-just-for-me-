@@ -22,6 +22,8 @@ struct SupportTicketView: View {
             device: UIDevice.current.model, language: Loc.language,
             studyLanguage: StudyLanguageStore.storedCurrent,
             cards: try? context.fetchCount(FetchDescriptor<Card>()))
+            // Сводка сбоев за месяц от MetricKit — без стека и адресов (P-74).
+            .merging(DiagnosticsService.summary) { current, _ in current }
     }
 
     private var body_: BackendAPI.SupportTicketBody {
@@ -114,6 +116,7 @@ struct SupportTicketView: View {
         defer { sending = false }
         do {
             sent = try await RecapBackend.shared.support(body_)
+            AnalyticsService.track(.supportSent(category: category))
             Haptics.success()
         } catch {
             Log.failure(.network, "Обращение в поддержку не ушло", error)

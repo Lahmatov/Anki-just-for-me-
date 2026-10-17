@@ -1,0 +1,18 @@
+# Обновления зависимостей (P-74): раз в неделю — пулл-реквест с новой
+# версией, CI проверяет его, как любой код. Сервер — пакеты npm, сборка —
+# действия GitHub (в журналах уже предупреждения о Node 20 в старых версиях).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /backend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      dev-dependencies:
+        dependency-type: development
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

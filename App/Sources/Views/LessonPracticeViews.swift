@@ -248,6 +248,7 @@ struct LessonQuizView: View {
         let score = LessonQuiz.score(questions, answers: answers)
         let wasPassed = LessonLibrary.bestQuiz(for: deck).map(LessonQuiz.passed) ?? false
         LessonLibrary.record(quiz: score, for: deck)
+        AnalyticsService.track(.quizFinished(passed: LessonQuiz.passed(score)))
         if LessonQuiz.passed(score), !wasPassed {
             Celebrations.shared.show(
                 tr("Тест сдан!", "Teste aprovado!", "Quiz passed!"),

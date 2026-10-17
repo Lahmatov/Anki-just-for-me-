@@ -1,0 +1,80 @@
+# Сборка в TestFlight кнопкой (Actions → Release to TestFlight → Run workflow).
+#
+# Практики (P-74, ios-good-practices): номер сборки растёт сам — это номер
+# прогона, его же видит сервер в x-recap-client (MIN_CLIENT_BUILD); архив и
+# символы (dSYM) сохраняются при каждом выпуске — без них отчёты о сбоях не
+# прочитать. Перед сборкой — проверка, что не осталось заглушек.
+#
+# Нужно один раз (Settings → Secrets → Actions):
+#   ASC_KEY_ID, ASC_ISSUER_ID — ключ App Store Connect API (Users and Access → Keys),
+#   ASC_KEY_P8 — содержимое файла .p8 этого ключа.
+# Подпись — автоматическая через этот ключ, сертификаты вручную не нужны.
+name: Release to TestFlight
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Версия для App Store (MARKETING_VERSION), например 1.0
+        required: true
+        default: "1.0"
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  testflight:
+    name: Архив и выгрузка
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - name: Заглушки
+        run: python3 tools/release_check.py
+      - name: XcodeGen
+        run: |
+          brew install xcodegen || true
+          xcodegen generate
+      - name: Ключ App Store Connect
+        env:
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          mkdir -p ~/.appstoreconnect
+          printf '%s' "$ASC_KEY_P8" > ~/.appstoreconnect/key.p8
+      - name: Архив
+        run: |
+          xcodebuild archive \
+            -project AJFM.xcodeproj -scheme AJFM -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath build/Recap.xcarchive \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/.appstoreconnect/key.p8 \
+            -authenticationKeyID "${{ secrets.ASC_KEY_ID }}" \
+            -authenticationKeyIssuerID "${{ secrets.ASC_ISSUER_ID }}" \
+            MARKETING_VERSION="${{ inputs.version }}" \
+            CURRENT_PROJECT_VERSION="${{ github.run_number }}"
+      - name: Выгрузка в TestFlight
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath build/Recap.xcarchive \
+            -exportOptionsPlist Config/ExportOptions.plist \
+            -exportPath build/export \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/.appstoreconnect/key.p8 \
+            -authenticationKeyID "${{ secrets.ASC_KEY_ID }}" \
+            -authenticationKeyIssuerID "${{ secrets.ASC_ISSUER_ID }}"
+      - name: Символы сбоев (dSYM)
+        if: always()
+        run: |
+          cd build/Recap.xcarchive && zip -qr ../../dsyms.zip dSYMs || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: recap-${{ inputs.version }}-${{ github.run_number }}-dsyms
+          path: dsyms.zip
+          if-no-files-found: ignore
+          retention-days: 90
+      - name: Убрать ключ
+        if: always()
+        run: rm -f ~/.appstoreconnect/key.p8

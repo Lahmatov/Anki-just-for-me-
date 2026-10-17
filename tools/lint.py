@@ -252,6 +252,84 @@ def check_untranslated():
                 f"{text[:50]}")
 
 
+# Секреты в журнал не пишутся (MASVS-STORAGE-2): журнал виден на экране
+# и уходит в обращение в поддержку. Ловим подстановку в вызов журнала
+# переменной, чьё имя говорит «это секрет».
+SECRET_NAME = re.compile(r'(?i)(token(?!s|izer)|api_?key|secret|password|private_?key|pepper)')
+LOG_CALL = re.compile(r'\b(?:Log\.(?:debug|info|warning|error|failure)|print|NSLog|'
+                      r'console\.(?:log|warn|error|info))\s*\(')
+
+
+def call_text(src, start):
+    """Текст вызова от открывающей скобки до парной — даже на несколько строк."""
+    depth, i = 0, start
+    while i < len(src):
+        if src[i] == '(':
+            depth += 1
+        elif src[i] == ')':
+            depth -= 1
+            if depth == 0:
+                return src[start:i + 1]
+        i += 1
+    return src[start:]
+
+
+def secrets_in_call(text):
+    """Имена-секреты в подстановках: Swift \\(x) и JS ${x}, а также голые аргументы JS."""
+    found = []
+    for expr in re.findall(r'\\\(([^()]*(?:\([^()]*\))?[^()]*)\)', text):
+        found += SECRET_NAME.findall(expr)
+    for expr in re.findall(r'\$\{([^}]*)\}', text):
+        found += SECRET_NAME.findall(expr)
+    # Аргументы вне строк: console.log("x", token).
+    bare = re.sub(r'"(?:[^"\\]|\\.)*"|\'(?:[^\'\\]|\\.)*\'|`[^`]*`', '""', text)
+    found += SECRET_NAME.findall(bare)
+    return found
+
+
+def check_secret_logging():
+    backend = sorted(glob.glob(os.path.join(ROOT, 'backend/src/**/*.ts'), recursive=True))
+    for path in [p for p in ALL if not is_test(p)] + backend:
+        src = read(path)
+        for match in LOG_CALL.finditer(src):
+            text = call_text(src, match.end() - 1)
+            names = secrets_in_call(text)
+            if names:
+                line = src.count('\n', 0, match.start()) + 1
+                problems.append(
+                    f"{os.path.relpath(path, ROOT)}:{line}: в журнал уходит "
+                    f"похожее на секрет: {', '.join(sorted(set(names)))}")
+
+
+# Пределы App Store Connect: длиннее — не сохранит форма, а fastlane deliver
+# упадёт в момент выпуска. Лучше узнать об этом в CI.
+STORE_LIMITS = {'name.txt': 30, 'subtitle.txt': 30, 'keywords.txt': 100,
+                'promotional_text.txt': 170, 'description.txt': 4000,
+                'release_notes.txt': 4000}
+STORE_LOCALES = ('ru', 'pt-PT', 'en-US')
+
+
+def check_store_metadata():
+    base = os.path.join(ROOT, 'fastlane/metadata')
+    if not os.path.isdir(base):
+        return
+    for locale in STORE_LOCALES:
+        for name, limit in STORE_LIMITS.items():
+            path = os.path.join(base, locale, name)
+            if not os.path.exists(path):
+                problems.append(f"fastlane/metadata/{locale}/{name}: нет файла")
+                continue
+            text = read(path).strip()
+            if not text:
+                problems.append(f"fastlane/metadata/{locale}/{name}: пусто")
+            elif len(text) > limit:
+                problems.append(
+                    f"fastlane/metadata/{locale}/{name}: {len(text)} знаков, предел {limit}")
+            if name == 'keywords.txt' and ', ' in text:
+                # Пробел после запятой App Store считает знаком — это потерянное место.
+                problems.append(f"fastlane/metadata/{locale}/{name}: пробел после запятой")
+
+
 def report():
     tests = sum(
         len(re.findall(r'func test\w+', read(p)))
@@ -272,4 +350,6 @@ if __name__ == '__main__':
     check_public_inits()
     check_duplicate_types()
     check_untranslated()
+    check_secret_logging()
+    check_store_metadata()
     sys.exit(report())

@@ -96,6 +96,11 @@ struct ProgressService {
         ((try? context.fetch(FetchDescriptor<Review>())) ?? []).filter(\.isHonest)
     }
 
+    /// Сколько всего было учебных дней — для просьбы об оценке.
+    func studyDayCount() -> Int {
+        studyDays(of: honestReviews()).count
+    }
+
     private func studyDays(of reviews: [Review]) -> Set<Date> {
         StreakCalculator.studyDays(from: reviews.map(\.timestamp), cutoffHour: cutoffHour)
     }

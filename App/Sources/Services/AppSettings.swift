@@ -89,6 +89,8 @@ enum SettingsKey {
     /// Выбранный провайдер ИИ и модель у каждого (`AIKeys`).
     static let aiProvider = "aiProvider"
     static let aiModelPrefix = "aiModel."
+    /// Согласие на анонимную статистику (P-74). По умолчанию — нет.
+    static let analyticsConsent = "analyticsConsent"
     /// Переписка с Monchik Help (`HelpService`), только на телефоне.
     static let helpHistory = "helpHistory"
 }
