@@ -23,6 +23,9 @@ concurrency:
 jobs:
   device:
     name: ${{ matrix.device }} · iOS ${{ matrix.runtime }}${{ matrix.text && format(' · {0}', matrix.text) || '' }}
+    # Обновления Dependabot меняют этот файл (версии actions) — 18 машин macOS
+    # ради номера версии не нужны.
+    if: github.actor != 'dependabot[bot]'
     runs-on: ${{ matrix.runner || 'macos-26' }}
     # 60, а не 40: с уроками, темой и iPad тестов стало вдвое больше.
     timeout-minutes: 60

@@ -53,6 +53,8 @@ final class EpisodeDiscussionViewModel {
         self.topic = topic
         self.retelling = retelling
         self.questions = EpisodeDiscussion.clampedLimit(questions)
+        // Звонок посреди ответа голосом — сказанное попадает в черновик (P-80).
+        recorder.onInterrupted = { [weak self] in self?.stopRecording() }
     }
 
     var questionNumber: Int {

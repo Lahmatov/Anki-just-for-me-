@@ -224,6 +224,15 @@ struct RetellView: View {
     @ViewBuilder
     private func transcriptSection(_ model: RetellViewModel) -> some View {
         Section {
+            if model.recorder.wasInterrupted {
+                // Звонок или отключённые наушники остановили запись (P-80).
+                Label(tr("Запись остановилась — звонок или наушники. Сказанное сохранено, можно дописать.",
+                         "A gravação parou — chamada ou auscultadores. O que disseste ficou guardado.",
+                         "Recording stopped — a call or headphones. What you said is kept; you can add more."),
+                      systemImage: "phone.arrow.down.left")
+                    .font(.app(.callout))
+                    .foregroundStyle(Theme.orange)
+            }
             TextEditor(text: Binding(
                 get: { model.transcript }, set: { model.transcript = $0 }))
                 .frame(minHeight: 200)

@@ -55,6 +55,8 @@ final class RetellViewModel {
             // Есть описание серии — можно начинать сразу, без поиска субтитров.
             if episode.synopsis != nil { step = .ready }
         }
+        // Звонок посреди пересказа — сказанное уходит в правку, а не теряется (P-80).
+        recorder.onInterrupted = { [weak self] in self?.stopRecording() }
     }
 
     /// С чем сверять пересказ: субтитры точнее, описание — если субтитров нет.

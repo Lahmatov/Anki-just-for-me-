@@ -392,6 +392,8 @@ struct LessonSpeakView: View {
             result = nil
             SpeechService.shared.stop()
             recorder.reset()
+            // Звонок или наушники — разбираем то, что успел сказать (P-80).
+            recorder.onInterrupted = { stop() }
             recorder.start()
         }
     }

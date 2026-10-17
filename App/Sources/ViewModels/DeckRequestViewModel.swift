@@ -168,7 +168,7 @@ final class DeckRequestViewModel {
         } catch let failure as BackendAPI.Failure {
             // Набор ещё собирается на сервере или связь оборвалась в фоне —
             // это не ошибка: продолжим с тем же номером запроса.
-            if failure.code == "deck_pending" || (failure == .network && backgrounded) {
+            if failure.code == "deck_pending" || (failure.isTransport && backgrounded) {
                 step = .interrupted
                 return nil
             }

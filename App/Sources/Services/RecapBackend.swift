@@ -46,18 +46,20 @@ final class RecapBackend {
                        body: encode(["transactionId": String(transactionID)]))
     }
 
+    // Наборы и уроки несут номер запроса: повтор после обрыва получит тот же
+    // готовый ответ, а не спишет лимит второй раз — их можно повторять.
     func deck(_ body: BackendAPI.DeckBody) async throws -> BackendAPI.DeckResponse {
-        try await send("POST", "/v1/deck", body: encode(body), timeout: 90)
+        try await send("POST", "/v1/deck", body: encode(body), timeout: 90, idempotent: true)
     }
 
     /// Набор к фильму — тот же маршрут, что у серии, но с номером фильма.
     func movieDeck(_ body: BackendAPI.MovieDeckBody) async throws -> BackendAPI.DeckResponse {
-        try await send("POST", "/v1/deck", body: encode(body), timeout: 90)
+        try await send("POST", "/v1/deck", body: encode(body), timeout: 90, idempotent: true)
     }
 
     /// Карточки из урока — отдельный маршрут: единственный со свободным текстом.
     func lesson(_ body: BackendAPI.LessonBody) async throws -> BackendAPI.DeckResponse {
-        try await send("POST", "/v1/lesson", body: encode(body), timeout: 90)
+        try await send("POST", "/v1/lesson", body: encode(body), timeout: 90, idempotent: true)
     }
 
     func discuss(_ body: BackendAPI.DiscussBody) async throws -> BackendAPI.DiscussResponse {
@@ -179,10 +181,10 @@ final class RecapBackend {
 
     private func send<Response: Decodable>(
         _ method: String, _ path: String, body: Data? = nil, query: [URLQueryItem] = [],
-        timeout: TimeInterval = 20, retrying: Bool = true
+        timeout: TimeInterval = 20, retrying: Bool = true, idempotent: Bool? = nil
     ) async throws -> Response {
         let data = try await request(method, path, body: body, query: query, timeout: timeout,
-                                     retrying: retrying)
+                                     retrying: retrying, idempotent: idempotent)
         do {
             return try JSONDecoder().decode(Response.self, from: data)
         } catch {
@@ -193,7 +195,8 @@ final class RecapBackend {
     private func request(
         _ method: String, _ path: String, body: Data? = nil,
         contentType: String = "application/json", query: [URLQueryItem] = [],
-        timeout: TimeInterval = 20, retrying: Bool = true
+        timeout: TimeInterval = 20, retrying: Bool = true,
+        idempotent: Bool? = nil, attempt: Int = 0
     ) async throws -> Data {
         guard let base = Self.baseURL else { throw BackendAPI.Failure.notConfigured }
         let token = try await deviceToken()
@@ -214,7 +217,20 @@ final class RecapBackend {
         do {
             (data, response) = try await session.data(for: urlRequest)
         } catch {
-            throw BackendAPI.Failure.network
+            // Обрыв посреди запроса (смена Wi-Fi на сотовую, метро) — один
+            // повтор, если запрос безопасно отправить дважды (P-80). Без сети
+            // и на прочих ошибках — сразу понятная причина.
+            let code = (error as? URLError)?.code.rawValue ?? (error as NSError).code
+            let repeatable = idempotent ?? (method == "GET" || method == "DELETE")
+            if let delay = NetworkRetryPolicy.delay(for: NetworkProblem(urlErrorCode: code),
+                                                    attempt: attempt, idempotent: repeatable) {
+                Log.info(.network, "Повтор запроса после обрыва связи", detail: "\(method) \(path) \(code)")
+                try await Task.sleep(for: delay)
+                return try await self.request(method, path, body: body, contentType: contentType, query: query,
+                                              timeout: timeout, retrying: retrying,
+                                              idempotent: idempotent, attempt: attempt + 1)
+            }
+            throw BackendAPI.Failure.transport(urlErrorCode: code)
         }
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
 
@@ -224,7 +240,7 @@ final class RecapBackend {
         if status == 401, retrying {
             Keychain.remove(Keychain.recapDeviceToken)
             return try await request(method, path, body: body, contentType: contentType, query: query,
-                                     timeout: timeout, retrying: false)
+                                     timeout: timeout, retrying: false, idempotent: idempotent)
         }
         guard (200..<300).contains(status) else {
             let failure = BackendAPI.Failure.from(status: status, body: data)

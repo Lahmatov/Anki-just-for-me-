@@ -15,6 +15,8 @@ public enum NetworkInterruption {
     /// Похоже ли это на обрыв, который стоит повторить.
     public static func isInterruption(_ error: Error) -> Bool {
         if error is CancellationError { return true }
+        // Сервер Recap заворачивает ошибку URLSession в свою.
+        if let failure = error as? BackendAPI.Failure { return failure.isTransport }
         if let urlError = error as? URLError { return codes.contains(urlError.code) }
         let nsError = error as NSError
         return nsError.domain == NSURLErrorDomain && codes.contains(URLError.Code(rawValue: nsError.code))

@@ -66,6 +66,13 @@ final class RetellRecorder {
     /// без этой проверки кусок попадал бы в расшифровку дважды.
     private var segmentGeneration = 0
 
+    /// Звонок, отключённые наушники, уход в фон — запись останавливается
+    /// сама, сказанное остаётся (P-80). Владелец переводит экран дальше.
+    var onInterrupted: (() -> Void)?
+    /// Последняя запись остановлена системой, а не человеком.
+    private(set) var wasInterrupted = false
+    private var audioEvents: AudioEventObserver?
+
     /// Больше минуты распознаватель не держит — перезапускаем отрезок заранее.
     private let segmentLimit: TimeInterval = 50
 
@@ -94,6 +101,7 @@ final class RetellRecorder {
         transcript = ""
         partial = ""
         elapsed = 0
+        wasInterrupted = false
 
         do {
             let session = AVAudioSession.sharedInstance()
@@ -119,6 +127,7 @@ final class RetellRecorder {
 
             startSegment(with: recognizer)
             startTimer()
+            audioEvents = AudioEventObserver(engine: engine) { [weak self] event in self?.handle(event) }
             status = .recording
         } catch {
             cleanUp()
@@ -143,7 +152,17 @@ final class RetellRecorder {
         status = .finished
     }
 
+    private func handle(_ event: AudioEvent) {
+        guard AudioInterruptionPolicy.reaction(to: event, isRecording: isRecording, isPlaying: false)
+                == .finishKeepingText else { return }
+        Log.info(.speech, "Запись пересказа остановлена системой", detail: event.logName)
+        wasInterrupted = true
+        stop()
+        onInterrupted?()
+    }
+
     func reset() {
+        wasInterrupted = false
         cleanUp()
         transcript = ""
         partial = ""
@@ -209,6 +228,7 @@ final class RetellRecorder {
     }
 
     private func cleanUp() {
+        audioEvents = nil
         if engine.isRunning {
             engine.stop()
             engine.inputNode.removeTap(onBus: 0)

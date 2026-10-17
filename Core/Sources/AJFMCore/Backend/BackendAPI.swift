@@ -381,7 +381,29 @@ public enum BackendAPI {
     public enum Failure: Error, Equatable, LocalizedError {
         case server(code: String, status: Int)
         case notConfigured
+        /// Связь оборвалась или сервер недоступен.
         case network
+        /// Сети нет совсем — повтор бесполезен, честнее сказать сразу (P-80).
+        case offline
+        /// Сеть есть, но ответ не пришёл вовремя.
+        case slow
+
+        /// Беда с доставкой, а не ответ сервера: такие запросы можно продолжить.
+        public var isTransport: Bool {
+            switch self {
+            case .network, .offline, .slow: return true
+            case .server, .notConfigured: return false
+            }
+        }
+
+        /// Ошибка URLSession → понятная человеку причина.
+        public static func transport(urlErrorCode code: Int) -> Failure {
+            switch NetworkProblem(urlErrorCode: code) {
+            case .offline: return .offline
+            case .slow: return .slow
+            case .dropped, .other: return .network
+            }
+        }
 
         /// Ошибка из ответа сервера: код из тела, а если тела нет — по статусу.
         public static func from(status: Int, body: Data) -> Failure {
@@ -408,6 +430,14 @@ public enum BackendAPI {
                 return tr("Нет связи с сервером. Проверь интернет.",
                           "Sem ligação ao servidor. Verifica a internet.",
                           "Can't reach the server. Check your connection.")
+            case .offline:
+                return tr("Нет интернета. Карточки и готовые наборы работают и без него.",
+                          "Sem internet. Os cartões e os baralhos prontos funcionam sem ela.",
+                          "No internet. Cards and ready decks work without it.")
+            case .slow:
+                return tr("Интернет слишком медленный — сервер не успел ответить. Попробуй ещё раз.",
+                          "A internet está muito lenta — o servidor não respondeu a tempo. Tenta de novo.",
+                          "The connection is too slow — the server didn't answer in time. Try again.")
             case .server(let code, _):
                 return Self.message(for: code)
             }

@@ -15,6 +15,17 @@ final class SpeechService {
 
     private let synthesizer = AVSpeechSynthesizer()
     private(set) var isSpeaking = false
+    /// Звонок или выдернутые наушники — озвучка замолкает (P-80).
+    private var audioEvents: AudioEventObserver?
+
+    private init() {
+        audioEvents = AudioEventObserver { [weak self] event in
+            guard let self,
+                  AudioInterruptionPolicy.reaction(to: event, isRecording: false, isPlaying: self.isSpeaking)
+                    == .stopPlayback else { return }
+            self.stop()
+        }
+    }
 
     /// Показывать ли подсказку про скачивание голоса получше.
     var shouldSuggestBetterVoice: Bool {

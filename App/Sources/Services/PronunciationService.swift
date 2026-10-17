@@ -41,6 +41,8 @@ final class PronunciationService {
     private var player: AVAudioPlayer?
     private var bestTranscript = ""
     private var bestConfidence: Double = 0
+    /// Звонок или отключённая гарнитура посреди слова (P-80).
+    private var audioEvents: AudioEventObserver?
 
     var isRecording: Bool { status == .recording }
 
@@ -83,6 +85,7 @@ final class PronunciationService {
         do {
             try configureSession()
             try startEngine(with: recognizer)
+            audioEvents = AudioEventObserver(engine: engine) { [weak self] event in self?.handleAudio(event) }
             status = .recording
         } catch {
             cleanUp()
@@ -217,7 +220,16 @@ final class PronunciationService {
         status = .finished(assessment)
     }
 
+    /// Система забрала микрофон — оцениваем то, что успели услышать.
+    private func handleAudio(_ event: AudioEvent) {
+        guard AudioInterruptionPolicy.reaction(to: event, isRecording: isRecording, isPlaying: false)
+                == .finishKeepingText else { return }
+        Log.info(.speech, "Запись слова остановлена системой", detail: event.logName)
+        stop()
+    }
+
     private func cleanUp() {
+        audioEvents = nil
         if engine.isRunning {
             engine.stop()
             engine.inputNode.removeTap(onBus: 0)

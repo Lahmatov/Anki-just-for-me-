@@ -45,6 +45,9 @@ jobs:
 
   core:
     name: Ядро (swift test)
+    # Машины macOS — общий узкий ресурс: обновления Dependabot (сервер,
+    # версии actions) их не занимают, иначе прогоны ветки ждут в очереди часами.
+    if: github.actor != 'dependabot[bot]'
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v5
@@ -65,6 +68,9 @@ jobs:
 
   app:
     name: Приложение (сборка и тесты на симуляторе)
+    # Машины macOS — общий узкий ресурс: обновления Dependabot (сервер,
+    # версии actions) их не занимают, иначе прогоны ветки ждут в очереди часами.
+    if: github.actor != 'dependabot[bot]'
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v5
