@@ -108,7 +108,13 @@ npx wrangler d1 migrations apply recap --remote
 ```sh
 npx wrangler secret put ANTHROPIC_API_KEY     # отдельный ключ только для сервера
 npx wrangler secret put PROMO_PEPPER          # содержимое secrets/promo-pepper.txt
+npx wrangler secret put ADMIN_TOKEN           # длинная случайная строка: openssl rand -hex 32
 ```
+
+`ADMIN_TOKEN` открывает выгрузку и удаление данных по коду поддержки
+(`npm run support -- export/erase`, P-76). Без него этих маршрутов нет. Тот же
+секрет хранится у тебя в менеджере паролей и передаётся скрипту через
+`RECAP_ADMIN_TOKEN` — в репозиторий и в историю команд он не попадает.
 
 Выкатить:
 

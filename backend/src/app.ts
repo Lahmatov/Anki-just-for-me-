@@ -28,6 +28,7 @@ import { accountOf, deleteAccount, followAccount, shareWithAccount, signIn, sign
 import { RETENTION } from "./retention";
 import { API_VERSION, requireEnabled, requireSupportedClient } from "./compat";
 import { createTicket, listTickets } from "./support";
+import { deviceBySupportCode, requireAdmin } from "./admin";
 import {
   BACKUP, adoptDeviceBackups, blobIdsOf, deleteBackupBlobs, deleteBackupsStatements, listBackups,
   loadBackup, ownerOf, saveBackup,
@@ -69,6 +70,8 @@ export async function handle(request: Request, env: Env, deps: Deps): Promise<Re
       case "GET /v1/backups": return await backups(request, env, deps, url);
       case "POST /v1/backups": return await uploadBackup(request, env, deps, url);
       case "DELETE /v1/backups": return await eraseBackups(request, env, deps);
+      case "POST /v1/admin/export": return await adminExport(request, env, deps);
+      case "POST /v1/admin/erase": return await adminErase(request, env, deps);
     }
     const backup = /^\/v1\/backups\/([0-9a-f]{32})$/.exec(url.pathname);
     if (request.method === "GET" && backup?.[1]) {
@@ -178,7 +181,11 @@ async function removeAccount(request: Request, env: Env, deps: Deps): Promise<Re
 async function exportData(request: Request, env: Env, deps: Deps): Promise<Response> {
   const { device, entitlement } = await context(request, env, deps);
   await hit(env.DB, "export:" + device.id, 10, 3600, deps.now());
-  const now = deps.now();
+  return json(await exportOf(env, device, entitlement, deps.now()));
+}
+
+/** Выгрузка — общая для кнопки в приложении и запроса по коду поддержки. */
+async function exportOf(env: Env, device: Device, entitlement: Entitlement | null, now: number) {
   const iso = (seconds: number) => new Date(seconds * 1000).toISOString();
   const row = await env.DB.prepare("SELECT created_at, last_seen_at FROM devices WHERE id = ?")
     .bind(device.id).first<{ created_at: number; last_seen_at: number }>();
@@ -192,7 +199,7 @@ async function exportData(request: Request, env: Env, deps: Deps): Promise<Respo
      WHERE device_id = ? ORDER BY created_at`,
   ).bind(device.id).all<{ kind: string; input_tokens: number; output_tokens: number; created_at: number }>();
 
-  return json({
+  return {
     supportCode: supportCode(device.id),
     exportedAt: iso(now),
     device: { registeredAt: iso(row?.created_at ?? now), lastSeenAt: iso(row?.last_seen_at ?? now) },
@@ -224,7 +231,7 @@ async function exportData(request: Request, env: Env, deps: Deps): Promise<Respo
       usageLog: RETENTION.usageLogDays,
       supportTicket: RETENTION.supportTicketDays,
     },
-  });
+  };
 }
 
 export function supportCode(deviceId: string): string {
@@ -240,6 +247,12 @@ export function supportCode(deviceId: string): string {
  */
 async function forget(request: Request, env: Env, deps: Deps): Promise<Response> {
   const { device, entitlement } = await context(request, env, deps);
+  await eraseDevice(env, device, entitlement);
+  return json({ deleted: true });
+}
+
+/** Стереть телефон — общее для «Удалить все данные» и удаления по коду поддержки. */
+async function eraseDevice(env: Env, device: Device, entitlement: Entitlement | null): Promise<void> {
   const blobs = await blobIdsOf(env.DB, device.id);
   const statements = [
     // Снимки, сделанные без входа, принадлежат телефону и уходят с ним.
@@ -263,7 +276,33 @@ async function forget(request: Request, env: Env, deps: Deps): Promise<Response>
   }
   await env.DB.batch(statements);
   await deleteBackupBlobs(env, blobs);
-  return json({ deleted: true });
+}
+
+// MARK: - Запросы людей не из приложения (P-76)
+
+/** Выгрузка по коду поддержки — ответ на письмо «какие данные у вас есть». */
+async function adminExport(request: Request, env: Env, deps: Deps): Promise<Response> {
+  await requireAdmin(request, env, deps);
+  const body = await readJson(request, 1_000);
+  const device = await deviceBySupportCode(env.DB, body.supportCode);
+  const entitlement = await entitlementOf(env.DB, device.entitlement_id, deps.now());
+  return json(await exportOf(env, device, entitlement, deps.now()));
+}
+
+/**
+ * Удаление по коду поддержки — то же, что «Удалить аккаунт» и «Удалить все
+ * данные» подряд: просьба удалить значит удалить всё. Другие телефоны
+ * аккаунта остаются отдельными устройствами — у каждого свой код.
+ */
+async function adminErase(request: Request, env: Env, deps: Deps): Promise<Response> {
+  await requireAdmin(request, env, deps);
+  const body = await readJson(request, 1_000);
+  const device = await deviceBySupportCode(env.DB, body.supportCode);
+  const hadAccount = device.account_id !== null;
+  if (hadAccount) await deleteAccount(env, deps, device);
+  const entitlement = await entitlementOf(env.DB, device.entitlement_id, deps.now());
+  await eraseDevice(env, device, entitlement);
+  return json({ deleted: true, account: hadAccount });
 }
 
 async function redeemPromo(request: Request, env: Env, deps: Deps): Promise<Response> {

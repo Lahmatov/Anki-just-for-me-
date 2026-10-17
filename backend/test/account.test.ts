@@ -303,6 +303,20 @@ describe("удаление аккаунта", () => {
     expect(w.count("accounts")).toBe(0);
   });
 
+  it("по коду поддержки (P-76) — отзывает вход у Apple и стирает аккаунт с телефоном", async () => {
+    const w = await appleWorld();
+    w.env.ADMIN_TOKEN = "admin-secret-0123456789abcdef0123456789abcdef";
+    const a = await w.device();
+    await w.signIn(a, "u8");
+    const code = (await w.call("GET", "/v1/me", undefined, a)).body.supportCode;
+    const response = await w.call("POST", "/v1/admin/erase", { supportCode: code }, w.env.ADMIN_TOKEN);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ deleted: true, account: true });
+    expect(w.state.revoked).toEqual(["rt-u8"]);
+    expect(w.count("accounts")).toBe(0);
+    expect(w.count("devices")).toBe(0);
+  });
+
   it("стирает облачные снимки аккаунта вместе с частями", async () => {
     const w = await appleWorld();
     const a = await w.device();

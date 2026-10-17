@@ -23,7 +23,7 @@ concurrency:
 jobs:
   device:
     name: ${{ matrix.device }} · iOS ${{ matrix.runtime }}${{ matrix.text && format(' · {0}', matrix.text) || '' }}
-    runs-on: macos-26
+    runs-on: ${{ matrix.runner || 'macos-26' }}
     # 60, а не 40: с уроками, темой и iPad тестов стало вдвое больше.
     timeout-minutes: 60
     strategy:
@@ -50,8 +50,32 @@ jobs:
           - { device: "iPad Air 11", runtime: latest }
           - { device: "iPad Pro 13", runtime: latest }
           - { device: "iPad", runtime: oldest }
+          # Складной iPhone Duo (осень 2026): симулятор — только в Xcode 27.1+
+          # и с iOS 27.1, поэтому своя машина GitHub и своя версия iOS. На
+          # открытом экране приложение получает regular-ширину, как iPad
+          # (P-77). Нет симулятора на машине — строка пропускается с
+          # предупреждением, а не падает.
+          - { device: "iPhone Duo", runtime: latest, ios: "27", runner: xcode-27, xcode: "27" }
     steps:
       - uses: actions/checkout@v5
+      - name: Xcode ${{ matrix.xcode || 'по умолчанию' }}
+        if: matrix.xcode
+        run: |
+          # Самый новый Xcode нужной версии: у Duo симулятор с 27.1, а беты
+          # лежат рядом с выпусками под разными именами.
+          XCODE=$(ls -d /Applications/Xcode_${{ matrix.xcode }}*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XCODE" ]; then XCODE=$(xcode-select -p | sed 's|/Contents/Developer||'); fi
+          echo "Xcode: $XCODE"; ls -d /Applications/Xcode*.app
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+          # Нет симулятора нужного устройства — докачать свежую iOS этой Xcode.
+          if ! xcrun simctl list devicetypes | grep -q "${{ matrix.device }}"; then
+            xcrun simctl list devicetypes | tail -20
+          fi
+          if ! xcrun simctl list runtimes | grep -q "iOS ${{ matrix.ios }}"; then
+            xcodebuild -downloadPlatform iOS || true
+          fi
+          xcrun simctl list runtimes
       - name: XcodeGen
         run: |
           brew install xcodegen || true
@@ -59,12 +83,12 @@ jobs:
       - name: Симулятор
         id: sim
         run: |
-          python3 - "${{ matrix.device }}" "${{ matrix.runtime }}" > sim.env <<'PY'
+          python3 - "${{ matrix.device }}" "${{ matrix.runtime }}" "${{ matrix.ios || '26' }}" > sim.env <<'PY'
           import json, subprocess, sys
-          device, which = sys.argv[1], sys.argv[2]
+          device, which, major = sys.argv[1], sys.argv[2], sys.argv[3]
           types = json.loads(subprocess.check_output(["xcrun", "simctl", "list", "devicetypes", "-j"]))["devicetypes"]
           runtimes = [r for r in json.loads(subprocess.check_output(["xcrun", "simctl", "list", "runtimes", "-j"]))["runtimes"]
-                      if r["platform"] == "iOS" and r["isAvailable"] and r["version"].startswith("26")]
+                      if r["platform"] == "iOS" and r["isAvailable"] and r["version"].split(".")[0] == major]
           runtimes.sort(key=lambda r: [int(x) for x in r["version"].split(".")])
           kind = next((t["identifier"] for t in types if t["name"] == device), "") or next(
               (t["identifier"] for t in types if t["name"].startswith(device + " ")), "")
@@ -76,7 +100,7 @@ jobs:
           cat sim.env
           source sim.env
           if [ -z "$TYPE" ] || [ -z "$RUNTIME" ]; then
-            echo "::warning::Нет симулятора «${{ matrix.device }}» с iOS 26 на этой машине — пропускаю"
+            echo "::warning::Нет симулятора «${{ matrix.device }}» с iOS ${{ matrix.ios || '26' }} на этой машине — пропускаю"
             echo "skip=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
