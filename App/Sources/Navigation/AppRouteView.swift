@@ -82,11 +82,22 @@ struct AppRouteView: View {
     private func model<Model: PersistentModel, Content: View>(
         _ id: PersistentIdentifier, as type: Model.Type, @ViewBuilder content: (Model) -> Content
     ) -> some View {
-        if let found = context.model(for: id) as? Model, !found.isDeleted {
+        if let found: Model = lookup(id) {
             content(found)
         } else {
             missing
         }
+    }
+
+    /// `model(for:)` не годится: для неизвестного идентификатора он отдаёт
+    /// пустую запись-призрак, а не nil. Запись, которую показывали, уже
+    /// в контексте; удалённую и сохранённую (другое окно на iPad или Duo)
+    /// там не найти — и в базе тоже.
+    private func lookup<Model: PersistentModel>(_ id: PersistentIdentifier) -> Model? {
+        if let registered: Model = context.registeredModel(for: id) {
+            return registered.isDeleted ? nil : registered
+        }
+        return (try? context.fetch(FetchDescriptor<Model>()))?.first { $0.persistentModelID == id }
     }
 
     private var missing: some View {

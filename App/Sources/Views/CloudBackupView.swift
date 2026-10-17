@@ -54,9 +54,10 @@ struct CloudBackupView: View {
             tr("Восстановить из облака?", "Restaurar da nuvem?", "Restore from the cloud?"),
             isPresented: $model.isRestorePending,
             presenting: model.pendingRestore
-        ) { _ in
-            Button(tr("Заменить всё", "Substituir tudo", "Replace everything"),
-                   role: .destructive, action: restore)
+        ) { pending in
+            Button(tr("Заменить всё", "Substituir tudo", "Replace everything"), role: .destructive) {
+                model.restore(pending, in: context)
+            }
             Button(CommonText.cancel, role: .cancel) {}
         } message: { pending in
             Text(Counted.words(pending.preview.notes) + ". "
@@ -155,7 +156,6 @@ struct CloudBackupView: View {
 
     private func uploadNow() { model.uploadNow(in: context) }
     private func eraseAll() { model.eraseAll(in: context) }
-    private func restore() { model.restore(in: context) }
 }
 
 #if DEBUG

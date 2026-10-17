@@ -332,7 +332,10 @@ struct LessonSpeakView: View {
         .background(Theme.background.ignoresSafeArea())
         .navigationTitle(tr("Расскажи об уроке", "Fala sobre a aula", "Talk about the lesson"))
         .navigationBarTitleDisplayMode(.inline)
-        .onDisappear { if recorder.isRecording { recorder.stop() } }
+        .onDisappear {
+            recorder.onInterrupted = nil
+            if recorder.isRecording { recorder.stop() }
+        }
     }
 
     private var recordButton: some View {
@@ -399,6 +402,9 @@ struct LessonSpeakView: View {
     }
 
     private func stop() {
+        // Замыкание держит копию экрана, а экран — рекордер: без обнуления
+        // рекордер с аудиодвижком не освободится после ухода с экрана.
+        recorder.onInterrupted = nil
         recorder.stop()
         transcript = recorder.fullText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !transcript.isEmpty else { return }

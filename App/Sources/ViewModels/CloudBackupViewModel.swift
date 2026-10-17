@@ -77,8 +77,9 @@ final class CloudBackupViewModel {
         }
     }
 
-    func restore(in context: ModelContext) {
-        guard let pending = pendingRestore else { return }
+    /// Снимок — из алерта (`presenting:`), а не из свойства: закрытие алерта
+    /// могло обнулить его раньше, чем сработала кнопка.
+    func restore(_ pending: PendingCloudRestore, in context: ModelContext) {
         pendingRestore = nil
         do {
             let result = try RestoreService(context: context).restore(pending.backup)
