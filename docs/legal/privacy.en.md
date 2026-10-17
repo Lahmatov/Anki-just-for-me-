@@ -114,9 +114,12 @@ No decisions with legal or similarly significant effects are made automatically.
 
 ## Children
 
-The app is not directed at children under 13. In Portugal and most of the EU,
-people under 13 (or the age set by their country) need a parent's permission to
-use online services that process their data.
+The app is not directed at children under 13 and does not knowingly collect
+their personal information (including under the US COPPA rule). Where the App
+Store reports that the user is under 13, the app does not open. In Portugal and
+most of the EU, people under 13 (or the age set by their country) need a parent's
+permission to use online services that process their data. If you think a child
+under 13 has sent us data, write to us and we will delete it.
 
 ## Security
 
@@ -124,6 +127,37 @@ Connections use HTTPS. The server stores access tokens and promo codes only as
 cryptographic hashes, your Apple user ID and IP addresses only as keyed hashes, and
 the Apple sign-in token only encrypted. If a breach affecting your data happens, we
 will notify the CNPD within 72 hours and tell you when the law requires it.
+
+## If you live in the United States
+
+State privacy laws — California's CCPA/CPRA and the laws of Virginia, Colorado,
+Connecticut, Texas and other states — give you rights over your personal
+information. This is how they apply to Recap:
+
+- **What we collect:** identifiers (a random device ID, a keyed hash of your Apple
+  user ID); commercial information (the subscription transaction and period);
+  usage limited to request counters and token counts; and content you choose to
+  send (support requests, cloud backups). It comes from you, your device and Apple.
+  Purposes and retention periods are in the tables above.
+- **No sale, no sharing, no targeted advertising.** We do not sell personal
+  information, share it for cross-context behavioral advertising, use it for
+  targeted advertising or profiling, and have not done so in the past 12 months.
+  We do not disclose it to third parties for their own marketing.
+- **Sensitive information:** we do not collect precise location, government IDs or
+  biometric data. Your voice is used only to recognize speech and is not saved; we
+  do not create voiceprints.
+- **Your rights:** to know and access, to delete, to correct and to get a copy of
+  your data — with the same tools as above. We answer within 45 days and do not
+  treat you differently for using your rights. To find your record we ask for the
+  support code from Profile. An authorized agent may act for you with your signed
+  permission. If we decline a request, reply to our answer to appeal; if the appeal
+  is declined, you can contact your state's attorney general.
+- **Age checks:** where state law requires it (for example, in Texas), the App Store
+  tells the app your age group — under 13, 13–15, 16–17 or 18+, never your birth
+  date. Only the result of the check is kept, on your phone; it is not sent to the
+  server. Purchases by minors go through Apple's parental consent.
+- **Do Not Track:** the app does not track you across apps or websites, so these
+  signals change nothing.
 
 ## Changes
 

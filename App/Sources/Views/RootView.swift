@@ -3,6 +3,7 @@ import SwiftData
 import UniformTypeIdentifiers
 import UIKit
 import StoreKit
+import DeclaredAgeRange
 import AJFMCore
 
 struct RootView: View {
@@ -33,6 +34,7 @@ struct RootView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.requestReview) private var requestReview
+    @Environment(\.requestAgeRange) private var requestAgeRange
     private var tabBarVisibility: TabBarVisibility { .shared }
     @AppStorage(SettingsKey.fontStyle) private var fontStyle = AppFont.nunito.rawValue
     /// Пустая строка — язык не выбран явно, действует системный.
@@ -121,6 +123,19 @@ struct RootView: View {
                 }
                 .transition(.opacity)
             }
+        }
+        .overlay {
+            // Закон требует проверку возраста, а она не пройдена (P-75).
+            if !showIntro, let decision = AgeAssuranceService.shared.decision,
+               !AgeAssurance.allowsAccess(decision) {
+                AgeGateView(decision: decision)
+                    .transition(.opacity)
+            }
+        }
+        .task(id: showIntro) {
+            // После заставки: системное окно поверх неё смотрелось бы сбоем.
+            guard !showIntro else { return }
+            await AgeAssuranceService.shared.checkIfNeeded(request: requestAgeRange)
         }
         .onAppear {
             // В UI-тестах заставки нет, а знакомство запускается после неё.

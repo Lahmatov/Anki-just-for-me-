@@ -44,5 +44,18 @@ describe("политика конфиденциальности и сроки х
       expect(text).toContain("CNPD");
       expect(text).toContain("72");
     });
+
+    // Законы штатов США (P-75): срок ответа CCPA — 45 дней, запрет «продажи»
+    // и возраст детей по COPPA — во всех трёх языках одинаково.
+    it(`${language}: раздел для жителей США`, () => {
+      expect(text).toContain("CCPA");
+      expect(text).toContain("45");
+      expect(text).toContain("COPPA");
+      expect(text).toMatch(/Do Not Track/);
+    });
+
+    it(`${language}: группы возраста — как в законе Техаса`, () => {
+      for (const group of ["13–15", "16–17", "18+"]) expect(text).toContain(group);
+    });
   }
 });

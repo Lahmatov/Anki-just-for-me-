@@ -114,9 +114,12 @@ decisões automatizadas com efeitos jurídicos ou similarmente significativos.
 
 ## Crianças
 
-A aplicação não se destina a menores de 13 anos. Em Portugal e na maior parte da UE,
-os menores de 13 anos (ou da idade fixada pelo seu país) precisam de autorização dos
-pais para usar serviços online que tratam dados pessoais.
+A aplicação não se destina a menores de 13 anos e não recolhe conscientemente os
+seus dados (incluindo ao abrigo da regra COPPA dos EUA). Quando a App Store indica
+que o utilizador tem menos de 13 anos, a aplicação não abre. Em Portugal e na maior
+parte da UE, os menores de 13 anos (ou da idade fixada pelo seu país) precisam de
+autorização dos pais para usar serviços online que tratam dados pessoais. Se achas
+que uma criança com menos de 13 anos nos enviou dados, escreve-nos e apagamo-los.
 
 ## Segurança
 
@@ -124,6 +127,39 @@ As ligações usam HTTPS. O servidor guarda tokens de acesso e códigos promocio
 apenas como hashes criptográficos, o identificador Apple e os endereços IP apenas como
 HMAC, e o token de sessão da Apple apenas cifrado. Se ocorrer uma violação que afete os
 teus dados, notificamos a CNPD no prazo de 72 horas e informamos-te quando a lei o exigir.
+
+## Se vives nos Estados Unidos
+
+As leis estaduais de privacidade — a CCPA/CPRA da Califórnia e as leis da Virgínia,
+do Colorado, do Connecticut, do Texas e de outros estados — dão-te direitos sobre as
+tuas informações pessoais. É assim que se aplicam ao Recap:
+
+- **O que recolhemos:** identificadores (um número aleatório do dispositivo, um HMAC
+  do identificador Apple); informação comercial (a transação e o período da
+  subscrição); utilização limitada a contadores de pedidos e número de tokens; e o
+  conteúdo que decides enviar (pedidos de suporte, cópias na nuvem). Vem de ti, do
+  teu telemóvel e da Apple. As finalidades e os prazos estão nas tabelas acima.
+- **Não vendemos nem partilhamos para publicidade.** Não vendemos informações
+  pessoais, não as partilhamos para publicidade comportamental, não as usamos para
+  publicidade dirigida nem para definição de perfis, e não o fizemos nos últimos
+  12 meses. Não as divulgamos a terceiros para o marketing deles.
+- **Dados sensíveis:** não recolhemos localização exata, documentos de identificação
+  nem dados biométricos. A voz serve apenas para reconhecer a fala e não é guardada;
+  não criamos impressões vocais.
+- **Os teus direitos:** saber e aceder, apagar, corrigir e obter uma cópia dos teus
+  dados — com as mesmas ferramentas indicadas acima. Respondemos no prazo de 45 dias
+  e não te tratamos de forma diferente por exerceres os teus direitos. Para encontrar
+  o teu registo pedimos o código de suporte do Perfil. Um representante autorizado
+  pode agir por ti com a tua autorização assinada. Se recusarmos um pedido, responde
+  à nossa resposta para recorrer; se o recurso for recusado, podes contactar o
+  procurador-geral (attorney general) do teu estado.
+- **Verificação de idade:** onde a lei estadual o exige (por exemplo, no Texas), a
+  App Store indica à app o teu escalão etário — menos de 13, 13–15, 16–17 ou 18+,
+  nunca a data de nascimento. Só o resultado da verificação é guardado, no
+  telemóvel; não é enviado para o servidor. As compras de menores passam pelo
+  consentimento parental da Apple.
+- **Do Not Track:** a app não te segue noutras apps nem em sites, por isso estes
+  sinais não alteram nada.
 
 ## Alterações
 

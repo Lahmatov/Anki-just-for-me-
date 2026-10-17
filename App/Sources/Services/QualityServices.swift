@@ -50,8 +50,11 @@ final class DiagnosticsService: NSObject, MXMetricManagerSubscriber {
 /// согласием остаётся в журнале на телефоне. Подключение PostHog — замена
 /// одной строки здесь (docs/gdpr.md, «Обработчики»).
 enum AnalyticsService {
+    /// Согласие человека — и не несовершеннолетний (P-75): у подростков
+    /// аналитики нет, даже если согласие когда-то дали.
     static var consent: Bool {
         UserDefaults.standard.bool(forKey: SettingsKey.analyticsConsent)
+            && AgeAssurance.allowsAnalytics(AgeAssuranceService.storedRecord?.decision)
     }
 
     static func track(_ event: AnalyticsEvent) {
