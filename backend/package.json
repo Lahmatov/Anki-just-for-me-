@@ -11,7 +11,7 @@
     "support": "node scripts/support.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.129.0"
+    "@anthropic-ai/sdk": "^0.134.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260928.1",
