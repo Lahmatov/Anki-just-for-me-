@@ -61,7 +61,7 @@ jobs:
           # предупреждением, а не падает.
           - { device: "iPhone Duo", runtime: latest, ios: "27.1", runner: xcode-27, xcode: "27" }
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Xcode ${{ matrix.xcode || 'по умолчанию' }}
         if: matrix.xcode
         run: |

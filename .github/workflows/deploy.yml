@@ -38,7 +38,7 @@ jobs:
       WRANGLER_ENV: ${{ inputs.environment == 'staging' && '--env staging' || '' }}
       DATABASE: ${{ inputs.environment == 'staging' && 'recap-staging' || 'recap' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v5
         with:
           node-version: 22
