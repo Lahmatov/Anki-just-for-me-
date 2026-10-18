@@ -65,12 +65,22 @@ jobs:
       - name: Xcode ${{ matrix.xcode || 'по умолчанию' }}
         if: matrix.xcode
         run: |
-          # Самый новый выпуск нужной версии. Беты и кандидаты — только если
-          # выпуска нет: у беты своя iOS, и на машине её обычно не бывает
-          # (прогон f84c6c9: Xcode 27.2 beta 2 и одна iOS 27.0 — «Incompatible device»).
-          XCODES=$(ls -d /Applications/Xcode_${{ matrix.xcode }}*.app 2>/dev/null)
-          XCODE=$(echo "$XCODES" | grep -viE "beta|candidate|_rc" | sort -V | tail -1)
-          if [ -z "$XCODE" ]; then XCODE=$(echo "$XCODES" | sort -V | tail -1); fi
+          # Самый новый выпуск нужной версии, в котором есть нужное устройство;
+          # беты и кандидаты — после выпусков: у беты своя iOS, и на машине её
+          # обычно нет (прогон f84c6c9: Xcode 27.2 beta 2 и одна iOS 27.0 —
+          # «Incompatible device»). Не нашлось — самый новый выпуск, шаг
+          # «Симулятор» пропустит строку с предупреждением.
+          XCODES=$(ls -d /Applications/Xcode_${{ matrix.xcode }}*.app 2>/dev/null || true)
+          ORDERED=$( (echo "$XCODES" | grep -viE "beta|candidate|_rc" | sort -rV
+                      echo "$XCODES" | grep -iE "beta|candidate|_rc" | sort -rV) | grep . || true)
+          XCODE=""
+          for CANDIDATE in $ORDERED; do
+            if DEVELOPER_DIR="$CANDIDATE/Contents/Developer" xcrun simctl list devicetypes \
+                 | grep -q "${{ matrix.device }}"; then
+              XCODE="$CANDIDATE"; break
+            fi
+          done
+          if [ -z "$XCODE" ]; then XCODE=$(echo "$ORDERED" | head -1); fi
           if [ -z "$XCODE" ]; then XCODE=$(xcode-select -p | sed 's|/Contents/Developer||'); fi
           echo "Xcode: $XCODE"; ls -d /Applications/Xcode*.app
           sudo xcode-select -s "$XCODE"
