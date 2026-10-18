@@ -28,6 +28,9 @@ extension View {
                 AppRouteView(route: route)
             }
         }
+        // «Назад» и жест меняют путь мимо роутера — панель вкладок сверяется
+        // с путём, а не только с событиями экрана сессии.
+        .onChange(of: router.path) { _, _ in TabBarVisibility.shared.pathChanged(in: router) }
         .environment(router)
     }
 }

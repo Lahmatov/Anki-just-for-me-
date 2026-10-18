@@ -54,19 +54,23 @@ jobs:
           - { device: "iPad Pro 13", runtime: latest }
           - { device: "iPad", runtime: oldest }
           # Складной iPhone Duo (осень 2026): симулятор — только в Xcode 27.1+
-          # и с iOS 27.1, поэтому своя машина GitHub и своя версия iOS. На
+          # и с iOS 27.1, поэтому своя машина GitHub и своя версия iOS
+          # (`ios` — наименьшая подходящая: на iOS 27.0 устройства нет). На
           # открытом экране приложение получает regular-ширину, как iPad
           # (P-77). Нет симулятора на машине — строка пропускается с
           # предупреждением, а не падает.
-          - { device: "iPhone Duo", runtime: latest, ios: "27", runner: xcode-27, xcode: "27" }
+          - { device: "iPhone Duo", runtime: latest, ios: "27.1", runner: xcode-27, xcode: "27" }
     steps:
       - uses: actions/checkout@v5
       - name: Xcode ${{ matrix.xcode || 'по умолчанию' }}
         if: matrix.xcode
         run: |
-          # Самый новый Xcode нужной версии: у Duo симулятор с 27.1, а беты
-          # лежат рядом с выпусками под разными именами.
-          XCODE=$(ls -d /Applications/Xcode_${{ matrix.xcode }}*.app 2>/dev/null | sort -V | tail -1)
+          # Самый новый выпуск нужной версии. Беты и кандидаты — только если
+          # выпуска нет: у беты своя iOS, и на машине её обычно не бывает
+          # (прогон f84c6c9: Xcode 27.2 beta 2 и одна iOS 27.0 — «Incompatible device»).
+          XCODES=$(ls -d /Applications/Xcode_${{ matrix.xcode }}*.app 2>/dev/null)
+          XCODE=$(echo "$XCODES" | grep -viE "beta|candidate|_rc" | sort -V | tail -1)
+          if [ -z "$XCODE" ]; then XCODE=$(echo "$XCODES" | sort -V | tail -1); fi
           if [ -z "$XCODE" ]; then XCODE=$(xcode-select -p | sed 's|/Contents/Developer||'); fi
           echo "Xcode: $XCODE"; ls -d /Applications/Xcode*.app
           sudo xcode-select -s "$XCODE"
@@ -75,7 +79,16 @@ jobs:
           if ! xcrun simctl list devicetypes | grep -q "${{ matrix.device }}"; then
             xcrun simctl list devicetypes | tail -20
           fi
-          if ! xcrun simctl list runtimes | grep -q "iOS ${{ matrix.ios }}"; then
+          # Нет iOS не ниже нужной (у Duo — 27.1) — докачать iOS этой Xcode.
+          HAVE=$(xcrun simctl list runtimes -j | python3 -c '
+          import json, sys
+          need = [int(x) for x in sys.argv[1].split(".")]
+          for r in json.load(sys.stdin)["runtimes"]:
+              v = [int(x) for x in r["version"].split(".")]
+              if r["platform"] == "iOS" and r["isAvailable"] and v[0] == need[0] and v >= need:
+                  print("yes"); break
+          ' "${{ matrix.ios }}")
+          if [ "$HAVE" != "yes" ]; then
             xcodebuild -downloadPlatform iOS || true
           fi
           xcrun simctl list runtimes
@@ -88,11 +101,14 @@ jobs:
         run: |
           python3 - "${{ matrix.device }}" "${{ matrix.runtime }}" "${{ matrix.ios || '26' }}" > sim.env <<'PY'
           import json, subprocess, sys
-          device, which, major = sys.argv[1], sys.argv[2], sys.argv[3]
+          device, which, minimum = sys.argv[1], sys.argv[2], sys.argv[3]
+          need = [int(x) for x in minimum.split(".")]
+          version = lambda r: [int(x) for x in r["version"].split(".")]
           types = json.loads(subprocess.check_output(["xcrun", "simctl", "list", "devicetypes", "-j"]))["devicetypes"]
+          # Та же старшая версия и не ниже нужной: «26» — любая 26.x, «27.1» — 27.1 и новее.
           runtimes = [r for r in json.loads(subprocess.check_output(["xcrun", "simctl", "list", "runtimes", "-j"]))["runtimes"]
-                      if r["platform"] == "iOS" and r["isAvailable"] and r["version"].split(".")[0] == major]
-          runtimes.sort(key=lambda r: [int(x) for x in r["version"].split(".")])
+                      if r["platform"] == "iOS" and r["isAvailable"] and version(r)[0] == need[0] and version(r) >= need]
+          runtimes.sort(key=version)
           kind = next((t["identifier"] for t in types if t["name"] == device), "") or next(
               (t["identifier"] for t in types if t["name"].startswith(device + " ")), "")
           runtime = (runtimes[-1] if which == "latest" else runtimes[0]) if runtimes else None

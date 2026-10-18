@@ -20,6 +20,10 @@ struct ReviewSessionView: View {
     @State private var shakes: CGFloat = 0
     /// Сколько осталось — на экране блокировки и в Dynamic Island.
     @State private var liveActivity = SessionActivityController()
+    /// Стек, в котором открыта сессия; нет — лист или превью.
+    @Environment(Router.self) private var router: Router?
+    /// Глубина пути при первом появлении: по ней видно, что сессию уже закрыли.
+    @State private var depth: Int?
 
     var body: some View {
         Group {
@@ -46,9 +50,12 @@ struct ReviewSessionView: View {
         .navigationBarTitleDisplayMode(.inline)
         // В сессии панель вкладок не нужна, а на маленьком экране отъедает
         // место у карточки и кнопок оценок.
-        .onAppear { TabBarVisibility.shared.hiddenBySession = true }
+        .onAppear {
+            if depth == nil { depth = router?.path.count }
+            TabBarVisibility.shared.sessionAppeared(in: router, depth: depth)
+        }
         .onDisappear {
-            TabBarVisibility.shared.hiddenBySession = false
+            TabBarVisibility.shared.sessionDisappeared()
             liveActivity.end()
         }
         .onAppear {

@@ -79,11 +79,29 @@ struct AppTabBar: View {
 /// Прячет панель вкладок, пока идёт сессия повторения. Общий объект, а не
 /// preference: из экрана, открытого внутри NavigationStack, preference до
 /// корня доходит не всегда.
+/// Когда именно прятать — `SessionBarRule` в Core: события экрана сверяются
+/// с путём стека, иначе после «Назад» панель могла не вернуться.
 @Observable
 @MainActor
 final class TabBarVisibility {
     static let shared = TabBarVisibility()
-    var hiddenBySession = false
+    private var rule = SessionBarRule<ObjectIdentifier>()
+
+    var hiddenBySession: Bool { rule.isBarHidden }
+
+    /// `depth` — глубина пути, на которой сессия появилась впервые.
+    func sessionAppeared(in router: Router?, depth: Int?) {
+        rule.sessionAppeared(stack: router.map { ObjectIdentifier($0) }, depth: depth,
+                             currentDepth: router?.path.count)
+    }
+
+    func sessionDisappeared() {
+        rule.sessionDisappeared()
+    }
+
+    func pathChanged(in router: Router) {
+        rule.pathChanged(stack: ObjectIdentifier(router), depth: router.path.count)
+    }
 }
 
 #if DEBUG

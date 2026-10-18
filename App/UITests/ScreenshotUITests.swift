@@ -45,6 +45,9 @@ final class ScreenshotUITests: XCTestCase {
                 }
             }
             app.navigationBars.buttons.element(boundBy: 0).tap()
+            // Сессия прячет панель вкладок; после «Назад» она обязана вернуться.
+            XCTAssertTrue(app.buttons["tab.today"].waitForExistence(timeout: 10),
+                          "После «Назад» из сессии нет панели вкладок")
         }
 
         for (index, tab) in ["decks", "shows", "settings"].enumerated() {
