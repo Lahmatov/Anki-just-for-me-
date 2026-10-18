@@ -118,9 +118,14 @@ jobs:
           # Та же старшая версия и не ниже нужной: «26» — любая 26.x, «27.1» — 27.1 и новее.
           runtimes = [r for r in json.loads(subprocess.check_output(["xcrun", "simctl", "list", "runtimes", "-j"]))["runtimes"]
                       if r["platform"] == "iOS" and r["isAvailable"] and version(r)[0] == need[0] and version(r) >= need]
-          runtimes.sort(key=version)
           kind = next((t["identifier"] for t in types if t["name"] == device), "") or next(
               (t["identifier"] for t in types if t["name"].startswith(device + " ")), "")
+          # Только iOS, которая сама объявляет это устройство: тип Duo есть и в
+          # Xcode, чья iOS его не поддерживает, — тогда «Incompatible device»
+          # (прогон f049844: Xcode 27.2, iOS 27.2 24B5089g).
+          runtimes = [r for r in runtimes if "supportedDeviceTypes" not in r
+                      or any(d["identifier"] == kind for d in r["supportedDeviceTypes"])]
+          runtimes.sort(key=version)
           runtime = (runtimes[-1] if which == "latest" else runtimes[0]) if runtimes else None
           print(f"TYPE={kind}")
           print(f"RUNTIME={runtime['identifier'] if runtime else ''}")
@@ -135,6 +140,9 @@ jobs:
           fi
           UDID=$(xcrun simctl create "Recap test" "$TYPE" "$RUNTIME")
           xcrun simctl boot "$UDID"
+          # Ждать полной загрузки: иначе xcodebuild иногда не видит только что
+          # созданный симулятор («Unable to find a device», iPad mini, f049844).
+          xcrun simctl bootstatus "$UDID" -b
           if [ -n "${{ matrix.text }}" ]; then
             xcrun simctl ui "$UDID" content_size "${{ matrix.text }}"
           fi
@@ -142,6 +150,9 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       - name: UI-тесты и скриншоты
         if: steps.sim.outputs.skip != 'true'
+        # Меньше лимита задачи: при зависании успеют выполниться шаги ниже —
+        # видно, на каком тесте встало, и есть скриншоты (iPhone 16e, f049844).
+        timeout-minutes: 50
         run: |
           set +e
           xcodebuild test \
@@ -156,6 +167,12 @@ jobs:
           grep -E "error:|Test Case .* failed|Executed [0-9]+ test|\*\* (BUILD|TEST)" ui.log \
             | grep -v "CoreData:" | tail -150
           exit $STATUS
+      - name: На каком тесте остановилось
+        if: failure() || cancelled()
+        run: |
+          [ -f ui.log ] || exit 0
+          grep -E "Test Case .* (started|passed|failed)" ui.log | tail -20
+          tail -30 ui.log
       - name: Достать скриншоты
         if: always() && steps.sim.outputs.skip != 'true'
         run: |
