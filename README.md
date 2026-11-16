@@ -61,9 +61,36 @@
 | `App/` | Приложение: модели SwiftData, сервисы, экраны |
 | `backend/` | Сервер Recap Plus на Cloudflare Workers: подписка, промокоды, каталог, запросы к Claude без ключа в приложении. Тесты — `npm test` |
 | `project.yml` | Проект Xcode генерируется отсюда через XcodeGen |
+| `e2e/` | Сквозные тесты [e2e](https://github.com/e2e-inc/e2e): сервер по HTTP и приложение на симуляторе iOS |
 
 Правило простое: **логика по умолчанию живёт в `Core/`**. Что там — проверяется
 без Xcode, а значит будет проверяться на самом деле.
+
+## Сквозные тесты (e2e)
+
+В `e2e/` — тесты, которые проверяют приложение и сервер так, как их видит
+человек. Две цели: `api` — сервер `backend/` в локальном workerd (`wrangler dev`,
+своя чистая база на каждый прогон), `ios` — приложение на симуляторе.
+
+```sh
+npm ci --prefix backend && npm ci --prefix e2e
+cd e2e
+npx e2e list                                  # какие тесты есть
+npx e2e run --target api                      # сервер: работает и без Mac
+npx e2e run --target ios                      # приложение: Mac, загруженный симулятор с установленной сборкой
+npx e2e run --target api --exclude-tag agent  # без агентских шагов
+```
+
+Часть тестов — агентские (тег `agent`): `agent.act` / `agent.assert` идут на
+Claude Code по подписке (локально — вход `claude`). В GitHub Actions их
+включает секрет `CLAUDE_CODE_OAUTH_TOKEN` (напечатать: `claude setup-token`);
+без него workflow **E2E** их пропускает. Workflow сам собирает приложение,
+ставит его на симулятор iOS (macOS) и прогоняет обе цели; отчёты и трейсы — в
+артефактах прогона.
+
+Как агенту проверить изменение (запуск, Doctor, доказательства, карта функций) —
+навык [`.agents/skills/verify-ajfm`](.agents/skills/verify-ajfm/SKILL.md)
+(он же в `.claude/skills/verify-ajfm`).
 
 ## Документы
 

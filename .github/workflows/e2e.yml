@@ -1,0 +1,155 @@
+# Сквозные тесты e2e (e2e/): сервер Recap по HTTP и приложение на симуляторе iOS.
+#
+# Отдельно от CI: падение e2e не красит сборку и тесты ядра, а машины macOS
+# заняты только когда менялось приложение, сервер или сами тесты.
+#
+# Агентские шаги (тег `agent`) идут на Claude Code по подписке. Нужен секрет
+# CLAUDE_CODE_OAUTH_TOKEN (Settings → Secrets → Actions): его печатает
+# `claude setup-token` на машине, где выполнен вход в Claude Code. Нет секрета —
+# агентские тесты исключаются (`--exclude-tag agent`), остальные идут как обычно.
+name: E2E
+
+on:
+  push:
+    paths:
+      - "App/**"
+      - "Core/Sources/**"
+      - "Shared/**"
+      - "Widget/**"
+      - "project.yml"
+      - "backend/src/**"
+      - "backend/migrations/**"
+      - "backend/wrangler.toml"
+      - "e2e/**"
+      - ".github/workflows/e2e.yml"
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  api:
+    name: E2E — сервер (HTTP)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            e2e/package-lock.json
+      - name: Зависимости
+        run: |
+          npm ci --prefix backend
+          npm ci --prefix e2e
+      - name: Браузер для агентских шагов
+        working-directory: e2e
+        run: npx e2e-web install chromium --with-deps
+      - name: Тесты
+        working-directory: e2e
+        run: |
+          EXTRA=""
+          if [ -z "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+            echo "::notice::Нет CLAUDE_CODE_OAUTH_TOKEN — агентские тесты пропущены"
+            EXTRA="--exclude-tag agent"
+          fi
+          npx e2e run --target api --reporter list,junit $EXTRA
+      - if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-api
+          path: |
+            e2e/.e2e/report.json
+            e2e/.e2e/junit.xml
+            e2e/.e2e/results
+            e2e/.e2e/logs
+          if-no-files-found: warn
+          retention-days: 7
+
+  ios:
+    name: E2E — приложение (симулятор iOS)
+    # Машины macOS — общий узкий ресурс: обновления Dependabot их не занимают.
+    if: github.actor != 'dependabot[bot]'
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: e2e/package-lock.json
+      - name: Зависимости e2e
+        run: npm ci --prefix e2e
+      - name: XcodeGen
+        run: |
+          brew install xcodegen || true
+          xcodegen generate
+      - name: Сборка под симулятор
+        run: |
+          set +e
+          xcodebuild build \
+            -project AJFM.xcodeproj \
+            -scheme AJFM \
+            -configuration Debug \
+            -destination "generic/platform=iOS Simulator" \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            > build.log 2>&1
+          STATUS=$?
+          grep -E "error:|\*\* BUILD" build.log | grep -v "CoreData:" | tail -100
+          exit $STATUS
+      - name: Симулятор
+        run: |
+          # Самый новый iPhone на самой новой iOS этой Xcode.
+          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          devices = json.load(sys.stdin)["devices"]
+          found = [(runtime, d) for runtime, items in devices.items() if "iOS" in runtime
+                   for d in items if d["name"].startswith("iPhone")]
+          found.sort(key=lambda item: item[0])
+          print(found[-1][1]["udid"] if found else "")')
+          test -n "$UDID" || { echo "нет симулятора iPhone"; xcrun simctl list devices; exit 1; }
+          echo "Симулятор: $UDID"
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
+          # Движок e2e приложение не ставит — ставим сборку сами.
+          xcrun simctl install "$UDID" build/Build/Products/Debug-iphonesimulator/AJFM.app
+      - name: Готовность e2e
+        working-directory: e2e
+        run: npx e2e doctor --target ios
+      - name: Тесты
+        working-directory: e2e
+        run: |
+          EXTRA=""
+          if [ -z "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+            echo "::notice::Нет CLAUDE_CODE_OAUTH_TOKEN — агентские тесты пропущены"
+            EXTRA="--exclude-tag agent"
+          fi
+          npx e2e run --target ios --reporter list,junit $EXTRA
+      - if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-ios
+          path: |
+            e2e/.e2e/report.json
+            e2e/.e2e/junit.xml
+            e2e/.e2e/results
+            build.log
+          if-no-files-found: warn
+          retention-days: 7
